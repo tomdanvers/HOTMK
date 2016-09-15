@@ -33298,7 +33298,8 @@ function World() {
 
     this.buildings = [];
 
-    this.addBuilding();
+    this.addBuilding(World.WIDTH * .5 * _Tile2.default.WIDTH, World.HEIGHT * .5 * _Tile2.default.HEIGHT);
+    this.addBuilding(World.WIDTH * .25 * _Tile2.default.WIDTH, World.HEIGHT * .15 * _Tile2.default.HEIGHT);
 
     this.dwarves = [];
 
@@ -33350,11 +33351,11 @@ World.prototype.addRock = function (x, y) {
     return rock;
 };
 
-World.prototype.addBuilding = function () {
+World.prototype.addBuilding = function (x, y) {
 
     var building = new _Barracks2.default(this);
-    building.x = World.WIDTH * _Tile2.default.WIDTH * .5 + _Tile2.default.WIDTH * .5;
-    building.y = World.HEIGHT * _Tile2.default.HEIGHT * .5 + _Tile2.default.HEIGHT * .5;
+    building.x = x + _Tile2.default.WIDTH * .5;
+    building.y = y + _Tile2.default.HEIGHT * .5;
 
     this.buildings.push(building);
     this.zOrdered.push(building);

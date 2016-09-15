@@ -75,7 +75,8 @@ export default function World() {
 
     this.buildings = [];
 
-    this.addBuilding();
+    this.addBuilding(World.WIDTH * .5 * Tile.WIDTH, World.HEIGHT * .5 * Tile.HEIGHT);
+    this.addBuilding(World.WIDTH * .25 * Tile.WIDTH, World.HEIGHT * .15 * Tile.HEIGHT);
 
     this.dwarves = [];
 
@@ -131,11 +132,11 @@ World.prototype.addRock = function(x, y) {
 
 }
 
-World.prototype.addBuilding = function() {
+World.prototype.addBuilding = function(x, y) {
 
     let building = new Barracks(this);
-    building.x = World.WIDTH * Tile.WIDTH * .5 + Tile.WIDTH * .5;
-    building.y = World.HEIGHT * Tile.HEIGHT * .5 + Tile.HEIGHT * .5;
+    building.x = x + Tile.WIDTH * .5;
+    building.y = y + Tile.HEIGHT * .5;
 
     this.buildings.push(building);
     this.zOrdered.push(building);
