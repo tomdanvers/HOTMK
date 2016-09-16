@@ -47,11 +47,11 @@ Building.prototype.update = function(timeDelta) {
 
     this.alpha = this.integrity / this.integrityMax;
 
-    if (this.timeSinceSpawn > Building.SPAWN_RATE) {
+    // if (this.timeSinceSpawn > Building.SPAWN_RATE) {
 
-     this.spawn(false);
+    //  this.spawn(false);
 
-    }
+    // }
 
 }
 
@@ -68,8 +68,6 @@ Building.prototype.onDown = function(event) {
 Building.prototype.spawn = function(isPurchased) {
 
     if (this.timeSinceSpawn > Building.SPAWN_RATE && this.constructed) {
-
-        console.log('Building.spawn()');
 
         this.timeSinceSpawn = 0;
 

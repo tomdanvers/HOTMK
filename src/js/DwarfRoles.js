@@ -20,8 +20,6 @@ DwarfRoles.constructor = DwarfRoles;
 
 DwarfRoles.prototype.getById = function(id) {
 
-    console.log('DwarfRoles.getById(', id, this.rolesMap[id], ')');
-
     return this.rolesMap[id];
 
 }
