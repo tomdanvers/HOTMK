@@ -1,6 +1,7 @@
 import PIXI from 'pixi.js';
 import Maths from './Maths';
 
+import DwarfRoles from './DwarfRoles';
 import {RoleIdle, RoleBuilder, RoleCollectWood, RoleCollectStone} from './DwarfRoles';
 
 export default function Dwarf(world, startX, startY, roleId) {
@@ -74,7 +75,7 @@ Dwarf.prototype.update = function(timeDelta, world) {
 
     }
 
-    if (this.roleId === Dwarf.ROLE_IDLE) {
+    if (this.roleId === DwarfRoles.IDLE) {
 
         this.careerRole.checkCanPerform(timeDelta, this, world);
 

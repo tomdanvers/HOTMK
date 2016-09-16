@@ -47,11 +47,11 @@ Building.prototype.update = function(timeDelta) {
 
     this.alpha = this.integrity / this.integrityMax;
 
-    // if (this.timeSinceSpawn > Building.SPAWN_RATE) {
+    if (this.timeSinceSpawn > Building.SPAWN_RATE) {
 
-    //  this.spawn();
+     this.spawn(false);
 
-    // }
+    }
 
 }
 
@@ -59,21 +59,29 @@ Building.prototype.onDown = function(event) {
 
     if (this.constructed) {
 
-        this.spawn();
+        this.spawn(true);
 
     }
 
 }
 
-Building.prototype.spawn = function() {
+Building.prototype.spawn = function(isPurchased) {
 
-    if (this.timeSinceSpawn > Building.SPAWN_RATE) {
+    if (this.timeSinceSpawn > Building.SPAWN_RATE && this.constructed) {
 
         console.log('Building.spawn()');
 
         this.timeSinceSpawn = 0;
 
-        this.world.buyDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+        if (isPurchased) {
+
+            this.world.buyDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+
+        } else {
+
+            this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+
+        }
 
     }
 
@@ -82,7 +90,7 @@ Building.prototype.spawn = function() {
 Building.WIDTH = 14;
 Building.HEIGHT = 18;
 
-Building.SPAWN_RATE = 5000;
+Building.SPAWN_RATE = 3000;
 
 Building.INTEGRITY = 100;
 Building.TYPE = 'building';

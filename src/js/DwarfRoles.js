@@ -74,7 +74,7 @@ export const RoleBuilder = {
 
     checkCanPerform(timeDelta, dwarf, world) {
 
-        if (Utils.nearestWithoutProperty('integrity', dwarf, world.buildings.buildings) || false) {
+        if (Utils.nearestWithoutProperty('integrity', dwarf, world.buildings.buildings)) {
 
             dwarf.changeRole(dwarf.careerRole.id);
 
@@ -88,7 +88,6 @@ export const RoleBuilder = {
 
             let target = Utils.nearestWithoutProperty('integrity', dwarf, world.buildings.buildings) || false;
 
-
             if (target) {
 
                 dwarf.target = target;
@@ -98,7 +97,7 @@ export const RoleBuilder = {
                 dwarf.startX = dwarf.x;
                 dwarf.startY = dwarf.y;
 
-                return Dwarf.ROLE_IDLE;
+                return DwarfRoles.IDLE;
 
             }
 
@@ -145,7 +144,7 @@ export const RoleCollectWood = {
 
     checkCanPerform(timeDelta, dwarf, world) {
 
-        if (Utils.nearestWithProperty('supply', dwarf, world.trees) || false) {
+        if (Utils.nearestWithProperty('supply', dwarf, world.trees)) {
 
             dwarf.changeRole(dwarf.careerRole.id);
 
@@ -158,7 +157,6 @@ export const RoleCollectWood = {
         if ( !dwarf.target || dwarf.target.type !== Tree.TYPE ) {
 
             let target = Utils.nearestWithProperty('supply', dwarf, world.trees) || false;
-            // let target = world.trees.random() || false;
 
             if (target) {
 
@@ -166,7 +164,7 @@ export const RoleCollectWood = {
 
             } else {
 
-                return Dwarf.ROLE_IDLE;
+                return DwarfRoles.IDLE;
 
             }
 
@@ -211,7 +209,7 @@ export const RoleCollectStone = {
 
     checkCanPerform(timeDelta, dwarf, world) {
 
-        if (Utils.nearestWithProperty('supply', dwarf, world.rocks) || false) {
+        if (Utils.nearestWithProperty('supply', dwarf, world.rocks)) {
 
             dwarf.changeRole(dwarf.careerRole.id);
 
@@ -232,7 +230,7 @@ export const RoleCollectStone = {
 
             } else {
 
-                return Dwarf.ROLE_IDLE;
+                return DwarfRoles.IDLE;
 
             }
 

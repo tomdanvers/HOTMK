@@ -32729,37 +32729,42 @@ Building.prototype.update = function (timeDelta) {
 
     this.alpha = this.integrity / this.integrityMax;
 
-    // if (this.timeSinceSpawn > Building.SPAWN_RATE) {
+    if (this.timeSinceSpawn > Building.SPAWN_RATE) {
 
-    //  this.spawn();
-
-    // }
+        this.spawn(false);
+    }
 };
 
 Building.prototype.onDown = function (event) {
 
     if (this.constructed) {
 
-        this.spawn();
+        this.spawn(true);
     }
 };
 
-Building.prototype.spawn = function () {
+Building.prototype.spawn = function (isPurchased) {
 
-    if (this.timeSinceSpawn > Building.SPAWN_RATE) {
+    if (this.timeSinceSpawn > Building.SPAWN_RATE && this.constructed) {
 
         console.log('Building.spawn()');
 
         this.timeSinceSpawn = 0;
 
-        this.world.buyDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+        if (isPurchased) {
+
+            this.world.buyDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+        } else {
+
+            this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+        }
     }
 };
 
 Building.WIDTH = 14;
 Building.HEIGHT = 18;
 
-Building.SPAWN_RATE = 5000;
+Building.SPAWN_RATE = 3000;
 
 Building.INTEGRITY = 100;
 Building.TYPE = 'building';
@@ -32923,6 +32928,8 @@ var _Maths2 = _interopRequireDefault(_Maths);
 
 var _DwarfRoles = require('./DwarfRoles');
 
+var _DwarfRoles2 = _interopRequireDefault(_DwarfRoles);
+
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
@@ -32993,7 +33000,7 @@ Dwarf.prototype.update = function (timeDelta, world) {
         this.changeRole(newRoleId);
     }
 
-    if (this.roleId === Dwarf.ROLE_IDLE) {
+    if (this.roleId === _DwarfRoles2.default.IDLE) {
 
         this.careerRole.checkCanPerform(timeDelta, this, world);
     }
@@ -33115,7 +33122,7 @@ var RoleBuilder = exports.RoleBuilder = {
 
     checkCanPerform: function checkCanPerform(timeDelta, dwarf, world) {
 
-        if (Utils.nearestWithoutProperty('integrity', dwarf, world.buildings.buildings) || false) {
+        if (Utils.nearestWithoutProperty('integrity', dwarf, world.buildings.buildings)) {
 
             dwarf.changeRole(dwarf.careerRole.id);
         }
@@ -33134,7 +33141,7 @@ var RoleBuilder = exports.RoleBuilder = {
                 dwarf.startX = dwarf.x;
                 dwarf.startY = dwarf.y;
 
-                return _Dwarf2.default.ROLE_IDLE;
+                return DwarfRoles.IDLE;
             }
         }
     },
@@ -33171,7 +33178,7 @@ var RoleCollectWood = exports.RoleCollectWood = {
 
     checkCanPerform: function checkCanPerform(timeDelta, dwarf, world) {
 
-        if (Utils.nearestWithProperty('supply', dwarf, world.trees) || false) {
+        if (Utils.nearestWithProperty('supply', dwarf, world.trees)) {
 
             dwarf.changeRole(dwarf.careerRole.id);
         }
@@ -33181,14 +33188,13 @@ var RoleCollectWood = exports.RoleCollectWood = {
         if (!dwarf.target || dwarf.target.type !== _Tree2.default.TYPE) {
 
             var target = Utils.nearestWithProperty('supply', dwarf, world.trees) || false;
-            // let target = world.trees.random() || false;
 
             if (target) {
 
                 dwarf.target = target;
             } else {
 
-                return _Dwarf2.default.ROLE_IDLE;
+                return DwarfRoles.IDLE;
             }
         }
     },
@@ -33224,7 +33230,7 @@ var RoleCollectStone = exports.RoleCollectStone = {
 
     checkCanPerform: function checkCanPerform(timeDelta, dwarf, world) {
 
-        if (Utils.nearestWithProperty('supply', dwarf, world.rocks) || false) {
+        if (Utils.nearestWithProperty('supply', dwarf, world.rocks)) {
 
             dwarf.changeRole(dwarf.careerRole.id);
         }
@@ -33241,7 +33247,7 @@ var RoleCollectStone = exports.RoleCollectStone = {
                 dwarf.target = target;
             } else {
 
-                return _Dwarf2.default.ROLE_IDLE;
+                return DwarfRoles.IDLE;
             }
         }
     },
@@ -34163,7 +34169,7 @@ World.prototype.addBuilding = function (id, tileX, tileY) {
         building.x = tile.x + _Tile2.default.WIDTH * .5;
         building.y = tile.y + _Tile2.default.HEIGHT * .5;
 
-        console.log('World.addBuilding(', building.id, ')');
+        console.log('World.addBuilding(', id, ')');
 
         this.zOrdered.push(building);
 
