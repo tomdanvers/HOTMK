@@ -10,11 +10,11 @@ import Rock from './Rock';
 
 import Supply from './Supply';
 
-import Barracks from './Barracks';
-
 import Buildings from './Buildings';
 
 import Dwarf from './Dwarf';
+
+import DwarfRoles from './DwarfRoles';
 
 import UI from './UI';
 
@@ -27,13 +27,19 @@ export default function World() {
     World.WIDTH = Math.ceil(Layout.WIDTH / Tile.WIDTH);
     World.HEIGHT = Math.ceil(Layout.HEIGHT / Tile.HEIGHT);
 
-    this.noise = new Noise.Noise(Math.random());
+    this.randomSeed = Math.floor(Math.random() * 1000);
+
+    console.log('World(', World.WIDTH, World.HEIGHT, this.randomSeed,')');
+
+    this.noise = new Noise.Noise(this.randomSeed);
 
     this.timeOfLastUpdate = 0;
 
     this.supply = new Supply();
 
     this.buildings = new Buildings(this);
+
+    this.dwarfRoles = new DwarfRoles(this);
 
     this.tiles = [];
     this.resources = [];
@@ -76,10 +82,10 @@ export default function World() {
 
     // Add dwarves
 
-    this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, Dwarf.ROLE_COLLECT_WOOD);
-    this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, Dwarf.ROLE_COLLECT_STONE);
+    this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.COLLECT_WOOD);
+    this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.COLLECT_STONE);
 
-    let builder = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, Dwarf.ROLE_BUILDER);
+    let builder = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.BUILDER);
     setTimeout(function() {
 
         // Hmmm WTF? Props in constructor of Dwarf get assigned one frame late?
@@ -126,9 +132,12 @@ World.prototype.addTree = function(tileX, tileY) {
 
         tile.occupy();
 
+        let offsetX = Tile.WIDTH * .3 * Math.random() - Tile.WIDTH * .15;
+        let offsetY = Tile.HEIGHT * .3 * Math.random() - Tile.HEIGHT * .15;
+
         let tree = new Tree();
-        tree.x = tile.x + Tile.WIDTH * .5;
-        tree.y = tile.y + Tile.HEIGHT * .5;
+        tree.x = tile.x + Tile.WIDTH * .5 + offsetX;
+        tree.y = tile.y + Tile.HEIGHT * .5 + offsetY;
 
         this.resources.push(tree);
         this.trees.push(tree);
@@ -193,6 +202,8 @@ World.prototype.addBuilding = function(id, tileX, tileY) {
         building.x = tile.x + Tile.WIDTH * .5;
         building.y = tile.y + Tile.HEIGHT * .5;
 
+        console.log('World.addBuilding(', building, ')');
+
         this.zOrdered.push(building);
 
         this.containerZOrdered.addChild(building);
@@ -206,9 +217,26 @@ World.prototype.addBuilding = function(id, tileX, tileY) {
 
 }
 
+World.prototype.buyDwarf = function(x, y, roleId) {
+
+    let role = this.dwarfRoles.getById(roleId);
+    let canAfford = this.supply.wood >= role.cWood && this.supply.stone >= role.cStone;
+
+    if (canAfford) {
+
+        this.supply.wood -= role.cWood;
+        this.supply.stone -= role.cStone;
+
+        this.addDwarf(x, y, roleId);
+
+    }
+
+
+}
+
 World.prototype.addDwarf = function(x, y, role) {
 
-    let dwarf = new Dwarf(this, x, y, role || Dwarf.ROLE_IDLE);
+    let dwarf = new Dwarf(this, x, y, role || DwarfRoles.IDLE);
 
     this.dwarves.push(dwarf);
     this.zOrdered.push(dwarf);
@@ -298,7 +326,7 @@ World.prototype.getTileFromWorld = function(x, y) {
 
 World.prototype.getTile = function(x, y) {
 
-    return this.tiles[y * World.WIDTH + x];
+    return this.tiles[y * World.WIDTH + x] || false;
 
 }
 

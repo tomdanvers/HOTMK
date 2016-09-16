@@ -9,6 +9,8 @@ export default function Dwarf(world, startX, startY, roleId) {
 
     this.target = null;
 
+    this.world = world;
+
     this.id = Dwarf.ID ++;
 
     this.angle = 0;
@@ -17,7 +19,7 @@ export default function Dwarf(world, startX, startY, roleId) {
     this.timeBetweenActions = 2000;
 
     this.roleId = null;
-    this.careerRole = Dwarf.ROLES[roleId];
+    this.careerRole = this.world.dwarfRoles.getById(roleId);
 
     this.changeRole(this.careerRole.id);
 
@@ -43,7 +45,7 @@ Dwarf.prototype.changeRole = function(roleId) {
 
     console.log('Dwarf.changeRole(', this.id, this.roleId, '>', roleId, ')');
 
-    this.role = Dwarf.ROLES[roleId];
+    this.role = this.world.dwarfRoles.getById(roleId);
     this.roleId = roleId;
 
 }
@@ -92,8 +94,8 @@ Dwarf.prototype.update = function(timeDelta, world) {
 
         } else {
 
-            this.x += Math.cos(this.angle) * Dwarf.SPEED;
-            this.y += Math.sin(this.angle) * Dwarf.SPEED;
+            this.x += Math.cos(this.angle) * Dwarf.SPEED * timeDelta / 30;
+            this.y += Math.sin(this.angle) * Dwarf.SPEED * timeDelta / 30;
 
         }
 
@@ -108,14 +110,4 @@ Dwarf.HEIGHT = 12;
 
 Dwarf.SPEED = .75;
 
-Dwarf.ROLE_IDLE = 'idle';
-Dwarf.ROLE_BUILDER = 'builder';
-Dwarf.ROLE_COLLECT_WOOD = 'collect-wood';
-Dwarf.ROLE_COLLECT_STONE = 'collect-stone';
 
-Dwarf.ROLES = {
-    'idle': RoleIdle,
-    'builder': RoleBuilder,
-    'collect-wood': RoleCollectWood,
-    'collect-stone': RoleCollectStone
-};

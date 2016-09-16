@@ -1,12 +1,13 @@
-import Barracks from './Barracks';
+import {Miner, Forester, Mason} from './Building';
 
 export default function Buildings(world) {
 
     this.world = world;
 
     this.archetypes = [
-        Buildings.ARCHETYPE_BARRACKS,
-        Buildings.ARCHETYPE_TAVERN
+        Buildings.ARCHETYPE_MINER,
+        Buildings.ARCHETYPE_FORESTER,
+        Buildings.ARCHETYPE_MASON
     ];
 
     this.archetypesMap = {};
@@ -41,8 +42,9 @@ Buildings.prototype.update = function(timeDelta) {
 
 }
 
-Buildings.ARCHETYPE_BARRACKS = new BuildingArchetype('barracks', 'Barracks', 'A dwarven barracks', 50, 50, Barracks);
-Buildings.ARCHETYPE_TAVERN = new BuildingArchetype('tavern', 'Tavern', 'Here be Ale and Mead', 150, 100, Barracks);
+Buildings.ARCHETYPE_MINER = new BuildingArchetype('miner', 'Miner\'s Cottage', 'A lowly home for a miner', 100, 50, Miner);
+Buildings.ARCHETYPE_FORESTER = new BuildingArchetype('forester', 'Forester\'s Cottage', 'A lowly home for a forester', 50, 100, Forester);
+Buildings.ARCHETYPE_MASON = new BuildingArchetype('mason', 'Mason\'s Cottage', 'A builder\'s home', 150, 150, Mason);
 
 
 function BuildingArchetype(id, title, description, cWood, cStone, c) {

@@ -26,8 +26,6 @@ function startGame() {
         Layout.WIDTH = Math.min(960, window.screen.width);
         Layout.HEIGHT = Math.min(640, window.screen.height);
 
-        console.log(Layout.WIDTH, Layout.HEIGHT);
-
     }
 
     let renderer = PIXI.autoDetectRenderer(Layout.WIDTH, Layout.HEIGHT, {backgroundColour: 0x000000});

@@ -32667,7 +32667,10 @@ module.exports = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = Barracks;
+exports.Building = Building;
+exports.Miner = Miner;
+exports.Forester = Forester;
+exports.Mason = Mason;
 
 var _pixi = require('pixi.js');
 
@@ -32677,55 +32680,63 @@ var _Dwarf = require('./Dwarf');
 
 var _Dwarf2 = _interopRequireDefault(_Dwarf);
 
+var _DwarfRoles = require('./DwarfRoles');
+
+var _DwarfRoles2 = _interopRequireDefault(_DwarfRoles);
+
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Barracks(world) {
+function Building(world) {
 
     _pixi2.default.Container.call(this);
 
     this.world = world;
 
-    this.integrityMax = Barracks.INTEGRITY;
-    this.integrity = Barracks.INTEGRITY * .25;
+    this.integrityMax = Building.INTEGRITY;
+    this.integrity = Building.INTEGRITY * .25;
 
     this.constructed = false;
 
-    this.timeSinceSpawn = Barracks.SPAWN_RATE;
+    this.timeSinceSpawn = Building.SPAWN_RATE;
 
     var base = new _pixi2.default.Graphics();
-    base.beginFill(0xAAAAAA);
-    base.drawRect(-Barracks.WIDTH * .5, -Barracks.HEIGHT, Barracks.WIDTH, Barracks.HEIGHT);
-    base.endFill();
-    base.beginFill(0x666666);
-    base.drawRect(-Barracks.WIDTH * .5 + 4, -10, Barracks.WIDTH - 8, 10);
-    base.endFill();
+    this.draw(base);
+    this.addChild(base);
 
     this.interactive = true;
     this.on('mousedown', this.onDown);
     this.on('touchstart', this.onDown);
-
-    this.addChild(base);
 }
 
-Barracks.constructor = Barracks;
-Barracks.prototype = Object.create(_pixi2.default.Container.prototype);
+Building.constructor = Building;
+Building.prototype = Object.create(_pixi2.default.Container.prototype);
 
-Barracks.prototype.update = function (timeDelta) {
+Building.prototype.draw = function (graphics) {
+
+    graphics.beginFill(0xAAAAAA);
+    graphics.drawRect(-Building.WIDTH * .5, -Building.HEIGHT, Building.WIDTH, Building.HEIGHT);
+    graphics.endFill();
+    graphics.beginFill(0x666666);
+    graphics.drawRect(-Building.WIDTH * .5 + 4, -10, Building.WIDTH - 8, 10);
+    graphics.endFill();
+};
+
+Building.prototype.update = function (timeDelta) {
 
     this.timeSinceSpawn += timeDelta;
 
     this.alpha = this.integrity / this.integrityMax;
 
-    // if (this.timeSinceSpawn > Barracks.SPAWN_RATE) {
+    // if (this.timeSinceSpawn > Building.SPAWN_RATE) {
 
     //  this.spawn();
 
     // }
 };
 
-Barracks.prototype.onDown = function (event) {
+Building.prototype.onDown = function (event) {
 
     if (this.constructed) {
 
@@ -32733,27 +32744,108 @@ Barracks.prototype.onDown = function (event) {
     }
 };
 
-Barracks.prototype.spawn = function () {
+Building.prototype.spawn = function () {
 
-    if (this.timeSinceSpawn > Barracks.SPAWN_RATE) {
+    if (this.timeSinceSpawn > Building.SPAWN_RATE) {
 
-        console.log('Barracks.spawn()');
+        console.log('Building.spawn()');
 
         this.timeSinceSpawn = 0;
 
-        this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, Math.random() > .3 ? _Dwarf2.default.ROLE_COLLECT_WOOD : _Dwarf2.default.ROLE_COLLECT_STONE);
+        this.world.buyDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
     }
 };
 
-Barracks.WIDTH = 14;
-Barracks.HEIGHT = 18;
+Building.WIDTH = 14;
+Building.HEIGHT = 18;
 
-Barracks.SPAWN_RATE = 5000;
+Building.SPAWN_RATE = 5000;
 
-Barracks.INTEGRITY = 100;
-Barracks.TYPE = 'building';
+Building.INTEGRITY = 100;
+Building.TYPE = 'building';
 
-},{"./Dwarf":211,"pixi.js":154}],210:[function(require,module,exports){
+/* -------------- */
+/* -------- Miner */
+/* -------------- */
+
+function Miner(world) {
+
+    Building.call(this, world);
+
+    this.associatedRole = _DwarfRoles2.default.COLLECT_STONE;
+}
+
+Miner.constructor = Miner;
+Miner.prototype = Object.create(Building.prototype);
+
+Miner.prototype.draw = function (graphics) {
+
+    graphics.beginFill(0x999999);
+    graphics.drawRect(-Miner.WIDTH * .5, -Miner.HEIGHT, Miner.WIDTH, Miner.HEIGHT);
+    graphics.endFill();
+    graphics.beginFill(0x222222);
+    graphics.drawRect(-Miner.WIDTH * .5 + 4, -6, Miner.WIDTH - 8, 6);
+    graphics.endFill();
+};
+
+Miner.WIDTH = 12;
+Miner.HEIGHT = 12;
+
+/* -------------- */
+/* ----- Forester */
+/* -------------- */
+
+function Forester(world) {
+
+    Building.call(this, world);
+
+    this.associatedRole = _DwarfRoles2.default.COLLECT_WOOD;
+}
+
+Forester.constructor = Forester;
+Forester.prototype = Object.create(Building.prototype);
+
+Forester.prototype.draw = function (graphics) {
+
+    graphics.beginFill(0x999999);
+    graphics.drawRect(-Forester.WIDTH * .5, -Forester.HEIGHT, Forester.WIDTH, Forester.HEIGHT);
+    graphics.endFill();
+    graphics.beginFill(0x228822);
+    graphics.drawRect(-Forester.WIDTH * .5 + 4, -6, Forester.WIDTH - 8, 6);
+    graphics.endFill();
+};
+
+Forester.WIDTH = 12;
+Forester.HEIGHT = 12;
+
+/* -------------- */
+/* -------- Mason */
+/* -------------- */
+
+function Mason(world) {
+
+    Building.call(this, world);
+
+    this.associatedRole = _DwarfRoles2.default.BUILDER;
+}
+
+Mason.constructor = Mason;
+Mason.prototype = Object.create(Building.prototype);
+
+Mason.prototype.draw = function (graphics) {
+
+    graphics.beginFill(0x999999);
+    graphics.drawRect(-Mason.WIDTH * .5, -Mason.HEIGHT, Mason.WIDTH, Mason.HEIGHT);
+    graphics.endFill();
+    graphics.beginFill(0x333333);
+    graphics.drawRect(-Mason.WIDTH * .5 + 4, -6, Mason.WIDTH - 8, 6);
+    graphics.endFill();
+};
+
+Mason.WIDTH = 13;
+Mason.HEIGHT = 14;
+
+},{"./Dwarf":211,"./DwarfRoles":212,"pixi.js":154}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32761,19 +32853,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = Buildings;
 
-var _Barracks = require('./Barracks');
-
-var _Barracks2 = _interopRequireDefault(_Barracks);
-
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : { default: obj };
-}
+var _Building = require('./Building');
 
 function Buildings(world) {
 
     this.world = world;
 
-    this.archetypes = [Buildings.ARCHETYPE_BARRACKS, Buildings.ARCHETYPE_TAVERN];
+    this.archetypes = [Buildings.ARCHETYPE_MINER, Buildings.ARCHETYPE_FORESTER, Buildings.ARCHETYPE_MASON];
 
     this.archetypesMap = {};
 
@@ -32803,8 +32889,9 @@ Buildings.prototype.update = function (timeDelta) {
     }.bind(this));
 };
 
-Buildings.ARCHETYPE_BARRACKS = new BuildingArchetype('barracks', 'Barracks', 'A dwarven barracks', 50, 50, _Barracks2.default);
-Buildings.ARCHETYPE_TAVERN = new BuildingArchetype('tavern', 'Tavern', 'Here be Ale and Mead', 150, 100, _Barracks2.default);
+Buildings.ARCHETYPE_MINER = new BuildingArchetype('miner', 'Miner\'s Cottage', 'A lowly home for a miner', 100, 50, _Building.Miner);
+Buildings.ARCHETYPE_FORESTER = new BuildingArchetype('forester', 'Forester\'s Cottage', 'A lowly home for a forester', 50, 100, _Building.Forester);
+Buildings.ARCHETYPE_MASON = new BuildingArchetype('mason', 'Mason\'s Cottage', 'A builder\'s home', 150, 150, _Building.Mason);
 
 function BuildingArchetype(id, title, description, cWood, cStone, c) {
 
@@ -32818,7 +32905,7 @@ function BuildingArchetype(id, title, description, cWood, cStone, c) {
 
 BuildingArchetype.constructor = BuildingArchetype;
 
-},{"./Barracks":209}],211:[function(require,module,exports){
+},{"./Building":209}],211:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32846,6 +32933,8 @@ function Dwarf(world, startX, startY, roleId) {
 
     this.target = null;
 
+    this.world = world;
+
     this.id = Dwarf.ID++;
 
     this.angle = 0;
@@ -32854,7 +32943,7 @@ function Dwarf(world, startX, startY, roleId) {
     this.timeBetweenActions = 2000;
 
     this.roleId = null;
-    this.careerRole = Dwarf.ROLES[roleId];
+    this.careerRole = this.world.dwarfRoles.getById(roleId);
 
     this.changeRole(this.careerRole.id);
 
@@ -32879,7 +32968,7 @@ Dwarf.prototype.changeRole = function (roleId) {
 
     console.log('Dwarf.changeRole(', this.id, this.roleId, '>', roleId, ')');
 
-    this.role = Dwarf.ROLES[roleId];
+    this.role = this.world.dwarfRoles.getById(roleId);
     this.roleId = roleId;
 };
 
@@ -32922,8 +33011,8 @@ Dwarf.prototype.update = function (timeDelta, world) {
             this.role.targetProximity(timeDelta, this, world);
         } else {
 
-            this.x += Math.cos(this.angle) * Dwarf.SPEED;
-            this.y += Math.sin(this.angle) * Dwarf.SPEED;
+            this.x += Math.cos(this.angle) * Dwarf.SPEED * timeDelta / 30;
+            this.y += Math.sin(this.angle) * Dwarf.SPEED * timeDelta / 30;
         }
     }
 };
@@ -32935,18 +33024,6 @@ Dwarf.HEIGHT = 12;
 
 Dwarf.SPEED = .75;
 
-Dwarf.ROLE_IDLE = 'idle';
-Dwarf.ROLE_BUILDER = 'builder';
-Dwarf.ROLE_COLLECT_WOOD = 'collect-wood';
-Dwarf.ROLE_COLLECT_STONE = 'collect-stone';
-
-Dwarf.ROLES = {
-    'idle': _DwarfRoles.RoleIdle,
-    'builder': _DwarfRoles.RoleBuilder,
-    'collect-wood': _DwarfRoles.RoleCollectWood,
-    'collect-stone': _DwarfRoles.RoleCollectStone
-};
-
 },{"./DwarfRoles":212,"./Maths":214,"pixi.js":154}],212:[function(require,module,exports){
 'use strict';
 
@@ -32954,6 +33031,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.RoleCollectStone = exports.RoleCollectWood = exports.RoleBuilder = exports.RoleIdle = undefined;
+exports.default = DwarfRoles;
 
 var _Maths = require('./Maths');
 
@@ -32971,13 +33049,35 @@ var _Rock = require('./Rock');
 
 var _Rock2 = _interopRequireDefault(_Rock);
 
-var _Barracks = require('./Barracks');
-
-var _Barracks2 = _interopRequireDefault(_Barracks);
-
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
+
+function DwarfRoles() {
+
+    this.rolesMap = {
+        'idle': RoleIdle,
+        'builder': RoleBuilder,
+        'collect-wood': RoleCollectWood,
+        'collect-stone': RoleCollectStone
+    };
+
+    // console.log('DwarfRoles(',this.rolesMap,')');
+}
+
+DwarfRoles.constructor = DwarfRoles;
+
+DwarfRoles.prototype.getById = function (id) {
+
+    console.log('DwarfRoles.getById(', id, this.rolesMap[id], ')');
+
+    return this.rolesMap[id];
+};
+
+DwarfRoles.IDLE = 'idle';
+DwarfRoles.BUILDER = 'builder';
+DwarfRoles.COLLECT_WOOD = 'collect-wood';
+DwarfRoles.COLLECT_STONE = 'collect-stone';
 
 var RoleIdle = exports.RoleIdle = {
 
@@ -33010,6 +33110,9 @@ var RoleBuilder = exports.RoleBuilder = {
 
     range: 10,
 
+    cWood: 50,
+    cStone: 50,
+
     checkCanPerform: function checkCanPerform(timeDelta, dwarf, world) {
 
         if (Utils.nearestWithoutProperty('integrity', dwarf, world.buildings.buildings) || false) {
@@ -33019,7 +33122,7 @@ var RoleBuilder = exports.RoleBuilder = {
     },
     update: function update(timeDelta, dwarf, world) {
 
-        if (!dwarf.target || dwarf.target.type !== _Barracks2.default.TYPE) {
+        if (!dwarf.target || dwarf.target.type !== 'building') {
 
             var target = Utils.nearestWithoutProperty('integrity', dwarf, world.buildings.buildings) || false;
 
@@ -33062,6 +33165,9 @@ var RoleBuilder = exports.RoleBuilder = {
 var RoleCollectWood = exports.RoleCollectWood = {
 
     id: 'collect-wood',
+
+    cWood: 20,
+    cStone: 40,
 
     checkCanPerform: function checkCanPerform(timeDelta, dwarf, world) {
 
@@ -33112,6 +33218,9 @@ var RoleCollectWood = exports.RoleCollectWood = {
 var RoleCollectStone = exports.RoleCollectStone = {
 
     id: 'collect-stone',
+
+    cWood: 40,
+    cStone: 20,
 
     checkCanPerform: function checkCanPerform(timeDelta, dwarf, world) {
 
@@ -33202,7 +33311,7 @@ var Utils = {
     }
 };
 
-},{"./Barracks":209,"./Dwarf":211,"./Maths":214,"./Rock":215,"./Tree":218}],213:[function(require,module,exports){
+},{"./Dwarf":211,"./Maths":214,"./Rock":215,"./Tree":218}],213:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33438,6 +33547,10 @@ var _pixi = require('pixi.js');
 
 var _pixi2 = _interopRequireDefault(_pixi);
 
+var _Tile = require('./Tile');
+
+var _Tile2 = _interopRequireDefault(_Tile);
+
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
@@ -33491,13 +33604,13 @@ Tree.prototype.hit = function () {
     this.quiverValue = 100;
 };
 
-Tree.WIDTH = 10;
-Tree.HEIGHT = 20;
+Tree.WIDTH = 12;
+Tree.HEIGHT = 24;
 
 Tree.TYPE = 'tree';
 Tree.SUPPLY = 100;
 
-},{"pixi.js":154}],219:[function(require,module,exports){
+},{"./Tile":217,"pixi.js":154}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33635,8 +33748,6 @@ function BuildingUI(world) {
 
     world.buildings.archetypes.forEach(function (archetype, index) {
 
-        console.log(archetype);
-
         var archetypeButtonW = 200;
         var archetypeButtonH = 60;
 
@@ -33740,7 +33851,7 @@ BuildingUI.prototype.onDrag = function (event) {
 
         var pos = event.data.getLocalPosition(this.world);
         var tile = this.world.getTileFromWorld(pos.x, pos.y);
-        if (!tile.isOccupied) {
+        if (tile && !tile.isOccupied) {
 
             this.activeBuilding.x = tile.xCentre;
             this.activeBuilding.y = tile.yCentre;
@@ -33757,7 +33868,7 @@ BuildingUI.prototype.onDragEnd = function () {
 
         var targetTile = this.world.getTileFromWorld(targetX, targetY);
 
-        if (!targetTile.isOccupied) {
+        if (targetTile && !targetTile.isOccupied) {
 
             var canAfford = this.world.supply.wood >= this.activeArchetype.cWood && this.world.supply.stone >= this.activeArchetype.cStone;
 
@@ -33852,10 +33963,6 @@ var _Supply = require('./Supply');
 
 var _Supply2 = _interopRequireDefault(_Supply);
 
-var _Barracks = require('./Barracks');
-
-var _Barracks2 = _interopRequireDefault(_Barracks);
-
 var _Buildings = require('./Buildings');
 
 var _Buildings2 = _interopRequireDefault(_Buildings);
@@ -33863,6 +33970,10 @@ var _Buildings2 = _interopRequireDefault(_Buildings);
 var _Dwarf = require('./Dwarf');
 
 var _Dwarf2 = _interopRequireDefault(_Dwarf);
+
+var _DwarfRoles = require('./DwarfRoles');
+
+var _DwarfRoles2 = _interopRequireDefault(_DwarfRoles);
 
 var _UI = require('./UI');
 
@@ -33883,13 +33994,19 @@ function World() {
     World.WIDTH = Math.ceil(_Layout2.default.WIDTH / _Tile2.default.WIDTH);
     World.HEIGHT = Math.ceil(_Layout2.default.HEIGHT / _Tile2.default.HEIGHT);
 
-    this.noise = new _noisejs2.default.Noise(Math.random());
+    this.randomSeed = Math.floor(Math.random() * 1000);
+
+    console.log('World(', World.WIDTH, World.HEIGHT, this.randomSeed, ')');
+
+    this.noise = new _noisejs2.default.Noise(this.randomSeed);
 
     this.timeOfLastUpdate = 0;
 
     this.supply = new _Supply2.default();
 
     this.buildings = new _Buildings2.default(this);
+
+    this.dwarfRoles = new _DwarfRoles2.default(this);
 
     this.tiles = [];
     this.resources = [];
@@ -33930,10 +34047,10 @@ function World() {
 
     // Add dwarves
 
-    this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _Dwarf2.default.ROLE_COLLECT_WOOD);
-    this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _Dwarf2.default.ROLE_COLLECT_STONE);
+    this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _DwarfRoles2.default.COLLECT_WOOD);
+    this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _DwarfRoles2.default.COLLECT_STONE);
 
-    var builder = this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _Dwarf2.default.ROLE_BUILDER);
+    var builder = this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _DwarfRoles2.default.BUILDER);
     setTimeout(function () {
 
         // Hmmm WTF? Props in constructor of Dwarf get assigned one frame late?
@@ -33974,9 +34091,12 @@ World.prototype.addTree = function (tileX, tileY) {
 
         tile.occupy();
 
+        var offsetX = _Tile2.default.WIDTH * .3 * Math.random() - _Tile2.default.WIDTH * .15;
+        var offsetY = _Tile2.default.HEIGHT * .3 * Math.random() - _Tile2.default.HEIGHT * .15;
+
         var tree = new _Tree2.default();
-        tree.x = tile.x + _Tile2.default.WIDTH * .5;
-        tree.y = tile.y + _Tile2.default.HEIGHT * .5;
+        tree.x = tile.x + _Tile2.default.WIDTH * .5 + offsetX;
+        tree.y = tile.y + _Tile2.default.HEIGHT * .5 + offsetY;
 
         this.resources.push(tree);
         this.trees.push(tree);
@@ -34035,6 +34155,8 @@ World.prototype.addBuilding = function (id, tileX, tileY) {
         building.x = tile.x + _Tile2.default.WIDTH * .5;
         building.y = tile.y + _Tile2.default.HEIGHT * .5;
 
+        console.log('World.addBuilding(', building, ')');
+
         this.zOrdered.push(building);
 
         this.containerZOrdered.addChild(building);
@@ -34044,9 +34166,23 @@ World.prototype.addBuilding = function (id, tileX, tileY) {
     }
 };
 
+World.prototype.buyDwarf = function (x, y, roleId) {
+
+    var role = this.dwarfRoles.getById(roleId);
+    var canAfford = this.supply.wood >= role.cWood && this.supply.stone >= role.cStone;
+
+    if (canAfford) {
+
+        this.supply.wood -= role.cWood;
+        this.supply.stone -= role.cStone;
+
+        this.addDwarf(x, y, roleId);
+    }
+};
+
 World.prototype.addDwarf = function (x, y, role) {
 
-    var dwarf = new _Dwarf2.default(this, x, y, role || _Dwarf2.default.ROLE_IDLE);
+    var dwarf = new _Dwarf2.default(this, x, y, role || _DwarfRoles2.default.IDLE);
 
     this.dwarves.push(dwarf);
     this.zOrdered.push(dwarf);
@@ -34123,13 +34259,13 @@ World.prototype.getTileFromWorld = function (x, y) {
 
 World.prototype.getTile = function (x, y) {
 
-    return this.tiles[y * World.WIDTH + x];
+    return this.tiles[y * World.WIDTH + x] || false;
 };
 
 World.WIDTH = 48;
 World.HEIGHT = 32;
 
-},{"./Barracks":209,"./Buildings":210,"./Dwarf":211,"./Layout":213,"./Rock":215,"./Supply":216,"./Tile":217,"./Tree":218,"./UI":219,"noisejs":30,"pixi.js":154}],221:[function(require,module,exports){
+},{"./Buildings":210,"./Dwarf":211,"./DwarfRoles":212,"./Layout":213,"./Rock":215,"./Supply":216,"./Tile":217,"./Tree":218,"./UI":219,"noisejs":30,"pixi.js":154}],221:[function(require,module,exports){
 'use strict';
 
 var _pixi = require('pixi.js');
@@ -34171,8 +34307,6 @@ function startGame() {
 
         _Layout2.default.WIDTH = Math.min(960, window.screen.width);
         _Layout2.default.HEIGHT = Math.min(640, window.screen.height);
-
-        console.log(_Layout2.default.WIDTH, _Layout2.default.HEIGHT);
     }
 
     var renderer = _pixi2.default.autoDetectRenderer(_Layout2.default.WIDTH, _Layout2.default.HEIGHT, { backgroundColour: 0x000000 });

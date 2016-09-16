@@ -2,7 +2,34 @@ import Maths from './Maths';
 import Dwarf from './Dwarf';
 import Tree from './Tree';
 import Rock from './Rock';
-import Barracks from './Barracks';
+
+export default function DwarfRoles() {
+
+    this.rolesMap = {
+        'idle': RoleIdle,
+        'builder': RoleBuilder,
+        'collect-wood': RoleCollectWood,
+        'collect-stone': RoleCollectStone
+    };
+
+    // console.log('DwarfRoles(',this.rolesMap,')');
+
+}
+
+DwarfRoles.constructor = DwarfRoles;
+
+DwarfRoles.prototype.getById = function(id) {
+
+    console.log('DwarfRoles.getById(', id, this.rolesMap[id], ')');
+
+    return this.rolesMap[id];
+
+}
+
+DwarfRoles.IDLE = 'idle';
+DwarfRoles.BUILDER = 'builder';
+DwarfRoles.COLLECT_WOOD = 'collect-wood';
+DwarfRoles.COLLECT_STONE = 'collect-stone';
 
 export const RoleIdle = {
 
@@ -42,6 +69,9 @@ export const RoleBuilder = {
 
     range: 10,
 
+    cWood: 50,
+    cStone: 50,
+
     checkCanPerform(timeDelta, dwarf, world) {
 
         if (Utils.nearestWithoutProperty('integrity', dwarf, world.buildings.buildings) || false) {
@@ -54,7 +84,7 @@ export const RoleBuilder = {
 
     update(timeDelta, dwarf, world) {
 
-        if ( !dwarf.target || dwarf.target.type !== Barracks.TYPE ) {
+        if ( !dwarf.target || dwarf.target.type !== 'building' ) {
 
             let target = Utils.nearestWithoutProperty('integrity', dwarf, world.buildings.buildings) || false;
 
@@ -109,6 +139,9 @@ export const RoleBuilder = {
 export const RoleCollectWood = {
 
     id: 'collect-wood',
+
+    cWood: 20,
+    cStone: 40,
 
     checkCanPerform(timeDelta, dwarf, world) {
 
@@ -172,6 +205,9 @@ export const RoleCollectWood = {
 export const RoleCollectStone = {
 
     id: 'collect-stone',
+
+    cWood: 40,
+    cStone: 20,
 
     checkCanPerform(timeDelta, dwarf, world) {
 

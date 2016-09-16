@@ -121,8 +121,6 @@ export function BuildingUI(world) {
 
     world.buildings.archetypes.forEach(function(archetype, index) {
 
-        console.log(archetype);
-
         let archetypeButtonW = 200;
         let archetypeButtonH = 60;
 
@@ -232,7 +230,7 @@ BuildingUI.prototype.onDrag = function(event) {
 
         let pos = event.data.getLocalPosition(this.world);
         let tile = this.world.getTileFromWorld(pos.x, pos.y);
-        if (!tile.isOccupied) {
+        if (tile && !tile.isOccupied) {
 
             this.activeBuilding.x = tile.xCentre;
             this.activeBuilding.y = tile.yCentre;
@@ -252,7 +250,7 @@ BuildingUI.prototype.onDragEnd = function() {
 
         let targetTile = this.world.getTileFromWorld(targetX, targetY);
 
-        if (!targetTile.isOccupied) {
+        if (targetTile && !targetTile.isOccupied) {
 
             let canAfford = this.world.supply.wood >= this.activeArchetype.cWood && this.world.supply.stone >= this.activeArchetype.cStone;
 

@@ -1,5 +1,7 @@
 import PIXI from 'pixi.js';
 
+import Tile from './Tile';
+
 export default function Tree() {
 
     PIXI.Container.call(this);
@@ -54,8 +56,8 @@ Tree.prototype.hit = function() {
 
 }
 
-Tree.WIDTH = 10;
-Tree.HEIGHT = 20;
+Tree.WIDTH = 12;
+Tree.HEIGHT = 24;
 
 Tree.TYPE = 'tree';
 Tree.SUPPLY = 100;
