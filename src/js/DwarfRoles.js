@@ -6,7 +6,10 @@ import Barracks from './Barracks';
 
 export const RoleIdle = {
 
+    id: 'idle',
+
     update(timeDelta, dwarf, world) {
+
 
         if (dwarf.canTakeAction()) {
 
@@ -23,16 +26,6 @@ export const RoleIdle = {
 
         }
 
-        // if (Math.random() > .99) {
-
-        //     return Math.random() > .5 ? Dwarf.ROLE_COLLECT_WOOD : Dwarf.ROLE_COLLECT_ROCK;
-
-        // } else {
-
-
-
-        // }
-
     },
 
     targetProximity(timeDelta, dwarf, world) {
@@ -45,13 +38,25 @@ export const RoleIdle = {
 
 export const RoleBuilder = {
 
+    id: 'builder',
+
     range: 10,
+
+    checkCanPerform(timeDelta, dwarf, world) {
+
+        if (Utils.nearestWithoutProperty('integrity', dwarf, world.buildings.buildings) || false) {
+
+            dwarf.changeRole(dwarf.careerRole.id);
+
+        }
+
+    },
 
     update(timeDelta, dwarf, world) {
 
         if ( !dwarf.target || dwarf.target.type !== Barracks.TYPE ) {
 
-            let target = Utils.nearestWithoutProperty('integrity', dwarf, world.buildings) || false;
+            let target = Utils.nearestWithoutProperty('integrity', dwarf, world.buildings.buildings) || false;
 
 
             if (target) {
@@ -103,6 +108,18 @@ export const RoleBuilder = {
 
 export const RoleCollectWood = {
 
+    id: 'collect-wood',
+
+    checkCanPerform(timeDelta, dwarf, world) {
+
+        if (Utils.nearestWithProperty('supply', dwarf, world.trees) || false) {
+
+            dwarf.changeRole(dwarf.careerRole.id);
+
+        }
+
+    },
+
     update(timeDelta, dwarf, world) {
 
         if ( !dwarf.target || dwarf.target.type !== Tree.TYPE ) {
@@ -153,6 +170,18 @@ export const RoleCollectWood = {
 }
 
 export const RoleCollectStone = {
+
+    id: 'collect-stone',
+
+    checkCanPerform(timeDelta, dwarf, world) {
+
+        if (Utils.nearestWithProperty('supply', dwarf, world.rocks) || false) {
+
+            dwarf.changeRole(dwarf.careerRole.id);
+
+        }
+
+    },
 
     update(timeDelta, dwarf, world) {
 

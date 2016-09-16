@@ -17,9 +17,9 @@ export default function Dwarf(world, startX, startY, roleId) {
     this.timeBetweenActions = 2000;
 
     this.roleId = null;
-    this.careerRole = roleId;
+    this.careerRole = Dwarf.ROLES[roleId];
 
-    this.changeRole(this.careerRole);
+    this.changeRole(this.careerRole.id);
 
     let base = new PIXI.Graphics();
     base.beginFill(0x333333);
@@ -74,7 +74,7 @@ Dwarf.prototype.update = function(timeDelta, world) {
 
     if (this.roleId === Dwarf.ROLE_IDLE) {
 
-        // Check whether a valid action is possible
+        this.careerRole.checkCanPerform(timeDelta, this, world);
 
     }
 

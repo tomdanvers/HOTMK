@@ -36,6 +36,8 @@ Supply.prototype.update = function(timeDelta, world) {
 
         world.ui.supply.update(this.wood, this.stone);
 
+        world.ui.building.update(this.wood, this.stone);
+
     }
 
 }

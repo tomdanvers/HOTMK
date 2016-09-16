@@ -1,5 +1,7 @@
 import PIXI from 'pixi.js';
 
+import Noise from 'noisejs';
+
 import Tile from './Tile';
 
 import Tree from './Tree';
@@ -9,6 +11,8 @@ import Rock from './Rock';
 import Supply from './Supply';
 
 import Barracks from './Barracks';
+
+import Buildings from './Buildings';
 
 import Dwarf from './Dwarf';
 
@@ -23,20 +27,24 @@ export default function World() {
     World.WIDTH = Math.ceil(Layout.WIDTH / Tile.WIDTH);
     World.HEIGHT = Math.ceil(Layout.HEIGHT / Tile.HEIGHT);
 
+    this.noise = new Noise.Noise(Math.random());
+
     this.timeOfLastUpdate = 0;
 
     this.supply = new Supply();
+
+    this.buildings = new Buildings(this);
 
     this.tiles = [];
     this.resources = [];
     this.trees = [];
     this.rocks = [];
+    this.dwarves = [];
     this.zOrdered = [];
 
-    // this.containerTiles = new PIXI.Container();
     this.containerZOrdered = new PIXI.Container();
 
-    this.ui = new UI();
+    this.ui = new UI(this);
 
     let background = document.createElement('canvas');
     background.width = World.WIDTH * Tile.WIDTH;
@@ -44,23 +52,13 @@ export default function World() {
 
     let backgroundCtx = background.getContext('2d');
 
-    for (let x = 0; x < World.WIDTH; x ++) {
+    for (let y = 0; y < World.HEIGHT; y ++) {
 
-        for (let y = 0; y < World.HEIGHT; y ++) {
+        for (let x = 0; x < World.WIDTH; x ++) {
 
             let tile = this.addTile(x, y);
 
             backgroundCtx.drawImage(tile.canvas, x * Tile.WIDTH, y * Tile.HEIGHT);
-
-            if (tile.type === Tile.TYPE_GRASS && Math.random() > .9) {
-
-                let tree = this.addTree(x, y);
-
-            } else if (tile.type === Tile.TYPE_GRASS && Math.random() > .99) {
-
-                let rock = this.addRock(x, y);
-
-            }
 
         }
 
@@ -71,16 +69,39 @@ export default function World() {
     this.addChild(this.containerZOrdered);
     this.addChild(this.ui);
 
-    // this.containerTiles.visible = false;
+    // Add buildings
 
-    this.buildings = [];
+    // this.addBuilding(Buildings.ARCHETYPE_BARRACKS.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT * .5));
+    // this.addBuilding(Buildings.ARCHETYPE_TAVERN.id, Math.floor(World.WIDTH * .25), Math.floor(World.HEIGHT * .15));
 
-    this.addBuilding(World.WIDTH * .5 * Tile.WIDTH, World.HEIGHT * .5 * Tile.HEIGHT);
-    this.addBuilding(World.WIDTH * .25 * Tile.WIDTH, World.HEIGHT * .15 * Tile.HEIGHT);
+    // Add dwarves
 
-    this.dwarves = [];
+    this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, Dwarf.ROLE_COLLECT_WOOD);
+    this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, Dwarf.ROLE_COLLECT_STONE);
 
-    this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * .5 * Tile.HEIGHT, Dwarf.ROLE_BUILDER);
+    let builder = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, Dwarf.ROLE_BUILDER);
+    setTimeout(function() {
+
+        // Hmmm WTF? Props in constructor of Dwarf get assigned one frame late?
+        builder.startY = World.HEIGHT * Tile.HEIGHT - 150;
+
+    }, 1);
+
+    // Add resources
+
+    this.tiles.forEach(function(tile) {
+
+        if (tile.type === Tile.TYPE_GRASS && tile.elevation < .4 && Math.random() > .6) {
+
+            let tree = this.addTree(tile.tileX, tile.tileY);
+
+        } else if (tile.type === Tile.TYPE_GRASS && (tile.elevation > .9 && Math.random() > .5 || Math.random() > .99)) {
+
+            let rock = this.addRock(tile.tileX, tile.tileY);
+
+        }
+
+    }.bind(this))
 
 }
 
@@ -89,59 +110,99 @@ World.prototype = Object.create(PIXI.Container.prototype);
 
 World.prototype.addTile = function(x, y) {
 
-    let tile = new Tile();
-    tile.x = x * Tile.WIDTH;
-    tile.y = y * Tile.HEIGHT;
+    let tile = new Tile(x, y, this.noise.simplex2(x / World.WIDTH * 2, y / World.WIDTH * 2));
 
     this.tiles.push(tile);
-    // this.containerTiles.addChild(tile);
 
     return tile;
 
 }
 
-World.prototype.addTree = function(x, y) {
+World.prototype.addTree = function(tileX, tileY) {
 
-    let tree = new Tree();
-    tree.x = x * Tile.WIDTH + Tile.WIDTH * .5;
-    tree.y = y * Tile.HEIGHT + Tile.HEIGHT * .5;
+    if (this.spaceAvailable(tileX, tileY, 1, 1)) {
 
-    this.resources.push(tree);
-    this.trees.push(tree);
-    this.zOrdered.push(tree);
+        let tile = this.getTile(tileX, tileY);
 
-    this.containerZOrdered.addChild(tree);
+        tile.occupy();
 
-    return tree;
+        let tree = new Tree();
+        tree.x = tile.x + Tile.WIDTH * .5;
+        tree.y = tile.y + Tile.HEIGHT * .5;
 
-}
+        this.resources.push(tree);
+        this.trees.push(tree);
+        this.zOrdered.push(tree);
 
-World.prototype.addRock = function(x, y) {
+        this.containerZOrdered.addChild(tree);
 
-    let rock = new Rock();
-    rock.x = x * Tile.WIDTH + Tile.WIDTH * .5;
-    rock.y = y * Tile.HEIGHT + Tile.HEIGHT * .5;
+        return tree;
 
-    this.resources.push(rock);
-    this.rocks.push(rock);
-    this.zOrdered.push(rock);
+    } else {
 
-    this.containerZOrdered.addChild(rock);
+        console.warn('Can\'t place tree at', tileX, tileY, 'there is not enough space.');
 
-    return rock;
+        return false;
+
+    }
 
 }
 
-World.prototype.addBuilding = function(x, y) {
+World.prototype.addRock = function(tileX, tileY) {
 
-    let building = new Barracks(this);
-    building.x = x + Tile.WIDTH * .5;
-    building.y = y + Tile.HEIGHT * .5;
+    if (this.spaceAvailable(tileX, tileY, 1, 1)) {
 
-    this.buildings.push(building);
-    this.zOrdered.push(building);
+        let tile = this.getTile(tileX, tileY);
 
-    this.containerZOrdered.addChild(building);
+        tile.occupy();
+
+        let rock = new Rock();
+        rock.x = tile.x + Tile.WIDTH * .5;
+        rock.y = tile.y + Tile.HEIGHT * .5;
+
+        this.resources.push(rock);
+        this.rocks.push(rock);
+        this.zOrdered.push(rock);
+
+        this.containerZOrdered.addChild(rock);
+
+        return rock;
+
+    } else {
+
+        console.warn('Can\'t place rock at', tileX, tileY, 'there is not enough space.');
+
+        return false;
+
+    }
+
+}
+
+World.prototype.addBuilding = function(id, tileX, tileY) {
+
+    let buildingWidth = 1;
+    let buildingHeight = 1
+
+    if (this.spaceAvailable(tileX, tileY, buildingWidth, buildingHeight)) {
+
+        let tile = this.getTile(tileX, tileY);
+
+        tile.occupy();
+
+        let building = this.buildings.add(id, this);
+        building.x = tile.x + Tile.WIDTH * .5;
+        building.y = tile.y + Tile.HEIGHT * .5;
+
+        this.zOrdered.push(building);
+
+        this.containerZOrdered.addChild(building);
+
+    } else {
+
+        console.warn('Can\'t place building at', tileX, tileY, 'there is not enough space.');
+
+    }
+
 
 }
 
@@ -154,6 +215,8 @@ World.prototype.addDwarf = function(x, y, role) {
 
     this.containerZOrdered.addChild(dwarf);
 
+    return dwarf;
+
 }
 
 World.prototype.update = function(time) {
@@ -161,10 +224,6 @@ World.prototype.update = function(time) {
     let timeDelta = time - this.timeOfLastUpdate;
 
     this.timeOfLastUpdate = time;
-
-    this.tiles.forEach(function(tile) {
-        // tile.rotation += 0.1;
-    });
 
     this.dwarves.forEach(function(dwarf) {
 
@@ -178,11 +237,7 @@ World.prototype.update = function(time) {
 
     }.bind(this));
 
-    this.buildings.forEach(function(building) {
-
-        building.update(timeDelta, this);
-
-    }.bind(this));
+    this.buildings.update(timeDelta);
 
     // Z-Sorting
 
@@ -211,6 +266,39 @@ World.prototype.update = function(time) {
     }.bind(this));
 
     this.supply.update(timeDelta, this);
+
+}
+
+World.prototype.spaceAvailable = function(tileX, tileY, w, h) {
+
+    let valid = true;
+
+    for (let i = tileX; i < tileX + w; i ++) {
+        for (let j = tileY; j < tileY + h; j ++) {
+
+            if (this.getTile(i, j).isOccupied) {
+
+                valid = false;
+                break;
+
+            }
+
+        }
+    }
+
+    return valid;
+
+}
+
+World.prototype.getTileFromWorld = function(x, y) {
+
+    return this.getTile(Math.floor(x / Tile.WIDTH), Math.floor(y / Tile.HEIGHT));
+
+}
+
+World.prototype.getTile = function(x, y) {
+
+    return this.tiles[y * World.WIDTH + x];
 
 }
 
