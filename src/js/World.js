@@ -202,7 +202,7 @@ World.prototype.addBuilding = function(id, tileX, tileY) {
         building.x = tile.x + Tile.WIDTH * .5;
         building.y = tile.y + Tile.HEIGHT * .5;
 
-        console.log('World.addBuilding(', building, ')');
+        console.log('World.addBuilding(', building.id, ')');
 
         this.zOrdered.push(building);
 
