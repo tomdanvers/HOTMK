@@ -151,10 +151,18 @@ export function BuildingUI(world) {
             wordWrapWidth : archetypeButtonW - 20
         };
 
-        let text = new PIXI.Text(archetype.title, style);
-        text.x = 10;
-        text.y = 10;
-        archetypeButton.addChild(text);
+        let textTitle = new PIXI.Text(archetype.title, style);
+        textTitle.x = 10;
+        textTitle.y = 10;
+        archetypeButton.addChild(textTitle);
+
+        style.font = '12px Arial';
+
+        let textDescription = new PIXI.Text(archetype.description, style);
+        textDescription.x = 10;
+        textDescription.y = 30;
+        textDescription.alpha = .75;
+        archetypeButton.addChild(textDescription);
 
     }.bind(this));
 
