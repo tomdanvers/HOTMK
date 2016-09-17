@@ -1,4 +1,5 @@
 import PIXI from 'pixi.js';
+import ValueMinMax from './utils/value-min-max';
 
 export default function Rock() {
 
@@ -6,7 +7,7 @@ export default function Rock() {
 
     this.type = Rock.TYPE;
 
-    this.supply = this.supplyMax = Rock.SUPPLY;
+    this.supply = new ValueMinMax(0, Rock.SUPPLY, 0);
 
     let base = new PIXI.Graphics();
     base.beginFill(0x555555);
@@ -22,7 +23,7 @@ Rock.prototype = Object.create(PIXI.Container.prototype);
 
 Rock.prototype.update = function(timeDelta, world) {
 
-    this.visible = this.supply > 0;
+    this.visible = !this.supply.isMin();
 
 }
 

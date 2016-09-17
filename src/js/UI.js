@@ -1,5 +1,5 @@
 import PIXI from 'pixi.js';
-import Maths from './Maths';
+import Maths from './utils/Maths';
 import Layout from './Layout';
 
 export default function UI(world) {
@@ -260,14 +260,14 @@ BuildingUI.prototype.onDragEnd = function() {
 
         if (targetTile && !targetTile.isOccupied) {
 
-            let canAfford = this.world.supply.wood >= this.activeArchetype.cWood && this.world.supply.stone >= this.activeArchetype.cStone;
+            let canAfford = this.world.supply.wood.get() >= this.activeArchetype.cWood && this.world.supply.stone.get() >= this.activeArchetype.cStone;
 
             if (canAfford && window.confirm('Place new ' + this.activeArchetype.title + ' at ' + targetTile.tileX + '/' + targetTile.tileY + '?')) {
 
                 console.log('Placing new', this.activeArchetype.title, 'at', targetTile.tileX + '/' + targetTile.tileY);
 
-                this.world.supply.wood -= this.activeArchetype.cWood;
-                this.world.supply.stone -= this.activeArchetype.cStone;
+                this.world.supply.wood.decrement(this.activeArchetype.cWood);
+                this.world.supply.stone.decrement(this.activeArchetype.cStone);
 
                 this.world.addBuilding(this.activeArchetype.id, targetTile.tileX, targetTile.tileY);
 

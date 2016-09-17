@@ -32684,6 +32684,10 @@ var _DwarfRoles = require('./DwarfRoles');
 
 var _DwarfRoles2 = _interopRequireDefault(_DwarfRoles);
 
+var _valueMinMax = require('./utils/value-min-max');
+
+var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
+
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
@@ -32694,10 +32698,9 @@ function Building(world) {
 
     this.world = world;
 
-    this.integrityMax = Building.INTEGRITY;
-    this.integrity = Building.INTEGRITY * .25;
+    this.integrity = new _valueMinMax2.default(0, Building.INTEGRITY, Building.INTEGRITY * .25);
 
-    this.constructed = false;
+    this.isConstructed = this.integrity.isMax();
 
     this.timeSinceSpawn = Building.SPAWN_RATE;
 
@@ -32727,7 +32730,7 @@ Building.prototype.update = function (timeDelta) {
 
     this.timeSinceSpawn += timeDelta;
 
-    this.alpha = this.integrity / this.integrityMax;
+    this.alpha = this.integrity.val();
 
     // if (this.timeSinceSpawn > Building.SPAWN_RATE) {
 
@@ -32738,10 +32741,12 @@ Building.prototype.update = function (timeDelta) {
 
 Building.prototype.onDown = function (event) {
 
-    if (this.constructed) {
+    // if (this.isConstructed) {
 
-        this.spawn(true);
-    }
+    //     this.spawn(true);
+
+    // }
+
 };
 
 Building.prototype.spawn = function (isPurchased) {
@@ -32758,6 +32763,27 @@ Building.prototype.spawn = function (isPurchased) {
             this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
         }
     }
+};
+
+Building.prototype.constructed = function () {
+
+    this.isConstructed = true;
+
+    if (this.associatedRole) {
+
+        // Add dwarf with associated role
+
+        this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+    }
+
+    this.onConstructed();
+};
+
+Building.prototype.onConstructed = function () {
+
+    // Stub to override
+
+
 };
 
 Building.WIDTH = 14;
@@ -32849,7 +32875,7 @@ Mason.prototype.draw = function (graphics) {
 Mason.WIDTH = 13;
 Mason.HEIGHT = 14;
 
-},{"./Dwarf":211,"./DwarfRoles":212,"pixi.js":154}],210:[function(require,module,exports){
+},{"./Dwarf":211,"./DwarfRoles":212,"./utils/value-min-max":222,"pixi.js":154}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32921,7 +32947,7 @@ var _pixi = require('pixi.js');
 
 var _pixi2 = _interopRequireDefault(_pixi);
 
-var _Maths = require('./Maths');
+var _Maths = require('./utils/Maths');
 
 var _Maths2 = _interopRequireDefault(_Maths);
 
@@ -33030,7 +33056,7 @@ Dwarf.HEIGHT = 12;
 
 Dwarf.SPEED = .75;
 
-},{"./DwarfRoles":212,"./Maths":214,"pixi.js":154}],212:[function(require,module,exports){
+},{"./DwarfRoles":212,"./utils/Maths":221,"pixi.js":154}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33039,7 +33065,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.RoleCollectStone = exports.RoleCollectWood = exports.RoleBuilder = exports.RoleIdle = undefined;
 exports.default = DwarfRoles;
 
-var _Maths = require('./Maths');
+var _Maths = require('./utils/Maths');
 
 var _Maths2 = _interopRequireDefault(_Maths);
 
@@ -33146,15 +33172,17 @@ var RoleBuilder = exports.RoleBuilder = {
 
         if (dwarf.canTakeAction()) {
 
-            if (dwarf.target.integrity < dwarf.target.integrityMax) {
+            var building = dwarf.target;
 
-                var rate = Math.min(10, dwarf.target.integrityMax - dwarf.target.integrity);
+            if (!building.integrity.isMax()) {
 
-                dwarf.target.integrity += rate;
+                var rate = Math.min(10, building.integrity.getRemainder());
 
-                if (dwarf.target.integrity == dwarf.target.integrityMax && !dwarf.target.constructed) {
+                building.integrity.increment(rate);
 
-                    dwarf.target.constructed = true;
+                if (building.integrity.isMax() && !building.isConstructed) {
+
+                    building.constructed();
                 }
 
                 dwarf.tookAction();
@@ -33199,15 +33227,17 @@ var RoleCollectWood = exports.RoleCollectWood = {
 
         if (dwarf.canTakeAction()) {
 
-            if (dwarf.target.supply > 0) {
+            var tree = dwarf.target;
 
-                var rate = Math.min(10, dwarf.target.supply);
+            if (!tree.supply.isMin()) {
 
-                dwarf.target.supply -= rate;
+                var rate = Math.min(10, tree.supply.get());
 
-                world.supply.wood += rate;
+                tree.supply.decrement(rate);
 
-                dwarf.target.hit();
+                world.supply.wood.increment(rate);
+
+                tree.hit();
 
                 dwarf.tookAction();
             } else {
@@ -33252,15 +33282,17 @@ var RoleCollectStone = exports.RoleCollectStone = {
 
         if (dwarf.canTakeAction()) {
 
-            if (dwarf.target.supply > 0) {
+            var rock = dwarf.target;
 
-                var rate = Math.min(5, dwarf.target.supply);
+            if (!rock.supply.isMin()) {
 
-                dwarf.target.supply -= rate;
+                var rate = Math.min(5, rock.supply.get());
 
-                world.supply.stone += rate;
+                rock.supply.decrement(rate);
 
-                dwarf.target.hit();
+                world.supply.stone.increment(rate);
+
+                rock.hit();
 
                 dwarf.tookAction();
             } else {
@@ -33279,7 +33311,7 @@ var Utils = {
 
         items.forEach(function (item) {
 
-            if (item[property] > 0) {
+            if (!item[property].isMin()) {
 
                 var distance = _Maths2.default.distanceBetween(referencePoint, item);
 
@@ -33299,7 +33331,7 @@ var Utils = {
 
         items.forEach(function (item) {
 
-            if (item[property] < item[property + 'Max']) {
+            if (!item[property].isMax()) {
 
                 var distance = _Maths2.default.distanceBetween(referencePoint, item);
 
@@ -33314,7 +33346,7 @@ var Utils = {
     }
 };
 
-},{"./Dwarf":211,"./Maths":214,"./Rock":215,"./Tree":218}],213:[function(require,module,exports){
+},{"./Dwarf":211,"./Rock":214,"./Tree":217,"./utils/Maths":221}],213:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33326,36 +33358,6 @@ exports.default = {
 };
 
 },{}],214:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = {
-    distanceBetween: function distanceBetween(a, b) {
-
-        return Math.hypot(a.x - b.x, a.y - b.y);
-    },
-    nearest: function nearest(referencePoint, items) {
-
-        var distanceToClosest = Number.MAX_VALUE;
-        var closest = false;
-
-        items.forEach(function (item) {
-
-            var distance = this.distanceBetween(referencePoint, item);
-
-            if (distance < distanceToClosest) {
-                distanceToClosest = distance;
-                closest = item;
-            }
-        }.bind(this));
-
-        return closest;
-    }
-};
-
-},{}],215:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33367,6 +33369,10 @@ var _pixi = require('pixi.js');
 
 var _pixi2 = _interopRequireDefault(_pixi);
 
+var _valueMinMax = require('./utils/value-min-max');
+
+var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
+
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
@@ -33377,7 +33383,7 @@ function Rock() {
 
     this.type = Rock.TYPE;
 
-    this.supply = this.supplyMax = Rock.SUPPLY;
+    this.supply = new _valueMinMax2.default(0, Rock.SUPPLY, 0);
 
     var base = new _pixi2.default.Graphics();
     base.beginFill(0x555555);
@@ -33392,7 +33398,7 @@ Rock.prototype = Object.create(_pixi2.default.Container.prototype);
 
 Rock.prototype.update = function (timeDelta, world) {
 
-    this.visible = this.supply > 0;
+    this.visible = !this.supply.isMin();
 };
 
 Rock.prototype.hit = function () {
@@ -33407,7 +33413,7 @@ Rock.HEIGHT = 10;
 Rock.TYPE = 'rock';
 Rock.SUPPLY = 250;
 
-},{"pixi.js":154}],216:[function(require,module,exports){
+},{"./utils/value-min-max":222,"pixi.js":154}],215:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33419,15 +33425,19 @@ var _pixi = require('pixi.js');
 
 var _pixi2 = _interopRequireDefault(_pixi);
 
+var _valueMinMax = require('./utils/value-min-max');
+
+var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
+
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
 function Supply() {
 
-    this.wood = 250;
+    this.wood = new _valueMinMax2.default(0, 10000, 250);
     this.woodOld = 0;
-    this.stone = 150;
+    this.stone = new _valueMinMax2.default(0, 10000, 150);
     this.stoneOld = 0;
 
     return this;
@@ -33437,29 +33447,29 @@ Supply.prototype.update = function (timeDelta, world) {
 
     var dirty = false;
 
-    if (this.wood !== this.woodOld) {
+    if (this.wood.get() !== this.woodOld) {
 
-        this.woodOld = this.wood;
+        this.woodOld = this.wood.get();
 
         dirty = true;
     }
 
-    if (this.stone !== this.stoneOld) {
+    if (this.stone.get() !== this.stoneOld) {
 
-        this.stoneOld = this.stone;
+        this.stoneOld = this.stone.get();
 
         dirty = true;
     }
 
     if (dirty) {
 
-        world.ui.supply.update(this.wood, this.stone);
+        world.ui.supply.update(this.wood.get(), this.stone.get());
 
-        world.ui.building.update(this.wood, this.stone);
+        world.ui.building.update(this.wood.get(), this.stone.get());
     }
 };
 
-},{"pixi.js":154}],217:[function(require,module,exports){
+},{"./utils/value-min-max":222,"pixi.js":154}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33538,7 +33548,7 @@ Tile.TILE_COLOURS = {
     grass: '#002C00'
 };
 
-},{"pixi.js":154}],218:[function(require,module,exports){
+},{"pixi.js":154}],217:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33549,6 +33559,10 @@ exports.default = Tree;
 var _pixi = require('pixi.js');
 
 var _pixi2 = _interopRequireDefault(_pixi);
+
+var _valueMinMax = require('./utils/value-min-max');
+
+var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
 
 var _Tile = require('./Tile');
 
@@ -33564,7 +33578,7 @@ function Tree() {
 
     this.type = Tree.TYPE;
 
-    this.supply = this.supplyMax = Tree.SUPPLY;
+    this.supply = new _valueMinMax2.default(0, Tree.SUPPLY, 0);
 
     var base = new _pixi2.default.Graphics();
 
@@ -33589,7 +33603,7 @@ Tree.prototype.update = function (timeDelta, world) {
 
     // this.alpha = this.supply / this.supplyMax;
 
-    this.visible = this.supply > 0;
+    this.visible = !this.supply.isMin();
 
     if (this.quiverValue > 0) {
 
@@ -33613,7 +33627,7 @@ Tree.HEIGHT = 24;
 Tree.TYPE = 'tree';
 Tree.SUPPLY = 100;
 
-},{"./Tile":217,"pixi.js":154}],219:[function(require,module,exports){
+},{"./Tile":216,"./utils/value-min-max":222,"pixi.js":154}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33627,7 +33641,7 @@ var _pixi = require('pixi.js');
 
 var _pixi2 = _interopRequireDefault(_pixi);
 
-var _Maths = require('./Maths');
+var _Maths = require('./utils/Maths');
 
 var _Maths2 = _interopRequireDefault(_Maths);
 
@@ -33881,14 +33895,14 @@ BuildingUI.prototype.onDragEnd = function () {
 
         if (targetTile && !targetTile.isOccupied) {
 
-            var canAfford = this.world.supply.wood >= this.activeArchetype.cWood && this.world.supply.stone >= this.activeArchetype.cStone;
+            var canAfford = this.world.supply.wood.get() >= this.activeArchetype.cWood && this.world.supply.stone.get() >= this.activeArchetype.cStone;
 
             if (canAfford && window.confirm('Place new ' + this.activeArchetype.title + ' at ' + targetTile.tileX + '/' + targetTile.tileY + '?')) {
 
                 console.log('Placing new', this.activeArchetype.title, 'at', targetTile.tileX + '/' + targetTile.tileY);
 
-                this.world.supply.wood -= this.activeArchetype.cWood;
-                this.world.supply.stone -= this.activeArchetype.cStone;
+                this.world.supply.wood.decrement(this.activeArchetype.cWood);
+                this.world.supply.stone.decrement(this.activeArchetype.cStone);
 
                 this.world.addBuilding(this.activeArchetype.id, targetTile.tileX, targetTile.tileY);
             } else {
@@ -33942,7 +33956,7 @@ BuildingUI.prototype.update = function (wood, stone) {
     }.bind(this));
 };
 
-},{"./Layout":213,"./Maths":214,"pixi.js":154}],220:[function(require,module,exports){
+},{"./Layout":213,"./utils/Maths":221,"pixi.js":154}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34276,7 +34290,7 @@ World.prototype.getTile = function (x, y) {
 World.WIDTH = 48;
 World.HEIGHT = 32;
 
-},{"./Buildings":210,"./Dwarf":211,"./DwarfRoles":212,"./Layout":213,"./Rock":215,"./Supply":216,"./Tile":217,"./Tree":218,"./UI":219,"noisejs":30,"pixi.js":154}],221:[function(require,module,exports){
+},{"./Buildings":210,"./Dwarf":211,"./DwarfRoles":212,"./Layout":213,"./Rock":214,"./Supply":215,"./Tile":216,"./Tree":217,"./UI":218,"noisejs":30,"pixi.js":154}],220:[function(require,module,exports){
 'use strict';
 
 var _pixi = require('pixi.js');
@@ -34347,4 +34361,109 @@ function startGame() {
     }
 }
 
-},{"./Layout":213,"./World":220,"pixi.js":154,"raf":187}]},{},[221]);
+},{"./Layout":213,"./World":219,"pixi.js":154,"raf":187}],221:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    distanceBetween: function distanceBetween(a, b) {
+
+        return Math.hypot(a.x - b.x, a.y - b.y);
+    },
+    nearest: function nearest(referencePoint, items) {
+
+        var distanceToClosest = Number.MAX_VALUE;
+        var closest = false;
+
+        items.forEach(function (item) {
+
+            var distance = this.distanceBetween(referencePoint, item);
+
+            if (distance < distanceToClosest) {
+                distanceToClosest = distance;
+                closest = item;
+            }
+        }.bind(this));
+
+        return closest;
+    }
+};
+
+},{}],222:[function(require,module,exports){
+"use strict";
+
+module.exports = function (min, max, initial) {
+
+	var value = initial || max;
+	var api = {
+		get: get,
+		getRemainder: getRemainder,
+		set: set,
+		increment: increment,
+		decrement: decrement,
+		isMax: isMax,
+		isMin: isMin,
+		simplify: simplify,
+		val: val
+	};
+
+	function get() {
+
+		return value;
+	}
+
+	function getRemainder() {
+
+		return max - value;
+	}
+
+	function set(val) {
+
+		value = constrain(val);
+	}
+
+	function increment(val) {
+
+		value = constrain(value + val);
+	}
+
+	function decrement(val) {
+
+		value = constrain(value - val);
+	}
+
+	function isMin() {
+
+		return value === min;
+	}
+
+	function isMax() {
+
+		return value === max;
+	}
+
+	function constrain(val) {
+
+		return val < min ? min : val > max ? max : val;
+	}
+
+	function val() {
+
+		return (value - min) / (max - min);
+	}
+
+	function simplify() {
+
+		return {
+			min: min,
+			value: value,
+			max: max
+		};
+	}
+
+	return api;
+};
+
+},{}]},{},[220]);

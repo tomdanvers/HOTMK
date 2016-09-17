@@ -1,4 +1,5 @@
 import PIXI from 'pixi.js';
+import ValueMinMax from './utils/value-min-max';
 
 import Tile from './Tile';
 
@@ -8,7 +9,7 @@ export default function Tree() {
 
     this.type = Tree.TYPE;
 
-    this.supply = this.supplyMax = Tree.SUPPLY;
+    this.supply = new ValueMinMax(0, Tree.SUPPLY, 0);
 
     let base = new PIXI.Graphics();
 
@@ -34,7 +35,7 @@ Tree.prototype.update = function(timeDelta, world) {
 
     // this.alpha = this.supply / this.supplyMax;
 
-    this.visible = this.supply > 0;
+    this.visible = !this.supply.isMin();
 
     if (this.quiverValue > 0) {
 

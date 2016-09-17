@@ -1,4 +1,4 @@
-import Maths from './Maths';
+import Maths from './utils/Maths';
 import Dwarf from './Dwarf';
 import Tree from './Tree';
 import Rock from './Rock';
@@ -107,15 +107,17 @@ export const RoleBuilder = {
 
         if (dwarf.canTakeAction()) {
 
-            if (dwarf.target.integrity < dwarf.target.integrityMax) {
+            let building = dwarf.target;
 
-                let rate = Math.min(10, dwarf.target.integrityMax - dwarf.target.integrity);
+            if (!building.integrity.isMax()) {
 
-                dwarf.target.integrity += rate;
+                let rate = Math.min(10, building.integrity.getRemainder());
 
-                if (dwarf.target.integrity == dwarf.target.integrityMax && !dwarf.target.constructed) {
+                building.integrity.increment(rate);
 
-                    dwarf.target.constructed = true;
+                if (building.integrity.isMax() && !building.isConstructed) {
+
+                    building.constructed();
 
                 }
 
@@ -174,15 +176,17 @@ export const RoleCollectWood = {
 
         if (dwarf.canTakeAction()) {
 
-            if (dwarf.target.supply > 0) {
+            let tree = dwarf.target;
 
-                let rate = Math.min(10, dwarf.target.supply);
+            if (!tree.supply.isMin()) {
 
-                dwarf.target.supply -= rate;
+                let rate = Math.min(10, tree.supply.get());
 
-                world.supply.wood += rate;
+                tree.supply.decrement(rate);
 
-                dwarf.target.hit();
+                world.supply.wood.increment(rate);
+
+                tree.hit();
 
                 dwarf.tookAction();
 
@@ -240,15 +244,17 @@ export const RoleCollectStone = {
 
         if (dwarf.canTakeAction()) {
 
-            if (dwarf.target.supply > 0) {
+            let rock = dwarf.target;
 
-                let rate = Math.min(5, dwarf.target.supply);
+            if (!rock.supply.isMin()) {
 
-                dwarf.target.supply -= rate;
+                let rate = Math.min(5, rock.supply.get());
 
-                world.supply.stone += rate;
+                rock.supply.decrement(rate);
 
-                dwarf.target.hit();
+                world.supply.stone.increment(rate);
+
+                rock.hit();
 
                 dwarf.tookAction();
 
@@ -273,7 +279,7 @@ const Utils = {
 
         items.forEach(function(item) {
 
-            if (item[property] > 0) {
+            if (!item[property].isMin()) {
 
                 let distance = Maths.distanceBetween(referencePoint, item);
 
@@ -297,7 +303,7 @@ const Utils = {
 
         items.forEach(function(item) {
 
-            if (item[property] < item[property + 'Max']) {
+            if (!item[property].isMax()) {
 
                 let distance = Maths.distanceBetween(referencePoint, item);
 

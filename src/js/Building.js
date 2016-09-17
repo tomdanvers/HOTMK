@@ -2,6 +2,7 @@ import PIXI from 'pixi.js';
 
 import Dwarf from './Dwarf';
 import DwarfRoles from './DwarfRoles';
+import ValueMinMax from './utils/value-min-max';
 
 export function Building(world) {
 
@@ -9,10 +10,9 @@ export function Building(world) {
 
     this.world = world;
 
-    this.integrityMax = Building.INTEGRITY;
-    this.integrity = Building.INTEGRITY * .25;
+    this.integrity = new ValueMinMax(0, Building.INTEGRITY, Building.INTEGRITY * .25);
 
-    this.constructed = false;
+    this.isConstructed = this.integrity.isMax();
 
     this.timeSinceSpawn = Building.SPAWN_RATE;
 
@@ -45,7 +45,7 @@ Building.prototype.update = function(timeDelta) {
 
     this.timeSinceSpawn += timeDelta;
 
-    this.alpha = this.integrity / this.integrityMax;
+    this.alpha = this.integrity.val();
 
     // if (this.timeSinceSpawn > Building.SPAWN_RATE) {
 
@@ -57,11 +57,11 @@ Building.prototype.update = function(timeDelta) {
 
 Building.prototype.onDown = function(event) {
 
-    if (this.constructed) {
+    // if (this.isConstructed) {
 
-        this.spawn(true);
+    //     this.spawn(true);
 
-    }
+    // }
 
 }
 
@@ -82,6 +82,29 @@ Building.prototype.spawn = function(isPurchased) {
         }
 
     }
+
+}
+
+Building.prototype.constructed = function() {
+
+    this.isConstructed = true;
+
+    if (this.associatedRole) {
+
+        // Add dwarf with associated role
+
+        this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+
+    }
+
+    this.onConstructed();
+
+}
+
+Building.prototype.onConstructed = function() {
+
+    // Stub to override
+
 
 }
 

@@ -1,5 +1,5 @@
 import PIXI from 'pixi.js';
-import Maths from './Maths';
+import Maths from './utils/Maths';
 
 import DwarfRoles from './DwarfRoles';
 import {RoleIdle, RoleBuilder, RoleCollectWood, RoleCollectStone} from './DwarfRoles';
