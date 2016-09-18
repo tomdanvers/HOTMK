@@ -20,6 +20,8 @@ import UI from './UI';
 
 import Layout from './Layout';
 
+import TimeOfDay from './TimeOfDay';
+
 export default function World() {
 
     PIXI.Container.call(this);
@@ -34,6 +36,8 @@ export default function World() {
     this.noise = new Noise.Noise(this.randomSeed);
 
     this.timeOfLastUpdate = 0;
+
+    this.timeOfDay = new TimeOfDay();
 
     this.supply = new Supply();
 
@@ -56,7 +60,12 @@ export default function World() {
     background.width = World.WIDTH * Tile.WIDTH;
     background.height = World.HEIGHT * Tile.HEIGHT;
 
+    this.nightCanvas = document.createElement('canvas');
+    this.nightCanvas.width = World.WIDTH * Tile.WIDTH;
+    this.nightCanvas.height = World.HEIGHT * Tile.HEIGHT;
+
     let backgroundCtx = background.getContext('2d');
+    this.nightCtx = this.nightCanvas.getContext('2d');
 
     for (let y = 0; y < World.HEIGHT; y ++) {
 
@@ -65,14 +74,18 @@ export default function World() {
             let tile = this.addTile(x, y);
 
             backgroundCtx.drawImage(tile.canvas, x * Tile.WIDTH, y * Tile.HEIGHT);
+            this.nightCtx.drawImage(tile.canvasNight, x * Tile.WIDTH, y * Tile.HEIGHT);
 
         }
 
     }
 
     this.background = new PIXI.Sprite(PIXI.Texture.fromCanvas(background));
+    this.night = new PIXI.Sprite(PIXI.Texture.fromCanvas(this.nightCanvas));
+
     this.addChild(this.background);
     this.addChild(this.containerZOrdered);
+    this.addChild(this.night);
     this.addChild(this.ui);
 
     // Add buildings
@@ -208,12 +221,27 @@ World.prototype.addBuilding = function(id, tileX, tileY) {
 
         this.containerZOrdered.addChild(building);
 
+        let radius = 50;
+
+        let gradient = this.nightCtx.createRadialGradient(building.x, building.y - 5, 0, building.x, building.y - 5, radius);
+        gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
+        gradient.addColorStop(.4, 'rgba(0, 0, 0, 1)');
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+        this.nightCtx.globalCompositeOperation = 'destination-out';
+        this.nightCtx.fillStyle = gradient;
+        this.nightCtx.beginPath();
+        this.nightCtx.arc(building.x, building.y - 5, radius, 0, 2 * Math.PI);
+        this.nightCtx.fill();
+
+        this.night.texture = PIXI.Texture.fromCanvas(this.nightCanvas);
+        this.night.texture.update();
+
     } else {
 
         console.warn('Can\'t place building at', tileX, tileY, 'there is not enough space.');
 
     }
-
 
 }
 
@@ -252,6 +280,10 @@ World.prototype.update = function(time) {
     let timeDelta = time - this.timeOfLastUpdate;
 
     this.timeOfLastUpdate = time;
+
+    this.timeOfDay.update(timeDelta, this);
+
+    this.night.alpha = this.timeOfDay.getSunValue();
 
     this.dwarves.forEach(function(dwarf) {
 

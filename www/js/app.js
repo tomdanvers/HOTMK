@@ -32875,7 +32875,7 @@ Mason.prototype.draw = function (graphics) {
 Mason.WIDTH = 13;
 Mason.HEIGHT = 14;
 
-},{"./Dwarf":211,"./DwarfRoles":212,"./utils/value-min-max":222,"pixi.js":154}],210:[function(require,module,exports){
+},{"./Dwarf":211,"./DwarfRoles":212,"./utils/value-min-max":223,"pixi.js":154}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33056,7 +33056,7 @@ Dwarf.HEIGHT = 12;
 
 Dwarf.SPEED = .75;
 
-},{"./DwarfRoles":212,"./utils/Maths":221,"pixi.js":154}],212:[function(require,module,exports){
+},{"./DwarfRoles":212,"./utils/Maths":222,"pixi.js":154}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33346,7 +33346,7 @@ var Utils = {
     }
 };
 
-},{"./Dwarf":211,"./Rock":214,"./Tree":217,"./utils/Maths":221}],213:[function(require,module,exports){
+},{"./Dwarf":211,"./Rock":214,"./Tree":218,"./utils/Maths":222}],213:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33413,7 +33413,7 @@ Rock.HEIGHT = 10;
 Rock.TYPE = 'rock';
 Rock.SUPPLY = 250;
 
-},{"./utils/value-min-max":222,"pixi.js":154}],215:[function(require,module,exports){
+},{"./utils/value-min-max":223,"pixi.js":154}],215:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33469,7 +33469,7 @@ Supply.prototype.update = function (timeDelta, world) {
     }
 };
 
-},{"./utils/value-min-max":222,"pixi.js":154}],216:[function(require,module,exports){
+},{"./utils/value-min-max":223,"pixi.js":154}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33507,7 +33507,12 @@ function Tile(x, y, elevation) {
     this.canvas.width = Tile.WIDTH;
     this.canvas.height = Tile.HEIGHT;
 
+    this.canvasNight = document.createElement('canvas');
+    this.canvasNight.width = Tile.WIDTH;
+    this.canvasNight.height = Tile.HEIGHT;
+
     var ctx = this.canvas.getContext('2d');
+    var ctxNight = this.canvasNight.getContext('2d');
 
     ctx.fillStyle = this.getColourFromType();
     ctx.fillRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
@@ -33517,6 +33522,11 @@ function Tile(x, y, elevation) {
 
     ctx.strokeStyle = 'rgba(255, 255, 255, .05)';
     ctx.strokeRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
+
+    ctxNight.fillStyle = 'rgba(0, 0, 0, .7)';
+    // let v = Math.floor(Math.random() * 255);
+    // ctxNight.fillStyle = 'rgba('+v+', '+v+', '+v+', .7)';
+    ctxNight.fillRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
 }
 
 Tile.constructor = Tile;
@@ -33549,6 +33559,90 @@ Tile.TILE_COLOURS = {
 };
 
 },{"pixi.js":154}],217:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = TimeOfDay;
+
+var _pixi = require('pixi.js');
+
+var _pixi2 = _interopRequireDefault(_pixi);
+
+var _valueMinMax = require('./utils/value-min-max');
+
+var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function TimeOfDay() {
+
+    this.time = 1;
+}
+
+TimeOfDay.DAWN_START = 6;
+TimeOfDay.DAWN_END = 7.5;
+
+TimeOfDay.DUSK_START = 19;
+TimeOfDay.DUSK_END = 21;
+
+TimeOfDay.constructor = TimeOfDay;
+
+TimeOfDay.prototype.update = function (timeDelta, world) {
+
+    this.time += timeDelta * 0.00005;
+
+    if (this.time >= 24) {
+
+        this.time = 0;
+    }
+
+    // console.log(this.getHour(), this.getMinute());
+};
+
+TimeOfDay.prototype.getValue = function () {
+
+    return this.time / 24;
+};
+
+TimeOfDay.prototype.getSunValue = function () {
+
+    var val = void 0;
+
+    if (this.time < TimeOfDay.DAWN_START) {
+
+        val = 0;
+    } else if (this.time < TimeOfDay.DAWN_END) {
+
+        val = (this.time - TimeOfDay.DAWN_START) / (TimeOfDay.DAWN_END - TimeOfDay.DAWN_START);
+    } else if (this.time < TimeOfDay.DUSK_START) {
+
+        val = 1;
+    } else if (this.time < TimeOfDay.DUSK_END) {
+
+        val = (this.time - TimeOfDay.DUSK_START) / (TimeOfDay.DUSK_END - TimeOfDay.DUSK_START);
+    } else {
+
+        val = 0;
+    }
+
+    return 1 - val;
+};
+
+TimeOfDay.prototype.getHour = function () {
+
+    return Math.floor(this.time);
+};
+
+TimeOfDay.prototype.getMinute = function () {
+
+    return Math.floor(this.time % 1 * 60);
+};
+
+},{"./utils/value-min-max":223,"pixi.js":154}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33627,7 +33721,7 @@ Tree.HEIGHT = 24;
 Tree.TYPE = 'tree';
 Tree.SUPPLY = 100;
 
-},{"./Tile":216,"./utils/value-min-max":222,"pixi.js":154}],218:[function(require,module,exports){
+},{"./Tile":216,"./utils/value-min-max":223,"pixi.js":154}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33956,7 +34050,7 @@ BuildingUI.prototype.update = function (wood, stone) {
     }.bind(this));
 };
 
-},{"./Layout":213,"./utils/Maths":221,"pixi.js":154}],219:[function(require,module,exports){
+},{"./Layout":213,"./utils/Maths":222,"pixi.js":154}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34008,6 +34102,10 @@ var _Layout = require('./Layout');
 
 var _Layout2 = _interopRequireDefault(_Layout);
 
+var _TimeOfDay = require('./TimeOfDay');
+
+var _TimeOfDay2 = _interopRequireDefault(_TimeOfDay);
+
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
@@ -34026,6 +34124,8 @@ function World() {
     this.noise = new _noisejs2.default.Noise(this.randomSeed);
 
     this.timeOfLastUpdate = 0;
+
+    this.timeOfDay = new _TimeOfDay2.default();
 
     this.supply = new _Supply2.default();
 
@@ -34048,7 +34148,12 @@ function World() {
     background.width = World.WIDTH * _Tile2.default.WIDTH;
     background.height = World.HEIGHT * _Tile2.default.HEIGHT;
 
+    this.nightCanvas = document.createElement('canvas');
+    this.nightCanvas.width = World.WIDTH * _Tile2.default.WIDTH;
+    this.nightCanvas.height = World.HEIGHT * _Tile2.default.HEIGHT;
+
     var backgroundCtx = background.getContext('2d');
+    this.nightCtx = this.nightCanvas.getContext('2d');
 
     for (var y = 0; y < World.HEIGHT; y++) {
 
@@ -34057,12 +34162,16 @@ function World() {
             var tile = this.addTile(x, y);
 
             backgroundCtx.drawImage(tile.canvas, x * _Tile2.default.WIDTH, y * _Tile2.default.HEIGHT);
+            this.nightCtx.drawImage(tile.canvasNight, x * _Tile2.default.WIDTH, y * _Tile2.default.HEIGHT);
         }
     }
 
     this.background = new _pixi2.default.Sprite(_pixi2.default.Texture.fromCanvas(background));
+    this.night = new _pixi2.default.Sprite(_pixi2.default.Texture.fromCanvas(this.nightCanvas));
+
     this.addChild(this.background);
     this.addChild(this.containerZOrdered);
+    this.addChild(this.night);
     this.addChild(this.ui);
 
     // Add buildings
@@ -34185,6 +34294,22 @@ World.prototype.addBuilding = function (id, tileX, tileY) {
         this.zOrdered.push(building);
 
         this.containerZOrdered.addChild(building);
+
+        var radius = 50;
+
+        var gradient = this.nightCtx.createRadialGradient(building.x, building.y - 5, 0, building.x, building.y - 5, radius);
+        gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
+        gradient.addColorStop(.4, 'rgba(0, 0, 0, 1)');
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+        this.nightCtx.globalCompositeOperation = 'destination-out';
+        this.nightCtx.fillStyle = gradient;
+        this.nightCtx.beginPath();
+        this.nightCtx.arc(building.x, building.y - 5, radius, 0, 2 * Math.PI);
+        this.nightCtx.fill();
+
+        this.night.texture = _pixi2.default.Texture.fromCanvas(this.nightCanvas);
+        this.night.texture.update();
     } else {
 
         console.warn('Can\'t place building at', tileX, tileY, 'there is not enough space.');
@@ -34222,6 +34347,10 @@ World.prototype.update = function (time) {
     var timeDelta = time - this.timeOfLastUpdate;
 
     this.timeOfLastUpdate = time;
+
+    this.timeOfDay.update(timeDelta, this);
+
+    this.night.alpha = this.timeOfDay.getSunValue();
 
     this.dwarves.forEach(function (dwarf) {
 
@@ -34290,7 +34419,7 @@ World.prototype.getTile = function (x, y) {
 World.WIDTH = 48;
 World.HEIGHT = 32;
 
-},{"./Buildings":210,"./Dwarf":211,"./DwarfRoles":212,"./Layout":213,"./Rock":214,"./Supply":215,"./Tile":216,"./Tree":217,"./UI":218,"noisejs":30,"pixi.js":154}],220:[function(require,module,exports){
+},{"./Buildings":210,"./Dwarf":211,"./DwarfRoles":212,"./Layout":213,"./Rock":214,"./Supply":215,"./Tile":216,"./TimeOfDay":217,"./Tree":218,"./UI":219,"noisejs":30,"pixi.js":154}],221:[function(require,module,exports){
 'use strict';
 
 var _pixi = require('pixi.js');
@@ -34361,7 +34490,7 @@ function startGame() {
     }
 }
 
-},{"./Layout":213,"./World":219,"pixi.js":154,"raf":187}],221:[function(require,module,exports){
+},{"./Layout":213,"./World":220,"pixi.js":154,"raf":187}],222:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -34391,7 +34520,7 @@ exports.default = {
     }
 };
 
-},{}],222:[function(require,module,exports){
+},{}],223:[function(require,module,exports){
 "use strict";
 
 module.exports = function (min, max, initial) {
@@ -34466,4 +34595,4 @@ module.exports = function (min, max, initial) {
 	return api;
 };
 
-},{}]},{},[220]);
+},{}]},{},[221]);
