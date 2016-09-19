@@ -32751,17 +32751,21 @@ Building.prototype.onDown = function (event) {
 
 Building.prototype.spawn = function (isPurchased) {
 
-    if (this.timeSinceSpawn > Building.SPAWN_RATE && this.constructed) {
+    if (this.timeSinceSpawn > Building.SPAWN_RATE && this.isConstructed) {
 
         this.timeSinceSpawn = 0;
 
+        var dwarf = void 0;
+
         if (isPurchased) {
 
-            this.world.buyDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+            dwarf = this.world.buyDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
         } else {
 
-            this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+            dwarf = this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
         }
+
+        dwarf.home = this;
     }
 };
 
@@ -32773,7 +32777,9 @@ Building.prototype.constructed = function () {
 
         // Add dwarf with associated role
 
-        this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+        // this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+
+        this.spawn(false);
     }
 
     this.onConstructed();
@@ -32964,6 +32970,7 @@ function Dwarf(world, startX, startY, roleId) {
     _pixi2.default.Container.call(this);
 
     this.target = null;
+    this.home = null;
 
     this.world = world;
 
@@ -32979,9 +32986,30 @@ function Dwarf(world, startX, startY, roleId) {
 
     this.changeRole(this.careerRole.id);
 
+    var heightFactor = .6;
+    var headWidth = 2;
+    var headHeight = 4;
+
     var base = new _pixi2.default.Graphics();
+
+    // Body
     base.beginFill(0x333333);
-    base.drawRect(0, 0, Dwarf.WIDTH, Dwarf.HEIGHT);
+    base.drawRect(0, 0, Dwarf.WIDTH, Dwarf.HEIGHT * heightFactor);
+    base.endFill();
+
+    // Head
+    base.beginFill(0x333333);
+    base.drawRect(Dwarf.WIDTH * .5 - headWidth * .5, -headHeight, headWidth, headHeight);
+    base.endFill();
+
+    // Left Leg
+    base.beginFill(0x333333);
+    base.drawRect(0, Dwarf.HEIGHT * heightFactor, 1, Dwarf.HEIGHT * (1 - heightFactor));
+    base.endFill();
+
+    // Right Leg
+    base.beginFill(0x333333);
+    base.drawRect(Dwarf.WIDTH - 1, Dwarf.HEIGHT * heightFactor, 1, Dwarf.HEIGHT * (1 - heightFactor));
     base.endFill();
 
     base.x = -Dwarf.WIDTH * .5;
@@ -33002,6 +33030,11 @@ Dwarf.prototype.changeRole = function (roleId) {
 
     this.role = this.world.dwarfRoles.getById(roleId);
     this.roleId = roleId;
+
+    if (this.role.enter !== undefined) {
+
+        this.role.enter(this, this.world);
+    }
 };
 
 Dwarf.prototype.canTakeAction = function () {
@@ -33020,14 +33053,14 @@ Dwarf.prototype.update = function (timeDelta, world) {
 
     var newRoleId = this.role.update(timeDelta, this, world) || false;
 
+    if (this.roleId !== _DwarfRoles2.default.RESTING && this.careerRole.startTime && this.careerRole.endTime && !world.timeOfDay.isDuringPeriod(this.careerRole.startTime, this.careerRole.endTime)) {
+
+        newRoleId = _DwarfRoles2.default.RESTING;
+    }
+
     if (newRoleId) {
 
         this.changeRole(newRoleId);
-    }
-
-    if (this.roleId === _DwarfRoles2.default.IDLE) {
-
-        this.careerRole.checkCanPerform(timeDelta, this, world);
     }
 
     if (this.target) {
@@ -33051,7 +33084,7 @@ Dwarf.prototype.update = function (timeDelta, world) {
 
 Dwarf.ID = 0;
 
-Dwarf.WIDTH = 8;
+Dwarf.WIDTH = 6;
 Dwarf.HEIGHT = 12;
 
 Dwarf.SPEED = .75;
@@ -33062,7 +33095,7 @@ Dwarf.SPEED = .75;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.RoleCollectStone = exports.RoleCollectWood = exports.RoleBuilder = exports.RoleIdle = undefined;
+exports.RoleCollectStone = exports.RoleCollectWood = exports.RoleBuilder = exports.RoleResting = exports.RoleIdle = undefined;
 exports.default = DwarfRoles;
 
 var _Maths = require('./utils/Maths');
@@ -33089,6 +33122,7 @@ function DwarfRoles() {
 
     this.rolesMap = {
         'idle': RoleIdle,
+        'resting': RoleResting,
         'builder': RoleBuilder,
         'collect-wood': RoleCollectWood,
         'collect-stone': RoleCollectStone
@@ -33105,6 +33139,7 @@ DwarfRoles.prototype.getById = function (id) {
 };
 
 DwarfRoles.IDLE = 'idle';
+DwarfRoles.RESTING = 'resting';
 DwarfRoles.BUILDER = 'builder';
 DwarfRoles.COLLECT_WOOD = 'collect-wood';
 DwarfRoles.COLLECT_STONE = 'collect-stone';
@@ -33127,6 +33162,37 @@ var RoleIdle = exports.RoleIdle = {
 
             dwarf.tookAction();
         }
+
+        if (dwarf.careerRole.checkCanPerform(timeDelta, dwarf, world)) {
+
+            return dwarf.careerRole.id;
+        }
+    },
+    targetProximity: function targetProximity(timeDelta, dwarf, world) {
+
+        dwarf.target = false;
+    }
+};
+
+var RoleResting = exports.RoleResting = {
+
+    id: 'resting',
+
+    range: 2,
+
+    enter: function enter(dwarf, world) {
+
+        if (dwarf.home) {
+
+            dwarf.target = dwarf.home;
+        }
+    },
+    update: function update(timeDelta, dwarf, world) {
+
+        if (dwarf.careerRole.startTime && dwarf.careerRole.endTime && world.timeOfDay.isDuringPeriod(dwarf.careerRole.startTime, dwarf.careerRole.endTime)) {
+
+            return dwarf.careerRole.id;
+        }
     },
     targetProximity: function targetProximity(timeDelta, dwarf, world) {
 
@@ -33137,6 +33203,9 @@ var RoleIdle = exports.RoleIdle = {
 var RoleBuilder = exports.RoleBuilder = {
 
     id: 'builder',
+
+    startTime: 7,
+    endTime: 18,
 
     range: 10,
 
@@ -33198,6 +33267,9 @@ var RoleCollectWood = exports.RoleCollectWood = {
 
     id: 'collect-wood',
 
+    startTime: 7,
+    endTime: 18,
+
     cWood: 20,
     cStone: 40,
 
@@ -33251,6 +33323,9 @@ var RoleCollectWood = exports.RoleCollectWood = {
 var RoleCollectStone = exports.RoleCollectStone = {
 
     id: 'collect-stone',
+
+    startTime: 7,
+    endTime: 18,
 
     cWood: 40,
     cStone: 20,
@@ -33580,7 +33655,7 @@ function _interopRequireDefault(obj) {
 
 function TimeOfDay() {
 
-    this.time = 1;
+    this.time = 15;
 }
 
 TimeOfDay.DAWN_START = 6;
@@ -33593,14 +33668,28 @@ TimeOfDay.constructor = TimeOfDay;
 
 TimeOfDay.prototype.update = function (timeDelta, world) {
 
-    this.time += timeDelta * 0.00005;
+    this.time += timeDelta * 0.0001; //0.00005
+
+    var hour = this.getHour();
+    var minute = this.getMinute();
+
+    if (hour != this.hourOld || minute != this.minuteOld) {
+
+        this.timeChanged(world, hour, minute);
+    }
+
+    this.hourOld = hour;
+    this.minuteOld = minute;
 
     if (this.time >= 24) {
 
         this.time = 0;
     }
+};
 
-    // console.log(this.getHour(), this.getMinute());
+TimeOfDay.prototype.timeChanged = function (world, hour, minute) {
+
+    world.ui.time.update(hour, minute);
 };
 
 TimeOfDay.prototype.getValue = function () {
@@ -33623,7 +33712,7 @@ TimeOfDay.prototype.getSunValue = function () {
         val = 1;
     } else if (this.time < TimeOfDay.DUSK_END) {
 
-        val = (this.time - TimeOfDay.DUSK_START) / (TimeOfDay.DUSK_END - TimeOfDay.DUSK_START);
+        val = 1 - (this.time - TimeOfDay.DUSK_START) / (TimeOfDay.DUSK_END - TimeOfDay.DUSK_START);
     } else {
 
         val = 0;
@@ -33640,6 +33729,13 @@ TimeOfDay.prototype.getHour = function () {
 TimeOfDay.prototype.getMinute = function () {
 
     return Math.floor(this.time % 1 * 60);
+};
+
+TimeOfDay.prototype.isDuringPeriod = function (start, end) {
+
+    // NB only works for roles that are in the daytime...
+
+    return this.time >= start && this.time < end;
 };
 
 },{"./utils/value-min-max":223,"pixi.js":154}],218:[function(require,module,exports){
@@ -33729,6 +33825,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = UI;
 exports.SupplyUI = SupplyUI;
+exports.TimeUI = TimeUI;
 exports.BuildingUI = BuildingUI;
 
 var _pixi = require('pixi.js');
@@ -33753,6 +33850,10 @@ function UI(world) {
 
     this.supply = new SupplyUI(world);
     this.addChild(this.supply);
+
+    this.time = new TimeUI(world);
+    this.time.y = 50;
+    this.addChild(this.time);
 
     this.building = new BuildingUI(world);
     this.addChild(this.building);
@@ -33798,6 +33899,51 @@ SupplyUI.prototype.update = function (wood, stone) {
     // console.log('Supply.update(', 'WOOD:' + this.wood, 'ROCK:' + this.stone, ')');
 
     this.text.text = 'Wood: ' + wood + ' | Stone: ' + stone;
+
+    var w = this.text.width + 20;
+    var h = this.text.height + 20;
+
+    this.background.clear();
+    this.background.beginFill(0x000000, .5);
+    this.background.drawRect(0, 0, w, h);
+    this.background.endFill();
+};
+
+/* -------------- */
+/* --------- Time */
+/* -------------- */
+
+function TimeUI() {
+
+    _pixi2.default.Container.call(this);
+
+    var w = 280;
+    var h = 40;
+
+    this.background = new _pixi2.default.Graphics();
+    this.addChild(this.background);
+
+    var style = {
+        font: '16px Arial',
+        fill: '#FFFFFF',
+        wordWrap: true,
+        wordWrapWidth: w - 20
+    };
+
+    this.text = new _pixi2.default.Text('Time', style);
+    this.text.x = 10;
+    this.text.y = 10;
+    this.addChild(this.text);
+
+    this.update(0, 0);
+}
+
+TimeUI.constructor = TimeUI;
+TimeUI.prototype = Object.create(_pixi2.default.Container.prototype);
+
+TimeUI.prototype.update = function (hour, minute) {
+
+    this.text.text = (hour < 10 ? '0' + hour : hour) + ':' + (minute < 10 ? '0' + minute : minute);
 
     var w = this.text.width + 20;
     var h = this.text.height + 20;
@@ -34326,7 +34472,7 @@ World.prototype.buyDwarf = function (x, y, roleId) {
         this.supply.wood -= role.cWood;
         this.supply.stone -= role.cStone;
 
-        this.addDwarf(x, y, roleId);
+        return this.addDwarf(x, y, roleId);
     }
 };
 

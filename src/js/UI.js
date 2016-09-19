@@ -9,6 +9,10 @@ export default function UI(world) {
     this.supply = new SupplyUI(world);
     this.addChild(this.supply);
 
+    this.time = new TimeUI(world);
+    this.time.y =  50;
+    this.addChild(this.time);
+
     this.building = new BuildingUI(world);
     this.addChild(this.building);
 
@@ -59,6 +63,54 @@ SupplyUI.prototype.update = function(wood, stone) {
 
     this.text.text = 'Wood: ' + wood + ' | Stone: ' + stone;
 
+
+    let w = this.text.width + 20;
+    let h = this.text.height + 20;
+
+    this.background.clear()
+    this.background.beginFill(0x000000, .5);
+    this.background.drawRect(0, 0, w, h);
+    this.background.endFill();
+
+}
+
+/* -------------- */
+/* --------- Time */
+/* -------------- */
+
+
+export function TimeUI() {
+
+    PIXI.Container.call(this);
+
+    let w = 280;
+    let h = 40;
+
+    this.background = new PIXI.Graphics();
+    this.addChild(this.background);
+
+    var style = {
+        font : '16px Arial',
+        fill : '#FFFFFF',
+        wordWrap : true,
+        wordWrapWidth : w - 20
+    };
+
+    this.text = new PIXI.Text('Time', style);
+    this.text.x = 10;
+    this.text.y = 10;
+    this.addChild(this.text);
+
+    this.update(0, 0);
+
+}
+
+TimeUI.constructor = TimeUI;
+TimeUI.prototype = Object.create(PIXI.Container.prototype);
+
+TimeUI.prototype.update = function(hour, minute) {
+
+    this.text.text = (hour < 10 ? '0' + hour : hour) + ':' + (minute < 10 ? '0' + minute : minute);
 
     let w = this.text.width + 20;
     let h = this.text.height + 20;

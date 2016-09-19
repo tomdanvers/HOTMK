@@ -2,13 +2,14 @@ import PIXI from 'pixi.js';
 import Maths from './utils/Maths';
 
 import DwarfRoles from './DwarfRoles';
-import {RoleIdle, RoleBuilder, RoleCollectWood, RoleCollectStone} from './DwarfRoles';
+import {RoleIdle, RoleResting, RoleBuilder, RoleCollectWood, RoleCollectStone} from './DwarfRoles';
 
 export default function Dwarf(world, startX, startY, roleId) {
 
     PIXI.Container.call(this);
 
     this.target = null;
+    this.home = null;
 
     this.world = world;
 
@@ -24,9 +25,30 @@ export default function Dwarf(world, startX, startY, roleId) {
 
     this.changeRole(this.careerRole.id);
 
+    let heightFactor = .6;
+    let headWidth = 2;
+    let headHeight = 4;
+
     let base = new PIXI.Graphics();
+
+    // Body
     base.beginFill(0x333333);
-    base.drawRect(0, 0, Dwarf.WIDTH, Dwarf.HEIGHT);
+    base.drawRect(0, 0, Dwarf.WIDTH, Dwarf.HEIGHT * heightFactor);
+    base.endFill();
+
+    // Head
+    base.beginFill(0x333333);
+    base.drawRect(Dwarf.WIDTH * .5 - headWidth * .5, -headHeight, headWidth, headHeight);
+    base.endFill();
+
+    // Left Leg
+    base.beginFill(0x333333);
+    base.drawRect(0, Dwarf.HEIGHT * heightFactor, 1, Dwarf.HEIGHT * (1-heightFactor));
+    base.endFill();
+
+    // Right Leg
+    base.beginFill(0x333333);
+    base.drawRect(Dwarf.WIDTH - 1, Dwarf.HEIGHT * heightFactor, 1, Dwarf.HEIGHT * (1-heightFactor));
     base.endFill();
 
     base.x = - Dwarf.WIDTH * .5;
@@ -49,6 +71,12 @@ Dwarf.prototype.changeRole = function(roleId) {
     this.role = this.world.dwarfRoles.getById(roleId);
     this.roleId = roleId;
 
+    if (this.role.enter !== undefined) {
+
+        this.role.enter(this, this.world);
+
+    }
+
 }
 
 Dwarf.prototype.canTakeAction = function() {
@@ -69,15 +97,15 @@ Dwarf.prototype.update = function(timeDelta, world) {
 
     let newRoleId = this.role.update(timeDelta, this, world) || false;
 
-    if (newRoleId) {
+    if (this.roleId !== DwarfRoles.RESTING && this.careerRole.startTime && this.careerRole.endTime && !world.timeOfDay.isDuringPeriod(this.careerRole.startTime, this.careerRole.endTime)) {
 
-        this.changeRole(newRoleId);
+        newRoleId = DwarfRoles.RESTING;
 
     }
 
-    if (this.roleId === DwarfRoles.IDLE) {
+    if (newRoleId) {
 
-        this.careerRole.checkCanPerform(timeDelta, this, world);
+        this.changeRole(newRoleId);
 
     }
 
@@ -106,7 +134,7 @@ Dwarf.prototype.update = function(timeDelta, world) {
 
 Dwarf.ID = 0;
 
-Dwarf.WIDTH = 8;
+Dwarf.WIDTH = 6;
 Dwarf.HEIGHT = 12;
 
 Dwarf.SPEED = .75;

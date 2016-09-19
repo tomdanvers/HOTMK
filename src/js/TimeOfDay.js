@@ -3,7 +3,7 @@ import ValueMinMax from './utils/value-min-max';
 
 export default function TimeOfDay() {
 
-    this.time = 1;
+    this.time = 15;
 
 }
 
@@ -17,7 +17,19 @@ TimeOfDay.constructor = TimeOfDay;
 
 TimeOfDay.prototype.update = function(timeDelta, world) {
 
-    this.time += timeDelta * 0.00005;
+    this.time += timeDelta * 0.0001;//0.00005
+
+    let hour = this.getHour();
+    let minute = this.getMinute();
+
+    if (hour != this.hourOld || minute != this.minuteOld) {
+
+        this.timeChanged(world, hour, minute);
+
+    }
+
+    this.hourOld = hour;
+    this.minuteOld = minute;
 
     if (this.time >= 24) {
 
@@ -25,7 +37,11 @@ TimeOfDay.prototype.update = function(timeDelta, world) {
 
     }
 
-    // console.log(this.getHour(), this.getMinute());
+}
+
+TimeOfDay.prototype.timeChanged = function(world, hour, minute) {
+
+    world.ui.time.update(hour, minute);
 
 }
 
@@ -53,7 +69,7 @@ TimeOfDay.prototype.getSunValue = function() {
 
     } else if (this.time < TimeOfDay.DUSK_END) {
 
-        val = (this.time - TimeOfDay.DUSK_START) / (TimeOfDay.DUSK_END - TimeOfDay.DUSK_START);
+        val = 1 - (this.time - TimeOfDay.DUSK_START) / (TimeOfDay.DUSK_END - TimeOfDay.DUSK_START);
 
     } else {
 
@@ -74,5 +90,13 @@ TimeOfDay.prototype.getHour = function() {
 TimeOfDay.prototype.getMinute = function() {
 
     return Math.floor((this.time % 1) * 60);
+
+}
+
+TimeOfDay.prototype.isDuringPeriod = function(start, end) {
+
+    // NB only works for roles that are in the daytime...
+
+    return this.time >= start && this.time < end;
 
 }

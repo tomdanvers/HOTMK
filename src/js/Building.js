@@ -67,19 +67,23 @@ Building.prototype.onDown = function(event) {
 
 Building.prototype.spawn = function(isPurchased) {
 
-    if (this.timeSinceSpawn > Building.SPAWN_RATE && this.constructed) {
+    if (this.timeSinceSpawn > Building.SPAWN_RATE && this.isConstructed) {
 
         this.timeSinceSpawn = 0;
 
+        let dwarf;
+
         if (isPurchased) {
 
-            this.world.buyDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+            dwarf = this.world.buyDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
 
         } else {
 
-            this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+            dwarf = this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
 
         }
+
+        dwarf.home = this;
 
     }
 
@@ -93,7 +97,9 @@ Building.prototype.constructed = function() {
 
         // Add dwarf with associated role
 
-        this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+        // this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+
+        this.spawn(false);
 
     }
 

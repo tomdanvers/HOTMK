@@ -7,6 +7,7 @@ export default function DwarfRoles() {
 
     this.rolesMap = {
         'idle': RoleIdle,
+        'resting': RoleResting,
         'builder': RoleBuilder,
         'collect-wood': RoleCollectWood,
         'collect-stone': RoleCollectStone
@@ -25,6 +26,7 @@ DwarfRoles.prototype.getById = function(id) {
 }
 
 DwarfRoles.IDLE = 'idle';
+DwarfRoles.RESTING = 'resting';
 DwarfRoles.BUILDER = 'builder';
 DwarfRoles.COLLECT_WOOD = 'collect-wood';
 DwarfRoles.COLLECT_STONE = 'collect-stone';
@@ -34,7 +36,6 @@ export const RoleIdle = {
     id: 'idle',
 
     update(timeDelta, dwarf, world) {
-
 
         if (dwarf.canTakeAction()) {
 
@@ -51,6 +52,46 @@ export const RoleIdle = {
 
         }
 
+        if (dwarf.careerRole.checkCanPerform(timeDelta, dwarf, world)) {
+
+            return dwarf.careerRole.id;
+
+        }
+
+    },
+
+    targetProximity(timeDelta, dwarf, world) {
+
+        dwarf.target = false;
+
+    }
+
+}
+
+export const RoleResting = {
+
+    id: 'resting',
+
+    range: 2,
+
+    enter(dwarf, world) {
+
+        if (dwarf.home) {
+
+            dwarf.target = dwarf.home;
+
+        }
+
+    },
+
+    update(timeDelta, dwarf, world) {
+
+        if (dwarf.careerRole.startTime && dwarf.careerRole.endTime && world.timeOfDay.isDuringPeriod(dwarf.careerRole.startTime, dwarf.careerRole.endTime)){
+
+            return dwarf.careerRole.id;
+
+        }
+
     },
 
     targetProximity(timeDelta, dwarf, world) {
@@ -64,6 +105,9 @@ export const RoleIdle = {
 export const RoleBuilder = {
 
     id: 'builder',
+
+    startTime: 7,
+    endTime: 18,
 
     range: 10,
 
@@ -139,6 +183,9 @@ export const RoleCollectWood = {
 
     id: 'collect-wood',
 
+    startTime: 7,
+    endTime: 18,
+
     cWood: 20,
     cStone: 40,
 
@@ -205,6 +252,9 @@ export const RoleCollectWood = {
 export const RoleCollectStone = {
 
     id: 'collect-stone',
+
+    startTime: 7,
+    endTime: 18,
 
     cWood: 40,
     cStone: 20,

@@ -255,7 +255,7 @@ World.prototype.buyDwarf = function(x, y, roleId) {
         this.supply.wood -= role.cWood;
         this.supply.stone -= role.cStone;
 
-        this.addDwarf(x, y, roleId);
+        return this.addDwarf(x, y, roleId);
 
     }
 
