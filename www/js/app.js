@@ -33510,9 +33510,9 @@ function _interopRequireDefault(obj) {
 
 function Supply() {
 
-    this.wood = new _valueMinMax2.default(0, 10000, 250);
+    this.wood = new _valueMinMax2.default(0, 100000, 250);
     this.woodOld = 0;
-    this.stone = new _valueMinMax2.default(0, 10000, 150);
+    this.stone = new _valueMinMax2.default(0, 100000, 150);
     this.stoneOld = 0;
 
     return this;
