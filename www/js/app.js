@@ -32708,9 +32708,32 @@ function Building(world) {
     this.draw(base);
     this.addChild(base);
 
-    this.interactive = true;
-    this.on('mousedown', this.onDown);
-    this.on('touchstart', this.onDown);
+    this.lightRadius = 50;
+
+    var lightCanvas = document.createElement('canvas');
+    lightCanvas.width = lightCanvas.height = this.lightRadius * 2;
+
+    var lightCtx = lightCanvas.getContext('2d');
+
+    var lightGradient = lightCtx.createRadialGradient(this.lightRadius, this.lightRadius, 0, this.lightRadius, this.lightRadius, this.lightRadius);
+    lightGradient.addColorStop(0, 'rgba(250, 224, 77, .5)');
+    lightGradient.addColorStop(1, 'rgba(250, 244, 77, 0)');
+
+    lightCtx.fillStyle = lightGradient;
+    lightCtx.beginPath();
+    lightCtx.arc(this.lightRadius, this.lightRadius, this.lightRadius, 0, 2 * Math.PI);
+    lightCtx.fill();
+
+    this.light = new _pixi2.default.Sprite(_pixi2.default.Texture.fromCanvas(lightCanvas));
+    this.light.x = -this.lightRadius;
+    this.light.y = -this.lightRadius - 5;
+    this.light.alpha = 0;
+
+    this.addChild(this.light);
+
+    // this.interactive = true;
+    // this.on('mousedown', this.onDown);
+    // this.on('touchstart', this.onDown);
 }
 
 Building.constructor = Building;
@@ -32732,22 +32755,10 @@ Building.prototype.update = function (timeDelta) {
 
     this.alpha = this.integrity.val();
 
-    // if (this.timeSinceSpawn > Building.SPAWN_RATE) {
-
-    //  this.spawn(false);
-
-    // }
+    this.light.alpha = this.world.timeOfDay.getSunValue() - (Math.random() > .9 ? Math.random() * .15 : 0);
 };
 
-Building.prototype.onDown = function (event) {
-
-    // if (this.isConstructed) {
-
-    //     this.spawn(true);
-
-    // }
-
-};
+Building.prototype.onDown = function (event) {};
 
 Building.prototype.spawn = function (isPurchased) {
 
@@ -33510,7 +33521,10 @@ Inventory.prototype.add = function (type, count) {
 
     this.count += count;
 
-    console.log('Inventory.add(', this.count, '/', this.limit, ')');
+    if (Inventory.VERBOSE) {
+
+        console.log('Inventory.add(', this.count, '/', this.limit, ')');
+    }
 };
 
 Inventory.prototype.remove = function (type, count) {
@@ -33531,7 +33545,10 @@ Inventory.prototype.remove = function (type, count) {
 
     this.count -= amount;
 
-    console.log('Inventory.remove(', this.count, '/', this.limit, ')');
+    if (Inventory.VERBOSE) {
+
+        console.log('Inventory.remove(', this.count, '/', this.limit, ')');
+    }
 
     return amount;
 };
@@ -33542,6 +33559,7 @@ Inventory.prototype.free = function () {
 };
 
 Inventory.LIMIT = 10;
+Inventory.VERBOSE = false;
 
 },{}],214:[function(require,module,exports){
 "use strict";
@@ -33717,12 +33735,12 @@ function Tile(x, y, elevation) {
     ctx.fillStyle = 'rgba(0, 0, 0, ' + (1 - this.elevation) * .25 + ')';
     ctx.fillRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
 
-    ctx.strokeStyle = 'rgba(255, 255, 255, .05)';
-    ctx.strokeRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
+    ctx.fillStyle = 'rgba(255, 255, 255, .025)';
+    ctx.fillRect(0, 0, 1, Tile.HEIGHT);
+    ctx.fillRect(0, 0, Tile.WIDTH, 1);
+    // ctx.strokeRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
 
     ctxNight.fillStyle = 'rgba(0, 0, 0, .7)';
-    // let v = Math.floor(Math.random() * 255);
-    // ctxNight.fillStyle = 'rgba('+v+', '+v+', '+v+', .7)';
     ctxNight.fillRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
 }
 
@@ -33777,7 +33795,7 @@ function _interopRequireDefault(obj) {
 
 function TimeOfDay() {
 
-    this.time = 10;
+    this.time = 18;
 }
 
 TimeOfDay.DAWN_START = 6;
@@ -33790,7 +33808,8 @@ TimeOfDay.constructor = TimeOfDay;
 
 TimeOfDay.prototype.update = function (timeDelta, world) {
 
-    this.time += timeDelta * 0.00005;
+    // this.time += timeDelta * 0.00005;
+    this.time += timeDelta * 0.0001;
 
     var hour = this.getHour();
     var minute = this.getMinute();
@@ -34451,13 +34470,7 @@ function World() {
 
     var forester = this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _DwarfRoles2.default.COLLECT_WOOD);
     var miner = this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _DwarfRoles2.default.COLLECT_STONE);
-
     var builder = this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _DwarfRoles2.default.BUILDER);
-    setTimeout(function () {
-
-        // Hmmm WTF? Props in constructor of Dwarf get assigned one frame late?
-        builder.startY = World.HEIGHT * _Tile2.default.HEIGHT - 150;
-    }, 1);
 
     forester.home = builder.home = miner.home = camp;
 
@@ -34565,7 +34578,7 @@ World.prototype.addBuilding = function (id, tileX, tileY) {
 
         this.containerZOrdered.addChild(building);
 
-        var radius = 50;
+        var radius = building.lightRadius;
 
         var gradient = this.nightCtx.createRadialGradient(building.x, building.y - 5, 0, building.x, building.y - 5, radius);
         gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');

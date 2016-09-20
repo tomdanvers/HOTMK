@@ -20,9 +20,32 @@ export function Building(world) {
     this.draw(base);
     this.addChild(base);
 
-    this.interactive = true;
-    this.on('mousedown', this.onDown);
-    this.on('touchstart', this.onDown);
+    this.lightRadius = 50;
+
+    let lightCanvas = document.createElement('canvas');
+    lightCanvas.width = lightCanvas.height = this.lightRadius * 2;
+
+    let lightCtx = lightCanvas.getContext('2d');
+
+    let lightGradient = lightCtx.createRadialGradient(this.lightRadius, this.lightRadius, 0, this.lightRadius, this.lightRadius, this.lightRadius);
+    lightGradient.addColorStop(0, 'rgba(250, 224, 77, .5)');
+    lightGradient.addColorStop(1, 'rgba(250, 244, 77, 0)');
+
+    lightCtx.fillStyle = lightGradient;
+    lightCtx.beginPath();
+    lightCtx.arc(this.lightRadius, this.lightRadius, this.lightRadius, 0, 2 * Math.PI);
+    lightCtx.fill();
+
+    this.light = new PIXI.Sprite(PIXI.Texture.fromCanvas(lightCanvas));
+    this.light.x = - this.lightRadius;
+    this.light.y = - this.lightRadius - 5;
+    this.light.alpha = 0;
+
+    this.addChild(this.light);
+
+    // this.interactive = true;
+    // this.on('mousedown', this.onDown);
+    // this.on('touchstart', this.onDown);
 
 
 }
@@ -47,21 +70,12 @@ Building.prototype.update = function(timeDelta) {
 
     this.alpha = this.integrity.val();
 
-    // if (this.timeSinceSpawn > Building.SPAWN_RATE) {
+    this.light.alpha = this.world.timeOfDay.getSunValue() - (Math.random() > .9 ? Math.random() * .15 : 0);
 
-    //  this.spawn(false);
-
-    // }
 
 }
 
 Building.prototype.onDown = function(event) {
-
-    // if (this.isConstructed) {
-
-    //     this.spawn(true);
-
-    // }
 
 }
 

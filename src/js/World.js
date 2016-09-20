@@ -97,14 +97,7 @@ export default function World() {
 
     let forester = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.COLLECT_WOOD);
     let miner = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.COLLECT_STONE);
-
     let builder = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.BUILDER);
-    setTimeout(function() {
-
-        // Hmmm WTF? Props in constructor of Dwarf get assigned one frame late?
-        builder.startY = World.HEIGHT * Tile.HEIGHT - 150;
-
-    }, 1);
 
     forester.home = builder.home = miner.home = camp;
 
@@ -223,7 +216,7 @@ World.prototype.addBuilding = function(id, tileX, tileY) {
 
         this.containerZOrdered.addChild(building);
 
-        let radius = 50;
+        let radius = building.lightRadius;
 
         let gradient = this.nightCtx.createRadialGradient(building.x, building.y - 5, 0, building.x, building.y - 5, radius);
         gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');

@@ -30,7 +30,11 @@ Inventory.prototype.add = function(type, count) {
 
     this.count += count;
 
-    console.log('Inventory.add(', this.count, '/',this.limit, ')');
+    if (Inventory.VERBOSE) {
+
+        console.log('Inventory.add(', this.count, '/',this.limit, ')');
+
+    }
 
 }
 
@@ -55,7 +59,11 @@ Inventory.prototype.remove = function(type, count) {
 
     this.count -= amount;
 
-    console.log('Inventory.remove(', this.count, '/', this.limit, ')');
+    if (Inventory.VERBOSE) {
+
+        console.log('Inventory.remove(', this.count, '/', this.limit, ')');
+
+    }
 
     return amount;
 
@@ -69,3 +77,4 @@ Inventory.prototype.free = function() {
 }
 
 Inventory.LIMIT = 10;
+Inventory.VERBOSE = false;

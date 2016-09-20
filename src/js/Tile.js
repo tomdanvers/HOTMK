@@ -35,12 +35,12 @@ export default function Tile(x, y, elevation) {
     ctx.fillStyle = 'rgba(0, 0, 0, ' + (1 - this.elevation) * .25 + ')';
     ctx.fillRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
 
-    ctx.strokeStyle = 'rgba(255, 255, 255, .05)';
-    ctx.strokeRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
+    ctx.fillStyle = 'rgba(255, 255, 255, .025)';
+    ctx.fillRect(0, 0, 1, Tile.HEIGHT);
+    ctx.fillRect(0, 0, Tile.WIDTH, 1);
+    // ctx.strokeRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
 
     ctxNight.fillStyle = 'rgba(0, 0, 0, .7)';
-    // let v = Math.floor(Math.random() * 255);
-    // ctxNight.fillStyle = 'rgba('+v+', '+v+', '+v+', .7)';
     ctxNight.fillRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
 
 }
