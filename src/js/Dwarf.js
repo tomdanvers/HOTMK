@@ -1,6 +1,7 @@
 import PIXI from 'pixi.js';
 import Maths from './utils/Maths';
 
+import Inventory from './Inventory';
 import DwarfRoles from './DwarfRoles';
 import {RoleIdle, RoleResting, RoleBuilder, RoleCollectWood, RoleCollectStone} from './DwarfRoles';
 
@@ -10,6 +11,7 @@ export default function Dwarf(world, startX, startY, roleId) {
 
     this.target = null;
     this.home = null;
+    this.inventory = new Inventory(this);
 
     this.world = world;
 

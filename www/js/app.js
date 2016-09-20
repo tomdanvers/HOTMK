@@ -32881,7 +32881,7 @@ Mason.prototype.draw = function (graphics) {
 Mason.WIDTH = 13;
 Mason.HEIGHT = 14;
 
-},{"./Dwarf":211,"./DwarfRoles":212,"./utils/value-min-max":223,"pixi.js":154}],210:[function(require,module,exports){
+},{"./Dwarf":211,"./DwarfRoles":212,"./utils/value-min-max":224,"pixi.js":154}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32902,6 +32902,8 @@ function Buildings(world) {
     this.archetypes.forEach(function (archetype) {
         this.archetypesMap[archetype.id] = archetype;
     }.bind(this));
+
+    this.archetypesMap['camp'] = Buildings.ARCHETYPE_CAMP;
 
     this.buildings = [];
 }
@@ -32925,6 +32927,7 @@ Buildings.prototype.update = function (timeDelta) {
     }.bind(this));
 };
 
+Buildings.ARCHETYPE_CAMP = new BuildingArchetype('camp', 'Camp', 'A settler\'s camp', 0, 0, _Building.Miner);
 Buildings.ARCHETYPE_MINER = new BuildingArchetype('miner', 'Miner\'s Cottage', 'A lowly home for a miner', 100, 50, _Building.Miner);
 Buildings.ARCHETYPE_FORESTER = new BuildingArchetype('forester', 'Forester\'s Cottage', 'A lowly home for a forester', 50, 100, _Building.Forester);
 Buildings.ARCHETYPE_MASON = new BuildingArchetype('mason', 'Mason\'s Cottage', 'A builder\'s home', 150, 150, _Building.Mason);
@@ -32936,7 +32939,7 @@ function BuildingArchetype(id, title, description, cWood, cStone, c) {
     this.description = description;
     this.cWood = cWood;
     this.cStone = cStone;
-    this.c = c;
+    this.c = c || false;
 }
 
 BuildingArchetype.constructor = BuildingArchetype;
@@ -32957,6 +32960,10 @@ var _Maths = require('./utils/Maths');
 
 var _Maths2 = _interopRequireDefault(_Maths);
 
+var _Inventory = require('./Inventory');
+
+var _Inventory2 = _interopRequireDefault(_Inventory);
+
 var _DwarfRoles = require('./DwarfRoles');
 
 var _DwarfRoles2 = _interopRequireDefault(_DwarfRoles);
@@ -32971,6 +32978,7 @@ function Dwarf(world, startX, startY, roleId) {
 
     this.target = null;
     this.home = null;
+    this.inventory = new _Inventory2.default(this);
 
     this.world = world;
 
@@ -33089,7 +33097,7 @@ Dwarf.HEIGHT = 12;
 
 Dwarf.SPEED = .75;
 
-},{"./DwarfRoles":212,"./utils/Maths":222,"pixi.js":154}],212:[function(require,module,exports){
+},{"./DwarfRoles":212,"./Inventory":213,"./utils/Maths":223,"pixi.js":154}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33282,16 +33290,27 @@ var RoleCollectWood = exports.RoleCollectWood = {
     },
     update: function update(timeDelta, dwarf, world) {
 
-        if (!dwarf.target || dwarf.target.type !== _Tree2.default.TYPE) {
+        // Check inventory
 
-            var target = Utils.nearestWithProperty('supply', dwarf, world.trees) || false;
+        if (dwarf.inventory.isFull()) {
 
-            if (target) {
+            if (!dwarf.target || dwarf.target !== dwarf.home) {
 
-                dwarf.target = target;
-            } else {
+                dwarf.target = dwarf.home;
+            }
+        } else {
 
-                return DwarfRoles.IDLE;
+            if (!dwarf.target || dwarf.target.type !== _Tree2.default.TYPE) {
+
+                var target = Utils.nearestWithProperty('supply', dwarf, world.trees) || false;
+
+                if (target) {
+
+                    dwarf.target = target;
+                } else {
+
+                    return DwarfRoles.IDLE;
+                }
             }
         }
     },
@@ -33299,22 +33318,36 @@ var RoleCollectWood = exports.RoleCollectWood = {
 
         if (dwarf.canTakeAction()) {
 
-            var tree = dwarf.target;
+            if (dwarf.inventory.isFull()) {
 
-            if (!tree.supply.isMin()) {
+                // Next to house so offload supply
 
-                var rate = Math.min(10, tree.supply.get());
-
-                tree.supply.decrement(rate);
-
-                world.supply.wood.increment(rate);
-
-                tree.hit();
-
-                dwarf.tookAction();
-            } else {
+                world.supply.wood.increment(dwarf.inventory.remove('wood'));
 
                 dwarf.target = false;
+            } else {
+
+                // Next to tree so add supply to inventory
+
+                var tree = dwarf.target;
+
+                if (!tree.supply.isMin()) {
+
+                    var rate = Math.min(1, tree.supply.get(), dwarf.inventory.free());
+
+                    tree.supply.decrement(rate);
+
+                    dwarf.inventory.add('wood', rate);
+
+                    //world.supply.wood.increment(rate);
+
+                    tree.hit();
+
+                    dwarf.tookAction();
+                } else {
+
+                    dwarf.target = false;
+                }
             }
         }
     }
@@ -33339,17 +33372,25 @@ var RoleCollectStone = exports.RoleCollectStone = {
     },
     update: function update(timeDelta, dwarf, world) {
 
-        if (!dwarf.target || dwarf.target.type !== _Rock2.default.TYPE) {
+        if (dwarf.inventory.isFull()) {
 
-            var target = Utils.nearestWithProperty('supply', dwarf, world.rocks) || false;
-            // let target = world.trees.random() || false;
+            if (!dwarf.target || dwarf.target !== dwarf.home) {
 
-            if (target) {
+                dwarf.target = dwarf.home;
+            }
+        } else {
 
-                dwarf.target = target;
-            } else {
+            if (!dwarf.target || dwarf.target.type !== _Rock2.default.TYPE) {
 
-                return DwarfRoles.IDLE;
+                var target = Utils.nearestWithProperty('supply', dwarf, world.rocks) || false;
+
+                if (target) {
+
+                    dwarf.target = target;
+                } else {
+
+                    return DwarfRoles.IDLE;
+                }
             }
         }
     },
@@ -33357,22 +33398,34 @@ var RoleCollectStone = exports.RoleCollectStone = {
 
         if (dwarf.canTakeAction()) {
 
-            var rock = dwarf.target;
+            if (dwarf.inventory.isFull()) {
 
-            if (!rock.supply.isMin()) {
+                // Next to house so offload supply
 
-                var rate = Math.min(5, rock.supply.get());
-
-                rock.supply.decrement(rate);
-
-                world.supply.stone.increment(rate);
-
-                rock.hit();
-
-                dwarf.tookAction();
-            } else {
+                world.supply.stone.increment(dwarf.inventory.remove('stone'));
 
                 dwarf.target = false;
+            } else {
+
+                // Next to rock so add supply to inventory
+
+                var rock = dwarf.target;
+
+                if (!rock.supply.isMin()) {
+
+                    var rate = Math.min(1, rock.supply.get(), dwarf.inventory.free());
+
+                    rock.supply.decrement(rate);
+
+                    dwarf.inventory.add('stone', rate);
+
+                    rock.hit();
+
+                    dwarf.tookAction();
+                } else {
+
+                    dwarf.target = false;
+                }
             }
         }
     }
@@ -33421,7 +33474,76 @@ var Utils = {
     }
 };
 
-},{"./Dwarf":211,"./Rock":214,"./Tree":218,"./utils/Maths":222}],213:[function(require,module,exports){
+},{"./Dwarf":211,"./Rock":215,"./Tree":219,"./utils/Maths":223}],213:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = Inventory;
+function Inventory(owner) {
+
+    this.owner = owner;
+
+    this.limit = Inventory.LIMIT;
+
+    this.count = 0;
+
+    this.inventory = {};
+}
+
+Inventory.constructor = Inventory;
+
+Inventory.prototype.isFull = function () {
+
+    return this.count >= this.limit;
+};
+
+Inventory.prototype.add = function (type, count) {
+
+    if (!this.inventory[type]) {
+
+        this.inventory[type] = 0;
+    }
+
+    this.inventory[type] += count;
+
+    this.count += count;
+
+    console.log('Inventory.add(', this.count, '/', this.limit, ')');
+};
+
+Inventory.prototype.remove = function (type, count) {
+
+    var amount = void 0;
+
+    if (count === undefined) {
+
+        amount = this.inventory[type] || 0;
+
+        delete this.inventory[type];
+    } else {
+
+        amount = Math.min(this.inventory[type], count);
+
+        this.inventory[type] = amount;
+    }
+
+    this.count -= amount;
+
+    console.log('Inventory.remove(', this.count, '/', this.limit, ')');
+
+    return amount;
+};
+
+Inventory.prototype.free = function () {
+
+    return this.limit - this.count;
+};
+
+Inventory.LIMIT = 10;
+
+},{}],214:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33432,7 +33554,7 @@ exports.default = {
     HEIGHT: 640
 };
 
-},{}],214:[function(require,module,exports){
+},{}],215:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33488,7 +33610,7 @@ Rock.HEIGHT = 10;
 Rock.TYPE = 'rock';
 Rock.SUPPLY = 250;
 
-},{"./utils/value-min-max":223,"pixi.js":154}],215:[function(require,module,exports){
+},{"./utils/value-min-max":224,"pixi.js":154}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33544,7 +33666,7 @@ Supply.prototype.update = function (timeDelta, world) {
     }
 };
 
-},{"./utils/value-min-max":223,"pixi.js":154}],216:[function(require,module,exports){
+},{"./utils/value-min-max":224,"pixi.js":154}],217:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33633,7 +33755,7 @@ Tile.TILE_COLOURS = {
     grass: '#002C00'
 };
 
-},{"pixi.js":154}],217:[function(require,module,exports){
+},{"pixi.js":154}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33655,7 +33777,7 @@ function _interopRequireDefault(obj) {
 
 function TimeOfDay() {
 
-    this.time = 15;
+    this.time = 10;
 }
 
 TimeOfDay.DAWN_START = 6;
@@ -33668,7 +33790,7 @@ TimeOfDay.constructor = TimeOfDay;
 
 TimeOfDay.prototype.update = function (timeDelta, world) {
 
-    this.time += timeDelta * 0.0001; //0.00005
+    this.time += timeDelta * 0.00005;
 
     var hour = this.getHour();
     var minute = this.getMinute();
@@ -33738,7 +33860,7 @@ TimeOfDay.prototype.isDuringPeriod = function (start, end) {
     return this.time >= start && this.time < end;
 };
 
-},{"./utils/value-min-max":223,"pixi.js":154}],218:[function(require,module,exports){
+},{"./utils/value-min-max":224,"pixi.js":154}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33817,7 +33939,7 @@ Tree.HEIGHT = 24;
 Tree.TYPE = 'tree';
 Tree.SUPPLY = 100;
 
-},{"./Tile":216,"./utils/value-min-max":223,"pixi.js":154}],219:[function(require,module,exports){
+},{"./Tile":217,"./utils/value-min-max":224,"pixi.js":154}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34196,7 +34318,7 @@ BuildingUI.prototype.update = function (wood, stone) {
     }.bind(this));
 };
 
-},{"./Layout":213,"./utils/Maths":222,"pixi.js":154}],220:[function(require,module,exports){
+},{"./Layout":214,"./utils/Maths":223,"pixi.js":154}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34323,12 +34445,12 @@ function World() {
     // Add buildings
 
     // this.addBuilding(Buildings.ARCHETYPE_BARRACKS.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT * .5));
-    // this.addBuilding(Buildings.ARCHETYPE_TAVERN.id, Math.floor(World.WIDTH * .25), Math.floor(World.HEIGHT * .15));
+    var camp = this.addBuilding(_Buildings2.default.ARCHETYPE_CAMP.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT * .85));
 
     // Add dwarves
 
-    this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _DwarfRoles2.default.COLLECT_WOOD);
-    this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _DwarfRoles2.default.COLLECT_STONE);
+    var forester = this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _DwarfRoles2.default.COLLECT_WOOD);
+    var miner = this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _DwarfRoles2.default.COLLECT_STONE);
 
     var builder = this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _DwarfRoles2.default.BUILDER);
     setTimeout(function () {
@@ -34336,6 +34458,8 @@ function World() {
         // Hmmm WTF? Props in constructor of Dwarf get assigned one frame late?
         builder.startY = World.HEIGHT * _Tile2.default.HEIGHT - 150;
     }, 1);
+
+    forester.home = builder.home = miner.home = camp;
 
     // Add resources
 
@@ -34456,9 +34580,13 @@ World.prototype.addBuilding = function (id, tileX, tileY) {
 
         this.night.texture = _pixi2.default.Texture.fromCanvas(this.nightCanvas);
         this.night.texture.update();
+
+        return building;
     } else {
 
         console.warn('Can\'t place building at', tileX, tileY, 'there is not enough space.');
+
+        return false;
     }
 };
 
@@ -34565,7 +34693,7 @@ World.prototype.getTile = function (x, y) {
 World.WIDTH = 48;
 World.HEIGHT = 32;
 
-},{"./Buildings":210,"./Dwarf":211,"./DwarfRoles":212,"./Layout":213,"./Rock":214,"./Supply":215,"./Tile":216,"./TimeOfDay":217,"./Tree":218,"./UI":219,"noisejs":30,"pixi.js":154}],221:[function(require,module,exports){
+},{"./Buildings":210,"./Dwarf":211,"./DwarfRoles":212,"./Layout":214,"./Rock":215,"./Supply":216,"./Tile":217,"./TimeOfDay":218,"./Tree":219,"./UI":220,"noisejs":30,"pixi.js":154}],222:[function(require,module,exports){
 'use strict';
 
 var _pixi = require('pixi.js');
@@ -34636,7 +34764,7 @@ function startGame() {
     }
 }
 
-},{"./Layout":213,"./World":220,"pixi.js":154,"raf":187}],222:[function(require,module,exports){
+},{"./Layout":214,"./World":221,"pixi.js":154,"raf":187}],223:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -34666,7 +34794,7 @@ exports.default = {
     }
 };
 
-},{}],223:[function(require,module,exports){
+},{}],224:[function(require,module,exports){
 "use strict";
 
 module.exports = function (min, max, initial) {
@@ -34741,4 +34869,4 @@ module.exports = function (min, max, initial) {
 	return api;
 };
 
-},{}]},{},[221]);
+},{}]},{},[222]);

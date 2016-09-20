@@ -201,17 +201,31 @@ export const RoleCollectWood = {
 
     update(timeDelta, dwarf, world) {
 
-        if ( !dwarf.target || dwarf.target.type !== Tree.TYPE ) {
+        // Check inventory
 
-            let target = Utils.nearestWithProperty('supply', dwarf, world.trees) || false;
+        if (dwarf.inventory.isFull()) {
 
-            if (target) {
+            if ( !dwarf.target || dwarf.target !== dwarf.home ) {
 
-                dwarf.target = target;
+                dwarf.target = dwarf.home;
 
-            } else {
+            }
 
-                return DwarfRoles.IDLE;
+        } else {
+
+            if ( !dwarf.target || dwarf.target.type !== Tree.TYPE ) {
+
+                let target = Utils.nearestWithProperty('supply', dwarf, world.trees) || false;
+
+                if (target) {
+
+                    dwarf.target = target;
+
+                } else {
+
+                    return DwarfRoles.IDLE;
+
+                }
 
             }
 
@@ -223,23 +237,39 @@ export const RoleCollectWood = {
 
         if (dwarf.canTakeAction()) {
 
-            let tree = dwarf.target;
+            if (dwarf.inventory.isFull()) {
 
-            if (!tree.supply.isMin()) {
+                // Next to house so offload supply
 
-                let rate = Math.min(10, tree.supply.get());
+                world.supply.wood.increment(dwarf.inventory.remove('wood'));
 
-                tree.supply.decrement(rate);
-
-                world.supply.wood.increment(rate);
-
-                tree.hit();
-
-                dwarf.tookAction();
+                dwarf.target = false;
 
             } else {
 
-                dwarf.target = false;
+                // Next to tree so add supply to inventory
+
+                let tree = dwarf.target;
+
+                if (!tree.supply.isMin()) {
+
+                    let rate = Math.min(1, tree.supply.get(), dwarf.inventory.free());
+
+                    tree.supply.decrement(rate);
+
+                    dwarf.inventory.add('wood', rate);
+
+                    //world.supply.wood.increment(rate);
+
+                    tree.hit();
+
+                    dwarf.tookAction();
+
+                } else {
+
+                    dwarf.target = false;
+
+                }
 
             }
 
@@ -271,18 +301,29 @@ export const RoleCollectStone = {
 
     update(timeDelta, dwarf, world) {
 
-        if ( !dwarf.target || dwarf.target.type !== Rock.TYPE ) {
+        if (dwarf.inventory.isFull()) {
 
-            let target = Utils.nearestWithProperty('supply', dwarf, world.rocks) || false;
-            // let target = world.trees.random() || false;
+            if ( !dwarf.target || dwarf.target !== dwarf.home ) {
 
-            if (target) {
+                dwarf.target = dwarf.home;
 
-                dwarf.target = target;
+            }
 
-            } else {
+        } else {
 
-                return DwarfRoles.IDLE;
+            if ( !dwarf.target || dwarf.target.type !== Rock.TYPE ) {
+
+                let target = Utils.nearestWithProperty('supply', dwarf, world.rocks) || false;
+
+                if (target) {
+
+                    dwarf.target = target;
+
+                } else {
+
+                    return DwarfRoles.IDLE;
+
+                }
 
             }
 
@@ -294,27 +335,42 @@ export const RoleCollectStone = {
 
         if (dwarf.canTakeAction()) {
 
-            let rock = dwarf.target;
+            if (dwarf.inventory.isFull()) {
 
-            if (!rock.supply.isMin()) {
+                // Next to house so offload supply
 
-                let rate = Math.min(5, rock.supply.get());
+                world.supply.stone.increment(dwarf.inventory.remove('stone'));
 
-                rock.supply.decrement(rate);
-
-                world.supply.stone.increment(rate);
-
-                rock.hit();
-
-                dwarf.tookAction();
+                dwarf.target = false;
 
             } else {
 
-                dwarf.target = false;
+                // Next to rock so add supply to inventory
+
+                let rock = dwarf.target;
+
+                if (!rock.supply.isMin()) {
+
+                    let rate = Math.min(1, rock.supply.get(), dwarf.inventory.free());
+
+                    rock.supply.decrement(rate);
+
+                    dwarf.inventory.add('stone', rate);
+
+                    rock.hit();
+
+                    dwarf.tookAction();
+
+                } else {
+
+                    dwarf.target = false;
+
+                }
 
             }
 
         }
+
 
     }
 

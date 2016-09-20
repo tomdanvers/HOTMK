@@ -3,7 +3,7 @@ import ValueMinMax from './utils/value-min-max';
 
 export default function TimeOfDay() {
 
-    this.time = 15;
+    this.time = 10;
 
 }
 
@@ -17,7 +17,7 @@ TimeOfDay.constructor = TimeOfDay;
 
 TimeOfDay.prototype.update = function(timeDelta, world) {
 
-    this.time += timeDelta * 0.0001;//0.00005
+    this.time += timeDelta * 0.00005;
 
     let hour = this.getHour();
     let minute = this.getMinute();

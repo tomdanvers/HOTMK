@@ -91,12 +91,12 @@ export default function World() {
     // Add buildings
 
     // this.addBuilding(Buildings.ARCHETYPE_BARRACKS.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT * .5));
-    // this.addBuilding(Buildings.ARCHETYPE_TAVERN.id, Math.floor(World.WIDTH * .25), Math.floor(World.HEIGHT * .15));
+    let camp = this.addBuilding(Buildings.ARCHETYPE_CAMP.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT * .85));
 
     // Add dwarves
 
-    this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.COLLECT_WOOD);
-    this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.COLLECT_STONE);
+    let forester = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.COLLECT_WOOD);
+    let miner = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.COLLECT_STONE);
 
     let builder = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.BUILDER);
     setTimeout(function() {
@@ -105,6 +105,8 @@ export default function World() {
         builder.startY = World.HEIGHT * Tile.HEIGHT - 150;
 
     }, 1);
+
+    forester.home = builder.home = miner.home = camp;
 
     // Add resources
 
@@ -237,11 +239,16 @@ World.prototype.addBuilding = function(id, tileX, tileY) {
         this.night.texture = PIXI.Texture.fromCanvas(this.nightCanvas);
         this.night.texture.update();
 
+        return building;
+
     } else {
 
         console.warn('Can\'t place building at', tileX, tileY, 'there is not enough space.');
 
+        return false;
+
     }
+
 
 }
 
