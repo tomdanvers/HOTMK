@@ -37,18 +37,23 @@ function startGame() {
     stage.addChild(world);
 
     let count = 0;
+    let msPerFrame = 1000/60;
 
     tick(0);
 
     function tick(time) {
 
-        count ++;
+        if (document.hasFocus()) {
 
-        if (count % 2 === 0) {
+            count ++;
 
-            world.update(time);
+            if (count % 2 === 0) {
 
-            renderer.render(stage);
+                world.update(count * msPerFrame);
+
+                renderer.render(stage);
+
+            }
 
         }
 

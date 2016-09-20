@@ -32668,6 +32668,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.Building = Building;
+exports.Camp = Camp;
 exports.Miner = Miner;
 exports.Forester = Forester;
 exports.Mason = Mason;
@@ -32716,7 +32717,7 @@ function Building(world) {
     var lightCtx = lightCanvas.getContext('2d');
 
     var lightGradient = lightCtx.createRadialGradient(this.lightRadius, this.lightRadius, 0, this.lightRadius, this.lightRadius, this.lightRadius);
-    lightGradient.addColorStop(0, 'rgba(250, 224, 77, .5)');
+    lightGradient.addColorStop(0, 'rgba(250, 224, 77, .25)');
     lightGradient.addColorStop(1, 'rgba(250, 244, 77, 0)');
 
     lightCtx.fillStyle = lightGradient;
@@ -32753,9 +32754,15 @@ Building.prototype.update = function (timeDelta) {
 
     this.timeSinceSpawn += timeDelta;
 
-    this.alpha = this.integrity.val();
+    if (!this.isConstructed) {
 
-    this.light.alpha = this.world.timeOfDay.getSunValue() - (Math.random() > .9 ? Math.random() * .15 : 0);
+        this.alpha = this.integrity.val();
+    }
+
+    if (this.world.timeOfDay.getSunValue() > 0) {
+
+        this.light.alpha = this.world.timeOfDay.getSunValue() - (Math.random() > .9 ? Math.random() * .15 : 0);
+    }
 };
 
 Building.prototype.onDown = function (event) {};
@@ -32784,6 +32791,8 @@ Building.prototype.constructed = function () {
 
     this.isConstructed = true;
 
+    this.alpha = 1;
+
     if (this.associatedRole) {
 
         // Add dwarf with associated role
@@ -32810,6 +32819,31 @@ Building.SPAWN_RATE = 3000;
 
 Building.INTEGRITY = 100;
 Building.TYPE = 'building';
+
+/* -------------- */
+/* --------- Camp */
+/* -------------- */
+
+function Camp(world) {
+
+    Building.call(this, world);
+}
+
+Camp.constructor = Camp;
+Camp.prototype = Object.create(Building.prototype);
+
+Camp.prototype.draw = function (graphics) {
+
+    graphics.beginFill(0x999999);
+    graphics.drawRect(-Camp.WIDTH * .5, -Camp.HEIGHT, Camp.WIDTH, Camp.HEIGHT);
+    graphics.endFill();
+    graphics.beginFill(0x222222);
+    graphics.drawRect(-Camp.WIDTH * .5 + 4, -6, Camp.WIDTH - 8, 6);
+    graphics.endFill();
+};
+
+Camp.WIDTH = 12;
+Camp.HEIGHT = 12;
 
 /* -------------- */
 /* -------- Miner */
@@ -32892,7 +32926,7 @@ Mason.prototype.draw = function (graphics) {
 Mason.WIDTH = 13;
 Mason.HEIGHT = 14;
 
-},{"./Dwarf":211,"./DwarfRoles":212,"./utils/value-min-max":224,"pixi.js":154}],210:[function(require,module,exports){
+},{"./Dwarf":211,"./DwarfRoles":212,"./utils/value-min-max":225,"pixi.js":154}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32938,7 +32972,7 @@ Buildings.prototype.update = function (timeDelta) {
     }.bind(this));
 };
 
-Buildings.ARCHETYPE_CAMP = new BuildingArchetype('camp', 'Camp', 'A settler\'s camp', 0, 0, _Building.Miner);
+Buildings.ARCHETYPE_CAMP = new BuildingArchetype('camp', 'Camp', 'A settler\'s camp', 0, 0, _Building.Camp);
 Buildings.ARCHETYPE_MINER = new BuildingArchetype('miner', 'Miner\'s Cottage', 'A lowly home for a miner', 100, 50, _Building.Miner);
 Buildings.ARCHETYPE_FORESTER = new BuildingArchetype('forester', 'Forester\'s Cottage', 'A lowly home for a forester', 50, 100, _Building.Forester);
 Buildings.ARCHETYPE_MASON = new BuildingArchetype('mason', 'Mason\'s Cottage', 'A builder\'s home', 150, 150, _Building.Mason);
@@ -32998,7 +33032,7 @@ function Dwarf(world, startX, startY, roleId) {
     this.angle = 0;
 
     this.timeSinceAction = 0;
-    this.timeBetweenActions = 2000;
+    this.timeBetweenActions = 1500;
 
     this.roleId = null;
     this.careerRole = this.world.dwarfRoles.getById(roleId);
@@ -33009,25 +33043,27 @@ function Dwarf(world, startX, startY, roleId) {
     var headWidth = 2;
     var headHeight = 4;
 
+    var colour = this.careerRole ? this.careerRole.colour : 0x333333;
+
     var base = new _pixi2.default.Graphics();
 
     // Body
-    base.beginFill(0x333333);
+    base.beginFill(colour);
     base.drawRect(0, 0, Dwarf.WIDTH, Dwarf.HEIGHT * heightFactor);
     base.endFill();
 
     // Head
-    base.beginFill(0x333333);
+    base.beginFill(colour);
     base.drawRect(Dwarf.WIDTH * .5 - headWidth * .5, -headHeight, headWidth, headHeight);
     base.endFill();
 
     // Left Leg
-    base.beginFill(0x333333);
+    base.beginFill(colour);
     base.drawRect(0, Dwarf.HEIGHT * heightFactor, 1, Dwarf.HEIGHT * (1 - heightFactor));
     base.endFill();
 
     // Right Leg
-    base.beginFill(0x333333);
+    base.beginFill(colour);
     base.drawRect(Dwarf.WIDTH - 1, Dwarf.HEIGHT * heightFactor, 1, Dwarf.HEIGHT * (1 - heightFactor));
     base.endFill();
 
@@ -33108,7 +33144,7 @@ Dwarf.HEIGHT = 12;
 
 Dwarf.SPEED = .75;
 
-},{"./DwarfRoles":212,"./Inventory":213,"./utils/Maths":223,"pixi.js":154}],212:[function(require,module,exports){
+},{"./DwarfRoles":212,"./Inventory":213,"./utils/Maths":224,"pixi.js":154}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33223,10 +33259,12 @@ var RoleBuilder = exports.RoleBuilder = {
 
     id: 'builder',
 
-    startTime: 7,
-    endTime: 18,
+    startTime: 5.5,
+    endTime: 20,
 
     range: 10,
+
+    colour: 0x333355,
 
     cWood: 50,
     cStone: 50,
@@ -33286,8 +33324,10 @@ var RoleCollectWood = exports.RoleCollectWood = {
 
     id: 'collect-wood',
 
-    startTime: 7,
-    endTime: 18,
+    startTime: 5.5,
+    endTime: 20,
+
+    colour: 0x335533,
 
     cWood: 20,
     cStone: 40,
@@ -33368,8 +33408,10 @@ var RoleCollectStone = exports.RoleCollectStone = {
 
     id: 'collect-stone',
 
-    startTime: 7,
-    endTime: 18,
+    startTime: 5.5,
+    endTime: 20,
+
+    colour: 0x444444,
 
     cWood: 40,
     cStone: 20,
@@ -33485,7 +33527,7 @@ var Utils = {
     }
 };
 
-},{"./Dwarf":211,"./Rock":215,"./Tree":219,"./utils/Maths":223}],213:[function(require,module,exports){
+},{"./Dwarf":211,"./Rock":216,"./Tree":220,"./utils/Maths":224}],213:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33558,7 +33600,7 @@ Inventory.prototype.free = function () {
     return this.limit - this.count;
 };
 
-Inventory.LIMIT = 10;
+Inventory.LIMIT = 20;
 Inventory.VERBOSE = false;
 
 },{}],214:[function(require,module,exports){
@@ -33573,6 +33615,124 @@ exports.default = {
 };
 
 },{}],215:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = Lighting;
+
+var _pixi = require('pixi.js');
+
+var _pixi2 = _interopRequireDefault(_pixi);
+
+var _World = require('./World');
+
+var _World2 = _interopRequireDefault(_World);
+
+var _Tile = require('./Tile');
+
+var _Tile2 = _interopRequireDefault(_Tile);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function Lighting(world) {
+
+    _pixi2.default.Sprite.call(this);
+
+    this.shadowCanvas = document.createElement('canvas');
+    this.shadowCanvas.width = _World2.default.WIDTH * _Tile2.default.WIDTH;
+    this.shadowCanvas.height = _World2.default.HEIGHT * _Tile2.default.HEIGHT;
+
+    this.shadowCtx = this.shadowCanvas.getContext('2d');
+
+    this.staticCanvas = document.createElement('canvas');
+    this.staticCanvas.width = _World2.default.WIDTH * _Tile2.default.WIDTH;
+    this.staticCanvas.height = _World2.default.HEIGHT * _Tile2.default.HEIGHT;
+
+    this.staticCtx = this.staticCanvas.getContext('2d');
+
+    this.emitters = [];
+}
+
+Lighting.constructor = Lighting;
+Lighting.prototype = Object.create(_pixi2.default.Sprite.prototype);
+
+Lighting.prototype.addStatic = function (x, y, radius, xOffset, yOffset) {
+
+    var gradient = this.shadowCtx.createRadialGradient(x + xOffset, y + yOffset, 0, x + xOffset, y + yOffset, radius);
+    gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
+    gradient.addColorStop(.4, 'rgba(0, 0, 0, 1)');
+    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+    this.staticCtx.fillStyle = gradient;
+    this.staticCtx.beginPath();
+    this.staticCtx.arc(x + xOffset, y + yOffset, radius, 0, 2 * Math.PI);
+    this.staticCtx.fill();
+};
+
+Lighting.prototype.addEmitter = function (owner, radius, xOffset, yOffset) {
+
+    var canvas = document.createElement('canvas');
+    canvas.width = radius * 2;
+    canvas.height = radius * 2;
+
+    var ctx = canvas.getContext('2d');
+
+    var gradient = ctx.createRadialGradient(radius, radius, 0, radius, radius, radius);
+    gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
+    gradient.addColorStop(.4, 'rgba(0, 0, 0, 1)');
+    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(radius, radius, radius, 0, 2 * Math.PI);
+    ctx.fill();
+
+    var emitter = {
+        owner: owner,
+        radius: radius,
+        canvas: canvas,
+        xOffset: xOffset,
+        yOffset: yOffset
+    };
+
+    this.emitters.push(emitter);
+};
+
+Lighting.prototype.update = function (timeDelta, world) {
+
+    if (world.timeOfDay.getSunValue() > 0) {
+
+        var width = _World2.default.WIDTH * _Tile2.default.WIDTH;
+        var height = _World2.default.HEIGHT * _Tile2.default.HEIGHT;
+
+        this.shadowCtx.clearRect(0, 0, width, height);
+
+        this.shadowCtx.fillStyle = 'rgba(0, 0, 0, .7)';
+        this.shadowCtx.fillRect(0, 0, width, height);
+
+        this.shadowCtx.globalCompositeOperation = 'destination-out';
+
+        this.shadowCtx.drawImage(this.staticCanvas, 0, 0);
+
+        this.emitters.forEach(function (emitter) {
+
+            this.shadowCtx.drawImage(emitter.canvas, emitter.owner.x - emitter.radius + emitter.xOffset, emitter.owner.y - emitter.radius + emitter.yOffset);
+        }.bind(this));
+
+        this.shadowCtx.globalCompositeOperation = 'source-over';
+
+        this.texture = _pixi2.default.Texture.fromCanvas(this.shadowCanvas);
+        this.texture.update();
+    }
+
+    this.alpha = world.timeOfDay.getSunValue();
+};
+
+},{"./Tile":218,"./World":222,"pixi.js":154}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33628,7 +33788,7 @@ Rock.HEIGHT = 10;
 Rock.TYPE = 'rock';
 Rock.SUPPLY = 250;
 
-},{"./utils/value-min-max":224,"pixi.js":154}],216:[function(require,module,exports){
+},{"./utils/value-min-max":225,"pixi.js":154}],217:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33684,7 +33844,7 @@ Supply.prototype.update = function (timeDelta, world) {
     }
 };
 
-},{"./utils/value-min-max":224,"pixi.js":154}],217:[function(require,module,exports){
+},{"./utils/value-min-max":225,"pixi.js":154}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33722,12 +33882,7 @@ function Tile(x, y, elevation) {
     this.canvas.width = Tile.WIDTH;
     this.canvas.height = Tile.HEIGHT;
 
-    this.canvasNight = document.createElement('canvas');
-    this.canvasNight.width = Tile.WIDTH;
-    this.canvasNight.height = Tile.HEIGHT;
-
     var ctx = this.canvas.getContext('2d');
-    var ctxNight = this.canvasNight.getContext('2d');
 
     ctx.fillStyle = this.getColourFromType();
     ctx.fillRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
@@ -33739,9 +33894,6 @@ function Tile(x, y, elevation) {
     ctx.fillRect(0, 0, 1, Tile.HEIGHT);
     ctx.fillRect(0, 0, Tile.WIDTH, 1);
     // ctx.strokeRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
-
-    ctxNight.fillStyle = 'rgba(0, 0, 0, .7)';
-    ctxNight.fillRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
 }
 
 Tile.constructor = Tile;
@@ -33773,7 +33925,7 @@ Tile.TILE_COLOURS = {
     grass: '#002C00'
 };
 
-},{"pixi.js":154}],218:[function(require,module,exports){
+},{"pixi.js":154}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33795,7 +33947,7 @@ function _interopRequireDefault(obj) {
 
 function TimeOfDay() {
 
-    this.time = 18;
+    this.time = 5.5;
 }
 
 TimeOfDay.DAWN_START = 6;
@@ -33808,8 +33960,8 @@ TimeOfDay.constructor = TimeOfDay;
 
 TimeOfDay.prototype.update = function (timeDelta, world) {
 
-    // this.time += timeDelta * 0.00005;
-    this.time += timeDelta * 0.0001;
+    // this.time += timeDelta * 0.0005;
+    this.time += timeDelta * 0.00005;
 
     var hour = this.getHour();
     var minute = this.getMinute();
@@ -33879,7 +34031,7 @@ TimeOfDay.prototype.isDuringPeriod = function (start, end) {
     return this.time >= start && this.time < end;
 };
 
-},{"./utils/value-min-max":224,"pixi.js":154}],219:[function(require,module,exports){
+},{"./utils/value-min-max":225,"pixi.js":154}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33914,14 +34066,14 @@ function Tree() {
     var base = new _pixi2.default.Graphics();
 
     base.beginFill(0x613917);
-    base.drawRect(-1, 0, 2, 3);
+    base.drawRect(-1, -2, 2, 3);
     base.endFill();
 
     base.beginFill(0x004400);
-    base.moveTo(0, -Tree.HEIGHT);
-    base.lineTo(-Tree.WIDTH * .5, 0);
-    base.lineTo(Tree.WIDTH * .5, 0);
-    base.lineTo(0, -Tree.HEIGHT);
+    base.moveTo(0, -Tree.HEIGHT - 2);
+    base.lineTo(-Tree.WIDTH * .5, -2);
+    base.lineTo(Tree.WIDTH * .5, -2);
+    base.lineTo(0, -Tree.HEIGHT - 2);
     base.endFill();
 
     this.addChild(base);
@@ -33958,7 +34110,7 @@ Tree.HEIGHT = 24;
 Tree.TYPE = 'tree';
 Tree.SUPPLY = 100;
 
-},{"./Tile":217,"./utils/value-min-max":224,"pixi.js":154}],220:[function(require,module,exports){
+},{"./Tile":218,"./utils/value-min-max":225,"pixi.js":154}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34146,7 +34298,7 @@ function BuildingUI(world) {
 
     world.buildings.archetypes.forEach(function (archetype, index) {
 
-        var archetypeButtonW = 200;
+        var archetypeButtonW = 300;
         var archetypeButtonH = 60;
 
         var archetypeButton = new _pixi2.default.Graphics();
@@ -34183,7 +34335,7 @@ function BuildingUI(world) {
 
         style.font = '12px Arial';
 
-        var textDescription = new _pixi2.default.Text(archetype.description, style);
+        var textDescription = new _pixi2.default.Text(archetype.description + ' (' + archetype.cWood + ' wood : ' + archetype.cStone + ' stone)', style);
         textDescription.x = 10;
         textDescription.y = 30;
         textDescription.alpha = .75;
@@ -34280,7 +34432,7 @@ BuildingUI.prototype.onDragEnd = function () {
 
             if (canAfford && window.confirm('Place new ' + this.activeArchetype.title + ' at ' + targetTile.tileX + '/' + targetTile.tileY + '?')) {
 
-                console.log('Placing new', this.activeArchetype.title, 'at', targetTile.tileX + '/' + targetTile.tileY);
+                // console.log('Placing new', this.activeArchetype.title, 'at', targetTile.tileX + '/' + targetTile.tileY);
 
                 this.world.supply.wood.decrement(this.activeArchetype.cWood);
                 this.world.supply.stone.decrement(this.activeArchetype.cStone);
@@ -34337,7 +34489,7 @@ BuildingUI.prototype.update = function (wood, stone) {
     }.bind(this));
 };
 
-},{"./Layout":214,"./utils/Maths":223,"pixi.js":154}],221:[function(require,module,exports){
+},{"./Layout":214,"./utils/Maths":224,"pixi.js":154}],222:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34368,6 +34520,10 @@ var _Rock2 = _interopRequireDefault(_Rock);
 var _Supply = require('./Supply');
 
 var _Supply2 = _interopRequireDefault(_Supply);
+
+var _Lighting = require('./Lighting');
+
+var _Lighting2 = _interopRequireDefault(_Lighting);
 
 var _Buildings = require('./Buildings');
 
@@ -34435,13 +34591,9 @@ function World() {
     background.width = World.WIDTH * _Tile2.default.WIDTH;
     background.height = World.HEIGHT * _Tile2.default.HEIGHT;
 
-    this.nightCanvas = document.createElement('canvas');
-    this.nightCanvas.width = World.WIDTH * _Tile2.default.WIDTH;
-    this.nightCanvas.height = World.HEIGHT * _Tile2.default.HEIGHT;
+    this.lighting = new _Lighting2.default(this);
 
     var backgroundCtx = background.getContext('2d');
-    this.nightCtx = this.nightCanvas.getContext('2d');
-
     for (var y = 0; y < World.HEIGHT; y++) {
 
         for (var x = 0; x < World.WIDTH; x++) {
@@ -34449,16 +34601,14 @@ function World() {
             var tile = this.addTile(x, y);
 
             backgroundCtx.drawImage(tile.canvas, x * _Tile2.default.WIDTH, y * _Tile2.default.HEIGHT);
-            this.nightCtx.drawImage(tile.canvasNight, x * _Tile2.default.WIDTH, y * _Tile2.default.HEIGHT);
         }
     }
 
     this.background = new _pixi2.default.Sprite(_pixi2.default.Texture.fromCanvas(background));
-    this.night = new _pixi2.default.Sprite(_pixi2.default.Texture.fromCanvas(this.nightCanvas));
 
     this.addChild(this.background);
     this.addChild(this.containerZOrdered);
-    this.addChild(this.night);
+    this.addChild(this.lighting);
     this.addChild(this.ui);
 
     // Add buildings
@@ -34578,21 +34728,44 @@ World.prototype.addBuilding = function (id, tileX, tileY) {
 
         this.containerZOrdered.addChild(building);
 
-        var radius = building.lightRadius;
+        this.lighting.addStatic(building.x, building.y, building.lightRadius, 0, -5);
 
-        var gradient = this.nightCtx.createRadialGradient(building.x, building.y - 5, 0, building.x, building.y - 5, radius);
-        gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
-        gradient.addColorStop(.4, 'rgba(0, 0, 0, 1)');
-        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        // let lightCanvas = document.createElement('canvas');
+        // lightCanvas.width = lightCanvas.height = radius * 2;
 
-        this.nightCtx.globalCompositeOperation = 'destination-out';
-        this.nightCtx.fillStyle = gradient;
-        this.nightCtx.beginPath();
-        this.nightCtx.arc(building.x, building.y - 5, radius, 0, 2 * Math.PI);
-        this.nightCtx.fill();
+        // let lightCtx = lightCanvas.getContext('2d');
 
-        this.night.texture = _pixi2.default.Texture.fromCanvas(this.nightCanvas);
-        this.night.texture.update();
+        // let lightGradient = lightCtx.createRadialGradient(radius, radius, 0, radius, radius, radius);
+        // lightGradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
+        // lightGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+        // lightCtx.fillStyle = lightGradient;
+        // lightCtx.beginPath();
+        // lightCtx.arc(radius, radius, radius, 0, 2 * Math.PI);
+        // lightCtx.fill();
+
+        // let light = new PIXI.Sprite(PIXI.Texture.fromCanvas(lightCanvas));
+        // light.x = building.x - radius;
+        // light.y = building.y - radius - 5;
+
+        // this.nightMask.addChild(light);
+
+
+        // let gradient = this.nightCtx.createRadialGradient(building.x, building.y - 5, 0, building.x, building.y - 5, radius);
+        // gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
+        // gradient.addColorStop(.4, 'rgba(0, 0, 0, 1)');
+        // gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+        // this.nightCtx.globalCompositeOperation = 'destination-out';
+        // this.nightCtx.fillStyle = gradient;
+        // this.nightCtx.beginPath();
+        // this.nightCtx.arc(building.x, building.y - 5, radius, 0, 2 * Math.PI);
+        // this.nightCtx.fill();
+
+        // this.night.texture = PIXI.Texture.fromCanvas(this.nightCanvas);
+        // this.night.texture.update();
+
+        // this.nightMask
 
         return building;
     } else {
@@ -34626,6 +34799,8 @@ World.prototype.addDwarf = function (x, y, role) {
 
     this.containerZOrdered.addChild(dwarf);
 
+    this.lighting.addEmitter(dwarf, 30, 0, -5);
+
     return dwarf;
 };
 
@@ -34637,7 +34812,7 @@ World.prototype.update = function (time) {
 
     this.timeOfDay.update(timeDelta, this);
 
-    this.night.alpha = this.timeOfDay.getSunValue();
+    this.lighting.update(timeDelta, this);
 
     this.dwarves.forEach(function (dwarf) {
 
@@ -34706,7 +34881,7 @@ World.prototype.getTile = function (x, y) {
 World.WIDTH = 48;
 World.HEIGHT = 32;
 
-},{"./Buildings":210,"./Dwarf":211,"./DwarfRoles":212,"./Layout":214,"./Rock":215,"./Supply":216,"./Tile":217,"./TimeOfDay":218,"./Tree":219,"./UI":220,"noisejs":30,"pixi.js":154}],222:[function(require,module,exports){
+},{"./Buildings":210,"./Dwarf":211,"./DwarfRoles":212,"./Layout":214,"./Lighting":215,"./Rock":216,"./Supply":217,"./Tile":218,"./TimeOfDay":219,"./Tree":220,"./UI":221,"noisejs":30,"pixi.js":154}],223:[function(require,module,exports){
 'use strict';
 
 var _pixi = require('pixi.js');
@@ -34759,25 +34934,29 @@ function startGame() {
     stage.addChild(world);
 
     var count = 0;
+    var msPerFrame = 1000 / 60;
 
     tick(0);
 
     function tick(time) {
 
-        count++;
+        if (document.hasFocus()) {
 
-        if (count % 2 === 0) {
+            count++;
 
-            world.update(time);
+            if (count % 2 === 0) {
 
-            renderer.render(stage);
+                world.update(count * msPerFrame);
+
+                renderer.render(stage);
+            }
         }
 
         (0, _raf2.default)(tick);
     }
 }
 
-},{"./Layout":214,"./World":221,"pixi.js":154,"raf":187}],223:[function(require,module,exports){
+},{"./Layout":214,"./World":222,"pixi.js":154,"raf":187}],224:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -34807,7 +34986,7 @@ exports.default = {
     }
 };
 
-},{}],224:[function(require,module,exports){
+},{}],225:[function(require,module,exports){
 "use strict";
 
 module.exports = function (min, max, initial) {
@@ -34882,4 +35061,4 @@ module.exports = function (min, max, initial) {
 	return api;
 };
 
-},{}]},{},[222]);
+},{}]},{},[223]);

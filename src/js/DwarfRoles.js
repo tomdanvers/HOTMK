@@ -106,10 +106,12 @@ export const RoleBuilder = {
 
     id: 'builder',
 
-    startTime: 7,
-    endTime: 18,
+    startTime: 5.5,
+    endTime: 20,
 
     range: 10,
+
+    colour: 0x333355,
 
     cWood: 50,
     cStone: 50,
@@ -183,8 +185,10 @@ export const RoleCollectWood = {
 
     id: 'collect-wood',
 
-    startTime: 7,
-    endTime: 18,
+    startTime: 5.5,
+    endTime: 20,
+
+    colour: 0x335533,
 
     cWood: 20,
     cStone: 40,
@@ -283,8 +287,10 @@ export const RoleCollectStone = {
 
     id: 'collect-stone',
 
-    startTime: 7,
-    endTime: 18,
+    startTime: 5.5,
+    endTime: 20,
+
+    colour: 0x444444,
 
     cWood: 40,
     cStone: 20,

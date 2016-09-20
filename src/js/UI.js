@@ -173,7 +173,7 @@ export function BuildingUI(world) {
 
     world.buildings.archetypes.forEach(function(archetype, index) {
 
-        let archetypeButtonW = 200;
+        let archetypeButtonW = 300;
         let archetypeButtonH = 60;
 
         let archetypeButton = new PIXI.Graphics();
@@ -210,7 +210,7 @@ export function BuildingUI(world) {
 
         style.font = '12px Arial';
 
-        let textDescription = new PIXI.Text(archetype.description, style);
+        let textDescription = new PIXI.Text(archetype.description + ' (' + archetype.cWood + ' wood : ' + archetype.cStone + ' stone)', style);
         textDescription.x = 10;
         textDescription.y = 30;
         textDescription.alpha = .75;
@@ -316,7 +316,7 @@ BuildingUI.prototype.onDragEnd = function() {
 
             if (canAfford && window.confirm('Place new ' + this.activeArchetype.title + ' at ' + targetTile.tileX + '/' + targetTile.tileY + '?')) {
 
-                console.log('Placing new', this.activeArchetype.title, 'at', targetTile.tileX + '/' + targetTile.tileY);
+                // console.log('Placing new', this.activeArchetype.title, 'at', targetTile.tileX + '/' + targetTile.tileY);
 
                 this.world.supply.wood.decrement(this.activeArchetype.cWood);
                 this.world.supply.stone.decrement(this.activeArchetype.cStone);

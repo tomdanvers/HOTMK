@@ -22,12 +22,7 @@ export default function Tile(x, y, elevation) {
     this.canvas.width = Tile.WIDTH;
     this.canvas.height = Tile.HEIGHT;
 
-    this.canvasNight = document.createElement('canvas');
-    this.canvasNight.width = Tile.WIDTH;
-    this.canvasNight.height = Tile.HEIGHT;
-
     let ctx = this.canvas.getContext('2d');
-    let ctxNight = this.canvasNight.getContext('2d');
 
     ctx.fillStyle = this.getColourFromType();
     ctx.fillRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
@@ -39,10 +34,6 @@ export default function Tile(x, y, elevation) {
     ctx.fillRect(0, 0, 1, Tile.HEIGHT);
     ctx.fillRect(0, 0, Tile.WIDTH, 1);
     // ctx.strokeRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
-
-    ctxNight.fillStyle = 'rgba(0, 0, 0, .7)';
-    ctxNight.fillRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
-
 }
 
 Tile.constructor = Tile;

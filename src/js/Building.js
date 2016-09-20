@@ -28,7 +28,7 @@ export function Building(world) {
     let lightCtx = lightCanvas.getContext('2d');
 
     let lightGradient = lightCtx.createRadialGradient(this.lightRadius, this.lightRadius, 0, this.lightRadius, this.lightRadius, this.lightRadius);
-    lightGradient.addColorStop(0, 'rgba(250, 224, 77, .5)');
+    lightGradient.addColorStop(0, 'rgba(250, 224, 77, .25)');
     lightGradient.addColorStop(1, 'rgba(250, 244, 77, 0)');
 
     lightCtx.fillStyle = lightGradient;
@@ -68,10 +68,17 @@ Building.prototype.update = function(timeDelta) {
 
     this.timeSinceSpawn += timeDelta;
 
-    this.alpha = this.integrity.val();
+    if (!this.isConstructed) {
 
-    this.light.alpha = this.world.timeOfDay.getSunValue() - (Math.random() > .9 ? Math.random() * .15 : 0);
+        this.alpha = this.integrity.val();
 
+    }
+
+    if (this.world.timeOfDay.getSunValue() > 0) {
+
+        this.light.alpha = this.world.timeOfDay.getSunValue() - (Math.random() > .9 ? Math.random() * .15 : 0);
+
+    }
 
 }
 
@@ -107,6 +114,8 @@ Building.prototype.constructed = function() {
 
     this.isConstructed = true;
 
+    this.alpha = 1;
+
     if (this.associatedRole) {
 
         // Add dwarf with associated role
@@ -137,7 +146,32 @@ Building.INTEGRITY = 100;
 Building.TYPE = 'building';
 
 
+/* -------------- */
+/* --------- Camp */
+/* -------------- */
 
+export function Camp(world) {
+
+    Building.call(this, world);
+
+}
+
+Camp.constructor = Camp;
+Camp.prototype = Object.create(Building.prototype);
+
+Camp.prototype.draw = function(graphics) {
+
+    graphics.beginFill(0x999999);
+    graphics.drawRect(- Camp.WIDTH * .5, - Camp.HEIGHT, Camp.WIDTH, Camp.HEIGHT);
+    graphics.endFill();
+    graphics.beginFill(0x222222);
+    graphics.drawRect(- Camp.WIDTH * .5 + 4, -6, Camp.WIDTH - 8, 6);
+    graphics.endFill();
+
+}
+
+Camp.WIDTH = 12;
+Camp.HEIGHT = 12;
 
 
 /* -------------- */

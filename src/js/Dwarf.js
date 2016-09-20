@@ -20,7 +20,7 @@ export default function Dwarf(world, startX, startY, roleId) {
     this.angle = 0;
 
     this.timeSinceAction = 0;
-    this.timeBetweenActions = 2000;
+    this.timeBetweenActions = 1500;
 
     this.roleId = null;
     this.careerRole = this.world.dwarfRoles.getById(roleId);
@@ -31,25 +31,27 @@ export default function Dwarf(world, startX, startY, roleId) {
     let headWidth = 2;
     let headHeight = 4;
 
+    let colour = this.careerRole ? this.careerRole.colour : 0x333333;
+
     let base = new PIXI.Graphics();
 
     // Body
-    base.beginFill(0x333333);
+    base.beginFill(colour);
     base.drawRect(0, 0, Dwarf.WIDTH, Dwarf.HEIGHT * heightFactor);
     base.endFill();
 
     // Head
-    base.beginFill(0x333333);
+    base.beginFill(colour);
     base.drawRect(Dwarf.WIDTH * .5 - headWidth * .5, -headHeight, headWidth, headHeight);
     base.endFill();
 
     // Left Leg
-    base.beginFill(0x333333);
+    base.beginFill(colour);
     base.drawRect(0, Dwarf.HEIGHT * heightFactor, 1, Dwarf.HEIGHT * (1-heightFactor));
     base.endFill();
 
     // Right Leg
-    base.beginFill(0x333333);
+    base.beginFill(colour);
     base.drawRect(Dwarf.WIDTH - 1, Dwarf.HEIGHT * heightFactor, 1, Dwarf.HEIGHT * (1-heightFactor));
     base.endFill();
 

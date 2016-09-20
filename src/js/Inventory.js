@@ -76,5 +76,5 @@ Inventory.prototype.free = function() {
 
 }
 
-Inventory.LIMIT = 10;
+Inventory.LIMIT = 20;
 Inventory.VERBOSE = false;

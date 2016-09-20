@@ -14,14 +14,14 @@ export default function Tree() {
     let base = new PIXI.Graphics();
 
     base.beginFill(0x613917);
-    base.drawRect(-1,0,2,3);
+    base.drawRect(-1,-2,2,3);
     base.endFill();
 
     base.beginFill(0x004400);
-    base.moveTo(0, - Tree.HEIGHT);
-    base.lineTo(- Tree.WIDTH * .5, 0);
-    base.lineTo(Tree.WIDTH * .5, 0);
-    base.lineTo(0, - Tree.HEIGHT);
+    base.moveTo(0, - Tree.HEIGHT-2);
+    base.lineTo(- Tree.WIDTH * .5, -2);
+    base.lineTo(Tree.WIDTH * .5, -2);
+    base.lineTo(0, - Tree.HEIGHT-2);
     base.endFill();
 
     this.addChild(base)
