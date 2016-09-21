@@ -32926,7 +32926,7 @@ Mason.prototype.draw = function (graphics) {
 Mason.WIDTH = 13;
 Mason.HEIGHT = 14;
 
-},{"./Dwarf":211,"./DwarfRoles":212,"./utils/value-min-max":225,"pixi.js":154}],210:[function(require,module,exports){
+},{"./Dwarf":211,"./DwarfRoles":212,"./utils/value-min-max":226,"pixi.js":154}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33144,7 +33144,7 @@ Dwarf.HEIGHT = 12;
 
 Dwarf.SPEED = .75;
 
-},{"./DwarfRoles":212,"./Inventory":213,"./utils/Maths":224,"pixi.js":154}],212:[function(require,module,exports){
+},{"./DwarfRoles":212,"./Inventory":213,"./utils/Maths":225,"pixi.js":154}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33527,7 +33527,7 @@ var Utils = {
     }
 };
 
-},{"./Dwarf":211,"./Rock":216,"./Tree":220,"./utils/Maths":224}],213:[function(require,module,exports){
+},{"./Dwarf":211,"./Rock":216,"./Tree":220,"./utils/Maths":225}],213:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33732,7 +33732,7 @@ Lighting.prototype.update = function (timeDelta, world) {
     this.alpha = world.timeOfDay.getSunValue();
 };
 
-},{"./Tile":218,"./World":222,"pixi.js":154}],216:[function(require,module,exports){
+},{"./Tile":218,"./World":223,"pixi.js":154}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33788,7 +33788,7 @@ Rock.HEIGHT = 10;
 Rock.TYPE = 'rock';
 Rock.SUPPLY = 250;
 
-},{"./utils/value-min-max":225,"pixi.js":154}],217:[function(require,module,exports){
+},{"./utils/value-min-max":226,"pixi.js":154}],217:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33844,7 +33844,7 @@ Supply.prototype.update = function (timeDelta, world) {
     }
 };
 
-},{"./utils/value-min-max":225,"pixi.js":154}],218:[function(require,module,exports){
+},{"./utils/value-min-max":226,"pixi.js":154}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34031,7 +34031,7 @@ TimeOfDay.prototype.isDuringPeriod = function (start, end) {
     return this.time >= start && this.time < end;
 };
 
-},{"./utils/value-min-max":225,"pixi.js":154}],220:[function(require,module,exports){
+},{"./utils/value-min-max":226,"pixi.js":154}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34110,7 +34110,7 @@ Tree.HEIGHT = 24;
 Tree.TYPE = 'tree';
 Tree.SUPPLY = 100;
 
-},{"./Tile":218,"./utils/value-min-max":225,"pixi.js":154}],221:[function(require,module,exports){
+},{"./Tile":218,"./utils/value-min-max":226,"pixi.js":154}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34489,7 +34489,47 @@ BuildingUI.prototype.update = function (wood, stone) {
     }.bind(this));
 };
 
-},{"./Layout":214,"./utils/Maths":224,"pixi.js":154}],222:[function(require,module,exports){
+},{"./Layout":214,"./utils/Maths":225,"pixi.js":154}],222:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = Viewport;
+
+var _pixi = require('pixi.js');
+
+var _pixi2 = _interopRequireDefault(_pixi);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function Viewport(width, height, worldWidth, worldHeight) {
+
+    this.width = width;
+    this.height = height;
+
+    this.worldWidth = worldWidth;
+    this.worldHeight = worldHeight;
+
+    this.scroll = this.worldHeight - this.height;
+    this.scroll = 0;
+}
+
+Viewport.constructor = Viewport;
+
+Viewport.prototype.update = function (timeDelta, world) {
+
+    var newScroll = this.scroll + 1;
+
+    if (newScroll <= this.worldHeight - this.height && newScroll > 0) {
+
+        this.scroll = newScroll;
+    }
+};
+
+},{"pixi.js":154}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34504,6 +34544,10 @@ var _pixi2 = _interopRequireDefault(_pixi);
 var _noisejs = require('noisejs');
 
 var _noisejs2 = _interopRequireDefault(_noisejs);
+
+var _Viewport = require('./Viewport');
+
+var _Viewport2 = _interopRequireDefault(_Viewport);
 
 var _Tile = require('./Tile');
 
@@ -34558,7 +34602,9 @@ function World() {
     _pixi2.default.Container.call(this);
 
     World.WIDTH = Math.ceil(_Layout2.default.WIDTH / _Tile2.default.WIDTH);
-    World.HEIGHT = Math.ceil(_Layout2.default.HEIGHT / _Tile2.default.HEIGHT);
+    World.HEIGHT = Math.ceil(_Layout2.default.HEIGHT / _Tile2.default.HEIGHT) * 2;
+
+    this.viewport = new _Viewport2.default(Math.ceil(_Layout2.default.WIDTH / _Tile2.default.WIDTH) * _Tile2.default.WIDTH, Math.ceil(_Layout2.default.HEIGHT / _Tile2.default.HEIGHT) * _Tile2.default.HEIGHT, World.WIDTH * _Tile2.default.WIDTH, World.HEIGHT * _Tile2.default.HEIGHT);
 
     this.randomSeed = Math.floor(Math.random() * 1000);
 
@@ -34606,9 +34652,13 @@ function World() {
 
     this.background = new _pixi2.default.Sprite(_pixi2.default.Texture.fromCanvas(background));
 
-    this.addChild(this.background);
-    this.addChild(this.containerZOrdered);
-    this.addChild(this.lighting);
+    this.content = new _pixi2.default.Container();
+
+    this.content.addChild(this.background);
+    this.content.addChild(this.containerZOrdered);
+    this.content.addChild(this.lighting);
+
+    this.addChild(this.content);
     this.addChild(this.ui);
 
     // Add buildings
@@ -34814,6 +34864,10 @@ World.prototype.update = function (time) {
 
     this.lighting.update(timeDelta, this);
 
+    this.viewport.update(timeDelta, this);
+
+    this.content.y = -this.viewport.scroll;
+
     this.dwarves.forEach(function (dwarf) {
 
         dwarf.update(timeDelta, this);
@@ -34881,7 +34935,7 @@ World.prototype.getTile = function (x, y) {
 World.WIDTH = 48;
 World.HEIGHT = 32;
 
-},{"./Buildings":210,"./Dwarf":211,"./DwarfRoles":212,"./Layout":214,"./Lighting":215,"./Rock":216,"./Supply":217,"./Tile":218,"./TimeOfDay":219,"./Tree":220,"./UI":221,"noisejs":30,"pixi.js":154}],223:[function(require,module,exports){
+},{"./Buildings":210,"./Dwarf":211,"./DwarfRoles":212,"./Layout":214,"./Lighting":215,"./Rock":216,"./Supply":217,"./Tile":218,"./TimeOfDay":219,"./Tree":220,"./UI":221,"./Viewport":222,"noisejs":30,"pixi.js":154}],224:[function(require,module,exports){
 'use strict';
 
 var _pixi = require('pixi.js');
@@ -34956,7 +35010,7 @@ function startGame() {
     }
 }
 
-},{"./Layout":214,"./World":222,"pixi.js":154,"raf":187}],224:[function(require,module,exports){
+},{"./Layout":214,"./World":223,"pixi.js":154,"raf":187}],225:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -34986,7 +35040,7 @@ exports.default = {
     }
 };
 
-},{}],225:[function(require,module,exports){
+},{}],226:[function(require,module,exports){
 "use strict";
 
 module.exports = function (min, max, initial) {
@@ -35061,4 +35115,4 @@ module.exports = function (min, max, initial) {
 	return api;
 };
 
-},{}]},{},[223]);
+},{}]},{},[224]);

@@ -2,6 +2,8 @@ import PIXI from 'pixi.js';
 
 import Noise from 'noisejs';
 
+import Viewport from './Viewport';
+
 import Tile from './Tile';
 
 import Tree from './Tree';
@@ -29,7 +31,14 @@ export default function World() {
     PIXI.Container.call(this);
 
     World.WIDTH = Math.ceil(Layout.WIDTH / Tile.WIDTH);
-    World.HEIGHT = Math.ceil(Layout.HEIGHT / Tile.HEIGHT);
+    World.HEIGHT = Math.ceil(Layout.HEIGHT / Tile.HEIGHT) * 2;
+
+    this.viewport = new Viewport(
+        Math.ceil(Layout.WIDTH / Tile.WIDTH) * Tile.WIDTH,
+        Math.ceil(Layout.HEIGHT / Tile.HEIGHT) * Tile.HEIGHT,
+        World.WIDTH * Tile.WIDTH,
+        World.HEIGHT * Tile.HEIGHT
+    );
 
     this.randomSeed = Math.floor(Math.random() * 1000);
 
@@ -79,9 +88,13 @@ export default function World() {
 
     this.background = new PIXI.Sprite(PIXI.Texture.fromCanvas(background));
 
-    this.addChild(this.background);
-    this.addChild(this.containerZOrdered);
-    this.addChild(this.lighting);
+    this.content = new PIXI.Container();
+
+    this.content.addChild(this.background);
+    this.content.addChild(this.containerZOrdered);
+    this.content.addChild(this.lighting);
+
+    this.addChild(this.content);
     this.addChild(this.ui);
 
     // Add buildings
@@ -310,6 +323,10 @@ World.prototype.update = function(time) {
     this.timeOfDay.update(timeDelta, this);
 
     this.lighting.update(timeDelta, this);
+
+    this.viewport.update(timeDelta, this);
+
+    this.content.y = - this.viewport.scroll;
 
     this.dwarves.forEach(function(dwarf) {
 
