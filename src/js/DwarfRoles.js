@@ -10,7 +10,8 @@ export default function DwarfRoles() {
         'resting': RoleResting,
         'builder': RoleBuilder,
         'collect-wood': RoleCollectWood,
-        'collect-stone': RoleCollectStone
+        'collect-stone': RoleCollectStone,
+        'watch-night': RoleWatchNight
     };
 
     // console.log('DwarfRoles(',this.rolesMap,')');
@@ -30,6 +31,7 @@ DwarfRoles.RESTING = 'resting';
 DwarfRoles.BUILDER = 'builder';
 DwarfRoles.COLLECT_WOOD = 'collect-wood';
 DwarfRoles.COLLECT_STONE = 'collect-stone';
+DwarfRoles.WATCH_NIGHT = 'watch-night';
 
 export const RoleIdle = {
 
@@ -97,6 +99,105 @@ export const RoleResting = {
     targetProximity(timeDelta, dwarf, world) {
 
         dwarf.target = false;
+
+    }
+
+}
+
+export const RoleWatchNight = {
+
+    id: 'watch-night',
+
+    startTime: 19,
+    endTime: 7,
+
+    range: 10,
+
+    colour: 0x553333,
+
+    cWood: 50,
+    cStone: 50,
+
+    enter(dwarf, world) {
+
+        if (dwarf.home) {
+
+            dwarf.target = dwarf.home;
+
+        }
+
+    },
+
+    updateRoute(dwarf, world) {
+
+        let watchTower = dwarf.home;
+
+        if (watchTower.patrolRoute.length > 0) {
+
+            dwarf.patrolRouteIndex = Math.floor(Math.random() * watchTower.patrolRoute.length);
+            dwarf.target = watchTower.patrolRoute[dwarf.patrolRouteIndex].building;
+
+            dwarf.patrolRouteVersion = watchTower.patrolRoute.version;
+
+        } else {
+
+            dwarf.patrolRouteVersion = 1;
+
+            dwarf.target = watchTower;
+
+        }
+
+    },
+
+    update(timeDelta, dwarf, world) {
+
+        if (dwarf.patrolRouteVersion !== dwarf.home.patrolRoute.version) {
+
+            this.updateRoute(dwarf, world);
+
+        }
+
+
+    },
+
+    targetProximity(timeDelta, dwarf, world) {
+
+
+        if (dwarf.canTakeAction()) {
+
+            let watchTower = dwarf.home;
+
+            // console.log('RoleWatchNight.targetProximity(', watchTower, ')');
+
+            if (watchTower.patrolRoute && watchTower.patrolRoute.length > 0) {
+
+                let nextWaypointIndex = dwarf.patrolRouteIndex + 1;
+
+                if (nextWaypointIndex >= watchTower.patrolRoute.length) {
+                    nextWaypointIndex = 0;
+                }
+
+                dwarf.patrolRouteIndex = nextWaypointIndex;
+
+                let nextWaypoint = watchTower.patrolRoute[dwarf.patrolRouteIndex];
+
+                dwarf.target = {
+                    x: nextWaypoint.building.x + Math.random() * 40 - 20,
+                    y: nextWaypoint.building.y + Math.random() * 40 - 20
+                };
+
+            } else {
+
+                dwarf.target = {
+                    x: watchTower.x + Math.random() * 80 - 40,
+                    y: watchTower.y + Math.random() * 80 - 40
+                };
+
+            }
+
+            dwarf.tookAction();
+
+        }
 
     }
 

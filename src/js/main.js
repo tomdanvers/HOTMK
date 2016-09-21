@@ -45,7 +45,7 @@ function startGame() {
 
         if (document.hasFocus()) {
 
-            count ++;
+            count += window.TICK_RATE || 1;
 
             if (count % 2 === 0) {
 

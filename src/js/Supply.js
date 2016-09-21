@@ -3,9 +3,10 @@ import ValueMinMax from './utils/value-min-max';
 
 export default function Supply() {
 
-    this.wood = new ValueMinMax(0, 100000, 250);
+    this.wood = new ValueMinMax(0, 100000, Supply.WOOD);
     this.woodOld = 0;
-    this.stone = new ValueMinMax(0, 100000, 150)
+
+    this.stone = new ValueMinMax(0, 100000, Supply.STONE);
     this.stoneOld = 0;
 
     return this;
@@ -42,3 +43,6 @@ Supply.prototype.update = function(timeDelta, world) {
     }
 
 }
+
+Supply.WOOD = 1000;
+Supply.STONE = 1000;

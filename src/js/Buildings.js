@@ -1,4 +1,4 @@
-import {Camp, Miner, Forester, Mason} from './Building';
+import {Camp, Miner, Forester, Mason, NightWatch} from './Building';
 
 export default function Buildings(world) {
 
@@ -7,7 +7,8 @@ export default function Buildings(world) {
     this.archetypes = [
         Buildings.ARCHETYPE_MINER,
         Buildings.ARCHETYPE_FORESTER,
-        Buildings.ARCHETYPE_MASON
+        Buildings.ARCHETYPE_MASON,
+        Buildings.ARCHETYPE_NIGHTWATCH
     ];
 
     this.archetypesMap = {};
@@ -48,6 +49,7 @@ Buildings.ARCHETYPE_CAMP = new BuildingArchetype('camp', 'Camp', 'A settler\'s c
 Buildings.ARCHETYPE_MINER = new BuildingArchetype('miner', 'Miner\'s Cottage', 'A lowly home for a miner', 100, 50, Miner);
 Buildings.ARCHETYPE_FORESTER = new BuildingArchetype('forester', 'Forester\'s Cottage', 'A lowly home for a forester', 50, 100, Forester);
 Buildings.ARCHETYPE_MASON = new BuildingArchetype('mason', 'Mason\'s Cottage', 'A builder\'s home', 150, 150, Mason);
+Buildings.ARCHETYPE_NIGHTWATCH = new BuildingArchetype('night-watch', 'The Night Watch', 'A watch house that patrols during the hours of darkness', 200, 200, NightWatch);
 
 
 function BuildingArchetype(id, title, description, cWood, cStone, c) {

@@ -19,8 +19,8 @@ export default function Dwarf(world, startX, startY, roleId) {
 
     this.angle = 0;
 
-    this.timeSinceAction = 0;
     this.timeBetweenActions = 1500;
+    this.timeSinceAction = this.timeBetweenActions;
 
     this.roleId = null;
     this.careerRole = this.world.dwarfRoles.getById(roleId);

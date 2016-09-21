@@ -3,7 +3,7 @@ import ValueMinMax from './utils/value-min-max';
 
 export default function TimeOfDay() {
 
-    this.time = 5.5;
+    this.time = 12;
 
 }
 
@@ -98,6 +98,15 @@ TimeOfDay.prototype.isDuringPeriod = function(start, end) {
 
     // NB only works for roles that are in the daytime...
 
-    return this.time >= start && this.time < end;
+    if (start > end) {
+
+        return this.time >= start || this.time < end;
+
+    } else {
+
+        return this.time >= start && this.time < end;
+
+    }
+
 
 }

@@ -231,47 +231,17 @@ World.prototype.addBuilding = function(id, tileX, tileY) {
 
         this.lighting.addStatic(building.x, building.y, building.lightRadius, 0, -5);
 
-        // let lightCanvas = document.createElement('canvas');
-        // lightCanvas.width = lightCanvas.height = radius * 2;
+        // Update watchmen patrol routes
 
-        // let lightCtx = lightCanvas.getContext('2d');
+        this.buildings.buildings.forEach(function(building) {
 
-        // let lightGradient = lightCtx.createRadialGradient(radius, radius, 0, radius, radius, radius);
-        // lightGradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
-        // lightGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            if (building.patrolRoute !== undefined) {
 
-        // lightCtx.fillStyle = lightGradient;
-        // lightCtx.beginPath();
-        // lightCtx.arc(radius, radius, radius, 0, 2 * Math.PI);
-        // lightCtx.fill();
+                building.updatePatrolRoute();
 
-        // let light = new PIXI.Sprite(PIXI.Texture.fromCanvas(lightCanvas));
-        // light.x = building.x - radius;
-        // light.y = building.y - radius - 5;
+            }
 
-        // this.nightMask.addChild(light);
-
-
-
-
-
-
-
-        // let gradient = this.nightCtx.createRadialGradient(building.x, building.y - 5, 0, building.x, building.y - 5, radius);
-        // gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
-        // gradient.addColorStop(.4, 'rgba(0, 0, 0, 1)');
-        // gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-
-        // this.nightCtx.globalCompositeOperation = 'destination-out';
-        // this.nightCtx.fillStyle = gradient;
-        // this.nightCtx.beginPath();
-        // this.nightCtx.arc(building.x, building.y - 5, radius, 0, 2 * Math.PI);
-        // this.nightCtx.fill();
-
-        // this.night.texture = PIXI.Texture.fromCanvas(this.nightCanvas);
-        // this.night.texture.update();
-
-        // this.nightMask
+        });
 
         return building;
 
@@ -312,7 +282,7 @@ World.prototype.addDwarf = function(x, y, role) {
 
     this.containerZOrdered.addChild(dwarf);
 
-    this.lighting.addEmitter(dwarf, 30, 0, -5);
+    this.lighting.addEmitter(dwarf, dwarf.careerRole.id === DwarfRoles.WATCH_NIGHT ? 50 : 30, 0, -5);
 
     return dwarf;
 

@@ -32669,6 +32669,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Building = Building;
 exports.Camp = Camp;
+exports.NightWatch = NightWatch;
 exports.Miner = Miner;
 exports.Forester = Forester;
 exports.Mason = Mason;
@@ -32689,6 +32690,10 @@ var _valueMinMax = require('./utils/value-min-max');
 
 var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
 
+var _Maths = require('./utils/Maths');
+
+var _Maths2 = _interopRequireDefault(_Maths);
+
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
@@ -32698,6 +32703,8 @@ function Building(world) {
     _pixi2.default.Container.call(this);
 
     this.world = world;
+
+    this.inhabitantCount = 1;
 
     this.integrity = new _valueMinMax2.default(0, Building.INTEGRITY, Building.INTEGRITY * .25);
 
@@ -32769,7 +32776,8 @@ Building.prototype.onDown = function (event) {};
 
 Building.prototype.spawn = function (isPurchased) {
 
-    if (this.timeSinceSpawn > Building.SPAWN_RATE && this.isConstructed) {
+    //if (this.timeSinceSpawn > Building.SPAWN_RATE && this.isConstructed) {
+    if (this.isConstructed) {
 
         this.timeSinceSpawn = 0;
 
@@ -32795,11 +32803,14 @@ Building.prototype.constructed = function () {
 
     if (this.associatedRole) {
 
-        // Add dwarf with associated role
+        // Add dwarf/dwarves with associated role
 
-        // this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+        var inhabitantCount = this.inhabitantCount || 1;
 
-        this.spawn(false);
+        for (var i = 0; i < inhabitantCount; i++) {
+
+            this.spawn(false);
+        }
     }
 
     this.onConstructed();
@@ -32844,6 +32855,92 @@ Camp.prototype.draw = function (graphics) {
 
 Camp.WIDTH = 12;
 Camp.HEIGHT = 12;
+
+/* -------------- */
+/* --- NightWatch */
+/* -------------- */
+
+function NightWatch(world) {
+
+    Building.call(this, world);
+
+    this.inhabitantCount = 3;
+    this.patrolRoute = false;
+    this.patrolRadius = 300;
+    this.lightRadius = 125;
+    this.associatedRole = _DwarfRoles2.default.WATCH_NIGHT;
+}
+
+NightWatch.constructor = NightWatch;
+NightWatch.prototype = Object.create(Building.prototype);
+
+NightWatch.prototype.draw = function (graphics) {
+
+    graphics.beginFill(0x999999);
+    graphics.drawRect(-NightWatch.WIDTH * .5, -NightWatch.HEIGHT, NightWatch.WIDTH, NightWatch.HEIGHT);
+    graphics.endFill();
+    graphics.beginFill(0x222222);
+    graphics.drawRect(-NightWatch.WIDTH * .5 + 4, -6, NightWatch.WIDTH - 8, 6);
+    graphics.endFill();
+};
+
+NightWatch.prototype.updatePatrolRoute = function () {
+
+    var patrolRadius = this.patrolRadius;
+
+    var patrolRouteVersion = !this.patrolRoute ? 1 : this.patrolRoute.version + 1;
+
+    this.patrolRoute = [];
+
+    this.patrolRoute.version = patrolRouteVersion;
+
+    var closest = false;
+    var closestDistance = Number.MAX_VALUE;
+
+    this.world.buildings.buildings.forEach(function (building) {
+
+        var distance = _Maths2.default.distanceBetween(this, building);
+        if (building !== this && distance <= patrolRadius) {
+
+            var angle = Math.atan2(building.y - this.y, building.x - this.x);
+
+            this.patrolRoute.push({
+                building: building,
+                angle: angle
+            });
+
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closest = building;
+            }
+        }
+    }.bind(this));
+
+    if (this.patrolRoute.length === 1) {
+        this.patrolRoute.push({
+            building: this,
+            angle: 0
+        });
+    }
+
+    // Sort the patrol route based on its relative angle to watch tower
+
+    this.patrolRoute.sort(function (a, b) {
+
+        if (a.angle > b.angle) {
+            return 1;
+        } else if (a.angle < b.angle) {
+            return -1;
+        } else {
+            return 0;
+        }
+    });
+
+    // console.log('NightWatch.updatePatrolRoute(',this.patrolRoute,')');
+};
+
+NightWatch.WIDTH = 12;
+NightWatch.HEIGHT = 18;
 
 /* -------------- */
 /* -------- Miner */
@@ -32926,7 +33023,7 @@ Mason.prototype.draw = function (graphics) {
 Mason.WIDTH = 13;
 Mason.HEIGHT = 14;
 
-},{"./Dwarf":211,"./DwarfRoles":212,"./utils/value-min-max":226,"pixi.js":154}],210:[function(require,module,exports){
+},{"./Dwarf":211,"./DwarfRoles":212,"./utils/Maths":225,"./utils/value-min-max":226,"pixi.js":154}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32940,7 +33037,7 @@ function Buildings(world) {
 
     this.world = world;
 
-    this.archetypes = [Buildings.ARCHETYPE_MINER, Buildings.ARCHETYPE_FORESTER, Buildings.ARCHETYPE_MASON];
+    this.archetypes = [Buildings.ARCHETYPE_MINER, Buildings.ARCHETYPE_FORESTER, Buildings.ARCHETYPE_MASON, Buildings.ARCHETYPE_NIGHTWATCH];
 
     this.archetypesMap = {};
 
@@ -32976,6 +33073,7 @@ Buildings.ARCHETYPE_CAMP = new BuildingArchetype('camp', 'Camp', 'A settler\'s c
 Buildings.ARCHETYPE_MINER = new BuildingArchetype('miner', 'Miner\'s Cottage', 'A lowly home for a miner', 100, 50, _Building.Miner);
 Buildings.ARCHETYPE_FORESTER = new BuildingArchetype('forester', 'Forester\'s Cottage', 'A lowly home for a forester', 50, 100, _Building.Forester);
 Buildings.ARCHETYPE_MASON = new BuildingArchetype('mason', 'Mason\'s Cottage', 'A builder\'s home', 150, 150, _Building.Mason);
+Buildings.ARCHETYPE_NIGHTWATCH = new BuildingArchetype('night-watch', 'The Night Watch', 'A watch house that patrols during the hours of darkness', 200, 200, _Building.NightWatch);
 
 function BuildingArchetype(id, title, description, cWood, cStone, c) {
 
@@ -33031,8 +33129,8 @@ function Dwarf(world, startX, startY, roleId) {
 
     this.angle = 0;
 
-    this.timeSinceAction = 0;
     this.timeBetweenActions = 1500;
+    this.timeSinceAction = this.timeBetweenActions;
 
     this.roleId = null;
     this.careerRole = this.world.dwarfRoles.getById(roleId);
@@ -33150,7 +33248,7 @@ Dwarf.SPEED = .75;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.RoleCollectStone = exports.RoleCollectWood = exports.RoleBuilder = exports.RoleResting = exports.RoleIdle = undefined;
+exports.RoleCollectStone = exports.RoleCollectWood = exports.RoleBuilder = exports.RoleWatchNight = exports.RoleResting = exports.RoleIdle = undefined;
 exports.default = DwarfRoles;
 
 var _Maths = require('./utils/Maths');
@@ -33180,7 +33278,8 @@ function DwarfRoles() {
         'resting': RoleResting,
         'builder': RoleBuilder,
         'collect-wood': RoleCollectWood,
-        'collect-stone': RoleCollectStone
+        'collect-stone': RoleCollectStone,
+        'watch-night': RoleWatchNight
     };
 
     // console.log('DwarfRoles(',this.rolesMap,')');
@@ -33198,6 +33297,7 @@ DwarfRoles.RESTING = 'resting';
 DwarfRoles.BUILDER = 'builder';
 DwarfRoles.COLLECT_WOOD = 'collect-wood';
 DwarfRoles.COLLECT_STONE = 'collect-stone';
+DwarfRoles.WATCH_NIGHT = 'watch-night';
 
 var RoleIdle = exports.RoleIdle = {
 
@@ -33252,6 +33352,88 @@ var RoleResting = exports.RoleResting = {
     targetProximity: function targetProximity(timeDelta, dwarf, world) {
 
         dwarf.target = false;
+    }
+};
+
+var RoleWatchNight = exports.RoleWatchNight = {
+
+    id: 'watch-night',
+
+    startTime: 19,
+    endTime: 7,
+
+    range: 10,
+
+    colour: 0x553333,
+
+    cWood: 50,
+    cStone: 50,
+
+    enter: function enter(dwarf, world) {
+
+        if (dwarf.home) {
+
+            dwarf.target = dwarf.home;
+        }
+    },
+    updateRoute: function updateRoute(dwarf, world) {
+
+        var watchTower = dwarf.home;
+
+        if (watchTower.patrolRoute.length > 0) {
+
+            dwarf.patrolRouteIndex = Math.floor(Math.random() * watchTower.patrolRoute.length);
+            dwarf.target = watchTower.patrolRoute[dwarf.patrolRouteIndex].building;
+
+            dwarf.patrolRouteVersion = watchTower.patrolRoute.version;
+        } else {
+
+            dwarf.patrolRouteVersion = 1;
+
+            dwarf.target = watchTower;
+        }
+    },
+    update: function update(timeDelta, dwarf, world) {
+
+        if (dwarf.patrolRouteVersion !== dwarf.home.patrolRoute.version) {
+
+            this.updateRoute(dwarf, world);
+        }
+    },
+    targetProximity: function targetProximity(timeDelta, dwarf, world) {
+
+        if (dwarf.canTakeAction()) {
+
+            var watchTower = dwarf.home;
+
+            // console.log('RoleWatchNight.targetProximity(', watchTower, ')');
+
+            if (watchTower.patrolRoute && watchTower.patrolRoute.length > 0) {
+
+                var nextWaypointIndex = dwarf.patrolRouteIndex + 1;
+
+                if (nextWaypointIndex >= watchTower.patrolRoute.length) {
+                    nextWaypointIndex = 0;
+                }
+
+                dwarf.patrolRouteIndex = nextWaypointIndex;
+
+                var nextWaypoint = watchTower.patrolRoute[dwarf.patrolRouteIndex];
+
+                dwarf.target = {
+                    x: nextWaypoint.building.x + Math.random() * 40 - 20,
+                    y: nextWaypoint.building.y + Math.random() * 40 - 20
+                };
+            } else {
+
+                dwarf.target = {
+                    x: watchTower.x + Math.random() * 80 - 40,
+                    y: watchTower.y + Math.random() * 80 - 40
+                };
+            }
+
+            dwarf.tookAction();
+        }
     }
 };
 
@@ -33810,9 +33992,10 @@ function _interopRequireDefault(obj) {
 
 function Supply() {
 
-    this.wood = new _valueMinMax2.default(0, 100000, 250);
+    this.wood = new _valueMinMax2.default(0, 100000, Supply.WOOD);
     this.woodOld = 0;
-    this.stone = new _valueMinMax2.default(0, 100000, 150);
+
+    this.stone = new _valueMinMax2.default(0, 100000, Supply.STONE);
     this.stoneOld = 0;
 
     return this;
@@ -33843,6 +34026,9 @@ Supply.prototype.update = function (timeDelta, world) {
         world.ui.building.update(this.wood.get(), this.stone.get());
     }
 };
+
+Supply.WOOD = 1000;
+Supply.STONE = 1000;
 
 },{"./utils/value-min-max":226,"pixi.js":154}],218:[function(require,module,exports){
 'use strict';
@@ -33947,7 +34133,7 @@ function _interopRequireDefault(obj) {
 
 function TimeOfDay() {
 
-    this.time = 5.5;
+    this.time = 12;
 }
 
 TimeOfDay.DAWN_START = 6;
@@ -34028,7 +34214,13 @@ TimeOfDay.prototype.isDuringPeriod = function (start, end) {
 
     // NB only works for roles that are in the daytime...
 
-    return this.time >= start && this.time < end;
+    if (start > end) {
+
+        return this.time >= start || this.time < end;
+    } else {
+
+        return this.time >= start && this.time < end;
+    }
 };
 
 },{"./utils/value-min-max":226,"pixi.js":154}],220:[function(require,module,exports){
@@ -34886,42 +35078,15 @@ World.prototype.addBuilding = function (id, tileX, tileY) {
 
         this.lighting.addStatic(building.x, building.y, building.lightRadius, 0, -5);
 
-        // let lightCanvas = document.createElement('canvas');
-        // lightCanvas.width = lightCanvas.height = radius * 2;
+        // Update watchmen patrol routes
 
-        // let lightCtx = lightCanvas.getContext('2d');
+        this.buildings.buildings.forEach(function (building) {
 
-        // let lightGradient = lightCtx.createRadialGradient(radius, radius, 0, radius, radius, radius);
-        // lightGradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
-        // lightGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            if (building.patrolRoute !== undefined) {
 
-        // lightCtx.fillStyle = lightGradient;
-        // lightCtx.beginPath();
-        // lightCtx.arc(radius, radius, radius, 0, 2 * Math.PI);
-        // lightCtx.fill();
-
-        // let light = new PIXI.Sprite(PIXI.Texture.fromCanvas(lightCanvas));
-        // light.x = building.x - radius;
-        // light.y = building.y - radius - 5;
-
-        // this.nightMask.addChild(light);
-
-
-        // let gradient = this.nightCtx.createRadialGradient(building.x, building.y - 5, 0, building.x, building.y - 5, radius);
-        // gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
-        // gradient.addColorStop(.4, 'rgba(0, 0, 0, 1)');
-        // gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-
-        // this.nightCtx.globalCompositeOperation = 'destination-out';
-        // this.nightCtx.fillStyle = gradient;
-        // this.nightCtx.beginPath();
-        // this.nightCtx.arc(building.x, building.y - 5, radius, 0, 2 * Math.PI);
-        // this.nightCtx.fill();
-
-        // this.night.texture = PIXI.Texture.fromCanvas(this.nightCanvas);
-        // this.night.texture.update();
-
-        // this.nightMask
+                building.updatePatrolRoute();
+            }
+        });
 
         return building;
     } else {
@@ -34955,7 +35120,7 @@ World.prototype.addDwarf = function (x, y, role) {
 
     this.containerZOrdered.addChild(dwarf);
 
-    this.lighting.addEmitter(dwarf, 30, 0, -5);
+    this.lighting.addEmitter(dwarf, dwarf.careerRole.id === _DwarfRoles2.default.WATCH_NIGHT ? 50 : 30, 0, -5);
 
     return dwarf;
 };
@@ -35102,7 +35267,7 @@ function startGame() {
 
         if (document.hasFocus()) {
 
-            count++;
+            count += window.TICK_RATE || 1;
 
             if (count % 2 === 0) {
 
