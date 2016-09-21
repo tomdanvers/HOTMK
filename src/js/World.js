@@ -30,14 +30,18 @@ export default function World() {
 
     PIXI.Container.call(this);
 
+    let heightMultiplier = 1;
+
     World.WIDTH = Math.ceil(Layout.WIDTH / Tile.WIDTH);
-    World.HEIGHT = Math.ceil(Layout.HEIGHT / Tile.HEIGHT) * 2;
+    World.HEIGHT = Math.ceil(Layout.HEIGHT / Tile.HEIGHT) * heightMultiplier;
 
     this.viewport = new Viewport(
+        this,
         Math.ceil(Layout.WIDTH / Tile.WIDTH) * Tile.WIDTH,
         Math.ceil(Layout.HEIGHT / Tile.HEIGHT) * Tile.HEIGHT,
         World.WIDTH * Tile.WIDTH,
-        World.HEIGHT * Tile.HEIGHT
+        World.HEIGHT * Tile.HEIGHT,
+        heightMultiplier > 1
     );
 
     this.randomSeed = Math.floor(Math.random() * 1000);

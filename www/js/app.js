@@ -34357,18 +34357,23 @@ BuildingUI.prototype.onArchetypeButtonDown = function (event) {
 
     // Wait for drag start
 
+    this.world.viewport.disable();
+
     this.world.interactive = true;
     this.dragging = false;
     this.activeArchetype = event.target.archetype;
     this.dragStartPos = event.data.getLocalPosition(this.world);
 
-    this.world.on('mousemove', this.onDrag.bind(this));
-    this.world.on('touchmove', this.onDrag.bind(this));
+    this.onDragBound = this.onDrag.bind(this);
+    this.onDragEndBound = this.onDragEnd.bind(this);
 
-    this.world.on('mouseupoutside', this.onDragEnd.bind(this));
-    this.world.on('mouseup', this.onDragEnd.bind(this));
-    this.world.on('touchendoutside', this.onDragEnd.bind(this));
-    this.world.on('touchend', this.onDragEnd.bind(this));
+    this.world.on('mousemove', this.onDragBound);
+    this.world.on('touchmove', this.onDragBound);
+
+    this.world.on('mouseupoutside', this.onDragEndBound);
+    this.world.on('mouseup', this.onDragEndBound);
+    this.world.on('touchendoutside', this.onDragEndBound);
+    this.world.on('touchend', this.onDragEndBound);
 
     // On drag start hide menu
 
@@ -34395,7 +34400,7 @@ BuildingUI.prototype.onDragStart = function (event) {
     this.activeBuilding.x = pos.x;
     this.activeBuilding.y = pos.y;
 
-    this.world.addChild(this.activeBuilding);
+    this.world.content.addChild(this.activeBuilding);
 };
 
 BuildingUI.prototype.onDrag = function (event) {
@@ -34408,7 +34413,7 @@ BuildingUI.prototype.onDrag = function (event) {
     } else if (this.dragging) {
 
         var pos = event.data.getLocalPosition(this.world);
-        var tile = this.world.getTileFromWorld(pos.x, pos.y);
+        var tile = this.world.getTileFromWorld(pos.x, pos.y + this.world.viewport.scroll);
         if (tile && !tile.isOccupied) {
 
             this.activeBuilding.x = tile.xCentre;
@@ -34418,6 +34423,16 @@ BuildingUI.prototype.onDrag = function (event) {
 };
 
 BuildingUI.prototype.onDragEnd = function () {
+
+    console.log('this.onDragEnd()');
+
+    this.world.off('mousemove', this.onDragBound);
+    this.world.off('touchmove', this.onDragBound);
+
+    this.world.off('mouseupoutside', this.onDragEndBound);
+    this.world.off('mouseup', this.onDragEndBound);
+    this.world.off('touchendoutside', this.onDragEndBound);
+    this.world.off('touchend', this.onDragEndBound);
 
     if (this.dragging) {
 
@@ -34453,15 +34468,12 @@ BuildingUI.prototype.onDragEnd = function () {
 
     this.dragStartPos = false;
 
-    this.world.interactive = false;
+    this.world.viewport.enable();
 
-    this.world.off('mousemove');
-    this.world.off('touchmove');
+    if (!this.world.viewport.isInteractive) {
 
-    this.world.off('mouseupoutside');
-    this.world.off('mouseup');
-    this.world.off('touchendoutside');
-    this.world.off('touchend');
+        this.world.interactive = false;
+    }
 };
 
 BuildingUI.prototype.toggle = function (show) {
@@ -34501,11 +34513,17 @@ var _pixi = require('pixi.js');
 
 var _pixi2 = _interopRequireDefault(_pixi);
 
+var _Maths = require('./utils/Maths');
+
+var _Maths2 = _interopRequireDefault(_Maths);
+
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Viewport(width, height, worldWidth, worldHeight) {
+function Viewport(world, width, height, worldWidth, worldHeight, isInteractive) {
+
+    this.world = world;
 
     this.width = width;
     this.height = height;
@@ -34515,21 +34533,107 @@ function Viewport(width, height, worldWidth, worldHeight) {
 
     this.scroll = this.worldHeight - this.height;
     this.scroll = 0;
+
+    this.scrollTarget = this.scroll;
+
+    this.isEnabled = true;
+    this.isInteractive = isInteractive;
+
+    if (this.isInteractive) {
+
+        this.dragging = false;
+        this.world.interactive = true;
+        this.world.on('mousedown', this.onWorldDown.bind(this));
+        this.world.on('touchstart', this.onWorldDown.bind(this));
+    }
 }
 
 Viewport.constructor = Viewport;
 
 Viewport.prototype.update = function (timeDelta, world) {
 
-    var newScroll = this.scroll + 1;
+    if (this.scrollTarget > this.worldHeight - this.height) {
 
-    if (newScroll <= this.worldHeight - this.height && newScroll > 0) {
+        this.scrollTarget = this.worldHeight - this.height;
+    } else if (this.scrollTarget < 0) {
 
-        this.scroll = newScroll;
+        this.scrollTarget = 0;
+    }
+
+    this.scroll += (this.scrollTarget - this.scroll) * .5;
+};
+
+Viewport.prototype.onWorldDown = function (event) {
+
+    this.dragging = false;
+    this.dragStartPos = event.data.getLocalPosition(this.world);
+    this.lastY = this.dragStartPos.y;
+
+    if (this.isEnabled) {
+
+        this.world.on('mousemove', this.onDrag.bind(this));
+        this.world.on('touchmove', this.onDrag.bind(this));
+
+        this.world.on('mouseupoutside', this.onDragEnd.bind(this));
+        this.world.on('mouseup', this.onDragEnd.bind(this));
+        this.world.on('touchendoutside', this.onDragEnd.bind(this));
+        this.world.on('touchend', this.onDragEnd.bind(this));
     }
 };
 
-},{"pixi.js":154}],223:[function(require,module,exports){
+Viewport.prototype.onDragStart = function (event) {
+
+    this.dragging = true;
+
+    // let pos = event.data.getLocalPosition(this.world);
+};
+
+Viewport.prototype.onDrag = function (event) {
+
+    var distanceFromStart = _Maths2.default.distanceBetween(this.dragStartPos, event.data.getLocalPosition(this.world));
+
+    if (!this.dragging && distanceFromStart > 5) {
+
+        this.onDragStart(event);
+    } else if (this.dragging) {
+
+        var pos = event.data.getLocalPosition(this.world);
+
+        var diffY = this.lastY - pos.y;
+
+        this.scrollTarget += diffY;
+
+        this.lastY = pos.y;
+    }
+};
+
+Viewport.prototype.onDragEnd = function () {
+
+    if (this.dragging) {}
+
+    this.dragStartPos = false;
+    this.dragging = false;
+
+    this.world.off('mousemove');
+    this.world.off('touchmove');
+
+    this.world.off('mouseupoutside');
+    this.world.off('mouseup');
+    this.world.off('touchendoutside');
+    this.world.off('touchend');
+};
+
+Viewport.prototype.enable = function () {
+
+    this.isEnabled = true;
+};
+
+Viewport.prototype.disable = function () {
+
+    this.isEnabled = false;
+};
+
+},{"./utils/Maths":225,"pixi.js":154}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34601,10 +34705,12 @@ function World() {
 
     _pixi2.default.Container.call(this);
 
-    World.WIDTH = Math.ceil(_Layout2.default.WIDTH / _Tile2.default.WIDTH);
-    World.HEIGHT = Math.ceil(_Layout2.default.HEIGHT / _Tile2.default.HEIGHT) * 2;
+    var heightMultiplier = 1;
 
-    this.viewport = new _Viewport2.default(Math.ceil(_Layout2.default.WIDTH / _Tile2.default.WIDTH) * _Tile2.default.WIDTH, Math.ceil(_Layout2.default.HEIGHT / _Tile2.default.HEIGHT) * _Tile2.default.HEIGHT, World.WIDTH * _Tile2.default.WIDTH, World.HEIGHT * _Tile2.default.HEIGHT);
+    World.WIDTH = Math.ceil(_Layout2.default.WIDTH / _Tile2.default.WIDTH);
+    World.HEIGHT = Math.ceil(_Layout2.default.HEIGHT / _Tile2.default.HEIGHT) * heightMultiplier;
+
+    this.viewport = new _Viewport2.default(this, Math.ceil(_Layout2.default.WIDTH / _Tile2.default.WIDTH) * _Tile2.default.WIDTH, Math.ceil(_Layout2.default.HEIGHT / _Tile2.default.HEIGHT) * _Tile2.default.HEIGHT, World.WIDTH * _Tile2.default.WIDTH, World.HEIGHT * _Tile2.default.HEIGHT, heightMultiplier > 1);
 
     this.randomSeed = Math.floor(Math.random() * 1000);
 

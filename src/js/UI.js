@@ -235,18 +235,23 @@ BuildingUI.prototype.onArchetypeButtonDown = function(event) {
 
     // Wait for drag start
 
+    this.world.viewport.disable();
+
     this.world.interactive = true;
     this.dragging = false;
     this.activeArchetype = event.target.archetype;
     this.dragStartPos = event.data.getLocalPosition(this.world);
 
-    this.world.on('mousemove', this.onDrag.bind(this));
-    this.world.on('touchmove', this.onDrag.bind(this));
+    this.onDragBound = this.onDrag.bind(this);
+    this.onDragEndBound = this.onDragEnd.bind(this);
 
-    this.world.on('mouseupoutside', this.onDragEnd.bind(this));
-    this.world.on('mouseup', this.onDragEnd.bind(this));
-    this.world.on('touchendoutside', this.onDragEnd.bind(this));
-    this.world.on('touchend', this.onDragEnd.bind(this));
+    this.world.on('mousemove', this.onDragBound);
+    this.world.on('touchmove', this.onDragBound);
+
+    this.world.on('mouseupoutside', this.onDragEndBound);
+    this.world.on('mouseup', this.onDragEndBound);
+    this.world.on('touchendoutside', this.onDragEndBound);
+    this.world.on('touchend', this.onDragEndBound);
 
 
     // On drag start hide menu
@@ -274,7 +279,9 @@ BuildingUI.prototype.onDragStart = function(event) {
     this.activeBuilding.x = pos.x;
     this.activeBuilding.y = pos.y;
 
-    this.world.addChild(this.activeBuilding);
+    this.world.content.addChild(this.activeBuilding);
+
+
 
 }
 
@@ -289,7 +296,7 @@ BuildingUI.prototype.onDrag = function(event) {
     } else if (this.dragging) {
 
         let pos = event.data.getLocalPosition(this.world);
-        let tile = this.world.getTileFromWorld(pos.x, pos.y);
+        let tile = this.world.getTileFromWorld(pos.x, pos.y + this.world.viewport.scroll);
         if (tile && !tile.isOccupied) {
 
             this.activeBuilding.x = tile.xCentre;
@@ -302,6 +309,16 @@ BuildingUI.prototype.onDrag = function(event) {
 }
 
 BuildingUI.prototype.onDragEnd = function() {
+
+    console.log('this.onDragEnd()');
+
+    this.world.off('mousemove', this.onDragBound);
+    this.world.off('touchmove', this.onDragBound);
+
+    this.world.off('mouseupoutside', this.onDragEndBound);
+    this.world.off('mouseup', this.onDragEndBound);
+    this.world.off('touchendoutside', this.onDragEndBound);
+    this.world.off('touchend', this.onDragEndBound);
 
     if (this.dragging) {
 
@@ -341,15 +358,13 @@ BuildingUI.prototype.onDragEnd = function() {
 
     this.dragStartPos = false;
 
-    this.world.interactive = false;
+    this.world.viewport.enable();
 
-    this.world.off('mousemove');
-    this.world.off('touchmove');
+    if (!this.world.viewport.isInteractive) {
 
-    this.world.off('mouseupoutside');
-    this.world.off('mouseup');
-    this.world.off('touchendoutside');
-    this.world.off('touchend');
+        this.world.interactive = false;
+
+    }
 
 }
 
