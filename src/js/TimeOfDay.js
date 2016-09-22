@@ -3,7 +3,7 @@ import ValueMinMax from './utils/value-min-max';
 
 export default function TimeOfDay() {
 
-    this.time = 12;
+    this.time = 20;
 
 }
 

@@ -25,9 +25,9 @@ export default function Buildings(world) {
 
 Buildings.constructor = Buildings;
 
-Buildings.prototype.add = function(id) {
+Buildings.prototype.add = function(id, x, y) {
 
-    let building = new this.archetypesMap[id].c(this.world);
+    let building = new this.archetypesMap[id].c(this.world, x, y, false);
 
     this.buildings.push(building);
 

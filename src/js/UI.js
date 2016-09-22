@@ -275,7 +275,7 @@ BuildingUI.prototype.onDragStart = function(event) {
 
     let pos = event.data.getLocalPosition(this.world);
 
-    this.activeBuilding = new this.activeArchetype.c(this.world);
+    this.activeBuilding = new this.activeArchetype.c(this.world, pos.x, pos.y, true);
     this.activeBuilding.x = pos.x;
     this.activeBuilding.y = pos.y;
 

@@ -5,7 +5,7 @@ import DwarfRoles from './DwarfRoles';
 import ValueMinMax from './utils/value-min-max';
 import Maths from './utils/Maths';
 
-export function Building(world) {
+export function Building(world, startX, startY, isTemp) {
 
     PIXI.Container.call(this);
 
@@ -25,31 +25,18 @@ export function Building(world) {
 
     this.lightRadius = 50;
 
-    let lightCanvas = document.createElement('canvas');
-    lightCanvas.width = lightCanvas.height = this.lightRadius * 2;
+    if (!isTemp) {
 
-    let lightCtx = lightCanvas.getContext('2d');
+        this.light = this.world.lighting.addStatic(startX, startY, this.lightRadius, 0, -5);
 
-    let lightGradient = lightCtx.createRadialGradient(this.lightRadius, this.lightRadius, 0, this.lightRadius, this.lightRadius, this.lightRadius);
-    lightGradient.addColorStop(0, 'rgba(250, 224, 77, .25)');
-    lightGradient.addColorStop(1, 'rgba(250, 244, 77, 0)');
+    }
 
-    lightCtx.fillStyle = lightGradient;
-    lightCtx.beginPath();
-    lightCtx.arc(this.lightRadius, this.lightRadius, this.lightRadius, 0, 2 * Math.PI);
-    lightCtx.fill();
-
-    this.light = new PIXI.Sprite(PIXI.Texture.fromCanvas(lightCanvas));
-    this.light.x = - this.lightRadius;
-    this.light.y = - this.lightRadius - 5;
-    this.light.alpha = 0;
-
-    this.addChild(this.light);
+    this.x = startX;
+    this.y = startY;
 
     // this.interactive = true;
     // this.on('mousedown', this.onDown);
     // this.on('touchstart', this.onDown);
-
 
 }
 
@@ -74,12 +61,6 @@ Building.prototype.update = function(timeDelta) {
     if (!this.isConstructed) {
 
         this.alpha = this.integrity.val();
-
-    }
-
-    if (this.world.timeOfDay.getSunValue() > 0) {
-
-        this.light.alpha = this.world.timeOfDay.getSunValue() - (Math.random() > .9 ? Math.random() * .15 : 0);
 
     }
 
@@ -158,9 +139,9 @@ Building.TYPE = 'building';
 /* --------- Camp */
 /* -------------- */
 
-export function Camp(world) {
+export function Camp(world, startX, startY, isTemp) {
 
-    Building.call(this, world);
+    Building.call(this, world, startX, startY, isTemp);
 
 }
 
@@ -185,9 +166,9 @@ Camp.HEIGHT = 12;
 /* --- NightWatch */
 /* -------------- */
 
-export function NightWatch(world) {
+export function NightWatch(world, startX, startY, isTemp) {
 
-    Building.call(this, world);
+    Building.call(this, world, startX, startY, isTemp);
 
     this.inhabitantCount = 3;
     this.patrolRoute = false;
@@ -279,9 +260,9 @@ NightWatch.HEIGHT = 18;
 /* -------- Miner */
 /* -------------- */
 
-export function Miner(world) {
+export function Miner(world, startX, startY, isTemp) {
 
-    Building.call(this, world);
+    Building.call(this, world, startX, startY, isTemp);
 
     this.associatedRole = DwarfRoles.COLLECT_STONE;
 
@@ -311,9 +292,9 @@ Miner.HEIGHT = 12;
 /* ----- Forester */
 /* -------------- */
 
-export function Forester(world) {
+export function Forester(world, startX, startY, isTemp) {
 
-    Building.call(this, world);
+    Building.call(this, world, startX, startY, isTemp);
 
     this.associatedRole = DwarfRoles.COLLECT_WOOD;
 
@@ -343,9 +324,9 @@ Forester.HEIGHT = 12;
 /* -------- Mason */
 /* -------------- */
 
-export function Mason(world) {
+export function Mason(world, startX, startY, isTemp) {
 
-    Building.call(this, world);
+    Building.call(this, world, startX, startY, isTemp);
 
     this.associatedRole = DwarfRoles.BUILDER;
 

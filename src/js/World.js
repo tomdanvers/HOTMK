@@ -26,6 +26,8 @@ import Layout from './Layout';
 
 import TimeOfDay from './TimeOfDay';
 
+import ZOrdered from './ZOrdered';
+
 export default function World() {
 
     PIXI.Container.call(this);
@@ -47,6 +49,11 @@ export default function World() {
     this.randomSeed = Math.floor(Math.random() * 1000);
 
     console.log('World(', World.WIDTH, World.HEIGHT, this.randomSeed,')');
+
+    // GOOD RANDOM SEEDS
+    // 182
+    // 746
+    // 353
 
     this.noise = new Noise.Noise(this.randomSeed);
 
@@ -77,6 +84,9 @@ export default function World() {
 
     this.lighting = new Lighting(this);
 
+    this.containerLights = new PIXI.Container();
+    this.containerLights.blendMode = PIXI.BLEND_MODES.SCREEN;
+
     let backgroundCtx = background.getContext('2d');
     for (let y = 0; y < World.HEIGHT; y ++) {
 
@@ -96,6 +106,7 @@ export default function World() {
 
     this.content.addChild(this.background);
     this.content.addChild(this.containerZOrdered);
+    this.content.addChild(this.containerLights);
     this.content.addChild(this.lighting);
 
     this.addChild(this.content);
@@ -145,6 +156,24 @@ World.prototype.addTile = function(x, y) {
 
 }
 
+World.prototype.addToZOrdered = function(item) {
+
+
+    item.id = ZOrdered.getUniqueID();
+    this.zOrdered.push(item);
+    this.containerZOrdered.addChild(item);
+
+    if (item.light) {
+
+        this.containerLights.addChild(item.light);
+
+        item.light.x = item.x;
+        item.light.y = item.y;
+
+    }
+
+}
+
 World.prototype.addTree = function(tileX, tileY) {
 
     if (this.spaceAvailable(tileX, tileY, 1, 1)) {
@@ -162,9 +191,8 @@ World.prototype.addTree = function(tileX, tileY) {
 
         this.resources.push(tree);
         this.trees.push(tree);
-        this.zOrdered.push(tree);
 
-        this.containerZOrdered.addChild(tree);
+        this.addToZOrdered(tree);
 
         return tree;
 
@@ -192,9 +220,8 @@ World.prototype.addRock = function(tileX, tileY) {
 
         this.resources.push(rock);
         this.rocks.push(rock);
-        this.zOrdered.push(rock);
 
-        this.containerZOrdered.addChild(rock);
+        this.addToZOrdered(rock);
 
         return rock;
 
@@ -219,17 +246,11 @@ World.prototype.addBuilding = function(id, tileX, tileY) {
 
         tile.occupy();
 
-        let building = this.buildings.add(id, this);
-        building.x = tile.x + Tile.WIDTH * .5;
-        building.y = tile.y + Tile.HEIGHT * .5;
+        let building = this.buildings.add(id, tile.x + Tile.WIDTH * .5, tile.y + Tile.HEIGHT * .5);
 
         console.log('World.addBuilding(', id, ')');
 
-        this.zOrdered.push(building);
-
-        this.containerZOrdered.addChild(building);
-
-        this.lighting.addStatic(building.x, building.y, building.lightRadius, 0, -5);
+        this.addToZOrdered(building);
 
         // Update watchmen patrol routes
 
@@ -278,11 +299,8 @@ World.prototype.addDwarf = function(x, y, role) {
     let dwarf = new Dwarf(this, x, y, role || DwarfRoles.IDLE);
 
     this.dwarves.push(dwarf);
-    this.zOrdered.push(dwarf);
 
-    this.containerZOrdered.addChild(dwarf);
-
-    this.lighting.addEmitter(dwarf, dwarf.careerRole.id === DwarfRoles.WATCH_NIGHT ? 50 : 30, 0, -5);
+    this.addToZOrdered(dwarf);
 
     return dwarf;
 
@@ -330,7 +348,19 @@ World.prototype.update = function(time) {
 
         } else {
 
-            return 0;
+            if (a.id > b.id) {
+
+                return 1;
+
+            } else if (a.id < b.id) {
+
+                return -1;
+
+            } else {
+
+                return 0;
+
+            }
 
         }
 
@@ -339,6 +369,16 @@ World.prototype.update = function(time) {
     this.zOrdered.forEach(function(item, index) {
 
         this.containerZOrdered.setChildIndex(item, index);
+
+        if (item.light && this.timeOfDay.getSunValue() > 0) {
+
+            item.light.x = item.x - item.light.radius + item.light.xOffset;
+            item.light.y = item.y - item.light.radius + item.light.yOffset;
+
+
+            item.light.alpha = this.timeOfDay.getSunValue() - (Math.random() > .9 ? Math.random() * .15 : 0);
+
+        }
 
     }.bind(this));
 

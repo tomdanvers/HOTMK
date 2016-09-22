@@ -15,8 +15,6 @@ export default function Dwarf(world, startX, startY, roleId) {
 
     this.world = world;
 
-    this.id = Dwarf.ID ++;
-
     this.angle = 0;
 
     this.timeBetweenActions = 1500;
@@ -62,6 +60,8 @@ export default function Dwarf(world, startX, startY, roleId) {
 
     this.x = this.startX = startX;
     this.y = this.startY = startY;
+
+    this.light = this.world.lighting.addEmitter(this, this.careerRole.id === DwarfRoles.WATCH_NIGHT ? 25 : 15, 5, -10);
 
 }
 
@@ -135,8 +135,6 @@ Dwarf.prototype.update = function(timeDelta, world) {
     }
 
 }
-
-Dwarf.ID = 0;
 
 Dwarf.WIDTH = 6;
 Dwarf.HEIGHT = 12;
