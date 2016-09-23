@@ -29,7 +29,7 @@ export default function Lighting(world) {
 Lighting.constructor = Lighting;
 Lighting.prototype = Object.create(PIXI.Sprite.prototype);
 
-Lighting.VERBOSE = true;
+Lighting.VERBOSE = false;
 
 Lighting.prototype.addStatic = function(x, y, radius, xOffset, yOffset) {
 
@@ -49,7 +49,7 @@ Lighting.prototype.addStatic = function(x, y, radius, xOffset, yOffset) {
     this.staticCtx.arc(x + xOffset, y + yOffset, radius, 0, 2 * Math.PI);
     this.staticCtx.fill();
 
-    return this.createLight(radius, xOffset, yOffset);
+    return this.createLight(radius, xOffset, yOffset, 1);
 
 }
 
@@ -87,11 +87,29 @@ Lighting.prototype.addEmitter = function(owner, radius, xOffset, yOffset) {
 
     }
 
-    return this.createLight(radius, xOffset, yOffset);
+    return false; // No light
+
+    return this.createLight(radius, xOffset, yOffset, 0);
 
 }
 
-Lighting.prototype.createLight = function(radius, xOffset, yOffset) {
+Lighting.prototype.removeEmitter = function(owner) {
+
+    for (let i = 0; i < this.emitters.length; i ++) {
+
+        if (this.emitters[i].owner === owner) {
+
+            this.emitters.splice(i, 1);
+
+            break;
+
+        }
+
+    }
+
+}
+
+Lighting.prototype.createLight = function(radius, xOffset, yOffset, alphaMultiplier) {
 
     let canvas = document.createElement('canvas');
 
@@ -102,7 +120,7 @@ Lighting.prototype.createLight = function(radius, xOffset, yOffset) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     let lightGradient = ctx.createRadialGradient(radius, radius, 0, radius, radius, radius);
-    lightGradient.addColorStop(0, 'rgba(250, 224, 77, .15)');
+    lightGradient.addColorStop(0, 'rgba(250, 224, 77, .25)');
     lightGradient.addColorStop(.6, 'rgba(250, 224, 77, .15)');
     lightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
@@ -112,6 +130,7 @@ Lighting.prototype.createLight = function(radius, xOffset, yOffset) {
     ctx.fill();
 
     let light = new PIXI.Sprite(PIXI.Texture.fromCanvas(canvas));
+    light.alphaMultiplier = alphaMultiplier;
     light.alpha = 0;
     light.radius = radius;
     light.xOffset = xOffset;

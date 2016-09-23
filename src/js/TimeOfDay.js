@@ -3,7 +3,8 @@ import ValueMinMax from './utils/value-min-max';
 
 export default function TimeOfDay() {
 
-    this.time = 20;
+    this.time = 6;
+    this.count = 0;
 
 }
 
@@ -16,6 +17,8 @@ TimeOfDay.DUSK_END = 21;
 TimeOfDay.constructor = TimeOfDay;
 
 TimeOfDay.prototype.update = function(timeDelta, world) {
+
+    this.count ++;
 
     // this.time += timeDelta * 0.0005;
     this.time += timeDelta * 0.00005;
@@ -35,6 +38,12 @@ TimeOfDay.prototype.update = function(timeDelta, world) {
     if (this.time >= 24) {
 
         this.time = 0;
+
+    }
+
+    if (this.count >= Number.MAX_VALUE) {
+
+        this.count = 0;
 
     }
 

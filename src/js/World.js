@@ -18,7 +18,11 @@ import Buildings from './Buildings';
 
 import Dwarf from './Dwarf';
 
+import Animal from './Animal';
+
 import DwarfRoles from './DwarfRoles';
+
+import MotherNature from './MotherNature';
 
 import UI from './UI';
 
@@ -52,14 +56,21 @@ export default function World() {
 
     // GOOD RANDOM SEEDS
     // 182
-    // 746
     // 353
+    // 686
+    // 746
+    // 776
+    // 806
+    // 841
+    // 929
 
     this.noise = new Noise.Noise(this.randomSeed);
 
     this.timeOfLastUpdate = 0;
 
     this.timeOfDay = new TimeOfDay();
+
+    this.motherNature = new MotherNature(this);
 
     this.supply = new Supply();
 
@@ -125,6 +136,11 @@ export default function World() {
 
     forester.home = builder.home = miner.home = camp;
 
+    /*let hunterShack = this.addBuilding(Buildings.ARCHETYPE_HUNTER.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT * .5));
+    let hunter = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.HUNTER);
+
+    hunter.home = hunterShack;*/
+
     // Add resources
 
     this.tiles.forEach(function(tile) {
@@ -157,7 +173,6 @@ World.prototype.addTile = function(x, y) {
 }
 
 World.prototype.addToZOrdered = function(item) {
-
 
     item.id = ZOrdered.getUniqueID();
     this.zOrdered.push(item);
@@ -248,7 +263,7 @@ World.prototype.addBuilding = function(id, tileX, tileY) {
 
         let building = this.buildings.add(id, tile.x + Tile.WIDTH * .5, tile.y + Tile.HEIGHT * .5);
 
-        console.log('World.addBuilding(', id, ')');
+        // console.log('World.addBuilding(', id, ')');
 
         this.addToZOrdered(building);
 
@@ -314,15 +329,41 @@ World.prototype.update = function(time) {
 
     this.timeOfDay.update(timeDelta, this);
 
+    this.motherNature.update(timeDelta, this);
+
     this.lighting.update(timeDelta, this);
 
     this.viewport.update(timeDelta, this);
 
     this.content.y = - this.viewport.scroll;
 
-    this.dwarves.forEach(function(dwarf) {
+    let killed = [];
 
-        dwarf.update(timeDelta, this);
+    this.motherNature.animals.forEach(function(animal, index) {
+
+        if (animal.isAlive()) {
+
+            animal.update(timeDelta);
+
+        } else {
+
+            killed.push(animal);
+
+        }
+
+    }.bind(this));
+
+    this.dwarves.forEach(function(dwarf, index) {
+
+        if (dwarf.isAlive()) {
+
+            dwarf.update(timeDelta, this);
+
+        } else {
+
+            killed.push(dwarf);
+
+        }
 
     }.bind(this));
 
@@ -368,21 +409,76 @@ World.prototype.update = function(time) {
 
     this.zOrdered.forEach(function(item, index) {
 
-        this.containerZOrdered.setChildIndex(item, index);
+        if (item.parent === null) {
 
-        if (item.light && this.timeOfDay.getSunValue() > 0) {
+            this.zOrdered = this.zOrdered.splice(index, 1);
 
-            item.light.x = item.x - item.light.radius + item.light.xOffset;
-            item.light.y = item.y - item.light.radius + item.light.yOffset;
+        } else {
 
+            this.containerZOrdered.setChildIndex(item, index);
 
-            item.light.alpha = this.timeOfDay.getSunValue() - (Math.random() > .9 ? Math.random() * .15 : 0);
+            if (item.light && this.timeOfDay.getSunValue() > 0) {
+
+                item.light.x = item.x - item.light.radius + item.light.xOffset;
+                item.light.y = item.y - item.light.radius + item.light.yOffset;
+
+                item.light.alpha = (this.timeOfDay.getSunValue() - (Math.random() > .9 ? Math.random() * .15 : 0)) * item.light.alphaMultiplier;
+
+            }
 
         }
+
 
     }.bind(this));
 
     this.supply.update(timeDelta, this);
+
+    killed.forEach(function(entity) {
+
+        switch(entity.type) {
+            case Dwarf.TYPE:
+
+                for(let d = 0; d < this.dwarves.length; d ++) {
+
+                    if (this.dwarves[d] === entity) {
+
+                        this.dwarves.splice(d, 1);
+                        break;
+
+                    }
+
+                }
+
+                break;
+            case Animal.TYPE:
+
+                this.motherNature.removeAnimal(entity);
+
+                break;
+        }
+
+        for(let i = 0; i < this.zOrdered.length; i ++) {
+
+            if (this.zOrdered[i] === entity) {
+
+                this.zOrdered.splice(i, 1);
+                break;
+
+            }
+
+        }
+
+        this.lighting.removeEmitter(entity);
+
+        if (entity.light) {
+
+            entity.light.destroy();
+
+        }
+
+        entity.destroy();
+
+    }.bind(this));
 
 }
 

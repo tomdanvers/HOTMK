@@ -32667,9 +32667,323 @@ module.exports = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.default = Animal;
+exports.Deer = Deer;
+exports.Rabbit = Rabbit;
+exports.Fox = Fox;
+exports.Wolf = Wolf;
+
+var _pixi = require('pixi.js');
+
+var _pixi2 = _interopRequireDefault(_pixi);
+
+var _DwarfRoles = require('./DwarfRoles');
+
+var _DwarfRoles2 = _interopRequireDefault(_DwarfRoles);
+
+var _valueMinMax = require('./utils/value-min-max');
+
+var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
+
+var _Maths = require('./utils/Maths');
+
+var _Maths2 = _interopRequireDefault(_Maths);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function Animal(world, archetype, startX, startY) {
+
+    _pixi2.default.Container.call(this);
+
+    this.type = Animal.TYPE;
+
+    this.world = world;
+
+    var base = new _pixi2.default.Graphics();
+    this.draw(base);
+    this.addChild(base);
+
+    this.timeBetweenActions = 1500;
+    this.timeSinceAction = this.timeBetweenActions;
+
+    this.lightRadius = 50;
+    this.range = 5;
+
+    this.perceptionRange = archetype.perceptionRange;
+    this.speed = archetype.speed;
+    this.damage = archetype.damage;
+    this.isAggressive = archetype.isAggressive;
+    this.health = new _valueMinMax2.default(0, archetype.health, archetype.health);
+    // this.isAggressive = true;
+
+    this.x = startX;
+    this.y = startY;
+
+    this.target = {
+
+        x: this.x + Math.random() * 100 - 50,
+        y: this.y + Math.random() * 100 - 50
+
+    };
+}
+
+Animal.constructor = Animal;
+Animal.prototype = Object.create(_pixi2.default.Container.prototype);
+
+Animal.prototype.draw = function (graphics) {
+
+    graphics.beginFill(0xAAAAAA);
+    graphics.drawRect(-Animal.WIDTH * .5, -Animal.HEIGHT, Animal.WIDTH, Animal.HEIGHT);
+    graphics.endFill();
+    graphics.beginFill(0x666666);
+    graphics.drawRect(-Animal.WIDTH * .5 + 4, -10, Animal.WIDTH - 8, 10);
+    graphics.endFill();
+};
+
+Animal.prototype.canTakeAction = function () {
+
+    return this.timeSinceAction > this.timeBetweenActions;
+};
+
+Animal.prototype.tookAction = function () {
+
+    this.timeSinceAction = 0;
+};
+
+Animal.prototype.update = function (timeDelta) {
+    var _this = this;
+
+    this.timeSinceAction += timeDelta;
+
+    if (this.world.timeOfDay.count % 10 === 0) {
+        (function () {
+
+            // Check for threats
+
+            var distance = void 0;
+            var fleeVectorX = 0;
+            var fleeVectorY = 0;
+            var percievedEntities = [];
+
+            _this.world.dwarves.forEach(function (dwarf) {
+
+                if (dwarf.isAlive()) {
+
+                    distance = _Maths2.default.distanceBetween(this, dwarf);
+
+                    if (this.isAggressive && Math.random() > dwarf.stealthiness && !dwarf.health.isMin() && distance < this.perceptionRange) {
+
+                        // Ignore dwarf that is too stealthy
+                        // Ignore dwarf that is dead
+                        // Ignore dwarf that is too far away
+
+                        percievedEntities.push(dwarf);
+                    } else if (!this.isAggressive && dwarf.roleId !== _DwarfRoles2.default.RESTING && Math.random() > dwarf.stealthiness && distance < this.perceptionRange) {
+
+                        // Ignore dwarf that is resting
+                        // Ignore dwarf that is too stealthy
+                        // Ignore dwarf that is too far away
+
+                        fleeVectorX += this.x - dwarf.x;
+                        fleeVectorY += this.y - dwarf.y;
+
+                        percievedEntities.push(dwarf);
+                    }
+                }
+            }.bind(_this));
+
+            if (_this.isAggressive && !_this.target && percievedEntities.length > 0) {
+
+                // Attack!
+
+                _this.target = percievedEntities.random();
+            } else if (!_this.isAggressive && percievedEntities.length > 0) {
+
+                // Flee!
+
+                var fleeAngle = Math.atan2(fleeVectorY, fleeVectorX);
+
+                _this.target = {
+                    x: _this.x + Math.cos(fleeAngle) * 150,
+                    y: _this.y + Math.sin(fleeAngle) * 150
+                };
+            }
+        })();
+    }
+
+    if (this.target) {
+
+        this.angle = Math.atan2(this.target.y - this.y, this.target.x - this.x);
+
+        var _distance = _Maths2.default.distanceBetween(this, this.target);
+
+        var range = this.range || 5;
+
+        if (_distance < range) {
+
+            if (this.isAggressive && this.target.health && !this.target.health.isMin()) {
+
+                if (this.canTakeAction()) {
+
+                    this.attackTarget();
+                }
+            } else {
+
+                this.target = false;
+            }
+        } else {
+
+            this.x += Math.cos(this.angle) * this.speed * timeDelta / 30;
+            this.y += Math.sin(this.angle) * this.speed * timeDelta / 30;
+        }
+    } else {
+
+        if (Math.random() > .99) {
+
+            this.target = {
+
+                x: this.x + Math.random() * 100 - 50,
+                y: this.y + Math.random() * 100 - 50
+
+            };
+        }
+    }
+};
+
+Animal.prototype.attackTarget = function () {
+
+    this.target.health.decrement(this.damage);
+
+    if (Animal.VERBOSE) {
+
+        console.log('Animal.attackTarget(', this.target.health.get(), ')');
+    }
+
+    if (this.target.health.isMin()) {
+
+        if (Animal.VERBOSE) {
+
+            console.log('Animal.killedTarget(', this.target.id, ')');
+        }
+
+        this.target = false;
+    }
+
+    this.tookAction();
+};
+
+Animal.prototype.isAlive = function () {
+
+    return !this.health.isMin();
+};
+
+Animal.WIDTH = 10;
+Animal.HEIGHT = 6;
+
+Animal.TYPE = 'animal';
+
+Animal.VERBOSE = false;
+
+/* -------------- */
+/* --------- Deer */
+/* -------------- */
+
+function Deer(world, archetype, startX, startY) {
+
+    Animal.call(this, world, archetype, startX, startY);
+}
+
+Deer.constructor = Deer;
+Deer.prototype = Object.create(Animal.prototype);
+
+Deer.prototype.draw = function (graphics) {
+
+    graphics.beginFill(0x523013);
+    graphics.drawRect(-Deer.WIDTH * .5, -Deer.HEIGHT, Deer.WIDTH, Deer.HEIGHT);
+    graphics.endFill();
+};
+
+Deer.WIDTH = 10;
+Deer.HEIGHT = 6;
+
+/* -------------- */
+/* ------- Rabbit */
+/* -------------- */
+
+function Rabbit(world, archetype, startX, startY) {
+
+    Animal.call(this, world, archetype, startX, startY);
+}
+
+Rabbit.constructor = Rabbit;
+Rabbit.prototype = Object.create(Animal.prototype);
+
+Rabbit.prototype.draw = function (graphics) {
+
+    graphics.beginFill(0x61443A);
+    graphics.drawRect(-Rabbit.WIDTH * .5, -Rabbit.HEIGHT, Rabbit.WIDTH, Rabbit.HEIGHT);
+    graphics.endFill();
+};
+
+Rabbit.WIDTH = 2;
+Rabbit.HEIGHT = 2;
+
+/* -------------- */
+/* ---------- Fox */
+/* -------------- */
+
+function Fox(world, archetype, startX, startY) {
+
+    Animal.call(this, world, archetype, startX, startY);
+}
+
+Fox.constructor = Fox;
+Fox.prototype = Object.create(Animal.prototype);
+
+Fox.prototype.draw = function (graphics) {
+
+    graphics.beginFill(0x8C3C12);
+    graphics.drawRect(-Fox.WIDTH * .5, -Fox.HEIGHT, Fox.WIDTH, Fox.HEIGHT);
+    graphics.endFill();
+};
+
+Fox.WIDTH = 4;
+Fox.HEIGHT = 2;
+
+/* -------------- */
+/* --------- Wolf */
+/* -------------- */
+
+function Wolf(world, archetype, startX, startY) {
+
+    Animal.call(this, world, archetype, startX, startY);
+}
+
+Wolf.constructor = Wolf;
+Wolf.prototype = Object.create(Animal.prototype);
+
+Wolf.prototype.draw = function (graphics) {
+
+    graphics.beginFill(0x4C484A);
+    graphics.drawRect(-Wolf.WIDTH * .5, -Wolf.HEIGHT, Wolf.WIDTH, Wolf.HEIGHT);
+    graphics.endFill();
+};
+
+Wolf.WIDTH = 8;
+Wolf.HEIGHT = 4;
+
+},{"./DwarfRoles":213,"./utils/Maths":228,"./utils/value-min-max":229,"pixi.js":154}],210:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.Building = Building;
 exports.Camp = Camp;
 exports.NightWatch = NightWatch;
+exports.Hunter = Hunter;
 exports.Miner = Miner;
 exports.Forester = Forester;
 exports.Mason = Mason;
@@ -32925,6 +33239,33 @@ NightWatch.WIDTH = 12;
 NightWatch.HEIGHT = 18;
 
 /* -------------- */
+/* ------- Hunter */
+/* -------------- */
+
+function Hunter(world, startX, startY, isTemp) {
+
+    Building.call(this, world, startX, startY, isTemp);
+
+    this.associatedRole = _DwarfRoles2.default.HUNTER;
+}
+
+Hunter.constructor = Hunter;
+Hunter.prototype = Object.create(Building.prototype);
+
+Hunter.prototype.draw = function (graphics) {
+
+    graphics.beginFill(0x999999);
+    graphics.drawRect(-Hunter.WIDTH * .5, -Hunter.HEIGHT, Hunter.WIDTH, Hunter.HEIGHT);
+    graphics.endFill();
+    graphics.beginFill(0x58240A);
+    graphics.drawRect(-Hunter.WIDTH * .5 + 4, -6, Hunter.WIDTH - 8, 6);
+    graphics.endFill();
+};
+
+Hunter.WIDTH = 12;
+Hunter.HEIGHT = 12;
+
+/* -------------- */
 /* -------- Miner */
 /* -------------- */
 
@@ -33005,7 +33346,7 @@ Mason.prototype.draw = function (graphics) {
 Mason.WIDTH = 13;
 Mason.HEIGHT = 14;
 
-},{"./Dwarf":211,"./DwarfRoles":212,"./utils/Maths":226,"./utils/value-min-max":227,"pixi.js":154}],210:[function(require,module,exports){
+},{"./Dwarf":212,"./DwarfRoles":213,"./utils/Maths":228,"./utils/value-min-max":229,"pixi.js":154}],211:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33019,7 +33360,7 @@ function Buildings(world) {
 
     this.world = world;
 
-    this.archetypes = [Buildings.ARCHETYPE_MINER, Buildings.ARCHETYPE_FORESTER, Buildings.ARCHETYPE_MASON, Buildings.ARCHETYPE_NIGHTWATCH];
+    this.archetypes = [Buildings.ARCHETYPE_MINER, Buildings.ARCHETYPE_FORESTER, Buildings.ARCHETYPE_MASON, Buildings.ARCHETYPE_HUNTER, Buildings.ARCHETYPE_NIGHTWATCH];
 
     this.archetypesMap = {};
 
@@ -33055,6 +33396,7 @@ Buildings.ARCHETYPE_CAMP = new BuildingArchetype('camp', 'Camp', 'A settler\'s c
 Buildings.ARCHETYPE_MINER = new BuildingArchetype('miner', 'Miner\'s Cottage', 'A lowly home for a miner', 100, 50, _Building.Miner);
 Buildings.ARCHETYPE_FORESTER = new BuildingArchetype('forester', 'Forester\'s Cottage', 'A lowly home for a forester', 50, 100, _Building.Forester);
 Buildings.ARCHETYPE_MASON = new BuildingArchetype('mason', 'Mason\'s Cottage', 'A builder\'s home', 150, 150, _Building.Mason);
+Buildings.ARCHETYPE_HUNTER = new BuildingArchetype('hunter', 'Hunter\'s Shack', 'A hunter\'s shack', 100, 100, _Building.Hunter);
 Buildings.ARCHETYPE_NIGHTWATCH = new BuildingArchetype('night-watch', 'The Night Watch', 'A watch house that patrols during the hours of darkness', 200, 200, _Building.NightWatch);
 
 function BuildingArchetype(id, title, description, cWood, cStone, c) {
@@ -33069,7 +33411,7 @@ function BuildingArchetype(id, title, description, cWood, cStone, c) {
 
 BuildingArchetype.constructor = BuildingArchetype;
 
-},{"./Building":209}],211:[function(require,module,exports){
+},{"./Building":210}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33084,6 +33426,10 @@ var _pixi2 = _interopRequireDefault(_pixi);
 var _Maths = require('./utils/Maths');
 
 var _Maths2 = _interopRequireDefault(_Maths);
+
+var _valueMinMax = require('./utils/value-min-max');
+
+var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
 
 var _Inventory = require('./Inventory');
 
@@ -33101,11 +33447,14 @@ function Dwarf(world, startX, startY, roleId) {
 
     _pixi2.default.Container.call(this);
 
+    this.type = Dwarf.TYPE;
+
+    this.world = world;
+
     this.target = null;
     this.home = null;
     this.inventory = new _Inventory2.default(this);
-
-    this.world = world;
+    this.health = new _valueMinMax2.default(0, 100, 100);
 
     this.angle = 0;
 
@@ -33122,6 +33471,9 @@ function Dwarf(world, startX, startY, roleId) {
     var headHeight = 4;
 
     var colour = this.careerRole ? this.careerRole.colour : 0x333333;
+    this.stealthiness = this.careerRole && this.careerRole.stealthiness ? this.careerRole.stealthiness : 0.5;
+    this.damage = this.careerRole && this.careerRole.damage ? this.careerRole.damage : 1;
+    this.range = this.careerRole && this.careerRole.range ? this.careerRole.range : 5;
 
     var base = new _pixi2.default.Graphics();
 
@@ -33153,7 +33505,7 @@ function Dwarf(world, startX, startY, roleId) {
     this.x = this.startX = startX;
     this.y = this.startY = startY;
 
-    this.light = this.world.lighting.addEmitter(this, this.careerRole.id === _DwarfRoles2.default.WATCH_NIGHT ? 25 : 15, 5, -10);
+    this.light = this.world.lighting.addEmitter(this, this.careerRole.lightRadius || 30, 0, -10);
 }
 
 Dwarf.constructor = Dwarf;
@@ -33204,9 +33556,7 @@ Dwarf.prototype.update = function (timeDelta, world) {
 
         var distance = _Maths2.default.distanceBetween(this, this.target);
 
-        var range = this.role.range || 5;
-
-        if (distance < range && this.role.targetProximity) {
+        if (distance < this.range && this.role.targetProximity) {
 
             this.role.targetProximity(timeDelta, this, world);
         } else {
@@ -33217,18 +33567,25 @@ Dwarf.prototype.update = function (timeDelta, world) {
     }
 };
 
+Dwarf.prototype.isAlive = function () {
+
+    return !this.health.isMin();
+};
+
 Dwarf.WIDTH = 6;
 Dwarf.HEIGHT = 12;
 
 Dwarf.SPEED = .75;
 
-},{"./DwarfRoles":212,"./Inventory":213,"./utils/Maths":226,"pixi.js":154}],212:[function(require,module,exports){
+Dwarf.TYPE = 'dwarf';
+
+},{"./DwarfRoles":213,"./Inventory":214,"./utils/Maths":228,"./utils/value-min-max":229,"pixi.js":154}],213:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.RoleCollectStone = exports.RoleCollectWood = exports.RoleBuilder = exports.RoleWatchNight = exports.RoleResting = exports.RoleIdle = undefined;
+exports.RoleCollectStone = exports.RoleCollectWood = exports.RoleHunter = exports.RoleBuilder = exports.RoleWatchNight = exports.RoleResting = exports.RoleIdle = undefined;
 exports.default = DwarfRoles;
 
 var _Maths = require('./utils/Maths');
@@ -33257,6 +33614,7 @@ function DwarfRoles() {
         'idle': RoleIdle,
         'resting': RoleResting,
         'builder': RoleBuilder,
+        'hunter': RoleHunter,
         'collect-wood': RoleCollectWood,
         'collect-stone': RoleCollectStone,
         'watch-night': RoleWatchNight
@@ -33275,6 +33633,7 @@ DwarfRoles.prototype.getById = function (id) {
 DwarfRoles.IDLE = 'idle';
 DwarfRoles.RESTING = 'resting';
 DwarfRoles.BUILDER = 'builder';
+DwarfRoles.HUNTER = 'hunter';
 DwarfRoles.COLLECT_WOOD = 'collect-wood';
 DwarfRoles.COLLECT_STONE = 'collect-stone';
 DwarfRoles.WATCH_NIGHT = 'watch-night';
@@ -33344,7 +33703,11 @@ var RoleWatchNight = exports.RoleWatchNight = {
 
     range: 10,
 
+    lightRadius: 45,
+
     colour: 0x553333,
+
+    stealthiness: .25,
 
     cWood: 50,
     cStone: 50,
@@ -33433,10 +33796,7 @@ var RoleBuilder = exports.RoleBuilder = {
 
     checkCanPerform: function checkCanPerform(timeDelta, dwarf, world) {
 
-        if (Utils.nearestWithoutProperty('integrity', dwarf, world.buildings.buildings)) {
-
-            dwarf.changeRole(dwarf.careerRole.id);
-        }
+        return Utils.nearestWithoutProperty('integrity', dwarf, world.buildings.buildings);
     },
     update: function update(timeDelta, dwarf, world) {
 
@@ -33482,6 +33842,85 @@ var RoleBuilder = exports.RoleBuilder = {
     }
 };
 
+var RoleHunter = exports.RoleHunter = {
+
+    id: 'hunter',
+
+    startTime: 5,
+    endTime: 19.5,
+
+    range: 5,
+    rangeWeapon: 50,
+    rangePerception: 150,
+
+    lightRadius: 60,
+
+    colour: 0x58240A,
+
+    stealthiness: .9,
+    damage: 10,
+
+    cWood: 50,
+    cStone: 50,
+
+    checkCanPerform: function checkCanPerform(timeDelta, dwarf, world) {
+
+        var target = Utils.nearestWithProperty('health', dwarf, world.motherNature.animals);
+
+        return target && _Maths2.default.distanceBetween(dwarf, target) <= this.rangePerception;
+    },
+    update: function update(timeDelta, dwarf, world) {
+
+        if (!dwarf.target) {
+
+            var target = Utils.nearestWithProperty('health', dwarf, world.motherNature.animals);
+
+            if (target && _Maths2.default.distanceBetween(dwarf, target) <= this.rangePerception) {
+
+                dwarf.target = target;
+                dwarf.range = this.rangeWeapon;
+            } else {
+
+                dwarf.target = false;
+                dwarf.range = this.range;
+
+                return DwarfRoles.IDLE;
+            }
+        }
+    },
+    targetProximity: function targetProximity(timeDelta, dwarf, world) {
+
+        if (dwarf.target && dwarf.target.health && !dwarf.target.health.isMin()) {
+
+            if (dwarf.canTakeAction()) {
+
+                // Attack
+
+                console.log('RoleHunter.attack()');
+
+                var animal = dwarf.target;
+
+                animal.health.decrement(dwarf.damage);
+
+                if (animal.health.isMin()) {
+
+                    console.log('RoleHunter.killedTarget(', animal, ')');
+
+                    dwarf.target = false;
+                    dwarf.range = this.range;
+
+                    return DwarfRoles.IDLE;
+                }
+
+                dwarf.tookAction();
+            }
+        } else {
+
+            dwarf.target = false;
+        }
+    }
+};
+
 var RoleCollectWood = exports.RoleCollectWood = {
 
     id: 'collect-wood',
@@ -33491,15 +33930,14 @@ var RoleCollectWood = exports.RoleCollectWood = {
 
     colour: 0x335533,
 
+    stealthiness: .8,
+
     cWood: 20,
     cStone: 40,
 
     checkCanPerform: function checkCanPerform(timeDelta, dwarf, world) {
 
-        if (Utils.nearestWithProperty('supply', dwarf, world.trees)) {
-
-            dwarf.changeRole(dwarf.careerRole.id);
-        }
+        return Utils.nearestWithProperty('supply', dwarf, world.trees);
     },
     update: function update(timeDelta, dwarf, world) {
 
@@ -33580,10 +34018,7 @@ var RoleCollectStone = exports.RoleCollectStone = {
 
     checkCanPerform: function checkCanPerform(timeDelta, dwarf, world) {
 
-        if (Utils.nearestWithProperty('supply', dwarf, world.rocks)) {
-
-            dwarf.changeRole(dwarf.careerRole.id);
-        }
+        return Utils.nearestWithProperty('supply', dwarf, world.rocks);
     },
     update: function update(timeDelta, dwarf, world) {
 
@@ -33689,7 +34124,7 @@ var Utils = {
     }
 };
 
-},{"./Dwarf":211,"./Rock":216,"./Tree":220,"./utils/Maths":226}],213:[function(require,module,exports){
+},{"./Dwarf":212,"./Rock":218,"./Tree":222,"./utils/Maths":228}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33765,7 +34200,7 @@ Inventory.prototype.free = function () {
 Inventory.LIMIT = 20;
 Inventory.VERBOSE = false;
 
-},{}],214:[function(require,module,exports){
+},{}],215:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33776,7 +34211,7 @@ exports.default = {
     HEIGHT: 640
 };
 
-},{}],215:[function(require,module,exports){
+},{}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33825,7 +34260,7 @@ function Lighting(world) {
 Lighting.constructor = Lighting;
 Lighting.prototype = Object.create(_pixi2.default.Sprite.prototype);
 
-Lighting.VERBOSE = true;
+Lighting.VERBOSE = false;
 
 Lighting.prototype.addStatic = function (x, y, radius, xOffset, yOffset) {
 
@@ -33844,7 +34279,7 @@ Lighting.prototype.addStatic = function (x, y, radius, xOffset, yOffset) {
     this.staticCtx.arc(x + xOffset, y + yOffset, radius, 0, 2 * Math.PI);
     this.staticCtx.fill();
 
-    return this.createLight(radius, xOffset, yOffset);
+    return this.createLight(radius, xOffset, yOffset, 1);
 };
 
 Lighting.prototype.addEmitter = function (owner, radius, xOffset, yOffset) {
@@ -33880,10 +34315,25 @@ Lighting.prototype.addEmitter = function (owner, radius, xOffset, yOffset) {
         console.log('Lighting.addEmitter(', owner, radius, xOffset, yOffset, ')');
     }
 
-    return this.createLight(radius, xOffset, yOffset);
+    return false; // No light
+
+    return this.createLight(radius, xOffset, yOffset, 0);
 };
 
-Lighting.prototype.createLight = function (radius, xOffset, yOffset) {
+Lighting.prototype.removeEmitter = function (owner) {
+
+    for (var i = 0; i < this.emitters.length; i++) {
+
+        if (this.emitters[i].owner === owner) {
+
+            this.emitters.splice(i, 1);
+
+            break;
+        }
+    }
+};
+
+Lighting.prototype.createLight = function (radius, xOffset, yOffset, alphaMultiplier) {
 
     var canvas = document.createElement('canvas');
 
@@ -33894,7 +34344,7 @@ Lighting.prototype.createLight = function (radius, xOffset, yOffset) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     var lightGradient = ctx.createRadialGradient(radius, radius, 0, radius, radius, radius);
-    lightGradient.addColorStop(0, 'rgba(250, 224, 77, .15)');
+    lightGradient.addColorStop(0, 'rgba(250, 224, 77, .25)');
     lightGradient.addColorStop(.6, 'rgba(250, 224, 77, .15)');
     lightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
@@ -33904,6 +34354,7 @@ Lighting.prototype.createLight = function (radius, xOffset, yOffset) {
     ctx.fill();
 
     var light = new _pixi2.default.Sprite(_pixi2.default.Texture.fromCanvas(canvas));
+    light.alphaMultiplier = alphaMultiplier;
     light.alpha = 0;
     light.radius = radius;
     light.xOffset = xOffset;
@@ -33943,7 +34394,116 @@ Lighting.prototype.update = function (timeDelta, world) {
     this.alpha = world.timeOfDay.getSunValue();
 };
 
-},{"./Tile":218,"./World":223,"pixi.js":154}],216:[function(require,module,exports){
+},{"./Tile":220,"./World":225,"pixi.js":154}],217:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = MotherNature;
+
+var _World = require('./World');
+
+var _World2 = _interopRequireDefault(_World);
+
+var _Tile = require('./Tile');
+
+var _Tile2 = _interopRequireDefault(_Tile);
+
+var _Animal = require('./Animal');
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function MotherNature(world) {
+
+    this.world = world;
+
+    this.animalArchetypes = [AnimalArchetype.DEER, AnimalArchetype.RABBIT, AnimalArchetype.FOX, AnimalArchetype.WOLF];
+
+    this.animalsMap = {};
+    this.animals = [];
+
+    this.animalArchetypes.forEach(function (animalArchetype) {
+
+        this.animalsMap[animalArchetype.id] = [];
+    }.bind(this));
+}
+
+MotherNature.constructor = MotherNature;
+
+MotherNature.prototype.update = function (timeDelta) {
+
+    this.animalArchetypes.forEach(function (animalArchetype) {
+
+        if (Math.random() > .99 && this.animalsMap[animalArchetype.id].length < animalArchetype.maxConcurrent && this.world.timeOfDay.isDuringPeriod(animalArchetype.startTime, animalArchetype.endTime)) {
+
+            console.log('MotherNature.spawnAnimal(', animalArchetype.id, ')');
+
+            this.spawn(animalArchetype);
+        }
+    }.bind(this));
+};
+
+MotherNature.prototype.spawn = function (animalArchetype) {
+
+    var animal = new animalArchetype.c(this.world, animalArchetype, _World2.default.WIDTH * _Tile2.default.WIDTH * Math.random(), _World2.default.HEIGHT * _Tile2.default.HEIGHT * Math.random());
+
+    this.world.addToZOrdered(animal);
+
+    this.animalsMap[animalArchetype.id].push(animal);
+    this.animals.push(animal);
+};
+
+MotherNature.prototype.removeAnimal = function (animal) {
+
+    this.animalArchetypes.forEach(function (animalArchetype) {
+
+        for (var i = 0; i < this.animalsMap[animalArchetype.id].length; i++) {
+
+            if (animal === this.animalsMap[animalArchetype.id][i]) {
+
+                this.animalsMap[animalArchetype.id].splice(i, 1);
+
+                break;
+            }
+        }
+    }.bind(this));
+
+    for (var i = 0; i < this.animals.length; i++) {
+
+        if (animal === this.animals[i]) {
+
+            this.animals.splice(i, 1);
+
+            break;
+        }
+    }
+};
+
+AnimalArchetype.DEER = new AnimalArchetype('deer', 6, 22, 3, _Animal.Deer, .9, 100, 1, false, 20);
+AnimalArchetype.RABBIT = new AnimalArchetype('rabbit', 4, 15, 4, _Animal.Rabbit, .8, 60, 1, false, 5);
+AnimalArchetype.FOX = new AnimalArchetype('fox', 2, 24, 2, _Animal.Fox, .9, 70, 5, false, 10);
+AnimalArchetype.WOLF = new AnimalArchetype('wolf', 20, 10, 1, _Animal.Wolf, .9, 120, 10, true, 80);
+
+function AnimalArchetype(id, startTime, endTime, maxConcurrent, c, speed, perceptionRange, damage, isAggressive, health) {
+
+    this.id = id;
+    this.startTime = startTime;
+    this.endTime = endTime;
+    this.maxConcurrent = maxConcurrent;
+    this.c = c || false;
+    this.speed = speed;
+    this.perceptionRange = perceptionRange;
+    this.damage = damage;
+    this.isAggressive = isAggressive;
+    this.health = health;
+}
+
+AnimalArchetype.constructor = AnimalArchetype;
+
+},{"./Animal":209,"./Tile":220,"./World":225}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33999,7 +34559,7 @@ Rock.HEIGHT = 10;
 Rock.TYPE = 'rock';
 Rock.SUPPLY = 250;
 
-},{"./utils/value-min-max":227,"pixi.js":154}],217:[function(require,module,exports){
+},{"./utils/value-min-max":229,"pixi.js":154}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34059,7 +34619,7 @@ Supply.prototype.update = function (timeDelta, world) {
 Supply.WOOD = 1000;
 Supply.STONE = 1000;
 
-},{"./utils/value-min-max":227,"pixi.js":154}],218:[function(require,module,exports){
+},{"./utils/value-min-max":229,"pixi.js":154}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34140,7 +34700,7 @@ Tile.TILE_COLOURS = {
     grass: '#002C00'
 };
 
-},{"pixi.js":154}],219:[function(require,module,exports){
+},{"pixi.js":154}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34162,7 +34722,8 @@ function _interopRequireDefault(obj) {
 
 function TimeOfDay() {
 
-    this.time = 20;
+    this.time = 6;
+    this.count = 0;
 }
 
 TimeOfDay.DAWN_START = 6;
@@ -34174,6 +34735,8 @@ TimeOfDay.DUSK_END = 21;
 TimeOfDay.constructor = TimeOfDay;
 
 TimeOfDay.prototype.update = function (timeDelta, world) {
+
+    this.count++;
 
     // this.time += timeDelta * 0.0005;
     this.time += timeDelta * 0.00005;
@@ -34192,6 +34755,11 @@ TimeOfDay.prototype.update = function (timeDelta, world) {
     if (this.time >= 24) {
 
         this.time = 0;
+    }
+
+    if (this.count >= Number.MAX_VALUE) {
+
+        this.count = 0;
     }
 };
 
@@ -34252,7 +34820,7 @@ TimeOfDay.prototype.isDuringPeriod = function (start, end) {
     }
 };
 
-},{"./utils/value-min-max":227,"pixi.js":154}],220:[function(require,module,exports){
+},{"./utils/value-min-max":229,"pixi.js":154}],222:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34331,7 +34899,7 @@ Tree.HEIGHT = 24;
 Tree.TYPE = 'tree';
 Tree.SUPPLY = 100;
 
-},{"./Tile":218,"./utils/value-min-max":227,"pixi.js":154}],221:[function(require,module,exports){
+},{"./Tile":220,"./utils/value-min-max":229,"pixi.js":154}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34486,6 +35054,10 @@ function BuildingUI(world) {
     this.button = new _pixi2.default.Graphics();
     this.button.beginFill(0x000000, .5);
     this.button.drawRect(0, 0, buttonW, buttonH);
+    this.button.endFill();
+
+    this.button.beginFill(0xFFFFFF, .75);
+    this.button.drawRect(10, 10, buttonW - 20, buttonH - 20);
     this.button.endFill();
 
     this.button.x = _Layout2.default.WIDTH - buttonW;
@@ -34645,8 +35217,6 @@ BuildingUI.prototype.onDrag = function (event) {
 
 BuildingUI.prototype.onDragEnd = function () {
 
-    console.log('this.onDragEnd()');
-
     this.world.off('mousemove', this.onDragBound);
     this.world.off('touchmove', this.onDragBound);
 
@@ -34722,7 +35292,7 @@ BuildingUI.prototype.update = function (wood, stone) {
     }.bind(this));
 };
 
-},{"./Layout":214,"./utils/Maths":226,"pixi.js":154}],222:[function(require,module,exports){
+},{"./Layout":215,"./utils/Maths":228,"pixi.js":154}],224:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34854,7 +35424,7 @@ Viewport.prototype.disable = function () {
     this.isEnabled = false;
 };
 
-},{"./utils/Maths":226,"pixi.js":154}],223:[function(require,module,exports){
+},{"./utils/Maths":228,"pixi.js":154}],225:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34902,9 +35472,17 @@ var _Dwarf = require('./Dwarf');
 
 var _Dwarf2 = _interopRequireDefault(_Dwarf);
 
+var _Animal = require('./Animal');
+
+var _Animal2 = _interopRequireDefault(_Animal);
+
 var _DwarfRoles = require('./DwarfRoles');
 
 var _DwarfRoles2 = _interopRequireDefault(_DwarfRoles);
+
+var _MotherNature = require('./MotherNature');
+
+var _MotherNature2 = _interopRequireDefault(_MotherNature);
 
 var _UI = require('./UI');
 
@@ -34943,14 +35521,21 @@ function World() {
 
     // GOOD RANDOM SEEDS
     // 182
-    // 746
     // 353
+    // 686
+    // 746
+    // 776
+    // 806
+    // 841
+    // 929
 
     this.noise = new _noisejs2.default.Noise(this.randomSeed);
 
     this.timeOfLastUpdate = 0;
 
     this.timeOfDay = new _TimeOfDay2.default();
+
+    this.motherNature = new _MotherNature2.default(this);
 
     this.supply = new _Supply2.default();
 
@@ -35013,6 +35598,10 @@ function World() {
     var builder = this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _DwarfRoles2.default.BUILDER);
 
     forester.home = builder.home = miner.home = camp;
+
+    /*let hunterShack = this.addBuilding(Buildings.ARCHETYPE_HUNTER.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT * .5));
+    let hunter = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.HUNTER);
+     hunter.home = hunterShack;*/
 
     // Add resources
 
@@ -35123,7 +35712,7 @@ World.prototype.addBuilding = function (id, tileX, tileY) {
 
         var building = this.buildings.add(id, tile.x + _Tile2.default.WIDTH * .5, tile.y + _Tile2.default.HEIGHT * .5);
 
-        console.log('World.addBuilding(', id, ')');
+        // console.log('World.addBuilding(', id, ')');
 
         this.addToZOrdered(building);
 
@@ -35179,15 +35768,36 @@ World.prototype.update = function (time) {
 
     this.timeOfDay.update(timeDelta, this);
 
+    this.motherNature.update(timeDelta, this);
+
     this.lighting.update(timeDelta, this);
 
     this.viewport.update(timeDelta, this);
 
     this.content.y = -this.viewport.scroll;
 
-    this.dwarves.forEach(function (dwarf) {
+    var killed = [];
 
-        dwarf.update(timeDelta, this);
+    this.motherNature.animals.forEach(function (animal, index) {
+
+        if (animal.isAlive()) {
+
+            animal.update(timeDelta);
+        } else {
+
+            killed.push(animal);
+        }
+    }.bind(this));
+
+    this.dwarves.forEach(function (dwarf, index) {
+
+        if (dwarf.isAlive()) {
+
+            dwarf.update(timeDelta, this);
+        } else {
+
+            killed.push(dwarf);
+        }
     }.bind(this));
 
     this.resources.forEach(function (resource) {
@@ -35224,18 +35834,65 @@ World.prototype.update = function (time) {
 
     this.zOrdered.forEach(function (item, index) {
 
-        this.containerZOrdered.setChildIndex(item, index);
+        if (item.parent === null) {
 
-        if (item.light && this.timeOfDay.getSunValue() > 0) {
+            this.zOrdered = this.zOrdered.splice(index, 1);
+        } else {
 
-            item.light.x = item.x - item.light.radius + item.light.xOffset;
-            item.light.y = item.y - item.light.radius + item.light.yOffset;
+            this.containerZOrdered.setChildIndex(item, index);
 
-            item.light.alpha = this.timeOfDay.getSunValue() - (Math.random() > .9 ? Math.random() * .15 : 0);
+            if (item.light && this.timeOfDay.getSunValue() > 0) {
+
+                item.light.x = item.x - item.light.radius + item.light.xOffset;
+                item.light.y = item.y - item.light.radius + item.light.yOffset;
+
+                item.light.alpha = (this.timeOfDay.getSunValue() - (Math.random() > .9 ? Math.random() * .15 : 0)) * item.light.alphaMultiplier;
+            }
         }
     }.bind(this));
 
     this.supply.update(timeDelta, this);
+
+    killed.forEach(function (entity) {
+
+        switch (entity.type) {
+            case _Dwarf2.default.TYPE:
+
+                for (var d = 0; d < this.dwarves.length; d++) {
+
+                    if (this.dwarves[d] === entity) {
+
+                        this.dwarves.splice(d, 1);
+                        break;
+                    }
+                }
+
+                break;
+            case _Animal2.default.TYPE:
+
+                this.motherNature.removeAnimal(entity);
+
+                break;
+        }
+
+        for (var i = 0; i < this.zOrdered.length; i++) {
+
+            if (this.zOrdered[i] === entity) {
+
+                this.zOrdered.splice(i, 1);
+                break;
+            }
+        }
+
+        this.lighting.removeEmitter(entity);
+
+        if (entity.light) {
+
+            entity.light.destroy();
+        }
+
+        entity.destroy();
+    }.bind(this));
 };
 
 World.prototype.spaceAvailable = function (tileX, tileY, w, h) {
@@ -35269,7 +35926,7 @@ World.prototype.getTile = function (x, y) {
 World.WIDTH = 48;
 World.HEIGHT = 32;
 
-},{"./Buildings":210,"./Dwarf":211,"./DwarfRoles":212,"./Layout":214,"./Lighting":215,"./Rock":216,"./Supply":217,"./Tile":218,"./TimeOfDay":219,"./Tree":220,"./UI":221,"./Viewport":222,"./ZOrdered":224,"noisejs":30,"pixi.js":154}],224:[function(require,module,exports){
+},{"./Animal":209,"./Buildings":211,"./Dwarf":212,"./DwarfRoles":213,"./Layout":215,"./Lighting":216,"./MotherNature":217,"./Rock":218,"./Supply":219,"./Tile":220,"./TimeOfDay":221,"./Tree":222,"./UI":223,"./Viewport":224,"./ZOrdered":226,"noisejs":30,"pixi.js":154}],226:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35282,7 +35939,7 @@ exports.default = {
     }
 };
 
-},{}],225:[function(require,module,exports){
+},{}],227:[function(require,module,exports){
 'use strict';
 
 var _pixi = require('pixi.js');
@@ -35357,7 +36014,7 @@ function startGame() {
     }
 }
 
-},{"./Layout":214,"./World":223,"pixi.js":154,"raf":187}],226:[function(require,module,exports){
+},{"./Layout":215,"./World":225,"pixi.js":154,"raf":187}],228:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35387,7 +36044,7 @@ exports.default = {
     }
 };
 
-},{}],227:[function(require,module,exports){
+},{}],229:[function(require,module,exports){
 "use strict";
 
 module.exports = function (min, max, initial) {
@@ -35462,4 +36119,4 @@ module.exports = function (min, max, initial) {
 	return api;
 };
 
-},{}]},{},[225]);
+},{}]},{},[227]);

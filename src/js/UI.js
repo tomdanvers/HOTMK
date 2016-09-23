@@ -142,6 +142,10 @@ export function BuildingUI(world) {
     this.button.drawRect(0, 0, buttonW, buttonH);
     this.button.endFill();
 
+    this.button.beginFill(0xFFFFFF, .75);
+    this.button.drawRect(10, 10, buttonW - 20, buttonH - 20);
+    this.button.endFill();
+
     this.button.x = Layout.WIDTH - buttonW;
     this.button.y = Layout.HEIGHT - buttonH;
 
@@ -309,8 +313,6 @@ BuildingUI.prototype.onDrag = function(event) {
 }
 
 BuildingUI.prototype.onDragEnd = function() {
-
-    console.log('this.onDragEnd()');
 
     this.world.off('mousemove', this.onDragBound);
     this.world.off('touchmove', this.onDragBound);

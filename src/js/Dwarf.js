@@ -1,5 +1,6 @@
 import PIXI from 'pixi.js';
 import Maths from './utils/Maths';
+import MinMaxValue from './utils/value-min-max';
 
 import Inventory from './Inventory';
 import DwarfRoles from './DwarfRoles';
@@ -9,11 +10,14 @@ export default function Dwarf(world, startX, startY, roleId) {
 
     PIXI.Container.call(this);
 
+    this.type = Dwarf.TYPE;
+
+    this.world = world;
+
     this.target = null;
     this.home = null;
     this.inventory = new Inventory(this);
-
-    this.world = world;
+    this.health = new MinMaxValue(0, 100, 100);
 
     this.angle = 0;
 
@@ -30,6 +34,9 @@ export default function Dwarf(world, startX, startY, roleId) {
     let headHeight = 4;
 
     let colour = this.careerRole ? this.careerRole.colour : 0x333333;
+    this.stealthiness = (this.careerRole && this.careerRole.stealthiness) ? this.careerRole.stealthiness : 0.5;
+    this.damage = (this.careerRole && this.careerRole.damage) ? this.careerRole.damage : 1;
+    this.range = (this.careerRole && this.careerRole.range) ? this.careerRole.range : 5;
 
     let base = new PIXI.Graphics();
 
@@ -61,7 +68,7 @@ export default function Dwarf(world, startX, startY, roleId) {
     this.x = this.startX = startX;
     this.y = this.startY = startY;
 
-    this.light = this.world.lighting.addEmitter(this, this.careerRole.id === DwarfRoles.WATCH_NIGHT ? 25 : 15, 5, -10);
+    this.light = this.world.lighting.addEmitter(this, this.careerRole.lightRadius || 30, 0, -10);
 
 }
 
@@ -119,9 +126,7 @@ Dwarf.prototype.update = function(timeDelta, world) {
 
         let distance = Maths.distanceBetween(this, this.target);
 
-        let range = this.role.range || 5;
-
-        if (distance < range && this.role.targetProximity) {
+        if (distance < this.range && this.role.targetProximity) {
 
             this.role.targetProximity(timeDelta, this, world);
 
@@ -136,9 +141,16 @@ Dwarf.prototype.update = function(timeDelta, world) {
 
 }
 
+Dwarf.prototype.isAlive = function() {
+
+    return !this.health.isMin();
+
+}
+
 Dwarf.WIDTH = 6;
 Dwarf.HEIGHT = 12;
 
 Dwarf.SPEED = .75;
 
+Dwarf.TYPE = 'dwarf';
 

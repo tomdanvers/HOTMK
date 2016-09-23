@@ -9,6 +9,7 @@ export default function DwarfRoles() {
         'idle': RoleIdle,
         'resting': RoleResting,
         'builder': RoleBuilder,
+        'hunter': RoleHunter,
         'collect-wood': RoleCollectWood,
         'collect-stone': RoleCollectStone,
         'watch-night': RoleWatchNight
@@ -29,6 +30,7 @@ DwarfRoles.prototype.getById = function(id) {
 DwarfRoles.IDLE = 'idle';
 DwarfRoles.RESTING = 'resting';
 DwarfRoles.BUILDER = 'builder';
+DwarfRoles.HUNTER = 'hunter';
 DwarfRoles.COLLECT_WOOD = 'collect-wood';
 DwarfRoles.COLLECT_STONE = 'collect-stone';
 DwarfRoles.WATCH_NIGHT = 'watch-night';
@@ -113,7 +115,11 @@ export const RoleWatchNight = {
 
     range: 10,
 
+    lightRadius: 45,
+
     colour: 0x553333,
+
+    stealthiness: .25,
 
     cWood: 50,
     cStone: 50,
@@ -157,11 +163,9 @@ export const RoleWatchNight = {
 
         }
 
-
     },
 
     targetProximity(timeDelta, dwarf, world) {
-
 
         if (dwarf.canTakeAction()) {
 
@@ -219,11 +223,7 @@ export const RoleBuilder = {
 
     checkCanPerform(timeDelta, dwarf, world) {
 
-        if (Utils.nearestWithoutProperty('integrity', dwarf, world.buildings.buildings)) {
-
-            dwarf.changeRole(dwarf.careerRole.id);
-
-        }
+        return Utils.nearestWithoutProperty('integrity', dwarf, world.buildings.buildings);
 
     },
 
@@ -282,6 +282,100 @@ export const RoleBuilder = {
 
 }
 
+export const RoleHunter = {
+
+    id: 'hunter',
+
+    startTime: 5,
+    endTime: 19.5,
+
+    range: 5,
+    rangeWeapon: 50,
+    rangePerception: 150,
+
+    lightRadius: 60,
+
+    colour: 0x58240A,
+
+    stealthiness: .9,
+    damage: 10,
+
+    cWood: 50,
+    cStone: 50,
+
+    checkCanPerform(timeDelta, dwarf, world) {
+
+        let target = Utils.nearestWithProperty('health', dwarf, world.motherNature.animals);
+
+        return (target && Maths.distanceBetween(dwarf, target) <= this.rangePerception);
+
+    },
+
+
+    update(timeDelta, dwarf, world) {
+
+        if (!dwarf.target) {
+
+            let target = Utils.nearestWithProperty('health', dwarf, world.motherNature.animals);
+
+            if (target && Maths.distanceBetween(dwarf, target) <= this.rangePerception) {
+
+                dwarf.target = target;
+                dwarf.range = this.rangeWeapon;
+
+            } else {
+
+                dwarf.target = false;
+                dwarf.range = this.range;
+
+                return DwarfRoles.IDLE;
+
+            }
+
+        }
+
+    },
+
+    targetProximity(timeDelta, dwarf, world) {
+
+        if (dwarf.target && dwarf.target.health && !dwarf.target.health.isMin()) {
+
+            if (dwarf.canTakeAction()) {
+
+                // Attack
+
+                console.log('RoleHunter.attack()')
+
+                let animal = dwarf.target;
+
+                animal.health.decrement(dwarf.damage);
+
+                if (animal.health.isMin()) {
+
+                    console.log('RoleHunter.killedTarget(', animal, ')');
+
+                    dwarf.target = false;
+                    dwarf.range = this.range;
+
+                    return DwarfRoles.IDLE;
+
+                }
+
+                dwarf.tookAction();
+
+            }
+
+        } else {
+
+            dwarf.target = false;
+
+        }
+
+
+    }
+
+}
+
 export const RoleCollectWood = {
 
     id: 'collect-wood',
@@ -291,16 +385,14 @@ export const RoleCollectWood = {
 
     colour: 0x335533,
 
+    stealthiness: .8,
+
     cWood: 20,
     cStone: 40,
 
     checkCanPerform(timeDelta, dwarf, world) {
 
-        if (Utils.nearestWithProperty('supply', dwarf, world.trees)) {
-
-            dwarf.changeRole(dwarf.careerRole.id);
-
-        }
+        return Utils.nearestWithProperty('supply', dwarf, world.trees);
 
     },
 
@@ -398,11 +490,7 @@ export const RoleCollectStone = {
 
     checkCanPerform(timeDelta, dwarf, world) {
 
-        if (Utils.nearestWithProperty('supply', dwarf, world.rocks)) {
-
-            dwarf.changeRole(dwarf.careerRole.id);
-
-        }
+        return Utils.nearestWithProperty('supply', dwarf, world.rocks);
 
     },
 

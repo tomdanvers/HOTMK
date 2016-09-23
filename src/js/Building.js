@@ -256,6 +256,37 @@ NightWatch.WIDTH = 12;
 NightWatch.HEIGHT = 18;
 
 
+
+/* -------------- */
+/* ------- Hunter */
+/* -------------- */
+
+export function Hunter(world, startX, startY, isTemp) {
+
+    Building.call(this, world, startX, startY, isTemp);
+
+    this.associatedRole = DwarfRoles.HUNTER;
+
+}
+
+Hunter.constructor = Hunter;
+Hunter.prototype = Object.create(Building.prototype);
+
+Hunter.prototype.draw = function(graphics) {
+
+    graphics.beginFill(0x999999);
+    graphics.drawRect(- Hunter.WIDTH * .5, - Hunter.HEIGHT, Hunter.WIDTH, Hunter.HEIGHT);
+    graphics.endFill();
+    graphics.beginFill(0x58240A);
+    graphics.drawRect(- Hunter.WIDTH * .5 + 4, -6, Hunter.WIDTH - 8, 6);
+    graphics.endFill();
+
+}
+
+Hunter.WIDTH = 12;
+Hunter.HEIGHT = 12;
+
+
 /* -------------- */
 /* -------- Miner */
 /* -------------- */
