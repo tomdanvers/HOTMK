@@ -33552,17 +33552,23 @@ Dwarf.prototype.update = function (timeDelta, world) {
 
     if (this.target) {
 
-        this.angle = Math.atan2(this.target.y - this.y, this.target.x - this.x);
+        if (this.target.isAlive !== undefined && !this.target.isAlive()) {
 
-        var distance = _Maths2.default.distanceBetween(this, this.target);
-
-        if (distance < this.range && this.role.targetProximity) {
-
-            this.role.targetProximity(timeDelta, this, world);
+            this.target = false;
         } else {
 
-            this.x += Math.cos(this.angle) * Dwarf.SPEED * timeDelta / 30;
-            this.y += Math.sin(this.angle) * Dwarf.SPEED * timeDelta / 30;
+            this.angle = Math.atan2(this.target.y - this.y, this.target.x - this.x);
+
+            var distance = _Maths2.default.distanceBetween(this, this.target);
+
+            if (distance < this.range && this.role.targetProximity) {
+
+                this.role.targetProximity(timeDelta, this, world);
+            } else {
+
+                this.x += Math.cos(this.angle) * Dwarf.SPEED * timeDelta / 30;
+                this.y += Math.sin(this.angle) * Dwarf.SPEED * timeDelta / 30;
+            }
         }
     }
 };
