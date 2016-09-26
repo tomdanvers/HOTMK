@@ -1,6 +1,7 @@
 import PIXI from 'pixi.js';
 import Maths from './utils/Maths';
 import Layout from './Layout';
+import PanelController from './PanelController';
 
 export default function UI(world) {
 
@@ -13,9 +14,16 @@ export default function UI(world) {
     this.time.y =  50;
     this.addChild(this.time);
 
+    this.panelController = new PanelController();
+
     this.building = new BuildingUI(world);
     this.addChild(this.building);
 
+    this.log = new LogUI(world);
+    this.addChild(this.log);
+
+    this.panelController.add(this.building);
+    this.panelController.add(this.log);
 
 }
 
@@ -131,6 +139,8 @@ export function BuildingUI(world) {
     PIXI.Container.call(this);
 
     this.world = world;
+
+    this.id = 'building';
 
     // Toggle Button
 
@@ -370,7 +380,7 @@ BuildingUI.prototype.onDragEnd = function() {
 
 }
 
-BuildingUI.prototype.toggle = function(show) {
+BuildingUI.prototype.toggle = function(show, dispatchEvent) {
 
     let isVisible;
     if (typeof(show) === 'undefined') {
@@ -379,7 +389,15 @@ BuildingUI.prototype.toggle = function(show) {
         isVisible = show;
     }
 
+    dispatchEvent = typeof(dispatchEvent) === 'undefined' ? true : dispatchEvent;
+
     this.menu.visible = this.shown = isVisible;
+
+    if (dispatchEvent) {
+
+        this.emit(isVisible ? 'toggle:on' : 'toggle:off', this.id);
+
+    }
 
 }
 
@@ -395,5 +413,126 @@ BuildingUI.prototype.update = function(wood, stone) {
         button.interactive = canAfford;
 
     }.bind(this));
+
+}
+
+/* -------------- */
+/* ---------- Log */
+/* -------------- */
+
+export function LogUI(world) {
+
+    PIXI.Container.call(this);
+
+    this.world = world;
+
+    this.id = 'log';
+
+    // Toggle Button
+
+    let buttonW = 60;
+    let buttonH = 60;
+
+    this.button = new PIXI.Graphics();
+    this.button.beginFill(0x000000, .5);
+    this.button.drawRect(0, 0, buttonW, buttonH);
+    this.button.endFill();
+
+    this.button.beginFill(0xFFFFFF, .75);
+    this.button.drawRect(10, 10, buttonW - 20, buttonH - 20);
+    this.button.endFill();
+
+    this.button.x = Layout.WIDTH - buttonW;
+    this.button.y = Layout.HEIGHT - buttonH * 2 - 20;
+
+    this.button.interactive = true;
+
+    this.button.on('mousedown', this.onButtonDown.bind(this));
+    this.button.on('touchstart', this.onButtonDown.bind(this));
+
+    this.addChild(this.button);
+
+    // Log
+
+    let logW = Layout.WIDTH * .8;
+    let logH = Layout.HEIGHT * .8;
+
+    this.logStyle = {
+        font : '14px Arial',
+        fill : '#FFFFFF'
+    };
+
+    this.logContainer = new PIXI.Graphics();
+    this.logContainer.beginFill(0x000000, .5);
+    this.logContainer.drawRect(0, 0, logW, logH);
+    this.logContainer.endFill();
+
+    this.logContainer.x = Layout.WIDTH * .5 - logW * .5;
+    this.logContainer.y = Layout.HEIGHT * .5 - logH * .5;
+
+    this.addChild(this.logContainer);
+
+    this.logItems = new PIXI.Container();
+    this.logContainer.addChild(this.logItems);
+
+    this.logItemHeight = 24;
+    this.logItemY = 0;
+
+    this.logCount = 0;
+    this.logMax = Math.floor((logH - 40) / this.logItemHeight);
+    // this.logMax = 5;
+
+    this.toggle(false);
+
+}
+
+LogUI.constructor = LogUI;
+LogUI.prototype = Object.create(PIXI.Container.prototype);
+
+LogUI.prototype.log = function(message) {
+
+    let item = new PIXI.Text(message, this.logStyle);
+    item.x = 20;
+    item.y = this.logItemY;
+    this.logItems.addChild(item);
+
+    this.logItems.y += this.logItemHeight;
+    this.logItemY -= this.logItemHeight;
+
+    this.logCount ++;
+
+    if (this.logCount > this.logMax) {
+
+        this.logItems.getChildAt(0).destroy();
+
+        this.logCount --;
+    }
+
+}
+
+LogUI.prototype.onButtonDown = function(event) {
+
+    this.toggle(undefined, true);
+
+}
+
+LogUI.prototype.toggle = function(show, dispatchEvent) {
+
+    let isVisible;
+    if (typeof(show) === 'undefined') {
+        isVisible = !this.shown;
+    } else {
+        isVisible = show;
+    }
+
+    dispatchEvent = typeof(dispatchEvent) === 'undefined' ? false : dispatchEvent;
+
+    this.logContainer.visible = this.shown = isVisible;
+
+    if (dispatchEvent) {
+
+        this.emit(isVisible ? 'toggle:on' : 'toggle:off', this.id);
+
+    }
 
 }

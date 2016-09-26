@@ -292,6 +292,7 @@ export const RoleHunter = {
     range: 5,
     rangeWeapon: 50,
     rangePerception: 150,
+    rangeLimit: 400,
 
     lightRadius: 60,
 
@@ -307,18 +308,28 @@ export const RoleHunter = {
 
         let target = Utils.nearestWithProperty('health', dwarf, world.motherNature.animals);
 
-        return (target && Maths.distanceBetween(dwarf, target) <= this.rangePerception);
+        return (target && Maths.distanceBetween(dwarf, target) <= this.rangePerception && Maths.distanceBetween(dwarf, dwarf.home) <= this.rangeLimit);
 
     },
 
 
     update(timeDelta, dwarf, world) {
 
-        if (!dwarf.target) {
+        if (dwarf.target) {
+
+            if (Maths.distanceBetween(dwarf, dwarf.home) > this.rangeLimit) {
+
+                // This critter got away...
+
+                dwarf.target = false;
+
+            }
+
+        } else {
 
             let target = Utils.nearestWithProperty('health', dwarf, world.motherNature.animals);
 
-            if (target && Maths.distanceBetween(dwarf, target) <= this.rangePerception) {
+            if (target && Maths.distanceBetween(dwarf, target) <= this.rangePerception && Maths.distanceBetween(dwarf, dwarf.home) <= this.rangeLimit) {
 
                 dwarf.target = target;
                 dwarf.range = this.rangeWeapon;
@@ -344,15 +355,15 @@ export const RoleHunter = {
 
                 // Attack
 
-                console.log('RoleHunter.attack()')
-
                 let animal = dwarf.target;
 
                 animal.health.decrement(dwarf.damage);
 
+                dwarf.tookAction();
+
                 if (animal.health.isMin()) {
 
-                    console.log('RoleHunter.killedTarget(', animal, ')');
+                    world.ui.log.log('Dwarf "' + dwarf.name + '" killed ' + animal.type + ' "' + animal.name + '"');
 
                     dwarf.target = false;
                     dwarf.range = this.range;
@@ -360,8 +371,6 @@ export const RoleHunter = {
                     return DwarfRoles.IDLE;
 
                 }
-
-                dwarf.tookAction();
 
             }
 

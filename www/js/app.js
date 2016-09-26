@@ -32672,6 +32672,7 @@ exports.Deer = Deer;
 exports.Rabbit = Rabbit;
 exports.Fox = Fox;
 exports.Wolf = Wolf;
+exports.Boar = Boar;
 
 var _pixi = require('pixi.js');
 
@@ -32698,6 +32699,7 @@ function Animal(world, archetype, startX, startY) {
     _pixi2.default.Container.call(this);
 
     this.type = Animal.TYPE;
+    this.name = 'animal';
 
     this.world = world;
 
@@ -32773,7 +32775,7 @@ Animal.prototype.update = function (timeDelta) {
 
                     distance = _Maths2.default.distanceBetween(this, dwarf);
 
-                    if (this.isAggressive && Math.random() > dwarf.stealthiness && !dwarf.health.isMin() && distance < this.perceptionRange) {
+                    if (this.isAggressive && dwarf.roleId !== _DwarfRoles2.default.RESTING && Math.random() > dwarf.stealthiness && !dwarf.health.isMin() && distance < this.perceptionRange) {
 
                         // Ignore dwarf that is too stealthy
                         // Ignore dwarf that is dead
@@ -32815,28 +32817,34 @@ Animal.prototype.update = function (timeDelta) {
 
     if (this.target) {
 
-        this.angle = Math.atan2(this.target.y - this.y, this.target.x - this.x);
+        if (this.target.isAlive !== undefined && !this.target.isAlive()) {
 
-        var _distance = _Maths2.default.distanceBetween(this, this.target);
+            this.target = false;
+        } else {
 
-        var range = this.range || 5;
+            this.angle = Math.atan2(this.target.y - this.y, this.target.x - this.x);
 
-        if (_distance < range) {
+            var _distance = _Maths2.default.distanceBetween(this, this.target);
 
-            if (this.isAggressive && this.target.health && !this.target.health.isMin()) {
+            var range = this.range || 5;
 
-                if (this.canTakeAction()) {
+            if (_distance < range) {
 
-                    this.attackTarget();
+                if (this.isAggressive && this.target.health && !this.target.health.isMin()) {
+
+                    if (this.canTakeAction()) {
+
+                        this.attackTarget();
+                    }
+                } else {
+
+                    this.target = false;
                 }
             } else {
 
-                this.target = false;
+                this.x += Math.cos(this.angle) * this.speed * timeDelta / 30;
+                this.y += Math.sin(this.angle) * this.speed * timeDelta / 30;
             }
-        } else {
-
-            this.x += Math.cos(this.angle) * this.speed * timeDelta / 30;
-            this.y += Math.sin(this.angle) * this.speed * timeDelta / 30;
         }
     } else {
 
@@ -32861,6 +32869,8 @@ Animal.prototype.attackTarget = function () {
         console.log('Animal.attackTarget(', this.target.health.get(), ')');
     }
 
+    this.tookAction();
+
     if (this.target.health.isMin()) {
 
         if (Animal.VERBOSE) {
@@ -32868,10 +32878,10 @@ Animal.prototype.attackTarget = function () {
             console.log('Animal.killedTarget(', this.target.id, ')');
         }
 
+        this.world.ui.log.log('Animal "' + this.name + '" killed "' + this.target.name + '"');
+
         this.target = false;
     }
-
-    this.tookAction();
 };
 
 Animal.prototype.isAlive = function () {
@@ -32893,6 +32903,8 @@ Animal.VERBOSE = false;
 function Deer(world, archetype, startX, startY) {
 
     Animal.call(this, world, archetype, startX, startY);
+
+    this.name = 'Deer';
 }
 
 Deer.constructor = Deer;
@@ -32915,6 +32927,8 @@ Deer.HEIGHT = 6;
 function Rabbit(world, archetype, startX, startY) {
 
     Animal.call(this, world, archetype, startX, startY);
+
+    this.name = 'Rabbit';
 }
 
 Rabbit.constructor = Rabbit;
@@ -32937,6 +32951,8 @@ Rabbit.HEIGHT = 2;
 function Fox(world, archetype, startX, startY) {
 
     Animal.call(this, world, archetype, startX, startY);
+
+    this.name = 'Fox';
 }
 
 Fox.constructor = Fox;
@@ -32959,6 +32975,8 @@ Fox.HEIGHT = 2;
 function Wolf(world, archetype, startX, startY) {
 
     Animal.call(this, world, archetype, startX, startY);
+
+    this.name = 'Wolf';
 }
 
 Wolf.constructor = Wolf;
@@ -32974,7 +32992,31 @@ Wolf.prototype.draw = function (graphics) {
 Wolf.WIDTH = 8;
 Wolf.HEIGHT = 4;
 
-},{"./DwarfRoles":213,"./utils/Maths":228,"./utils/value-min-max":229,"pixi.js":154}],210:[function(require,module,exports){
+/* -------------- */
+/* --------- Wolf */
+/* -------------- */
+
+function Boar(world, archetype, startX, startY) {
+
+    Animal.call(this, world, archetype, startX, startY);
+
+    this.name = 'Boar';
+}
+
+Boar.constructor = Boar;
+Boar.prototype = Object.create(Animal.prototype);
+
+Boar.prototype.draw = function (graphics) {
+
+    graphics.beginFill(0x191719);
+    graphics.drawRect(-Boar.WIDTH * .5, -Boar.HEIGHT, Boar.WIDTH, Boar.HEIGHT);
+    graphics.endFill();
+};
+
+Boar.WIDTH = 8;
+Boar.HEIGHT = 5;
+
+},{"./DwarfRoles":213,"./utils/Maths":229,"./utils/value-min-max":230,"pixi.js":154}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33346,7 +33388,7 @@ Mason.prototype.draw = function (graphics) {
 Mason.WIDTH = 13;
 Mason.HEIGHT = 14;
 
-},{"./Dwarf":212,"./DwarfRoles":213,"./utils/Maths":228,"./utils/value-min-max":229,"pixi.js":154}],211:[function(require,module,exports){
+},{"./Dwarf":212,"./DwarfRoles":213,"./utils/Maths":229,"./utils/value-min-max":230,"pixi.js":154}],211:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33448,6 +33490,7 @@ function Dwarf(world, startX, startY, roleId) {
     _pixi2.default.Container.call(this);
 
     this.type = Dwarf.TYPE;
+    this.name = Dwarf.getName();
 
     this.world = world;
 
@@ -33578,6 +33621,14 @@ Dwarf.prototype.isAlive = function () {
     return !this.health.isMin();
 };
 
+Dwarf.NAMES_FIRST = ['Snorri', 'Ori', 'Nori', 'Gloin', 'Oin', 'Bifur', 'Bofur', 'Thorin', 'Balin'];
+Dwarf.NAMES_LAST = ['Oakenshield', 'Bittenaxe', 'Longbeard', 'Undermountain', 'Ironskull', 'Steelhammer'];
+
+Dwarf.getName = function () {
+
+    return Dwarf.NAMES_FIRST.random() + ' ' + Dwarf.NAMES_LAST.random();
+};
+
 Dwarf.WIDTH = 6;
 Dwarf.HEIGHT = 12;
 
@@ -33585,7 +33636,7 @@ Dwarf.SPEED = .75;
 
 Dwarf.TYPE = 'dwarf';
 
-},{"./DwarfRoles":213,"./Inventory":214,"./utils/Maths":228,"./utils/value-min-max":229,"pixi.js":154}],213:[function(require,module,exports){
+},{"./DwarfRoles":213,"./Inventory":214,"./utils/Maths":229,"./utils/value-min-max":230,"pixi.js":154}],213:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33858,6 +33909,7 @@ var RoleHunter = exports.RoleHunter = {
     range: 5,
     rangeWeapon: 50,
     rangePerception: 150,
+    rangeLimit: 400,
 
     lightRadius: 60,
 
@@ -33873,15 +33925,23 @@ var RoleHunter = exports.RoleHunter = {
 
         var target = Utils.nearestWithProperty('health', dwarf, world.motherNature.animals);
 
-        return target && _Maths2.default.distanceBetween(dwarf, target) <= this.rangePerception;
+        return target && _Maths2.default.distanceBetween(dwarf, target) <= this.rangePerception && _Maths2.default.distanceBetween(dwarf, dwarf.home) <= this.rangeLimit;
     },
     update: function update(timeDelta, dwarf, world) {
 
-        if (!dwarf.target) {
+        if (dwarf.target) {
+
+            if (_Maths2.default.distanceBetween(dwarf, dwarf.home) > this.rangeLimit) {
+
+                // This critter got away...
+
+                dwarf.target = false;
+            }
+        } else {
 
             var target = Utils.nearestWithProperty('health', dwarf, world.motherNature.animals);
 
-            if (target && _Maths2.default.distanceBetween(dwarf, target) <= this.rangePerception) {
+            if (target && _Maths2.default.distanceBetween(dwarf, target) <= this.rangePerception && _Maths2.default.distanceBetween(dwarf, dwarf.home) <= this.rangeLimit) {
 
                 dwarf.target = target;
                 dwarf.range = this.rangeWeapon;
@@ -33902,23 +33962,21 @@ var RoleHunter = exports.RoleHunter = {
 
                 // Attack
 
-                console.log('RoleHunter.attack()');
-
                 var animal = dwarf.target;
 
                 animal.health.decrement(dwarf.damage);
 
+                dwarf.tookAction();
+
                 if (animal.health.isMin()) {
 
-                    console.log('RoleHunter.killedTarget(', animal, ')');
+                    world.ui.log.log('Dwarf "' + dwarf.name + '" killed ' + animal.type + ' "' + animal.name + '"');
 
                     dwarf.target = false;
                     dwarf.range = this.range;
 
                     return DwarfRoles.IDLE;
                 }
-
-                dwarf.tookAction();
             }
         } else {
 
@@ -34130,7 +34188,7 @@ var Utils = {
     }
 };
 
-},{"./Dwarf":212,"./Rock":218,"./Tree":222,"./utils/Maths":228}],214:[function(require,module,exports){
+},{"./Dwarf":212,"./Rock":219,"./Tree":223,"./utils/Maths":229}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34400,7 +34458,7 @@ Lighting.prototype.update = function (timeDelta, world) {
     this.alpha = world.timeOfDay.getSunValue();
 };
 
-},{"./Tile":220,"./World":225,"pixi.js":154}],217:[function(require,module,exports){
+},{"./Tile":221,"./World":226,"pixi.js":154}],217:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34426,7 +34484,7 @@ function MotherNature(world) {
 
     this.world = world;
 
-    this.animalArchetypes = [AnimalArchetype.DEER, AnimalArchetype.RABBIT, AnimalArchetype.FOX, AnimalArchetype.WOLF];
+    this.animalArchetypes = [AnimalArchetype.DEER, AnimalArchetype.RABBIT, AnimalArchetype.FOX, AnimalArchetype.WOLF, AnimalArchetype.BOAR];
 
     this.animalsMap = {};
     this.animals = [];
@@ -34454,7 +34512,7 @@ MotherNature.prototype.update = function (timeDelta) {
 
 MotherNature.prototype.spawn = function (animalArchetype) {
 
-    var animal = new animalArchetype.c(this.world, animalArchetype, _World2.default.WIDTH * _Tile2.default.WIDTH * Math.random(), _World2.default.HEIGHT * _Tile2.default.HEIGHT * Math.random());
+    var animal = new animalArchetype.c(this.world, animalArchetype, _World2.default.WIDTH * _Tile2.default.WIDTH * Math.random(), _World2.default.HEIGHT * _Tile2.default.HEIGHT * Math.random() * .7);
 
     this.world.addToZOrdered(animal);
 
@@ -34491,7 +34549,8 @@ MotherNature.prototype.removeAnimal = function (animal) {
 AnimalArchetype.DEER = new AnimalArchetype('deer', 6, 22, 3, _Animal.Deer, .9, 100, 1, false, 20);
 AnimalArchetype.RABBIT = new AnimalArchetype('rabbit', 4, 15, 4, _Animal.Rabbit, .8, 60, 1, false, 5);
 AnimalArchetype.FOX = new AnimalArchetype('fox', 2, 24, 2, _Animal.Fox, .9, 70, 5, false, 10);
-AnimalArchetype.WOLF = new AnimalArchetype('wolf', 20, 10, 1, _Animal.Wolf, .9, 120, 10, true, 80);
+AnimalArchetype.WOLF = new AnimalArchetype('wolf', 22, 5, 1, _Animal.Wolf, .9, 120, 10, true, 80);
+AnimalArchetype.BOAR = new AnimalArchetype('boar', 4, 23, 3, _Animal.Boar, .6, 60, 10, true, 100);
 
 function AnimalArchetype(id, startTime, endTime, maxConcurrent, c, speed, perceptionRange, damage, isAggressive, health) {
 
@@ -34509,7 +34568,74 @@ function AnimalArchetype(id, startTime, endTime, maxConcurrent, c, speed, percep
 
 AnimalArchetype.constructor = AnimalArchetype;
 
-},{"./Animal":209,"./Tile":220,"./World":225}],218:[function(require,module,exports){
+},{"./Animal":209,"./Tile":221,"./World":226}],218:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = PanelController;
+
+var _valueMinMax = require('./utils/value-min-max');
+
+var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
+
+var _Maths = require('./utils/Maths');
+
+var _Maths2 = _interopRequireDefault(_Maths);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function PanelController() {
+
+    this.panels = [];
+    this.panelsMap = {};
+
+    this.current = false;
+}
+
+PanelController.constructor = PanelController;
+
+PanelController.prototype.add = function (panel) {
+
+    if (panel.id === undefined) {
+        console.error('PanelController.add(PANEL HAS NO ID)');
+    }
+
+    this.panels.push(panel);
+    this.panelsMap[panel.id] = panel;
+
+    panel.on('toggle:on', this.panelOn.bind(this));
+    panel.on('toggle:off', this.panelOff.bind(this));
+
+    console.log('PanelController.add(', panel.id, ')');
+};
+
+PanelController.prototype.panelOn = function (id) {
+
+    if (this.current) {
+
+        this.current.toggle(false, false);
+    }
+
+    console.log('PanelController.panelOn(', id, ')');
+
+    this.current = this.panelsMap[id];
+};
+
+PanelController.prototype.panelOff = function (id) {
+
+    if (this.current && this.current.id === id) {
+
+        this.current = false;
+    }
+
+    console.log('PanelController.panelOff(', id, ')');
+};
+
+},{"./utils/Maths":229,"./utils/value-min-max":230}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34565,7 +34691,7 @@ Rock.HEIGHT = 10;
 Rock.TYPE = 'rock';
 Rock.SUPPLY = 250;
 
-},{"./utils/value-min-max":229,"pixi.js":154}],219:[function(require,module,exports){
+},{"./utils/value-min-max":230,"pixi.js":154}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34625,7 +34751,7 @@ Supply.prototype.update = function (timeDelta, world) {
 Supply.WOOD = 1000;
 Supply.STONE = 1000;
 
-},{"./utils/value-min-max":229,"pixi.js":154}],220:[function(require,module,exports){
+},{"./utils/value-min-max":230,"pixi.js":154}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34706,7 +34832,7 @@ Tile.TILE_COLOURS = {
     grass: '#002C00'
 };
 
-},{"pixi.js":154}],221:[function(require,module,exports){
+},{"pixi.js":154}],222:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34728,7 +34854,7 @@ function _interopRequireDefault(obj) {
 
 function TimeOfDay() {
 
-    this.time = 6;
+    this.time = 8;
     this.count = 0;
 }
 
@@ -34826,7 +34952,7 @@ TimeOfDay.prototype.isDuringPeriod = function (start, end) {
     }
 };
 
-},{"./utils/value-min-max":229,"pixi.js":154}],222:[function(require,module,exports){
+},{"./utils/value-min-max":230,"pixi.js":154}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34905,7 +35031,7 @@ Tree.HEIGHT = 24;
 Tree.TYPE = 'tree';
 Tree.SUPPLY = 100;
 
-},{"./Tile":220,"./utils/value-min-max":229,"pixi.js":154}],223:[function(require,module,exports){
+},{"./Tile":221,"./utils/value-min-max":230,"pixi.js":154}],224:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34915,6 +35041,7 @@ exports.default = UI;
 exports.SupplyUI = SupplyUI;
 exports.TimeUI = TimeUI;
 exports.BuildingUI = BuildingUI;
+exports.LogUI = LogUI;
 
 var _pixi = require('pixi.js');
 
@@ -34927,6 +35054,10 @@ var _Maths2 = _interopRequireDefault(_Maths);
 var _Layout = require('./Layout');
 
 var _Layout2 = _interopRequireDefault(_Layout);
+
+var _PanelController = require('./PanelController');
+
+var _PanelController2 = _interopRequireDefault(_PanelController);
 
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
@@ -34943,8 +35074,16 @@ function UI(world) {
     this.time.y = 50;
     this.addChild(this.time);
 
+    this.panelController = new _PanelController2.default();
+
     this.building = new BuildingUI(world);
     this.addChild(this.building);
+
+    this.log = new LogUI(world);
+    this.addChild(this.log);
+
+    this.panelController.add(this.building);
+    this.panelController.add(this.log);
 }
 
 UI.constructor = UI;
@@ -35051,6 +35190,8 @@ function BuildingUI(world) {
     _pixi2.default.Container.call(this);
 
     this.world = world;
+
+    this.id = 'building';
 
     // Toggle Button
 
@@ -35273,7 +35414,7 @@ BuildingUI.prototype.onDragEnd = function () {
     }
 };
 
-BuildingUI.prototype.toggle = function (show) {
+BuildingUI.prototype.toggle = function (show, dispatchEvent) {
 
     var isVisible = void 0;
     if (typeof show === 'undefined') {
@@ -35282,7 +35423,14 @@ BuildingUI.prototype.toggle = function (show) {
         isVisible = show;
     }
 
+    dispatchEvent = typeof dispatchEvent === 'undefined' ? true : dispatchEvent;
+
     this.menu.visible = this.shown = isVisible;
+
+    if (dispatchEvent) {
+
+        this.emit(isVisible ? 'toggle:on' : 'toggle:off', this.id);
+    }
 };
 
 BuildingUI.prototype.update = function (wood, stone) {
@@ -35298,7 +35446,123 @@ BuildingUI.prototype.update = function (wood, stone) {
     }.bind(this));
 };
 
-},{"./Layout":215,"./utils/Maths":228,"pixi.js":154}],224:[function(require,module,exports){
+/* -------------- */
+/* ---------- Log */
+/* -------------- */
+
+function LogUI(world) {
+
+    _pixi2.default.Container.call(this);
+
+    this.world = world;
+
+    this.id = 'log';
+
+    // Toggle Button
+
+    var buttonW = 60;
+    var buttonH = 60;
+
+    this.button = new _pixi2.default.Graphics();
+    this.button.beginFill(0x000000, .5);
+    this.button.drawRect(0, 0, buttonW, buttonH);
+    this.button.endFill();
+
+    this.button.beginFill(0xFFFFFF, .75);
+    this.button.drawRect(10, 10, buttonW - 20, buttonH - 20);
+    this.button.endFill();
+
+    this.button.x = _Layout2.default.WIDTH - buttonW;
+    this.button.y = _Layout2.default.HEIGHT - buttonH * 2 - 20;
+
+    this.button.interactive = true;
+
+    this.button.on('mousedown', this.onButtonDown.bind(this));
+    this.button.on('touchstart', this.onButtonDown.bind(this));
+
+    this.addChild(this.button);
+
+    // Log
+
+    var logW = _Layout2.default.WIDTH * .8;
+    var logH = _Layout2.default.HEIGHT * .8;
+
+    this.logStyle = {
+        font: '14px Arial',
+        fill: '#FFFFFF'
+    };
+
+    this.logContainer = new _pixi2.default.Graphics();
+    this.logContainer.beginFill(0x000000, .5);
+    this.logContainer.drawRect(0, 0, logW, logH);
+    this.logContainer.endFill();
+
+    this.logContainer.x = _Layout2.default.WIDTH * .5 - logW * .5;
+    this.logContainer.y = _Layout2.default.HEIGHT * .5 - logH * .5;
+
+    this.addChild(this.logContainer);
+
+    this.logItems = new _pixi2.default.Container();
+    this.logContainer.addChild(this.logItems);
+
+    this.logItemHeight = 24;
+    this.logItemY = 0;
+
+    this.logCount = 0;
+    this.logMax = Math.floor((logH - 40) / this.logItemHeight);
+    // this.logMax = 5;
+
+    this.toggle(false);
+}
+
+LogUI.constructor = LogUI;
+LogUI.prototype = Object.create(_pixi2.default.Container.prototype);
+
+LogUI.prototype.log = function (message) {
+
+    var item = new _pixi2.default.Text(message, this.logStyle);
+    item.x = 20;
+    item.y = this.logItemY;
+    this.logItems.addChild(item);
+
+    this.logItems.y += this.logItemHeight;
+    this.logItemY -= this.logItemHeight;
+
+    this.logCount++;
+
+    if (this.logCount > this.logMax) {
+
+        this.logItems.getChildAt(0).destroy();
+
+        this.logCount--;
+    }
+};
+
+LogUI.prototype.onButtonDown = function (event) {
+
+    this.toggle(undefined, true);
+};
+
+LogUI.prototype.toggle = function (show, dispatchEvent) {
+
+    var isVisible = void 0;
+    if (typeof show === 'undefined') {
+        isVisible = !this.shown;
+    } else {
+        isVisible = show;
+    }
+
+    dispatchEvent = typeof dispatchEvent === 'undefined' ? false : dispatchEvent;
+
+    this.logContainer.visible = this.shown = isVisible;
+
+    if (dispatchEvent) {
+
+        this.emit(isVisible ? 'toggle:on' : 'toggle:off', this.id);
+    }
+};
+
+},{"./Layout":215,"./PanelController":218,"./utils/Maths":229,"pixi.js":154}],225:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35430,7 +35694,7 @@ Viewport.prototype.disable = function () {
     this.isEnabled = false;
 };
 
-},{"./utils/Maths":228,"pixi.js":154}],225:[function(require,module,exports){
+},{"./utils/Maths":229,"pixi.js":154}],226:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35560,6 +35824,8 @@ function World() {
 
     this.ui = new _UI2.default(this);
 
+    this.ui.log.log('New game started. Random seed is ' + this.randomSeed);
+
     var background = document.createElement('canvas');
     background.width = World.WIDTH * _Tile2.default.WIDTH;
     background.height = World.HEIGHT * _Tile2.default.HEIGHT;
@@ -35602,8 +35868,9 @@ function World() {
     var forester = this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _DwarfRoles2.default.COLLECT_WOOD);
     var miner = this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _DwarfRoles2.default.COLLECT_STONE);
     var builder = this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _DwarfRoles2.default.BUILDER);
+    var hunter = this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _DwarfRoles2.default.HUNTER);
 
-    forester.home = builder.home = miner.home = camp;
+    forester.home = builder.home = miner.home = hunter.home = camp;
 
     /*let hunterShack = this.addBuilding(Buildings.ARCHETYPE_HUNTER.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT * .5));
     let hunter = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.HUNTER);
@@ -35720,6 +35987,8 @@ World.prototype.addBuilding = function (id, tileX, tileY) {
 
         // console.log('World.addBuilding(', id, ')');
 
+        this.ui.log.log('Added building of type "' + id + '"');
+
         this.addToZOrdered(building);
 
         // Update watchmen patrol routes
@@ -35758,6 +36027,8 @@ World.prototype.buyDwarf = function (x, y, roleId) {
 World.prototype.addDwarf = function (x, y, role) {
 
     var dwarf = new _Dwarf2.default(this, x, y, role || _DwarfRoles2.default.IDLE);
+
+    this.ui.log.log('Added dwarf of type "' + role + '" called "' + dwarf.name + '"');
 
     this.dwarves.push(dwarf);
 
@@ -35932,7 +36203,7 @@ World.prototype.getTile = function (x, y) {
 World.WIDTH = 48;
 World.HEIGHT = 32;
 
-},{"./Animal":209,"./Buildings":211,"./Dwarf":212,"./DwarfRoles":213,"./Layout":215,"./Lighting":216,"./MotherNature":217,"./Rock":218,"./Supply":219,"./Tile":220,"./TimeOfDay":221,"./Tree":222,"./UI":223,"./Viewport":224,"./ZOrdered":226,"noisejs":30,"pixi.js":154}],226:[function(require,module,exports){
+},{"./Animal":209,"./Buildings":211,"./Dwarf":212,"./DwarfRoles":213,"./Layout":215,"./Lighting":216,"./MotherNature":217,"./Rock":219,"./Supply":220,"./Tile":221,"./TimeOfDay":222,"./Tree":223,"./UI":224,"./Viewport":225,"./ZOrdered":227,"noisejs":30,"pixi.js":154}],227:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35945,7 +36216,7 @@ exports.default = {
     }
 };
 
-},{}],227:[function(require,module,exports){
+},{}],228:[function(require,module,exports){
 'use strict';
 
 var _pixi = require('pixi.js');
@@ -36020,7 +36291,7 @@ function startGame() {
     }
 }
 
-},{"./Layout":215,"./World":225,"pixi.js":154,"raf":187}],228:[function(require,module,exports){
+},{"./Layout":215,"./World":226,"pixi.js":154,"raf":187}],229:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36050,7 +36321,7 @@ exports.default = {
     }
 };
 
-},{}],229:[function(require,module,exports){
+},{}],230:[function(require,module,exports){
 "use strict";
 
 module.exports = function (min, max, initial) {
@@ -36125,4 +36396,4 @@ module.exports = function (min, max, initial) {
 	return api;
 };
 
-},{}]},{},[227]);
+},{}]},{},[228]);

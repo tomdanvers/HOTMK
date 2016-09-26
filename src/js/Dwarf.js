@@ -11,6 +11,7 @@ export default function Dwarf(world, startX, startY, roleId) {
     PIXI.Container.call(this);
 
     this.type = Dwarf.TYPE;
+    this.name = Dwarf.getName();
 
     this.world = world;
 
@@ -152,6 +153,15 @@ Dwarf.prototype.update = function(timeDelta, world) {
 Dwarf.prototype.isAlive = function() {
 
     return !this.health.isMin();
+
+}
+
+Dwarf.NAMES_FIRST = ['Snorri', 'Ori', 'Nori', 'Gloin', 'Oin', 'Bifur', 'Bofur', 'Thorin', 'Balin'];
+Dwarf.NAMES_LAST = ['Oakenshield', 'Bittenaxe', 'Longbeard', 'Undermountain', 'Ironskull', 'Steelhammer'];
+
+Dwarf.getName = function() {
+
+    return Dwarf.NAMES_FIRST.random() + ' ' + Dwarf.NAMES_LAST.random();
 
 }
 

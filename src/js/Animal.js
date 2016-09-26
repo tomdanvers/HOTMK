@@ -9,6 +9,7 @@ export default function Animal(world, archetype, startX, startY) {
     PIXI.Container.call(this);
 
     this.type = Animal.TYPE;
+    this.name = 'animal';
 
     this.world = world;
 
@@ -86,7 +87,7 @@ Animal.prototype.update = function(timeDelta) {
 
                 distance = Maths.distanceBetween(this, dwarf);
 
-                if (this.isAggressive && Math.random() > dwarf.stealthiness && !dwarf.health.isMin() && distance < this.perceptionRange) {
+                if (this.isAggressive && dwarf.roleId !== DwarfRoles.RESTING && Math.random() > dwarf.stealthiness && !dwarf.health.isMin() && distance < this.perceptionRange) {
 
                     // Ignore dwarf that is too stealthy
                     // Ignore dwarf that is dead
@@ -134,33 +135,42 @@ Animal.prototype.update = function(timeDelta) {
 
     if (this.target) {
 
-        this.angle = Math.atan2(this.target.y - this.y, this.target.x - this.x);
+        if (this.target.isAlive !== undefined && !this.target.isAlive()) {
 
-        let distance = Maths.distanceBetween(this, this.target);
-
-        let range = this.range || 5;
-
-        if (distance < range) {
-
-            if (this.isAggressive && this.target.health && !this.target.health.isMin()){
-
-                if (this.canTakeAction()) {
-
-                    this.attackTarget();
-
-                }
-
-            } else {
-
-                this.target = false;
-
-            }
-
+            this.target = false;
 
         } else {
 
-            this.x += Math.cos(this.angle) * this.speed * timeDelta / 30;
-            this.y += Math.sin(this.angle) * this.speed * timeDelta / 30;
+            this.angle = Math.atan2(this.target.y - this.y, this.target.x - this.x);
+
+            let distance = Maths.distanceBetween(this, this.target);
+
+            let range = this.range || 5;
+
+
+            if (distance < range) {
+
+                if (this.isAggressive && this.target.health && !this.target.health.isMin()){
+
+                    if (this.canTakeAction()) {
+
+                        this.attackTarget();
+
+                    }
+
+                } else {
+
+                    this.target = false;
+
+                }
+
+
+            } else {
+
+                this.x += Math.cos(this.angle) * this.speed * timeDelta / 30;
+                this.y += Math.sin(this.angle) * this.speed * timeDelta / 30;
+
+            }
 
         }
 
@@ -191,6 +201,7 @@ Animal.prototype.attackTarget = function() {
 
     }
 
+    this.tookAction();
 
     if (this.target.health.isMin()) {
 
@@ -200,11 +211,11 @@ Animal.prototype.attackTarget = function() {
 
         }
 
+        this.world.ui.log.log('Animal "' + this.name + '" killed "' + this.target.name + '"');
+
         this.target = false;
 
     }
-
-    this.tookAction();
 
 }
 
@@ -231,6 +242,8 @@ export function Deer(world, archetype, startX, startY) {
 
     Animal.call(this, world, archetype, startX, startY);
 
+    this.name = 'Deer';
+
 }
 
 Deer.constructor = Deer;
@@ -254,6 +267,8 @@ Deer.HEIGHT = 6;
 export function Rabbit(world, archetype, startX, startY) {
 
     Animal.call(this, world, archetype, startX, startY);
+
+    this.name = 'Rabbit';
 
 }
 
@@ -279,6 +294,8 @@ export function Fox(world, archetype, startX, startY) {
 
     Animal.call(this, world, archetype, startX, startY);
 
+    this.name = 'Fox';
+
 }
 
 Fox.constructor = Fox;
@@ -303,6 +320,8 @@ export function Wolf(world, archetype, startX, startY) {
 
     Animal.call(this, world, archetype, startX, startY);
 
+    this.name = 'Wolf';
+
 }
 
 Wolf.constructor = Wolf;
@@ -318,3 +337,29 @@ Wolf.prototype.draw = function(graphics) {
 
 Wolf.WIDTH = 8;
 Wolf.HEIGHT = 4;
+
+/* -------------- */
+/* --------- Wolf */
+/* -------------- */
+
+export function Boar(world, archetype, startX, startY) {
+
+    Animal.call(this, world, archetype, startX, startY);
+
+    this.name = 'Boar';
+
+}
+
+Boar.constructor = Boar;
+Boar.prototype = Object.create(Animal.prototype);
+
+Boar.prototype.draw = function(graphics) {
+
+    graphics.beginFill(0x191719);
+    graphics.drawRect(- Boar.WIDTH * .5, - Boar.HEIGHT, Boar.WIDTH, Boar.HEIGHT);
+    graphics.endFill();
+
+}
+
+Boar.WIDTH = 8;
+Boar.HEIGHT = 5;

@@ -89,6 +89,8 @@ export default function World() {
 
     this.ui = new UI(this);
 
+    this.ui.log.log('New game started. Random seed is ' + this.randomSeed);
+
     let background = document.createElement('canvas');
     background.width = World.WIDTH * Tile.WIDTH;
     background.height = World.HEIGHT * Tile.HEIGHT;
@@ -133,8 +135,9 @@ export default function World() {
     let forester = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.COLLECT_WOOD);
     let miner = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.COLLECT_STONE);
     let builder = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.BUILDER);
+    let hunter = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.HUNTER);
 
-    forester.home = builder.home = miner.home = camp;
+    forester.home = builder.home = miner.home = hunter.home = camp;
 
     /*let hunterShack = this.addBuilding(Buildings.ARCHETYPE_HUNTER.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT * .5));
     let hunter = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.HUNTER);
@@ -155,7 +158,7 @@ export default function World() {
 
         }
 
-    }.bind(this))
+    }.bind(this));
 
 }
 
@@ -265,6 +268,8 @@ World.prototype.addBuilding = function(id, tileX, tileY) {
 
         // console.log('World.addBuilding(', id, ')');
 
+        this.ui.log.log('Added building of type "' + id + '"');
+
         this.addToZOrdered(building);
 
         // Update watchmen patrol routes
@@ -312,6 +317,8 @@ World.prototype.buyDwarf = function(x, y, roleId) {
 World.prototype.addDwarf = function(x, y, role) {
 
     let dwarf = new Dwarf(this, x, y, role || DwarfRoles.IDLE);
+
+    this.ui.log.log('Added dwarf of type "' + role + '" called "' + dwarf.name + '"');
 
     this.dwarves.push(dwarf);
 
