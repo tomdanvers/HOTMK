@@ -18,6 +18,12 @@ Inventory.prototype.isFull = function() {
 
 }
 
+Inventory.prototype.has = function(type) {
+
+    return this.inventory[type] && this.inventory[type] > 0;
+
+}
+
 Inventory.prototype.add = function(type, count) {
 
     if (!this.inventory[type]) {

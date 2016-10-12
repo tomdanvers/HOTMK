@@ -32862,7 +32862,7 @@ Animal.prototype.update = function (timeDelta) {
 
 Animal.prototype.attackTarget = function () {
 
-    this.target.health.decrement(this.damage);
+    this.target.takeDamage(this.damage, this);
 
     if (Animal.VERBOSE) {
 
@@ -33497,6 +33497,7 @@ function Dwarf(world, startX, startY, roleId) {
     this.target = null;
     this.home = null;
     this.inventory = new _Inventory2.default(this);
+    this.inventory.add('weapon', 1);
     this.health = new _valueMinMax2.default(0, 100, 100);
 
     this.angle = 0;
@@ -33577,6 +33578,32 @@ Dwarf.prototype.tookAction = function () {
     this.timeSinceAction = 0;
 };
 
+Dwarf.prototype.takeDamage = function (damage, attacker) {
+
+    this.health.decrement(damage);
+
+    // What happens now?
+
+    // If the unit is aggressive? Or if the unit has a weapon?
+
+    // Change behaviour to ...
+
+    // Self defense
+
+    if (this.roleId !== _DwarfRoles2.default.SELF_DEFENSE && this.roleId !== _DwarfRoles2.default.FLEE) {
+
+        if (this.inventory.has('weapon')) {
+
+            this.target = attacker;
+
+            this.changeRole(_DwarfRoles2.default.SELF_DEFENSE);
+        } else {
+
+            this.changeRole(_DwarfRoles2.default.FLEE);
+        }
+    }
+};
+
 Dwarf.prototype.update = function (timeDelta, world) {
 
     this.timeSinceAction += timeDelta;
@@ -33642,7 +33669,7 @@ Dwarf.TYPE = 'dwarf';
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.RoleCollectStone = exports.RoleCollectWood = exports.RoleHunter = exports.RoleBuilder = exports.RoleWatchNight = exports.RoleResting = exports.RoleIdle = undefined;
+exports.RoleCollectStone = exports.RoleCollectWood = exports.RoleHunter = exports.RoleBuilder = exports.RoleWatchNight = exports.RoleResting = exports.RoleSelfDefense = exports.RoleFlee = exports.RoleIdle = undefined;
 exports.default = DwarfRoles;
 
 var _Maths = require('./utils/Maths');
@@ -33674,7 +33701,9 @@ function DwarfRoles() {
         'hunter': RoleHunter,
         'collect-wood': RoleCollectWood,
         'collect-stone': RoleCollectStone,
-        'watch-night': RoleWatchNight
+        'watch-night': RoleWatchNight,
+        'flee': RoleFlee,
+        'self-defense': RoleSelfDefense
     };
 
     // console.log('DwarfRoles(',this.rolesMap,')');
@@ -33694,6 +33723,8 @@ DwarfRoles.HUNTER = 'hunter';
 DwarfRoles.COLLECT_WOOD = 'collect-wood';
 DwarfRoles.COLLECT_STONE = 'collect-stone';
 DwarfRoles.WATCH_NIGHT = 'watch-night';
+DwarfRoles.FLEE = 'flee';
+DwarfRoles.SELF_DEFENSE = 'self-defense';
 
 var RoleIdle = exports.RoleIdle = {
 
@@ -33722,6 +33753,81 @@ var RoleIdle = exports.RoleIdle = {
     targetProximity: function targetProximity(timeDelta, dwarf, world) {
 
         dwarf.target = false;
+    }
+};
+
+var RoleFlee = exports.RoleFlee = {
+
+    id: 'flee',
+
+    enter: function enter(dwarf, world) {
+
+        if (dwarf.home) {
+
+            dwarf.target = dwarf.home;
+        }
+    },
+    update: function update(timeDelta, dwarf, world) {
+
+        // What to do when I get home?
+
+        // If no enemies nearby then return to idle...
+
+        if (!dwarf.target) {
+
+            return DwarfRoles.IDLE;
+        }
+    },
+    targetProximity: function targetProximity(timeDelta, dwarf, world) {
+
+        dwarf.target = false;
+    }
+};
+
+var RoleSelfDefense = exports.RoleSelfDefense = {
+
+    id: 'self-defense',
+
+    range: 5,
+    rangeWeapon: 50,
+    rangePerception: 150,
+    rangeLimit: 400,
+
+    update: function update(timeDelta, dwarf, world) {
+
+        if (!dwarf.target || dwarf.target.health.isMin()) {
+
+            dwarf.target = false;
+            dwarf.range = this.range;
+
+            return DwarfRoles.IDLE;
+        }
+    },
+    targetProximity: function targetProximity(timeDelta, dwarf, world) {
+
+        if (dwarf.target && dwarf.target.health && !dwarf.target.health.isMin()) {
+
+            if (dwarf.canTakeAction()) {
+
+                // Attack
+
+                var animal = dwarf.target;
+
+                animal.health.decrement(dwarf.damage);
+
+                dwarf.tookAction();
+
+                if (animal.health.isMin()) {
+
+                    world.ui.log.log('Dwarf "' + dwarf.name + '" killed ' + animal.type + ' "' + animal.name + '"');
+
+                    dwarf.target = false;
+                    dwarf.range = this.range;
+
+                    return DwarfRoles.IDLE;
+                }
+            }
+        }
     }
 };
 
@@ -34213,6 +34319,11 @@ Inventory.prototype.isFull = function () {
     return this.count >= this.limit;
 };
 
+Inventory.prototype.has = function (type) {
+
+    return this.inventory[type] && this.inventory[type] > 0;
+};
+
 Inventory.prototype.add = function (type, count) {
 
     if (!this.inventory[type]) {
@@ -34512,7 +34623,7 @@ MotherNature.prototype.update = function (timeDelta) {
 
 MotherNature.prototype.spawn = function (animalArchetype) {
 
-    var animal = new animalArchetype.c(this.world, animalArchetype, _World2.default.WIDTH * _Tile2.default.WIDTH * Math.random(), _World2.default.HEIGHT * _Tile2.default.HEIGHT * Math.random() * .7);
+    var animal = new animalArchetype.c(this.world, animalArchetype, _World2.default.WIDTH * _Tile2.default.WIDTH * Math.random(), _World2.default.HEIGHT * _Tile2.default.HEIGHT * Math.random()); // * .7
 
     this.world.addToZOrdered(animal);
 
@@ -34550,7 +34661,7 @@ AnimalArchetype.DEER = new AnimalArchetype('deer', 6, 22, 3, _Animal.Deer, .9, 1
 AnimalArchetype.RABBIT = new AnimalArchetype('rabbit', 4, 15, 4, _Animal.Rabbit, .8, 60, 1, false, 5);
 AnimalArchetype.FOX = new AnimalArchetype('fox', 2, 24, 2, _Animal.Fox, .9, 70, 5, false, 10);
 AnimalArchetype.WOLF = new AnimalArchetype('wolf', 22, 5, 1, _Animal.Wolf, .9, 120, 10, true, 80);
-AnimalArchetype.BOAR = new AnimalArchetype('boar', 4, 23, 3, _Animal.Boar, .6, 60, 10, true, 100);
+AnimalArchetype.BOAR = new AnimalArchetype('boar', 4, 23, 10, _Animal.Boar, .6, 60, 10, true, 100);
 
 function AnimalArchetype(id, startTime, endTime, maxConcurrent, c, speed, perceptionRange, damage, isAggressive, health) {
 

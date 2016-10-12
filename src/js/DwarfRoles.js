@@ -12,7 +12,9 @@ export default function DwarfRoles() {
         'hunter': RoleHunter,
         'collect-wood': RoleCollectWood,
         'collect-stone': RoleCollectStone,
-        'watch-night': RoleWatchNight
+        'watch-night': RoleWatchNight,
+        'flee': RoleFlee,
+        'self-defense': RoleSelfDefense
     };
 
     // console.log('DwarfRoles(',this.rolesMap,')');
@@ -34,6 +36,8 @@ DwarfRoles.HUNTER = 'hunter';
 DwarfRoles.COLLECT_WOOD = 'collect-wood';
 DwarfRoles.COLLECT_STONE = 'collect-stone';
 DwarfRoles.WATCH_NIGHT = 'watch-night';
+DwarfRoles.FLEE = 'flee';
+DwarfRoles.SELF_DEFENSE = 'self-defense';
 
 export const RoleIdle = {
 
@@ -67,6 +71,97 @@ export const RoleIdle = {
     targetProximity(timeDelta, dwarf, world) {
 
         dwarf.target = false;
+
+    }
+
+}
+
+export const RoleFlee = {
+
+    id: 'flee',
+
+    enter(dwarf, world) {
+
+        if (dwarf.home) {
+
+            dwarf.target = dwarf.home;
+
+        }
+
+    },
+
+    update(timeDelta, dwarf, world) {
+
+        // What to do when I get home?
+
+        // If no enemies nearby then return to idle...
+
+        if (!dwarf.target) {
+
+            return DwarfRoles.IDLE;
+
+        }
+
+    },
+
+    targetProximity(timeDelta, dwarf, world) {
+
+        dwarf.target = false;
+
+    }
+
+}
+
+export const RoleSelfDefense = {
+
+    id: 'self-defense',
+
+    range: 5,
+    rangeWeapon: 50,
+    rangePerception: 150,
+    rangeLimit: 400,
+
+    update(timeDelta, dwarf, world) {
+
+        if (!dwarf.target || dwarf.target.health.isMin()) {
+
+            dwarf.target = false;
+            dwarf.range = this.range;
+
+            return DwarfRoles.IDLE;
+
+        }
+
+    },
+
+    targetProximity(timeDelta, dwarf, world) {
+
+        if (dwarf.target && dwarf.target.health && !dwarf.target.health.isMin()) {
+
+            if (dwarf.canTakeAction()) {
+
+                // Attack
+
+                let animal = dwarf.target;
+
+                animal.health.decrement(dwarf.damage);
+
+                dwarf.tookAction();
+
+                if (animal.health.isMin()) {
+
+                    world.ui.log.log('Dwarf "' + dwarf.name + '" killed ' + animal.type + ' "' + animal.name + '"');
+
+                    dwarf.target = false;
+                    dwarf.range = this.range;
+
+                    return DwarfRoles.IDLE;
+
+                }
+
+            }
+
+        }
 
     }
 

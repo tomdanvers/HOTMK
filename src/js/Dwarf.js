@@ -18,6 +18,7 @@ export default function Dwarf(world, startX, startY, roleId) {
     this.target = null;
     this.home = null;
     this.inventory = new Inventory(this);
+    this.inventory.add('weapon', 1);
     this.health = new MinMaxValue(0, 100, 100);
 
     this.angle = 0;
@@ -100,6 +101,36 @@ Dwarf.prototype.canTakeAction = function() {
 Dwarf.prototype.tookAction = function() {
 
     this.timeSinceAction = 0;
+
+}
+
+Dwarf.prototype.takeDamage = function(damage, attacker) {
+
+    this.health.decrement(damage);
+
+    // What happens now?
+
+    // If the unit is aggressive? Or if the unit has a weapon?
+
+    // Change behaviour to ...
+
+        // Self defense
+
+    if (this.roleId !== DwarfRoles.SELF_DEFENSE && this.roleId !== DwarfRoles.FLEE) {
+
+        if (this.inventory.has('weapon')) {
+
+            this.target = attacker;
+
+            this.changeRole(DwarfRoles.SELF_DEFENSE);
+
+        } else {
+
+            this.changeRole(DwarfRoles.FLEE);
+
+        }
+
+    }
 
 }
 

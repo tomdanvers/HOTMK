@@ -193,7 +193,7 @@ Animal.prototype.update = function(timeDelta) {
 
 Animal.prototype.attackTarget = function() {
 
-    this.target.health.decrement(this.damage);
+    this.target.takeDamage(this.damage, this);
 
     if (Animal.VERBOSE) {
 
