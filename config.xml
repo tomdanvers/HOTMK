@@ -19,7 +19,7 @@
     <platform name="android">
         <allow-intent href="market:*" />
         <preference name="FullScreen" value="true" />
-        <preference name="Orientation" value="landscape" />
+        <preference name="Orientation" value="portrait" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />

@@ -480,7 +480,6 @@ export function LogUI(world) {
 
     this.logCount = 0;
     this.logMax = Math.floor((logH - 40) / this.logItemHeight);
-    // this.logMax = 5;
 
     this.toggle(false);
 

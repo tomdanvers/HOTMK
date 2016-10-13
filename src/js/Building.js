@@ -1,7 +1,8 @@
 import PIXI from 'pixi.js';
 
 import Dwarf from './Dwarf';
-import DwarfRoles from './DwarfRoles';
+import Roles from './Roles';
+import Archetypes from './Archetypes';
 import ValueMinMax from './utils/value-min-max';
 import Maths from './utils/Maths';
 
@@ -81,11 +82,11 @@ Building.prototype.spawn = function(isPurchased) {
 
         if (isPurchased) {
 
-            dwarf = this.world.buyDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+            dwarf = this.world.buyDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedArchetype);
 
         } else {
 
-            dwarf = this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedRole);
+            dwarf = this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedArchetype);
 
         }
 
@@ -101,7 +102,7 @@ Building.prototype.constructed = function() {
 
     this.alpha = 1;
 
-    if (this.associatedRole) {
+    if (this.associatedArchetype) {
 
         // Add dwarf/dwarves with associated role
 
@@ -174,7 +175,7 @@ export function NightWatch(world, startX, startY, isTemp) {
     this.patrolRoute = false;
     this.patrolRadius = 300;
     this.lightRadius = 125;
-    this.associatedRole = DwarfRoles.WATCH_NIGHT;
+    this.associatedArchetype = Archetypes.WATCH_NIGHT;
 
 }
 
@@ -265,7 +266,7 @@ export function Hunter(world, startX, startY, isTemp) {
 
     Building.call(this, world, startX, startY, isTemp);
 
-    this.associatedRole = DwarfRoles.HUNTER;
+    this.associatedArchetype = Archetypes.HUNTER;
 
 }
 
@@ -295,7 +296,7 @@ export function Miner(world, startX, startY, isTemp) {
 
     Building.call(this, world, startX, startY, isTemp);
 
-    this.associatedRole = DwarfRoles.COLLECT_STONE;
+    this.associatedArchetype = Archetypes.MINER;
 
 }
 
@@ -327,7 +328,7 @@ export function Forester(world, startX, startY, isTemp) {
 
     Building.call(this, world, startX, startY, isTemp);
 
-    this.associatedRole = DwarfRoles.COLLECT_WOOD;
+    this.associatedArchetype = Archetypes.FORESTER;
 
 }
 
@@ -359,7 +360,7 @@ export function Mason(world, startX, startY, isTemp) {
 
     Building.call(this, world, startX, startY, isTemp);
 
-    this.associatedRole = DwarfRoles.BUILDER;
+    this.associatedArchetype = Archetypes.MASON;
 
 }
 

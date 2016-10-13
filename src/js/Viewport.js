@@ -13,7 +13,7 @@ export default function Viewport(world, width, height, worldWidth, worldHeight, 
     this.worldHeight = worldHeight;
 
     this.scroll = this.worldHeight - this.height;
-    this.scroll = 0;
+    // this.scroll = 0;
 
     this.scrollTarget = this.scroll;
 

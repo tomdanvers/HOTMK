@@ -20,7 +20,9 @@ import Dwarf from './Dwarf';
 
 import Animal from './Animal';
 
-import DwarfRoles from './DwarfRoles';
+import Roles from './Roles';
+
+import Archetypes from './Archetypes';
 
 import MotherNature from './MotherNature';
 
@@ -36,7 +38,7 @@ export default function World() {
 
     PIXI.Container.call(this);
 
-    let heightMultiplier = 1;
+    let heightMultiplier = 2;
 
     World.WIDTH = Math.ceil(Layout.WIDTH / Tile.WIDTH);
     World.HEIGHT = Math.ceil(Layout.HEIGHT / Tile.HEIGHT) * heightMultiplier;
@@ -68,15 +70,17 @@ export default function World() {
 
     this.timeOfLastUpdate = 0;
 
+    this.supply = new Supply();
+
     this.timeOfDay = new TimeOfDay();
 
     this.motherNature = new MotherNature(this);
 
-    this.supply = new Supply();
-
     this.buildings = new Buildings(this);
 
-    this.dwarfRoles = new DwarfRoles(this);
+    this.roles = new Roles(this);
+
+    this.archetypes = new Archetypes(this);
 
     this.tiles = [];
     this.resources = [];
@@ -127,22 +131,17 @@ export default function World() {
 
     // Add buildings
 
-    // this.addBuilding(Buildings.ARCHETYPE_BARRACKS.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT * .5));
-    let camp = this.addBuilding(Buildings.ARCHETYPE_CAMP.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT * .85));
+    let camp = this.addBuilding(Buildings.ARCHETYPE_CAMP.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT - 5));
 
     // Add dwarves
 
-    let forester = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.COLLECT_WOOD);
-    let miner = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.COLLECT_STONE);
-    let builder = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.BUILDER);
-    let hunter = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.HUNTER);
+    let forester = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, Archetypes.FORESTER);
+    let miner = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, Archetypes.MINER);
+    let builder = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, Archetypes.MASON);
+    // let hunter = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, Archetypes.HUNTER);
 
-    forester.home = builder.home = miner.home = hunter.home = camp;
-
-    /*let hunterShack = this.addBuilding(Buildings.ARCHETYPE_HUNTER.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT * .5));
-    let hunter = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, DwarfRoles.HUNTER);
-
-    hunter.home = hunterShack;*/
+    forester.home = builder.home = miner.home = camp;
+    // forester.home = builder.home = miner.home = hunter.home = camp;
 
     // Add resources
 
@@ -297,28 +296,28 @@ World.prototype.addBuilding = function(id, tileX, tileY) {
 
 }
 
-World.prototype.buyDwarf = function(x, y, roleId) {
+World.prototype.buyDwarf = function(x, y, archetypeId) {
 
-    let role = this.dwarfRoles.getById(roleId);
-    let canAfford = this.supply.wood >= role.cWood && this.supply.stone >= role.cStone;
+    let archetype = this.archetypes.getById(archetypeId);
+    let canAfford = this.supply.wood >= archetype.cWood && this.supply.stone >= archetype.cStone;
 
     if (canAfford) {
 
-        this.supply.wood -= role.cWood;
-        this.supply.stone -= role.cStone;
+        this.supply.wood -= archetype.cWood;
+        this.supply.stone -= archetype.cStone;
 
-        return this.addDwarf(x, y, roleId);
+        return this.addDwarf(x, y, archetype.id);
 
     }
 
 
 }
 
-World.prototype.addDwarf = function(x, y, role) {
+World.prototype.addDwarf = function(x, y, archetypeId) {
 
-    let dwarf = new Dwarf(this, x, y, role || DwarfRoles.IDLE);
+    let dwarf = new Dwarf(this, x, y, this.archetypes.getById(archetypeId));
 
-    this.ui.log.log('Added dwarf of type "' + role + '" called "' + dwarf.name + '"');
+    this.ui.log.log('Added dwarf of type "' + archetypeId + '" called "' + dwarf.name + '"');
 
     this.dwarves.push(dwarf);
 
@@ -350,7 +349,7 @@ World.prototype.update = function(time) {
 
         if (animal.isAlive()) {
 
-            animal.update(timeDelta);
+            animal.update(timeDelta, this);
 
         } else {
 

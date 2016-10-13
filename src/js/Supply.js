@@ -44,5 +44,5 @@ Supply.prototype.update = function(timeDelta, world) {
 
 }
 
-Supply.WOOD = 1000;
-Supply.STONE = 1000;
+Supply.WOOD = 150;
+Supply.STONE = 150;

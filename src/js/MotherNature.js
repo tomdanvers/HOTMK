@@ -1,5 +1,6 @@
 import World from './World';
 import Tile from './Tile';
+import {Deer as ADeer, Rabbit as ARabbit, Fox as AFox, Wolf as AWolf, Boar as ABoar} from './Archetypes';
 import {Deer, Rabbit, Fox, Wolf, Boar} from './Animal';
 
 export default function MotherNature(world) {
@@ -45,7 +46,7 @@ MotherNature.prototype.update = function(timeDelta) {
 
 MotherNature.prototype.spawn = function(animalArchetype) {
 
-    let animal = new animalArchetype.c(this.world, animalArchetype, World.WIDTH * Tile.WIDTH * Math.random(), World.HEIGHT * Tile.HEIGHT * Math.random());// * .7
+    let animal = new animalArchetype.c(this.world, World.WIDTH * Tile.WIDTH * Math.random(), World.HEIGHT * Tile.HEIGHT * Math.random() * .7, animalArchetype.archetype);// * .7
 
     this.world.addToZOrdered(animal);
 
@@ -86,25 +87,21 @@ MotherNature.prototype.removeAnimal = function(animal) {
 
 }
 
-AnimalArchetype.DEER = new AnimalArchetype('deer', 6, 22, 3, Deer, .9, 100, 1, false, 20);
-AnimalArchetype.RABBIT = new AnimalArchetype('rabbit', 4, 15, 4, Rabbit, .8, 60, 1, false, 5);
-AnimalArchetype.FOX = new AnimalArchetype('fox', 2, 24, 2, Fox, .9, 70, 5, false, 10);
-AnimalArchetype.WOLF = new AnimalArchetype('wolf', 22, 5, 1, Wolf, .9, 120, 10, true, 80);
-AnimalArchetype.BOAR = new AnimalArchetype('boar', 4, 23, 10, Boar, .6, 60, 10, true, 100);
+AnimalArchetype.RABBIT = new AnimalArchetype('rabbit', 4, 15, 4, Rabbit, new ARabbit());
+AnimalArchetype.DEER = new AnimalArchetype('deer', 6, 22, 3, Deer, new ADeer());
+AnimalArchetype.FOX = new AnimalArchetype('fox', 2, 24, 2, Fox, new AFox());
+AnimalArchetype.BOAR = new AnimalArchetype('boar', 4, 23, 10, Boar, new ABoar());
+AnimalArchetype.WOLF = new AnimalArchetype('wolf', 22, 5, 1, Wolf, new AWolf());
 
 
-function AnimalArchetype(id, startTime, endTime, maxConcurrent, c, speed, perceptionRange, damage, isAggressive, health) {
+function AnimalArchetype(id, startTime, endTime, maxConcurrent, c, archetype) {
 
     this.id = id;
     this.startTime = startTime;
     this.endTime = endTime;
     this.maxConcurrent = maxConcurrent;
     this.c = c || false;
-    this.speed = speed;
-    this.perceptionRange = perceptionRange;
-    this.damage = damage;
-    this.isAggressive = isAggressive;
-    this.health = health;
+    this.archetype = archetype;
 
 }
 
