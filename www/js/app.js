@@ -32850,7 +32850,7 @@ Boar.prototype.draw = function (graphics) {
 Boar.WIDTH = 8;
 Boar.HEIGHT = 5;
 
-},{"./Creature":213,"./utils/Maths":231,"./utils/value-min-max":232,"pixi.js":154}],210:[function(require,module,exports){
+},{"./Creature":213,"./utils/Maths":232,"./utils/value-min-max":233,"pixi.js":154}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33222,11 +33222,13 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Building(world, startX, startY, isTemp) {
+function Building(world, startX, startY, archetype, isTemp) {
 
     _pixi2.default.Container.call(this);
 
     this.world = world;
+
+    this.archetype = archetype;
 
     this.inhabitantCount = 1;
 
@@ -33347,9 +33349,9 @@ Building.TYPE = 'building';
 /* --------- Camp */
 /* -------------- */
 
-function Camp(world, startX, startY, isTemp) {
+function Camp(world, startX, startY, archetype, isTemp) {
 
-    Building.call(this, world, startX, startY, isTemp);
+    Building.call(this, world, startX, startY, archetype, isTemp);
 }
 
 Camp.constructor = Camp;
@@ -33372,9 +33374,9 @@ Camp.HEIGHT = 12;
 /* --- NightWatch */
 /* -------------- */
 
-function NightWatch(world, startX, startY, isTemp) {
+function NightWatch(world, startX, startY, archetype, isTemp) {
 
-    Building.call(this, world, startX, startY, isTemp);
+    Building.call(this, world, startX, startY, archetype, isTemp);
 
     this.inhabitantCount = 3;
     this.patrolRoute = false;
@@ -33458,9 +33460,9 @@ NightWatch.HEIGHT = 18;
 /* ------- Hunter */
 /* -------------- */
 
-function Hunter(world, startX, startY, isTemp) {
+function Hunter(world, startX, startY, archetype, isTemp) {
 
-    Building.call(this, world, startX, startY, isTemp);
+    Building.call(this, world, startX, startY, archetype, isTemp);
 
     this.associatedArchetype = _Archetypes2.default.HUNTER;
 }
@@ -33485,9 +33487,9 @@ Hunter.HEIGHT = 12;
 /* -------- Miner */
 /* -------------- */
 
-function Miner(world, startX, startY, isTemp) {
+function Miner(world, startX, startY, archetype, isTemp) {
 
-    Building.call(this, world, startX, startY, isTemp);
+    Building.call(this, world, startX, startY, archetype, isTemp);
 
     this.associatedArchetype = _Archetypes2.default.MINER;
 }
@@ -33512,9 +33514,9 @@ Miner.HEIGHT = 12;
 /* ----- Forester */
 /* -------------- */
 
-function Forester(world, startX, startY, isTemp) {
+function Forester(world, startX, startY, archetype, isTemp) {
 
-    Building.call(this, world, startX, startY, isTemp);
+    Building.call(this, world, startX, startY, archetype, isTemp);
 
     this.associatedArchetype = _Archetypes2.default.FORESTER;
 }
@@ -33539,9 +33541,9 @@ Forester.HEIGHT = 12;
 /* -------- Mason */
 /* -------------- */
 
-function Mason(world, startX, startY, isTemp) {
+function Mason(world, startX, startY, archetype, isTemp) {
 
-    Building.call(this, world, startX, startY, isTemp);
+    Building.call(this, world, startX, startY, archetype, isTemp);
 
     this.associatedArchetype = _Archetypes2.default.MASON;
 }
@@ -33562,7 +33564,7 @@ Mason.prototype.draw = function (graphics) {
 Mason.WIDTH = 13;
 Mason.HEIGHT = 14;
 
-},{"./Archetypes":210,"./Dwarf":214,"./Roles":221,"./utils/Maths":231,"./utils/value-min-max":232,"pixi.js":154}],212:[function(require,module,exports){
+},{"./Archetypes":210,"./Dwarf":214,"./Roles":221,"./utils/Maths":232,"./utils/value-min-max":233,"pixi.js":154}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33593,7 +33595,9 @@ Buildings.constructor = Buildings;
 
 Buildings.prototype.add = function (id, x, y) {
 
-    var building = new this.archetypesMap[id].c(this.world, x, y, false);
+    var archetype = this.archetypesMap[id];
+
+    var building = new archetype.c(this.world, x, y, archetype, false);
 
     this.buildings.push(building);
 
@@ -33818,7 +33822,7 @@ Creature.prototype.isAlive = function () {
     return !this.health.isMin();
 };
 
-},{"./Inventory":215,"./Roles":221,"./utils/Maths":231,"./utils/value-min-max":232,"pixi.js":154}],214:[function(require,module,exports){
+},{"./Inventory":215,"./Roles":221,"./utils/Maths":232,"./utils/value-min-max":233,"pixi.js":154}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33904,7 +33908,7 @@ Dwarf.SPEED = .75;
 
 Dwarf.TYPE = 'dwarf';
 
-},{"./Creature":213,"./utils/Maths":231,"pixi.js":154}],215:[function(require,module,exports){
+},{"./Creature":213,"./utils/Maths":232,"pixi.js":154}],215:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34328,8 +34332,6 @@ PanelController.prototype.add = function (panel) {
 
     panel.on('toggle:on', this.panelOn.bind(this));
     panel.on('toggle:off', this.panelOff.bind(this));
-
-    console.log('PanelController.add(', panel.id, ')');
 };
 
 PanelController.prototype.panelOn = function (id) {
@@ -34338,8 +34340,6 @@ PanelController.prototype.panelOn = function (id) {
 
         this.current.toggle(false, false);
     }
-
-    console.log('PanelController.panelOn(', id, ')');
 
     this.current = this.panelsMap[id];
 };
@@ -34350,11 +34350,9 @@ PanelController.prototype.panelOff = function (id) {
 
         this.current = false;
     }
-
-    console.log('PanelController.panelOff(', id, ')');
 };
 
-},{"./utils/Maths":231,"./utils/value-min-max":232}],220:[function(require,module,exports){
+},{"./utils/Maths":232,"./utils/value-min-max":233}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34410,7 +34408,7 @@ Rock.HEIGHT = 10;
 Rock.TYPE = 'rock';
 Rock.SUPPLY = 250;
 
-},{"./utils/value-min-max":232,"pixi.js":154}],221:[function(require,module,exports){
+},{"./utils/value-min-max":233,"pixi.js":154}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35170,7 +35168,7 @@ var Utils = {
     }
 };
 
-},{"./Dwarf":214,"./Rock":220,"./Tree":225,"./utils/Maths":231}],222:[function(require,module,exports){
+},{"./Dwarf":214,"./Rock":220,"./Tree":225,"./utils/Maths":232}],222:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35228,7 +35226,7 @@ Supply.prototype.update = function (timeDelta, world) {
 Supply.WOOD = 150;
 Supply.STONE = 150;
 
-},{"./utils/value-min-max":232,"pixi.js":154}],223:[function(require,module,exports){
+},{"./utils/value-min-max":233,"pixi.js":154}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35429,7 +35427,7 @@ TimeOfDay.prototype.isDuringPeriod = function (start, end) {
     }
 };
 
-},{"./utils/value-min-max":232,"pixi.js":154}],225:[function(require,module,exports){
+},{"./utils/value-min-max":233,"pixi.js":154}],225:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35508,13 +35506,14 @@ Tree.HEIGHT = 24;
 Tree.TYPE = 'tree';
 Tree.SUPPLY = 100;
 
-},{"./Tile":223,"./utils/value-min-max":232,"pixi.js":154}],226:[function(require,module,exports){
+},{"./Tile":223,"./utils/value-min-max":233,"pixi.js":154}],226:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = UI;
+exports.PanelUI = PanelUI;
 exports.BuildingUI = BuildingUI;
 exports.SupplyUI = SupplyUI;
 exports.TimeUI = TimeUI;
@@ -35537,6 +35536,10 @@ var _PanelController = require('./PanelController');
 
 var _PanelController2 = _interopRequireDefault(_PanelController);
 
+var _ValueBarUI = require('./ui/ValueBarUI');
+
+var _ValueBarUI2 = _interopRequireDefault(_ValueBarUI);
+
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
@@ -35554,11 +35557,17 @@ function UI(world) {
 
     this.panelController = new _PanelController2.default();
 
+    this.panelButtons = new _pixi2.default.Container();
+    this.addChild(this.panelButtons);
+
     this.construction = new ConstructionUI(world);
     this.addChild(this.construction);
 
     this.log = new LogUI(world);
     this.addChild(this.log);
+
+    this.panelButtons.addChild(this.construction.button);
+    this.panelButtons.addChild(this.log.button);
 
     this.building = new BuildingUI(world);
     this.addChild(this.building);
@@ -35571,29 +35580,45 @@ function UI(world) {
 UI.constructor = UI;
 UI.prototype = Object.create(_pixi2.default.Container.prototype);
 
+UI.prototype.update = function (timeDelta, world) {
+
+    this.building.update(timeDelta, world);
+};
+
 UI.prototype.updateSupply = function (wood, stone) {
 
     this.supply.update(wood, stone);
     this.construction.update(wood, stone);
 };
 
-/* -------------- */
-/* ----- Building */
-/* -------------- */
+/* ---------------------------- */
+/* ---------------------- Panel */
+/* ---------------------------- */
 
-function BuildingUI(world) {
+function PanelUI(world, id) {
 
     _pixi2.default.Container.call(this);
 
     this.world = world;
 
-    this.id = 'building';
+    this.id = id;
+
+    this.hit = new _pixi2.default.Graphics();
+    this.hit.beginFill(0x000000, .15);
+    this.hit.drawRect(0, 0, _Layout2.default.WIDTH, _Layout2.default.HEIGHT);
+    this.hit.endFill();
+
+    this.hit.interactive = true;
+    this.hit.on('mousedown', this.onButtonDown.bind(this));
+    this.hit.on('touchstart', this.onButtonDown.bind(this));
+
+    this.addChild(this.hit);
 
     var backgroundW = _Layout2.default.WIDTH * .8;
     var backgroundH = _Layout2.default.HEIGHT * .8;
 
     this.background = new _pixi2.default.Graphics();
-    this.background.beginFill(0x000000, .5);
+    this.background.beginFill(0x000000, 1);
     this.background.drawRect(0, 0, backgroundW, backgroundH);
     this.background.endFill();
 
@@ -35605,15 +35630,15 @@ function BuildingUI(world) {
     this.toggle(false);
 }
 
-BuildingUI.constructor = BuildingUI;
-BuildingUI.prototype = Object.create(_pixi2.default.Container.prototype);
+PanelUI.constructor = PanelUI;
+PanelUI.prototype = Object.create(_pixi2.default.Container.prototype);
 
-BuildingUI.prototype.setBuilding = function (building) {
+PanelUI.prototype.onButtonDown = function (event) {
 
-    console.log('BuildingUI.setBuilding(', building, ')');
+    this.toggle(undefined, true);
 };
 
-BuildingUI.prototype.toggle = function (show, dispatchEvent) {
+PanelUI.prototype.toggle = function (show, dispatchEvent) {
 
     var isVisible = void 0;
     if (typeof show === 'undefined') {
@@ -35632,9 +35657,63 @@ BuildingUI.prototype.toggle = function (show, dispatchEvent) {
     }
 };
 
-/* -------------- */
-/* ------- Supply */
-/* -------------- */
+/* ---------------------------- */
+/* ------------------- Building */
+/* ---------------------------- */
+
+function BuildingUI(world) {
+
+    PanelUI.call(this, world, 'building');
+
+    var style = {
+        font: '20px Arial',
+        fill: '#FFFFFF',
+        wordWrap: true,
+        wordWrapWidth: this.background.width - 40
+    };
+
+    this.textTitle = new _pixi2.default.Text('title', style);
+    this.textTitle.x = 20;
+    this.textTitle.y = 20;
+    this.background.addChild(this.textTitle);
+
+    style.font = '14px Arial';
+
+    this.textDescription = new _pixi2.default.Text('description', style);
+    this.textDescription.x = 20;
+    this.textDescription.y = 50;
+    this.textDescription.alpha = .75;
+    this.background.addChild(this.textDescription);
+
+    this.integrity = new _ValueBarUI2.default(this.background.width - 40, 10);
+    this.integrity.x = 20;
+    this.integrity.y = this.background.height - 30;
+    this.background.addChild(this.integrity);
+}
+
+BuildingUI.constructor = BuildingUI;
+BuildingUI.prototype = Object.create(PanelUI.prototype);
+
+BuildingUI.prototype.update = function (timeDelta, world) {
+
+    if (this.shown && this.activeBuilding) {
+
+        this.integrity.setValue(this.activeBuilding.integrity.val());
+    }
+};
+
+BuildingUI.prototype.setBuilding = function (building) {
+
+    this.activeBuilding = building;
+
+    this.textTitle.setText(building.archetype.title);
+    this.textDescription.setText(building.archetype.description);
+    this.integrity.setValue(building.integrity.val());
+};
+
+/* ---------------------------- */
+/* --------------------- Supply */
+/* ---------------------------- */
 
 function SupplyUI() {
 
@@ -35679,9 +35758,9 @@ SupplyUI.prototype.update = function (wood, stone) {
     this.background.endFill();
 };
 
-/* -------------- */
-/* --------- Time */
-/* -------------- */
+/* ---------------------------- */
+/* ----------------------- Time */
+/* ---------------------------- */
 
 function TimeUI() {
 
@@ -35724,17 +35803,13 @@ TimeUI.prototype.update = function (hour, minute) {
     this.background.endFill();
 };
 
-/* -------------- */
-/* ----- Building */
-/* -------------- */
+/* ---------------------------- */
+/* --------------- Construction */
+/* ---------------------------- */
 
 function ConstructionUI(world) {
 
-    _pixi2.default.Container.call(this);
-
-    this.world = world;
-
-    this.id = 'construction';
+    PanelUI.call(this, world, 'construction');
 
     // Toggle Button
 
@@ -35758,30 +35833,13 @@ function ConstructionUI(world) {
     this.button.on('mousedown', this.onButtonDown.bind(this));
     this.button.on('touchstart', this.onButtonDown.bind(this));
 
-    this.addChild(this.button);
-
-    // Menu
-
-    var menuW = _Layout2.default.WIDTH * .8;
-    var menuH = _Layout2.default.HEIGHT * .8;
-
-    this.menu = new _pixi2.default.Graphics();
-    this.menu.beginFill(0x000000, .5);
-    this.menu.drawRect(0, 0, menuW, menuH);
-    this.menu.endFill();
-
-    this.menu.x = _Layout2.default.WIDTH * .5 - menuW * .5;
-    this.menu.y = _Layout2.default.HEIGHT * .5 - menuH * .5;
-
-    this.addChild(this.menu);
-
     // Buildings
 
     this.archetypeButtonsMap = {};
 
     world.buildings.archetypes.forEach(function (archetype, index) {
 
-        var archetypeButtonW = 300;
+        var archetypeButtonW = Math.min(300, this.background.width - 40);
         var archetypeButtonH = 60;
 
         var archetypeButton = new _pixi2.default.Graphics();
@@ -35802,7 +35860,7 @@ function ConstructionUI(world) {
 
         this.archetypeButtonsMap[archetype.id] = archetypeButton;
 
-        this.menu.addChild(archetypeButton);
+        this.background.addChild(archetypeButton);
 
         var style = {
             font: '16px Arial',
@@ -35824,12 +35882,10 @@ function ConstructionUI(world) {
         textDescription.alpha = .75;
         archetypeButton.addChild(textDescription);
     }.bind(this));
-
-    this.toggle(false);
 }
 
 ConstructionUI.constructor = ConstructionUI;
-ConstructionUI.prototype = Object.create(_pixi2.default.Container.prototype);
+ConstructionUI.prototype = Object.create(PanelUI.prototype);
 
 ConstructionUI.prototype.onButtonDown = function (event) {
 
@@ -35879,7 +35935,7 @@ ConstructionUI.prototype.onDragStart = function (event) {
 
     var pos = event.data.getLocalPosition(this.world);
 
-    this.activeBuilding = new this.activeArchetype.c(this.world, pos.x, pos.y, true);
+    this.activeBuilding = new this.activeArchetype.c(this.world, pos.x, pos.y, this.activeArchetype, true);
     this.activeBuilding.x = pos.x;
     this.activeBuilding.y = pos.y;
 
@@ -35957,25 +36013,6 @@ ConstructionUI.prototype.onDragEnd = function () {
     }
 };
 
-ConstructionUI.prototype.toggle = function (show, dispatchEvent) {
-
-    var isVisible = void 0;
-    if (typeof show === 'undefined') {
-        isVisible = !this.shown;
-    } else {
-        isVisible = show;
-    }
-
-    dispatchEvent = typeof dispatchEvent === 'undefined' ? true : dispatchEvent;
-
-    this.menu.visible = this.shown = isVisible;
-
-    if (dispatchEvent) {
-
-        this.emit(isVisible ? 'toggle:on' : 'toggle:off', this.id);
-    }
-};
-
 ConstructionUI.prototype.update = function (wood, stone) {
 
     this.world.buildings.archetypes.forEach(function (archetype) {
@@ -35989,17 +36026,13 @@ ConstructionUI.prototype.update = function (wood, stone) {
     }.bind(this));
 };
 
-/* -------------- */
-/* ---------- Log */
-/* -------------- */
+/* ---------------------------- */
+/* ------------------------ Log */
+/* ---------------------------- */
 
 function LogUI(world) {
 
-    _pixi2.default.Container.call(this);
-
-    this.world = world;
-
-    this.id = 'log';
+    PanelUI.call(this, world, 'log');
 
     // Toggle Button
 
@@ -36023,8 +36056,6 @@ function LogUI(world) {
     this.button.on('mousedown', this.onButtonDown.bind(this));
     this.button.on('touchstart', this.onButtonDown.bind(this));
 
-    this.addChild(this.button);
-
     // Log
 
     var logW = _Layout2.default.WIDTH * .8;
@@ -36035,18 +36066,8 @@ function LogUI(world) {
         fill: '#FFFFFF'
     };
 
-    this.logContainer = new _pixi2.default.Graphics();
-    this.logContainer.beginFill(0x000000, .5);
-    this.logContainer.drawRect(0, 0, logW, logH);
-    this.logContainer.endFill();
-
-    this.logContainer.x = _Layout2.default.WIDTH * .5 - logW * .5;
-    this.logContainer.y = _Layout2.default.HEIGHT * .5 - logH * .5;
-
-    this.addChild(this.logContainer);
-
     this.logItems = new _pixi2.default.Container();
-    this.logContainer.addChild(this.logItems);
+    this.background.addChild(this.logItems);
 
     this.logItemHeight = 24;
     this.logItemY = 0;
@@ -36058,7 +36079,7 @@ function LogUI(world) {
 }
 
 LogUI.constructor = LogUI;
-LogUI.prototype = Object.create(_pixi2.default.Container.prototype);
+LogUI.prototype = Object.create(PanelUI.prototype);
 
 LogUI.prototype.log = function (message) {
 
@@ -36085,26 +36106,7 @@ LogUI.prototype.onButtonDown = function (event) {
     this.toggle(undefined, true);
 };
 
-LogUI.prototype.toggle = function (show, dispatchEvent) {
-
-    var isVisible = void 0;
-    if (typeof show === 'undefined') {
-        isVisible = !this.shown;
-    } else {
-        isVisible = show;
-    }
-
-    dispatchEvent = typeof dispatchEvent === 'undefined' ? false : dispatchEvent;
-
-    this.logContainer.visible = this.shown = isVisible;
-
-    if (dispatchEvent) {
-
-        this.emit(isVisible ? 'toggle:on' : 'toggle:off', this.id);
-    }
-};
-
-},{"./Layout":216,"./PanelController":219,"./utils/Maths":231,"pixi.js":154}],227:[function(require,module,exports){
+},{"./Layout":216,"./PanelController":219,"./ui/ValueBarUI":231,"./utils/Maths":232,"pixi.js":154}],227:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36236,7 +36238,7 @@ Viewport.prototype.disable = function () {
     this.isEnabled = false;
 };
 
-},{"./utils/Maths":231,"pixi.js":154}],228:[function(require,module,exports){
+},{"./utils/Maths":232,"pixi.js":154}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36628,6 +36630,8 @@ World.prototype.update = function (time) {
 
     this.buildings.update(timeDelta);
 
+    this.ui.update(timeDelta, this);
+
     // Z-Sorting
 
     this.zOrdered.sort(function (a, b) {
@@ -36836,6 +36840,54 @@ function startGame() {
 }
 
 },{"./Layout":216,"./World":228,"pixi.js":154,"raf":187}],231:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = ValueBarUI;
+
+var _pixi = require('pixi.js');
+
+var _pixi2 = _interopRequireDefault(_pixi);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function ValueBarUI(w, h, value) {
+
+    _pixi2.default.Container.call(this);
+
+    this.background = new _pixi2.default.Graphics();
+    this.background.beginFill(0x333333);
+    this.background.drawRect(0, 0, w, h);
+    this.background.endFill();
+    this.background.beginFill(0xBB3333);
+    this.background.drawRect(1, 1, w - 2, h - 2);
+    this.background.endFill();
+    this.addChild(this.background);
+
+    this.bar = new _pixi2.default.Graphics();
+    this.bar.x = 1;
+    this.bar.y = 1;
+    this.bar.beginFill(0x33BB33);
+    this.bar.drawRect(0, 0, w - 2, h - 2);
+    this.bar.endFill();
+    this.addChild(this.bar);
+
+    this.setValue(value || 0);
+}
+
+ValueBarUI.constructor = ValueBarUI;
+ValueBarUI.prototype = Object.create(_pixi2.default.Container.prototype);
+
+ValueBarUI.prototype.setValue = function (value) {
+
+    this.bar.scale.x = value;
+};
+
+},{"pixi.js":154}],232:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36865,7 +36917,7 @@ exports.default = {
     }
 };
 
-},{}],232:[function(require,module,exports){
+},{}],233:[function(require,module,exports){
 "use strict";
 
 module.exports = function (min, max, initial) {

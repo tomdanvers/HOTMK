@@ -24,8 +24,6 @@ PanelController.prototype.add = function(panel) {
     panel.on('toggle:on', this.panelOn.bind(this));
     panel.on('toggle:off', this.panelOff.bind(this));
 
-    console.log('PanelController.add(',panel.id,')')
-
 }
 
 PanelController.prototype.panelOn = function(id) {
@@ -36,8 +34,6 @@ PanelController.prototype.panelOn = function(id) {
         this.current.toggle(false, false);
 
     }
-
-    console.log('PanelController.panelOn(', id, ')');
 
     this.current = this.panelsMap[id];
 
@@ -50,7 +46,5 @@ PanelController.prototype.panelOff = function(id) {
         this.current = false;
 
     }
-
-    console.log('PanelController.panelOff(', id, ')');
 
 }

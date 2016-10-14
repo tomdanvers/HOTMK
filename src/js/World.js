@@ -381,6 +381,8 @@ World.prototype.update = function(time) {
 
     this.buildings.update(timeDelta);
 
+    this.ui.update(timeDelta, this);
+
     // Z-Sorting
 
     this.zOrdered.sort(function(a, b) {

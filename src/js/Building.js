@@ -6,11 +6,13 @@ import Archetypes from './Archetypes';
 import ValueMinMax from './utils/value-min-max';
 import Maths from './utils/Maths';
 
-export function Building(world, startX, startY, isTemp) {
+export function Building(world, startX, startY, archetype, isTemp) {
 
     PIXI.Container.call(this);
 
     this.world = world;
+
+    this.archetype = archetype;
 
     this.inhabitantCount = 1;
 
@@ -145,9 +147,9 @@ Building.TYPE = 'building';
 /* --------- Camp */
 /* -------------- */
 
-export function Camp(world, startX, startY, isTemp) {
+export function Camp(world, startX, startY, archetype, isTemp) {
 
-    Building.call(this, world, startX, startY, isTemp);
+    Building.call(this, world, startX, startY, archetype, isTemp);
 
 }
 
@@ -172,9 +174,9 @@ Camp.HEIGHT = 12;
 /* --- NightWatch */
 /* -------------- */
 
-export function NightWatch(world, startX, startY, isTemp) {
+export function NightWatch(world, startX, startY, archetype, isTemp) {
 
-    Building.call(this, world, startX, startY, isTemp);
+    Building.call(this, world, startX, startY, archetype, isTemp);
 
     this.inhabitantCount = 3;
     this.patrolRoute = false;
@@ -267,9 +269,9 @@ NightWatch.HEIGHT = 18;
 /* ------- Hunter */
 /* -------------- */
 
-export function Hunter(world, startX, startY, isTemp) {
+export function Hunter(world, startX, startY, archetype, isTemp) {
 
-    Building.call(this, world, startX, startY, isTemp);
+    Building.call(this, world, startX, startY, archetype, isTemp);
 
     this.associatedArchetype = Archetypes.HUNTER;
 
@@ -297,9 +299,9 @@ Hunter.HEIGHT = 12;
 /* -------- Miner */
 /* -------------- */
 
-export function Miner(world, startX, startY, isTemp) {
+export function Miner(world, startX, startY, archetype, isTemp) {
 
-    Building.call(this, world, startX, startY, isTemp);
+    Building.call(this, world, startX, startY, archetype, isTemp);
 
     this.associatedArchetype = Archetypes.MINER;
 
@@ -329,9 +331,9 @@ Miner.HEIGHT = 12;
 /* ----- Forester */
 /* -------------- */
 
-export function Forester(world, startX, startY, isTemp) {
+export function Forester(world, startX, startY, archetype, isTemp) {
 
-    Building.call(this, world, startX, startY, isTemp);
+    Building.call(this, world, startX, startY, archetype, isTemp);
 
     this.associatedArchetype = Archetypes.FORESTER;
 
@@ -361,9 +363,9 @@ Forester.HEIGHT = 12;
 /* -------- Mason */
 /* -------------- */
 
-export function Mason(world, startX, startY, isTemp) {
+export function Mason(world, startX, startY, archetype, isTemp) {
 
-    Building.call(this, world, startX, startY, isTemp);
+    Building.call(this, world, startX, startY, archetype, isTemp);
 
     this.associatedArchetype = Archetypes.MASON;
 

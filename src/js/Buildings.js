@@ -28,7 +28,9 @@ Buildings.constructor = Buildings;
 
 Buildings.prototype.add = function(id, x, y) {
 
-    let building = new this.archetypesMap[id].c(this.world, x, y, false);
+    let archetype = this.archetypesMap[id];
+
+    let building = new archetype.c(this.world, x, y, archetype, false);
 
     this.buildings.push(building);
 

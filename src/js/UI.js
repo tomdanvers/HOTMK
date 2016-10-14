@@ -2,6 +2,7 @@ import PIXI from 'pixi.js';
 import Maths from './utils/Maths';
 import Layout from './Layout';
 import PanelController from './PanelController';
+import ValueBarUI from './ui/ValueBarUI';
 
 export default function UI(world) {
 
@@ -16,11 +17,17 @@ export default function UI(world) {
 
     this.panelController = new PanelController();
 
+    this.panelButtons = new PIXI.Container();
+    this.addChild(this.panelButtons);
+
     this.construction = new ConstructionUI(world);
     this.addChild(this.construction);
 
     this.log = new LogUI(world);
     this.addChild(this.log);
+
+    this.panelButtons.addChild(this.construction.button);
+    this.panelButtons.addChild(this.log.button);
 
     this.building = new BuildingUI(world);
     this.addChild(this.building);
@@ -34,6 +41,12 @@ export default function UI(world) {
 UI.constructor = UI;
 UI.prototype = Object.create(PIXI.Container.prototype);
 
+UI.prototype.update = function(timeDelta, world) {
+
+    this.building.update(timeDelta, world);
+
+}
+
 UI.prototype.updateSupply = function(wood, stone) {
 
     this.supply.update(wood, stone);
@@ -41,24 +54,34 @@ UI.prototype.updateSupply = function(wood, stone) {
 
 }
 
+/* ---------------------------- */
+/* ---------------------- Panel */
+/* ---------------------------- */
 
-/* -------------- */
-/* ----- Building */
-/* -------------- */
-
-export function BuildingUI(world) {
+export function PanelUI(world, id) {
 
     PIXI.Container.call(this);
 
     this.world = world;
 
-    this.id = 'building';
+    this.id = id;
+
+    this.hit = new PIXI.Graphics();
+    this.hit.beginFill(0x000000, .15);
+    this.hit.drawRect(0, 0, Layout.WIDTH, Layout.HEIGHT);
+    this.hit.endFill();
+
+    this.hit.interactive = true;
+    this.hit.on('mousedown', this.onButtonDown.bind(this));
+    this.hit.on('touchstart', this.onButtonDown.bind(this));
+
+    this.addChild(this.hit);
 
     let backgroundW = Layout.WIDTH * .8;
     let backgroundH = Layout.HEIGHT * .8;
 
     this.background = new PIXI.Graphics();
-    this.background.beginFill(0x000000, .5);
+    this.background.beginFill(0x000000, 1);
     this.background.drawRect(0, 0, backgroundW, backgroundH);
     this.background.endFill();
 
@@ -71,16 +94,16 @@ export function BuildingUI(world) {
 
 }
 
-BuildingUI.constructor = BuildingUI;
-BuildingUI.prototype = Object.create(PIXI.Container.prototype);
+PanelUI.constructor = PanelUI;
+PanelUI.prototype = Object.create(PIXI.Container.prototype);
 
-BuildingUI.prototype.setBuilding = function(building) {
+PanelUI.prototype.onButtonDown = function(event) {
 
-    console.log('BuildingUI.setBuilding(',building,')');
+    this.toggle(undefined, true);
 
 }
 
-BuildingUI.prototype.toggle = function(show, dispatchEvent) {
+PanelUI.prototype.toggle = function(show, dispatchEvent) {
 
     let isVisible;
     if (typeof(show) === 'undefined') {
@@ -102,9 +125,69 @@ BuildingUI.prototype.toggle = function(show, dispatchEvent) {
 }
 
 
-/* -------------- */
-/* ------- Supply */
-/* -------------- */
+
+/* ---------------------------- */
+/* ------------------- Building */
+/* ---------------------------- */
+
+export function BuildingUI(world) {
+
+    PanelUI.call(this, world, 'building');
+
+    var style = {
+        font : '20px Arial',
+        fill : '#FFFFFF',
+        wordWrap : true,
+        wordWrapWidth : this.background.width - 40
+    };
+
+    this.textTitle = new PIXI.Text('title', style);
+    this.textTitle.x = 20;
+    this.textTitle.y = 20;
+    this.background.addChild(this.textTitle);
+
+    style.font = '14px Arial';
+
+    this.textDescription = new PIXI.Text('description', style);
+    this.textDescription.x = 20;
+    this.textDescription.y = 50;
+    this.textDescription.alpha = .75;
+    this.background.addChild(this.textDescription);
+
+    this.integrity = new ValueBarUI(this.background.width - 40, 10);
+    this.integrity.x = 20;
+    this.integrity.y = this.background.height - 30;
+    this.background.addChild(this.integrity);
+
+}
+
+BuildingUI.constructor = BuildingUI;
+BuildingUI.prototype = Object.create(PanelUI.prototype);
+
+BuildingUI.prototype.update = function(timeDelta, world) {
+
+    if (this.shown && this.activeBuilding) {
+
+        this.integrity.setValue(this.activeBuilding.integrity.val());
+
+    }
+
+}
+
+BuildingUI.prototype.setBuilding = function(building) {
+
+    this.activeBuilding = building;
+
+    this.textTitle.setText(building.archetype.title);
+    this.textDescription.setText(building.archetype.description);
+    this.integrity.setValue(building.integrity.val());
+
+}
+
+
+/* ---------------------------- */
+/* --------------------- Supply */
+/* ---------------------------- */
 
 export function SupplyUI() {
 
@@ -153,9 +236,9 @@ SupplyUI.prototype.update = function(wood, stone) {
 }
 
 
-/* -------------- */
-/* --------- Time */
-/* -------------- */
+/* ---------------------------- */
+/* ----------------------- Time */
+/* ---------------------------- */
 
 export function TimeUI() {
 
@@ -201,17 +284,13 @@ TimeUI.prototype.update = function(hour, minute) {
 }
 
 
-/* -------------- */
-/* ----- Building */
-/* -------------- */
+/* ---------------------------- */
+/* --------------- Construction */
+/* ---------------------------- */
 
 export function ConstructionUI(world) {
 
-    PIXI.Container.call(this);
-
-    this.world = world;
-
-    this.id = 'construction';
+    PanelUI.call(this, world, 'construction');
 
     // Toggle Button
 
@@ -235,30 +314,13 @@ export function ConstructionUI(world) {
     this.button.on('mousedown', this.onButtonDown.bind(this));
     this.button.on('touchstart', this.onButtonDown.bind(this));
 
-    this.addChild(this.button);
-
-    // Menu
-
-    let menuW = Layout.WIDTH * .8;
-    let menuH = Layout.HEIGHT * .8;
-
-    this.menu = new PIXI.Graphics();
-    this.menu.beginFill(0x000000, .5);
-    this.menu.drawRect(0, 0, menuW, menuH);
-    this.menu.endFill();
-
-    this.menu.x = Layout.WIDTH * .5 - menuW * .5;
-    this.menu.y = Layout.HEIGHT * .5 - menuH * .5;
-
-    this.addChild(this.menu);
-
     // Buildings
 
     this.archetypeButtonsMap = {};
 
     world.buildings.archetypes.forEach(function(archetype, index) {
 
-        let archetypeButtonW = 300;
+        let archetypeButtonW = Math.min(300, this.background.width - 40);
         let archetypeButtonH = 60;
 
         let archetypeButton = new PIXI.Graphics();
@@ -279,7 +341,7 @@ export function ConstructionUI(world) {
 
         this.archetypeButtonsMap[archetype.id] = archetypeButton;
 
-        this.menu.addChild(archetypeButton);
+        this.background.addChild(archetypeButton);
 
         var style = {
             font : '16px Arial',
@@ -303,12 +365,10 @@ export function ConstructionUI(world) {
 
     }.bind(this));
 
-    this.toggle(false);
-
 }
 
 ConstructionUI.constructor = ConstructionUI;
-ConstructionUI.prototype = Object.create(PIXI.Container.prototype);
+ConstructionUI.prototype = Object.create(PanelUI.prototype);
 
 ConstructionUI.prototype.onButtonDown = function(event) {
 
@@ -360,7 +420,7 @@ ConstructionUI.prototype.onDragStart = function(event) {
 
     let pos = event.data.getLocalPosition(this.world);
 
-    this.activeBuilding = new this.activeArchetype.c(this.world, pos.x, pos.y, true);
+    this.activeBuilding = new this.activeArchetype.c(this.world, pos.x, pos.y, this.activeArchetype, true);
     this.activeBuilding.x = pos.x;
     this.activeBuilding.y = pos.y;
 
@@ -451,27 +511,6 @@ ConstructionUI.prototype.onDragEnd = function() {
 
 }
 
-ConstructionUI.prototype.toggle = function(show, dispatchEvent) {
-
-    let isVisible;
-    if (typeof(show) === 'undefined') {
-        isVisible = !this.shown;
-    } else {
-        isVisible = show;
-    }
-
-    dispatchEvent = typeof(dispatchEvent) === 'undefined' ? true : dispatchEvent;
-
-    this.menu.visible = this.shown = isVisible;
-
-    if (dispatchEvent) {
-
-        this.emit(isVisible ? 'toggle:on' : 'toggle:off', this.id);
-
-    }
-
-}
-
 ConstructionUI.prototype.update = function(wood, stone) {
 
     this.world.buildings.archetypes.forEach(function(archetype) {
@@ -488,17 +527,13 @@ ConstructionUI.prototype.update = function(wood, stone) {
 }
 
 
-/* -------------- */
-/* ---------- Log */
-/* -------------- */
+/* ---------------------------- */
+/* ------------------------ Log */
+/* ---------------------------- */
 
 export function LogUI(world) {
 
-    PIXI.Container.call(this);
-
-    this.world = world;
-
-    this.id = 'log';
+    PanelUI.call(this, world, 'log');
 
     // Toggle Button
 
@@ -522,8 +557,6 @@ export function LogUI(world) {
     this.button.on('mousedown', this.onButtonDown.bind(this));
     this.button.on('touchstart', this.onButtonDown.bind(this));
 
-    this.addChild(this.button);
-
     // Log
 
     let logW = Layout.WIDTH * .8;
@@ -534,18 +567,8 @@ export function LogUI(world) {
         fill : '#FFFFFF'
     };
 
-    this.logContainer = new PIXI.Graphics();
-    this.logContainer.beginFill(0x000000, .5);
-    this.logContainer.drawRect(0, 0, logW, logH);
-    this.logContainer.endFill();
-
-    this.logContainer.x = Layout.WIDTH * .5 - logW * .5;
-    this.logContainer.y = Layout.HEIGHT * .5 - logH * .5;
-
-    this.addChild(this.logContainer);
-
     this.logItems = new PIXI.Container();
-    this.logContainer.addChild(this.logItems);
+    this.background.addChild(this.logItems);
 
     this.logItemHeight = 24;
     this.logItemY = 0;
@@ -558,7 +581,7 @@ export function LogUI(world) {
 }
 
 LogUI.constructor = LogUI;
-LogUI.prototype = Object.create(PIXI.Container.prototype);
+LogUI.prototype = Object.create(PanelUI.prototype);
 
 LogUI.prototype.log = function(message) {
 
@@ -584,26 +607,5 @@ LogUI.prototype.log = function(message) {
 LogUI.prototype.onButtonDown = function(event) {
 
     this.toggle(undefined, true);
-
-}
-
-LogUI.prototype.toggle = function(show, dispatchEvent) {
-
-    let isVisible;
-    if (typeof(show) === 'undefined') {
-        isVisible = !this.shown;
-    } else {
-        isVisible = show;
-    }
-
-    dispatchEvent = typeof(dispatchEvent) === 'undefined' ? false : dispatchEvent;
-
-    this.logContainer.visible = this.shown = isVisible;
-
-    if (dispatchEvent) {
-
-        this.emit(isVisible ? 'toggle:on' : 'toggle:off', this.id);
-
-    }
 
 }
