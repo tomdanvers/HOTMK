@@ -4,20 +4,30 @@ export default function ValueBarUI(w, h, value) {
 
     PIXI.Container.call(this);
 
+    let border = w >= 10 && h >= 10;
+
     this.background = new PIXI.Graphics();
     this.background.beginFill(0x333333);
     this.background.drawRect(0, 0, w, h);
     this.background.endFill();
     this.background.beginFill(0xBB3333);
-    this.background.drawRect(1, 1, w - 2, h - 2);
+    if (border) {
+        this.background.drawRect(1, 1, w - 2, h - 2);
+    } else {
+        this.background.drawRect(0, 0, w, h);
+    }
     this.background.endFill();
     this.addChild(this.background);
 
     this.bar = new PIXI.Graphics();
-    this.bar.x = 1;
-    this.bar.y = 1;
     this.bar.beginFill(0x33BB33);
-    this.bar.drawRect(0, 0, w - 2, h - 2);
+    if (border) {
+        this.bar.drawRect(0, 0, w - 2, h - 2);
+        this.bar.x = 1;
+        this.bar.y = 1;
+    } else {
+        this.bar.drawRect(0, 0, w, h);
+    }
     this.bar.endFill();
     this.addChild(this.bar);
 

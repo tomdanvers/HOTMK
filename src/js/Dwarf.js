@@ -11,7 +11,7 @@ export default function Dwarf(world, startX, startY, archetype) {
 
     this.light = this.world.lighting.addEmitter(this, this.careerRole.lightRadius || 30, 0, -10);
 
-    this.health.decrement(10);
+    this.takeDamage(10);
 
 }
 

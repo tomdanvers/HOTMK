@@ -33709,6 +33709,10 @@ var _valueMinMax = require('./utils/value-min-max');
 
 var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
 
+var _ValueBarUI = require('./ui/ValueBarUI');
+
+var _ValueBarUI2 = _interopRequireDefault(_ValueBarUI);
+
 var _Inventory = require('./Inventory');
 
 var _Inventory2 = _interopRequireDefault(_Inventory);
@@ -33752,7 +33756,14 @@ function Creature(world, startX, startY, archetype) {
     this.rangePerception = archetype.rangePerception;
     this.isAggressive = archetype.isAggressive;
 
-    this.addChild(this.getAppearance());
+    this.base = this.getAppearance();
+    this.addChild(this.base);
+
+    this.healthBar = new _ValueBarUI2.default(10, 2);
+    this.healthBar.x = -5;
+    this.healthBar.y = -this.base.height - 5;
+    this.healthBar.visible = false;
+    this.addChild(this.healthBar);
 
     this.x = this.startX = startX;
     this.y = this.startY = startY;
@@ -33810,9 +33821,18 @@ Creature.prototype.tookAction = function () {
     this.timeSinceAction = 0;
 };
 
+Creature.prototype.takeHealing = function (heal, healer) {
+
+    this.health.increment(heal);
+
+    this.healthChanged();
+};
+
 Creature.prototype.takeDamage = function (damage, attacker) {
 
     this.health.decrement(damage);
+
+    this.healthChanged();
 
     // If the unit is aggressive then ignore as behaviour is dealing with combat
 
@@ -33822,7 +33842,7 @@ Creature.prototype.takeDamage = function (damage, attacker) {
 
     // Self defense
 
-    if (!this.role.isAggressive) {
+    if (!this.role.isAggressive && attacker) {
 
         if (this.inventory.has('weapon')) {
 
@@ -33833,6 +33853,18 @@ Creature.prototype.takeDamage = function (damage, attacker) {
 
             this.changeRole(_Roles2.default.FLEE);
         }
+    }
+};
+
+Creature.prototype.healthChanged = function () {
+
+    if (this.health.isMax()) {
+
+        this.healthBar.visible = false;
+    } else {
+
+        this.healthBar.visible = true;
+        this.healthBar.setValue(this.health.val());
     }
 };
 
@@ -33880,7 +33912,7 @@ Creature.prototype.isAlive = function () {
     return !this.health.isMin();
 };
 
-},{"./Inventory":215,"./Roles":221,"./utils/Maths":232,"./utils/value-min-max":233,"pixi.js":154}],214:[function(require,module,exports){
+},{"./Inventory":215,"./Roles":221,"./ui/ValueBarUI":231,"./utils/Maths":232,"./utils/value-min-max":233,"pixi.js":154}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33912,7 +33944,7 @@ function Dwarf(world, startX, startY, archetype) {
 
     this.light = this.world.lighting.addEmitter(this, this.careerRole.lightRadius || 30, 0, -10);
 
-    this.health.decrement(10);
+    this.takeDamage(10);
 }
 
 Dwarf.constructor = Dwarf;
@@ -34802,7 +34834,7 @@ var RoleHealer = exports.RoleHealer = {
 
                 var rate = Math.min(3, entityB.health.getRemainder());
 
-                entityB.health.increment(rate);
+                entityB.takeHealing(rate);
 
                 entity.tookAction();
             }
@@ -36978,20 +37010,30 @@ function ValueBarUI(w, h, value) {
 
     _pixi2.default.Container.call(this);
 
+    var border = w >= 10 && h >= 10;
+
     this.background = new _pixi2.default.Graphics();
     this.background.beginFill(0x333333);
     this.background.drawRect(0, 0, w, h);
     this.background.endFill();
     this.background.beginFill(0xBB3333);
-    this.background.drawRect(1, 1, w - 2, h - 2);
+    if (border) {
+        this.background.drawRect(1, 1, w - 2, h - 2);
+    } else {
+        this.background.drawRect(0, 0, w, h);
+    }
     this.background.endFill();
     this.addChild(this.background);
 
     this.bar = new _pixi2.default.Graphics();
-    this.bar.x = 1;
-    this.bar.y = 1;
     this.bar.beginFill(0x33BB33);
-    this.bar.drawRect(0, 0, w - 2, h - 2);
+    if (border) {
+        this.bar.drawRect(0, 0, w - 2, h - 2);
+        this.bar.x = 1;
+        this.bar.y = 1;
+    } else {
+        this.bar.drawRect(0, 0, w, h);
+    }
     this.bar.endFill();
     this.addChild(this.bar);
 

@@ -365,7 +365,7 @@ export const RoleHealer = {
 
                 let rate = Math.min(3, entityB.health.getRemainder());
 
-                entityB.health.increment(rate);
+                entityB.takeHealing(rate);
 
                 entity.tookAction();
 

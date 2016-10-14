@@ -2,6 +2,7 @@ import PIXI from 'pixi.js';
 import Maths from './utils/Maths';
 import MinMaxValue from './utils/value-min-max';
 
+import ValueBar from './ui/ValueBarUI';
 import Inventory from './Inventory';
 import Roles from './Roles';
 
@@ -36,7 +37,14 @@ export default function Creature(world, startX, startY, archetype) {
     this.rangePerception = archetype.rangePerception;
     this.isAggressive = archetype.isAggressive;
 
-    this.addChild(this.getAppearance());
+    this.base = this.getAppearance();
+    this.addChild(this.base);
+
+    this.healthBar = new ValueBar(10, 2);
+    this.healthBar.x = - 5;
+    this.healthBar.y = - this.base.height - 5;
+    this.healthBar.visible = false;
+    this.addChild(this.healthBar);
 
     this.x = this.startX = startX;
     this.y = this.startY = startY;
@@ -103,9 +111,19 @@ Creature.prototype.tookAction = function() {
 
 }
 
+Creature.prototype.takeHealing = function(heal, healer) {
+
+    this.health.increment(heal);
+
+    this.healthChanged();
+
+}
+
 Creature.prototype.takeDamage = function(damage, attacker) {
 
     this.health.decrement(damage);
+
+    this.healthChanged();
 
     // If the unit is aggressive then ignore as behaviour is dealing with combat
 
@@ -115,7 +133,7 @@ Creature.prototype.takeDamage = function(damage, attacker) {
 
         // Self defense
 
-    if (!this.role.isAggressive) {
+    if (!this.role.isAggressive && attacker) {
 
         if (this.inventory.has('weapon')) {
 
@@ -128,6 +146,21 @@ Creature.prototype.takeDamage = function(damage, attacker) {
             this.changeRole(Roles.FLEE);
 
         }
+
+    }
+
+}
+
+Creature.prototype.healthChanged = function() {
+
+    if (this.health.isMax()) {
+
+        this.healthBar.visible = false;
+
+    } else {
+
+        this.healthBar.visible = true;
+        this.healthBar.setValue(this.health.val());
 
     }
 
