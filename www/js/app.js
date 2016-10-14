@@ -32862,6 +32862,7 @@ exports.Miner = Miner;
 exports.Forester = Forester;
 exports.Hunter = Hunter;
 exports.WatchNight = WatchNight;
+exports.Healer = Healer;
 exports.Rabbit = Rabbit;
 exports.Deer = Deer;
 exports.Fox = Fox;
@@ -32884,6 +32885,7 @@ function Archetypes() {
         'forester': new Forester(),
         'hunter': new Hunter(),
         'watch-night': new WatchNight(),
+        'healer': new Healer(),
 
         'animal-rabbit': new Rabbit(),
         'animal-deer': new Deer(),
@@ -32905,6 +32907,7 @@ Archetypes.MINER = 'miner';
 Archetypes.FORESTER = 'forester';
 Archetypes.HUNTER = 'hunter';
 Archetypes.WATCH_NIGHT = 'watch-night';
+Archetypes.HEALER = 'healer';
 
 Archetypes.ANIMAL_RABBIT = 'animal-rabbit';
 Archetypes.ANIMAL_DEER = 'animal-deer';
@@ -33047,6 +33050,29 @@ function WatchNight() {
 }
 WatchNight.constructor = WatchNight;
 WatchNight.prototype = Object.create(Dwarf.prototype);
+
+/* --------------------------------- */
+/* -------------------------- HEALER */
+/* --------------------------------- */
+
+function Healer() {
+
+    Dwarf.call(this);
+
+    this.id = Archetypes.HEALER;
+    this.role = _Roles2.default.HEALER;
+
+    this.colour = 0x999999;
+
+    this.stealthiness = .25;
+
+    this.damage = 20;
+
+    this.cWood = 50;
+    this.cStone = 50;
+}
+Healer.constructor = Healer;
+Healer.prototype = Object.create(Dwarf.prototype);
 
 /* --------------------------------- */
 /* --------------------- ANIMAL BASE */
@@ -33193,6 +33219,7 @@ exports.Hunter = Hunter;
 exports.Miner = Miner;
 exports.Forester = Forester;
 exports.Mason = Mason;
+exports.Healer = Healer;
 
 var _pixi = require('pixi.js');
 
@@ -33231,6 +33258,7 @@ function Building(world, startX, startY, archetype, isTemp) {
     this.archetype = archetype;
 
     this.inhabitantCount = 1;
+    this.inhabitants = [];
 
     this.integrity = new _valueMinMax2.default(0, Building.INTEGRITY, Building.INTEGRITY * .25);
 
@@ -33306,6 +33334,8 @@ Building.prototype.spawn = function (isPurchased) {
         }
 
         dwarf.home = this;
+
+        this.inhabitants.push(dwarf);
     }
 };
 
@@ -33564,6 +33594,33 @@ Mason.prototype.draw = function (graphics) {
 Mason.WIDTH = 13;
 Mason.HEIGHT = 14;
 
+/* -------------- */
+/* ------- Healer */
+/* -------------- */
+
+function Healer(world, startX, startY, archetype, isTemp) {
+
+    Building.call(this, world, startX, startY, archetype, isTemp);
+
+    this.associatedArchetype = _Archetypes2.default.HEALER;
+}
+
+Healer.constructor = Healer;
+Healer.prototype = Object.create(Building.prototype);
+
+Healer.prototype.draw = function (graphics) {
+
+    graphics.beginFill(0x999999);
+    graphics.drawRect(-Healer.WIDTH * .5, -Healer.HEIGHT, Healer.WIDTH, Healer.HEIGHT);
+    graphics.endFill();
+    graphics.beginFill(0xFFFFFF);
+    graphics.drawRect(-Healer.WIDTH * .5 + 4, -6, Healer.WIDTH - 8, 6);
+    graphics.endFill();
+};
+
+Healer.WIDTH = 12;
+Healer.HEIGHT = 12;
+
 },{"./Archetypes":210,"./Dwarf":214,"./Roles":221,"./utils/Maths":232,"./utils/value-min-max":233,"pixi.js":154}],212:[function(require,module,exports){
 'use strict';
 
@@ -33578,7 +33635,7 @@ function Buildings(world) {
 
     this.world = world;
 
-    this.archetypes = [Buildings.ARCHETYPE_MINER, Buildings.ARCHETYPE_FORESTER, Buildings.ARCHETYPE_MASON, Buildings.ARCHETYPE_HUNTER, Buildings.ARCHETYPE_NIGHTWATCH];
+    this.archetypes = [Buildings.ARCHETYPE_MINER, Buildings.ARCHETYPE_FORESTER, Buildings.ARCHETYPE_MASON, Buildings.ARCHETYPE_HUNTER, Buildings.ARCHETYPE_NIGHTWATCH, Buildings.ARCHETYPE_HEALER];
 
     this.archetypesMap = {};
 
@@ -33618,6 +33675,7 @@ Buildings.ARCHETYPE_FORESTER = new BuildingArchetype('forester', 'Forester\'s Co
 Buildings.ARCHETYPE_MASON = new BuildingArchetype('mason', 'Mason\'s Cottage', 'A builder\'s home', 150, 150, _Building.Mason);
 Buildings.ARCHETYPE_HUNTER = new BuildingArchetype('hunter', 'Hunter\'s Shack', 'A hunter\'s shack', 100, 100, _Building.Hunter);
 Buildings.ARCHETYPE_NIGHTWATCH = new BuildingArchetype('night-watch', 'The Night Watch', 'A watch house that patrols during the hours of darkness', 200, 200, _Building.NightWatch);
+Buildings.ARCHETYPE_HEALER = new BuildingArchetype('healer', 'Healer\'s Home', 'A den of herbal healing', 120, 80, _Building.Healer);
 
 function BuildingArchetype(id, title, description, cWood, cStone, c) {
 
@@ -33853,6 +33911,8 @@ function Dwarf(world, startX, startY, archetype) {
     this.name = Dwarf.getName();
 
     this.light = this.world.lighting.addEmitter(this, this.careerRole.lightRadius || 30, 0, -10);
+
+    this.health.decrement(10);
 }
 
 Dwarf.constructor = Dwarf;
@@ -33894,7 +33954,7 @@ Dwarf.prototype.getAppearance = function (roleId) {
 };
 
 Dwarf.NAMES_FIRST = ['Snorri', 'Ori', 'Nori', 'Gloin', 'Oin', 'Bifur', 'Bofur', 'Thorin', 'Balin'];
-Dwarf.NAMES_LAST = ['Oakenshield', 'Bittenaxe', 'Longbeard', 'Undermountain', 'Ironskull', 'Steelhammer'];
+Dwarf.NAMES_LAST = ['Oakenshield', 'Bittenaxe', 'Longbeard', 'Undermountain', 'Ironskull', 'Steelhammer', 'Goldring'];
 
 Dwarf.getName = function () {
 
@@ -34414,7 +34474,7 @@ Rock.SUPPLY = 250;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.RolePrey = exports.RolePredator = exports.RoleCollectStone = exports.RoleCollectWood = exports.RoleHunter = exports.RoleBuilder = exports.RoleWatchNight = exports.RoleResting = exports.RoleSelfDefense = exports.RoleFlee = exports.RoleIdle = undefined;
+exports.RolePrey = exports.RolePredator = exports.RoleCollectStone = exports.RoleCollectWood = exports.RoleHunter = exports.RoleBuilder = exports.RoleHealer = exports.RoleWatchNight = exports.RoleResting = exports.RoleSelfDefense = exports.RoleFlee = exports.RoleIdle = undefined;
 exports.default = Roles;
 
 var _Maths = require('./utils/Maths');
@@ -34447,6 +34507,7 @@ function Roles() {
         'collect-wood': RoleCollectWood,
         'collect-stone': RoleCollectStone,
         'watch-night': RoleWatchNight,
+        'healer': RoleHealer,
         'flee': RoleFlee,
         'self-defense': RoleSelfDefense,
         'predator': RolePredator,
@@ -34469,6 +34530,7 @@ Roles.BUILDER = 'builder';
 Roles.HUNTER = 'hunter';
 Roles.COLLECT_WOOD = 'collect-wood';
 Roles.COLLECT_STONE = 'collect-stone';
+Roles.HEALER = 'healer';
 Roles.WATCH_NIGHT = 'watch-night';
 Roles.FLEE = 'flee';
 Roles.SELF_DEFENSE = 'self-defense';
@@ -34687,6 +34749,63 @@ var RoleWatchNight = exports.RoleWatchNight = {
             }
 
             entity.tookAction();
+        }
+    }
+};
+
+var RoleHealer = exports.RoleHealer = {
+
+    id: 'healer',
+
+    startTime: 5.5,
+    endTime: 20,
+
+    range: 10,
+
+    colour: 0xFFFFFF,
+
+    cWood: 50,
+    cStone: 50,
+
+    checkCanPerform: function checkCanPerform(timeDelta, entity, world) {
+
+        return Utils.nearestWithoutProperty('health', entity, world.dwarves);
+    },
+    update: function update(timeDelta, entity, world) {
+
+        if (!entity.target || entity.target.type !== 'dwarf') {
+
+            var target = Utils.nearestWithoutProperty('health', entity, world.dwarves) || false;
+
+            if (target) {
+
+                entity.target = target;
+            } else {
+
+                entity.startX = entity.x;
+                entity.startY = entity.y;
+
+                return Roles.IDLE;
+            }
+        }
+    },
+    targetProximity: function targetProximity(timeDelta, entity, world) {
+
+        if (entity.canTakeAction()) {
+
+            var entityB = entity.target;
+
+            if (entityB.health.isMax()) {
+
+                entity.target = false;
+            } else {
+
+                var rate = Math.min(3, entityB.health.getRemainder());
+
+                entityB.health.increment(rate);
+
+                entity.tookAction();
+            }
         }
     }
 };

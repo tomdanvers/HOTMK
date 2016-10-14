@@ -8,6 +8,7 @@ export default function Archetypes() {
         'forester': new Forester(),
         'hunter': new Hunter(),
         'watch-night': new WatchNight(),
+        'healer': new Healer(),
 
         'animal-rabbit': new Rabbit(),
         'animal-deer': new Deer(),
@@ -31,6 +32,7 @@ Archetypes.MINER = 'miner';
 Archetypes.FORESTER = 'forester';
 Archetypes.HUNTER = 'hunter';
 Archetypes.WATCH_NIGHT = 'watch-night';
+Archetypes.HEALER = 'healer';
 
 Archetypes.ANIMAL_RABBIT = 'animal-rabbit';
 Archetypes.ANIMAL_DEER = 'animal-deer';
@@ -193,6 +195,32 @@ export function WatchNight() {
 }
 WatchNight.constructor = WatchNight;
 WatchNight.prototype = Object.create(Dwarf.prototype);
+
+
+/* --------------------------------- */
+/* -------------------------- HEALER */
+/* --------------------------------- */
+
+
+export function Healer() {
+
+    Dwarf.call(this);
+
+    this.id = Archetypes.HEALER;
+    this.role = Roles.HEALER;
+
+    this.colour = 0x999999;
+
+    this.stealthiness = .25;
+
+    this.damage = 20;
+
+    this.cWood = 50;
+    this.cStone = 50;
+
+}
+Healer.constructor = Healer;
+Healer.prototype = Object.create(Dwarf.prototype);
 
 
 

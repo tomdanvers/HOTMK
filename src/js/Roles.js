@@ -13,6 +13,7 @@ export default function Roles() {
         'collect-wood': RoleCollectWood,
         'collect-stone': RoleCollectStone,
         'watch-night': RoleWatchNight,
+        'healer': RoleHealer,
         'flee': RoleFlee,
         'self-defense': RoleSelfDefense,
         'predator': RolePredator,
@@ -37,6 +38,7 @@ Roles.BUILDER = 'builder';
 Roles.HUNTER = 'hunter';
 Roles.COLLECT_WOOD = 'collect-wood';
 Roles.COLLECT_STONE = 'collect-stone';
+Roles.HEALER = 'healer';
 Roles.WATCH_NIGHT = 'watch-night';
 Roles.FLEE = 'flee';
 Roles.SELF_DEFENSE = 'self-defense';
@@ -304,6 +306,78 @@ export const RoleWatchNight = {
     }
 
 }
+
+
+export const RoleHealer = {
+
+    id: 'healer',
+
+    startTime: 5.5,
+    endTime: 20,
+
+    range: 10,
+
+    colour: 0xFFFFFF,
+
+    cWood: 50,
+    cStone: 50,
+
+    checkCanPerform(timeDelta, entity, world) {
+
+        return Utils.nearestWithoutProperty('health', entity, world.dwarves);
+
+    },
+
+    update(timeDelta, entity, world) {
+
+        if ( !entity.target || entity.target.type !== 'dwarf' ) {
+
+            let target = Utils.nearestWithoutProperty('health', entity, world.dwarves) || false;
+
+            if (target) {
+
+                entity.target = target;
+
+            } else {
+
+                entity.startX = entity.x;
+                entity.startY = entity.y;
+
+                return Roles.IDLE;
+
+            }
+
+        }
+
+    },
+
+    targetProximity(timeDelta, entity, world) {
+
+        if (entity.canTakeAction()) {
+
+            let entityB = entity.target;
+
+            if (entityB.health.isMax()) {
+
+                entity.target = false;
+
+            } else {
+
+                let rate = Math.min(3, entityB.health.getRemainder());
+
+                entityB.health.increment(rate);
+
+                entity.tookAction();
+
+            }
+
+        }
+
+    }
+
+}
+
+
 
 export const RoleBuilder = {
 

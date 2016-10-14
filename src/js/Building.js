@@ -15,6 +15,7 @@ export function Building(world, startX, startY, archetype, isTemp) {
     this.archetype = archetype;
 
     this.inhabitantCount = 1;
+    this.inhabitants = [];
 
     this.integrity = new ValueMinMax(0, Building.INTEGRITY, Building.INTEGRITY * .25);
 
@@ -98,6 +99,8 @@ Building.prototype.spawn = function(isPurchased) {
         }
 
         dwarf.home = this;
+
+        this.inhabitants.push(dwarf);
 
     }
 
@@ -387,3 +390,37 @@ Mason.prototype.draw = function(graphics) {
 
 Mason.WIDTH = 13;
 Mason.HEIGHT = 14;
+
+
+
+/* -------------- */
+/* ------- Healer */
+/* -------------- */
+
+export function Healer(world, startX, startY, archetype, isTemp) {
+
+    Building.call(this, world, startX, startY, archetype, isTemp);
+
+    this.associatedArchetype = Archetypes.HEALER;
+
+}
+
+Healer.constructor = Healer;
+Healer.prototype = Object.create(Building.prototype);
+
+Healer.prototype.draw = function(graphics) {
+
+    graphics.beginFill(0x999999);
+    graphics.drawRect(- Healer.WIDTH * .5, - Healer.HEIGHT, Healer.WIDTH, Healer.HEIGHT);
+    graphics.endFill();
+    graphics.beginFill(0xFFFFFF);
+    graphics.drawRect(- Healer.WIDTH * .5 + 4, -6, Healer.WIDTH - 8, 6);
+    graphics.endFill();
+
+}
+
+Healer.WIDTH = 12;
+Healer.HEIGHT = 12;
+
+
+

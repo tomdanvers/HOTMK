@@ -11,6 +11,8 @@ export default function Dwarf(world, startX, startY, archetype) {
 
     this.light = this.world.lighting.addEmitter(this, this.careerRole.lightRadius || 30, 0, -10);
 
+    this.health.decrement(10);
+
 }
 
 Dwarf.constructor = Dwarf;
@@ -53,7 +55,7 @@ Dwarf.prototype.getAppearance = function(roleId) {
 }
 
 Dwarf.NAMES_FIRST = ['Snorri', 'Ori', 'Nori', 'Gloin', 'Oin', 'Bifur', 'Bofur', 'Thorin', 'Balin'];
-Dwarf.NAMES_LAST = ['Oakenshield', 'Bittenaxe', 'Longbeard', 'Undermountain', 'Ironskull', 'Steelhammer'];
+Dwarf.NAMES_LAST = ['Oakenshield', 'Bittenaxe', 'Longbeard', 'Undermountain', 'Ironskull', 'Steelhammer', 'Goldring'];
 
 Dwarf.getName = function() {
 
