@@ -35,9 +35,9 @@ export function Building(world, startX, startY, isTemp) {
     this.x = startX;
     this.y = startY;
 
-    // this.interactive = true;
-    // this.on('mousedown', this.onDown);
-    // this.on('touchstart', this.onDown);
+    this.interactive = true;
+    this.on('mousedown', this.onDown);
+    this.on('touchstart', this.onDown);
 
 }
 
@@ -68,6 +68,11 @@ Building.prototype.update = function(timeDelta) {
 }
 
 Building.prototype.onDown = function(event) {
+
+    console.log('Building.onDown(',this.id,')');
+
+    this.world.ui.building.setBuilding(this);
+    this.world.ui.building.toggle(true, true);
 
 }
 

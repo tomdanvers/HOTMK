@@ -36,9 +36,7 @@ Supply.prototype.update = function(timeDelta, world) {
 
     if (dirty) {
 
-        world.ui.supply.update(this.wood.get(), this.stone.get());
-
-        world.ui.building.update(this.wood.get(), this.stone.get());
+        world.ui.updateSupply(this.wood.get(), this.stone.get());
 
     }
 

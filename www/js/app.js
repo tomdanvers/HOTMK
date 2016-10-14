@@ -33250,9 +33250,9 @@ function Building(world, startX, startY, isTemp) {
     this.x = startX;
     this.y = startY;
 
-    // this.interactive = true;
-    // this.on('mousedown', this.onDown);
-    // this.on('touchstart', this.onDown);
+    this.interactive = true;
+    this.on('mousedown', this.onDown);
+    this.on('touchstart', this.onDown);
 }
 
 Building.constructor = Building;
@@ -33278,7 +33278,13 @@ Building.prototype.update = function (timeDelta) {
     }
 };
 
-Building.prototype.onDown = function (event) {};
+Building.prototype.onDown = function (event) {
+
+    console.log('Building.onDown(', this.id, ')');
+
+    this.world.ui.building.setBuilding(this);
+    this.world.ui.building.toggle(true, true);
+};
 
 Building.prototype.spawn = function (isPurchased) {
 
@@ -35215,9 +35221,7 @@ Supply.prototype.update = function (timeDelta, world) {
 
     if (dirty) {
 
-        world.ui.supply.update(this.wood.get(), this.stone.get());
-
-        world.ui.building.update(this.wood.get(), this.stone.get());
+        world.ui.updateSupply(this.wood.get(), this.stone.get());
     }
 };
 
@@ -35511,9 +35515,10 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = UI;
+exports.BuildingUI = BuildingUI;
 exports.SupplyUI = SupplyUI;
 exports.TimeUI = TimeUI;
-exports.BuildingUI = BuildingUI;
+exports.ConstructionUI = ConstructionUI;
 exports.LogUI = LogUI;
 
 var _pixi = require('pixi.js');
@@ -35549,18 +35554,83 @@ function UI(world) {
 
     this.panelController = new _PanelController2.default();
 
-    this.building = new BuildingUI(world);
-    this.addChild(this.building);
+    this.construction = new ConstructionUI(world);
+    this.addChild(this.construction);
 
     this.log = new LogUI(world);
     this.addChild(this.log);
 
+    this.building = new BuildingUI(world);
+    this.addChild(this.building);
+
     this.panelController.add(this.building);
+    this.panelController.add(this.construction);
     this.panelController.add(this.log);
 }
 
 UI.constructor = UI;
 UI.prototype = Object.create(_pixi2.default.Container.prototype);
+
+UI.prototype.updateSupply = function (wood, stone) {
+
+    this.supply.update(wood, stone);
+    this.construction.update(wood, stone);
+};
+
+/* -------------- */
+/* ----- Building */
+/* -------------- */
+
+function BuildingUI(world) {
+
+    _pixi2.default.Container.call(this);
+
+    this.world = world;
+
+    this.id = 'building';
+
+    var backgroundW = _Layout2.default.WIDTH * .8;
+    var backgroundH = _Layout2.default.HEIGHT * .8;
+
+    this.background = new _pixi2.default.Graphics();
+    this.background.beginFill(0x000000, .5);
+    this.background.drawRect(0, 0, backgroundW, backgroundH);
+    this.background.endFill();
+
+    this.background.x = _Layout2.default.WIDTH * .5 - backgroundW * .5;
+    this.background.y = _Layout2.default.HEIGHT * .5 - backgroundH * .5;
+
+    this.addChild(this.background);
+
+    this.toggle(false);
+}
+
+BuildingUI.constructor = BuildingUI;
+BuildingUI.prototype = Object.create(_pixi2.default.Container.prototype);
+
+BuildingUI.prototype.setBuilding = function (building) {
+
+    console.log('BuildingUI.setBuilding(', building, ')');
+};
+
+BuildingUI.prototype.toggle = function (show, dispatchEvent) {
+
+    var isVisible = void 0;
+    if (typeof show === 'undefined') {
+        isVisible = !this.shown;
+    } else {
+        isVisible = show;
+    }
+
+    dispatchEvent = typeof dispatchEvent === 'undefined' ? false : dispatchEvent;
+
+    this.visible = this.shown = isVisible;
+
+    if (dispatchEvent) {
+
+        this.emit(isVisible ? 'toggle:on' : 'toggle:off', this.id);
+    }
+};
 
 /* -------------- */
 /* ------- Supply */
@@ -35658,13 +35728,13 @@ TimeUI.prototype.update = function (hour, minute) {
 /* ----- Building */
 /* -------------- */
 
-function BuildingUI(world) {
+function ConstructionUI(world) {
 
     _pixi2.default.Container.call(this);
 
     this.world = world;
 
-    this.id = 'building';
+    this.id = 'construction';
 
     // Toggle Button
 
@@ -35758,15 +35828,15 @@ function BuildingUI(world) {
     this.toggle(false);
 }
 
-BuildingUI.constructor = BuildingUI;
-BuildingUI.prototype = Object.create(_pixi2.default.Container.prototype);
+ConstructionUI.constructor = ConstructionUI;
+ConstructionUI.prototype = Object.create(_pixi2.default.Container.prototype);
 
-BuildingUI.prototype.onButtonDown = function (event) {
+ConstructionUI.prototype.onButtonDown = function (event) {
 
     this.toggle();
 };
 
-BuildingUI.prototype.onArchetypeButtonDown = function (event) {
+ConstructionUI.prototype.onArchetypeButtonDown = function (event) {
 
     // Wait for drag start
 
@@ -35801,7 +35871,7 @@ BuildingUI.prototype.onArchetypeButtonDown = function (event) {
     // On cancel open building menu
 };
 
-BuildingUI.prototype.onDragStart = function (event) {
+ConstructionUI.prototype.onDragStart = function (event) {
 
     this.dragging = true;
 
@@ -35816,7 +35886,7 @@ BuildingUI.prototype.onDragStart = function (event) {
     this.world.content.addChild(this.activeBuilding);
 };
 
-BuildingUI.prototype.onDrag = function (event) {
+ConstructionUI.prototype.onDrag = function (event) {
 
     var distanceFromStart = _Maths2.default.distanceBetween(this.dragStartPos, event.data.getLocalPosition(this.world));
 
@@ -35835,7 +35905,7 @@ BuildingUI.prototype.onDrag = function (event) {
     }
 };
 
-BuildingUI.prototype.onDragEnd = function () {
+ConstructionUI.prototype.onDragEnd = function () {
 
     this.world.off('mousemove', this.onDragBound);
     this.world.off('touchmove', this.onDragBound);
@@ -35887,7 +35957,7 @@ BuildingUI.prototype.onDragEnd = function () {
     }
 };
 
-BuildingUI.prototype.toggle = function (show, dispatchEvent) {
+ConstructionUI.prototype.toggle = function (show, dispatchEvent) {
 
     var isVisible = void 0;
     if (typeof show === 'undefined') {
@@ -35906,7 +35976,7 @@ BuildingUI.prototype.toggle = function (show, dispatchEvent) {
     }
 };
 
-BuildingUI.prototype.update = function (wood, stone) {
+ConstructionUI.prototype.update = function (wood, stone) {
 
     this.world.buildings.archetypes.forEach(function (archetype) {
 
