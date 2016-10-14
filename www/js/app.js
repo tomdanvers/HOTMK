@@ -34827,7 +34827,7 @@ var RoleHealer = exports.RoleHealer = {
 
             var entityB = entity.target;
 
-            if (entityB.health.isMax()) {
+            if (entityB.health.isMax() || entityB.health.isMin()) {
 
                 entity.target = false;
             } else {

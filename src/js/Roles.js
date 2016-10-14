@@ -357,7 +357,7 @@ export const RoleHealer = {
 
             let entityB = entity.target;
 
-            if (entityB.health.isMax()) {
+            if (entityB.health.isMax() || entityB.health.isMin()) {
 
                 entity.target = false;
 
