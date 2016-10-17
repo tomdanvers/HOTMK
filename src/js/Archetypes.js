@@ -50,7 +50,6 @@ function Dwarf() {
 
     this.timeBetweenActions = 1500;
 
-
     this.range = 5;
     this.rangeWeapon = 50;
     this.rangePerception = 150;

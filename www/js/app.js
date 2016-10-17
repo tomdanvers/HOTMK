@@ -32850,7 +32850,7 @@ Boar.prototype.draw = function (graphics) {
 Boar.WIDTH = 8;
 Boar.HEIGHT = 5;
 
-},{"./Creature":213,"./utils/Maths":232,"./utils/value-min-max":233,"pixi.js":154}],210:[function(require,module,exports){
+},{"./Creature":213,"./utils/Maths":233,"./utils/value-min-max":234,"pixi.js":154}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33206,7 +33206,7 @@ function Wolf() {
 Wolf.constructor = Wolf;
 Wolf.prototype = Object.create(Animal.prototype);
 
-},{"./Roles":221}],211:[function(require,module,exports){
+},{"./Roles":222}],211:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33233,6 +33233,10 @@ var _Roles = require('./Roles');
 
 var _Roles2 = _interopRequireDefault(_Roles);
 
+var _Inhabitants = require('./Inhabitants');
+
+var _Inhabitants2 = _interopRequireDefault(_Inhabitants);
+
 var _Archetypes = require('./Archetypes');
 
 var _Archetypes2 = _interopRequireDefault(_Archetypes);
@@ -33257,8 +33261,7 @@ function Building(world, startX, startY, archetype, isTemp) {
 
     this.archetype = archetype;
 
-    this.inhabitantCount = 1;
-    this.inhabitants = [];
+    this.inhabitants = new _Inhabitants2.default(world, this);
 
     this.integrity = new _valueMinMax2.default(0, Building.INTEGRITY, Building.INTEGRITY * .25);
 
@@ -33316,46 +33319,13 @@ Building.prototype.onDown = function (event) {
     this.world.ui.building.toggle(true, true);
 };
 
-Building.prototype.spawn = function (isPurchased) {
-
-    //if (this.timeSinceSpawn > Building.SPAWN_RATE && this.isConstructed) {
-    if (this.isConstructed) {
-
-        this.timeSinceSpawn = 0;
-
-        var dwarf = void 0;
-
-        if (isPurchased) {
-
-            dwarf = this.world.buyDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedArchetype);
-        } else {
-
-            dwarf = this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedArchetype);
-        }
-
-        dwarf.home = this;
-
-        this.inhabitants.push(dwarf);
-    }
-};
-
 Building.prototype.constructed = function () {
 
     this.isConstructed = true;
 
     this.alpha = 1;
 
-    if (this.associatedArchetype) {
-
-        // Add dwarf/dwarves with associated role
-
-        var inhabitantCount = this.inhabitantCount || 1;
-
-        for (var i = 0; i < inhabitantCount; i++) {
-
-            this.spawn(false);
-        }
-    }
+    this.inhabitants.spawn();
 
     this.onConstructed();
 };
@@ -33382,6 +33352,12 @@ Building.TYPE = 'building';
 function Camp(world, startX, startY, archetype, isTemp) {
 
     Building.call(this, world, startX, startY, archetype, isTemp);
+
+    this.inhabitants.addArchetype(_Archetypes2.default.MASON);
+    this.inhabitants.addArchetype(_Archetypes2.default.FORESTER);
+    this.inhabitants.addArchetype(_Archetypes2.default.MINER);
+
+    this.inhabitants.spawn();
 }
 
 Camp.constructor = Camp;
@@ -33408,11 +33384,13 @@ function NightWatch(world, startX, startY, archetype, isTemp) {
 
     Building.call(this, world, startX, startY, archetype, isTemp);
 
-    this.inhabitantCount = 3;
     this.patrolRoute = false;
     this.patrolRadius = 300;
     this.lightRadius = 125;
-    this.associatedArchetype = _Archetypes2.default.WATCH_NIGHT;
+
+    this.inhabitants.addArchetype(_Archetypes2.default.WATCH_NIGHT);
+    this.inhabitants.addArchetype(_Archetypes2.default.WATCH_NIGHT);
+    this.inhabitants.addArchetype(_Archetypes2.default.WATCH_NIGHT);
 }
 
 NightWatch.constructor = NightWatch;
@@ -33494,7 +33472,7 @@ function Hunter(world, startX, startY, archetype, isTemp) {
 
     Building.call(this, world, startX, startY, archetype, isTemp);
 
-    this.associatedArchetype = _Archetypes2.default.HUNTER;
+    this.inhabitants.addArchetype(_Archetypes2.default.HUNTER);
 }
 
 Hunter.constructor = Hunter;
@@ -33521,7 +33499,7 @@ function Miner(world, startX, startY, archetype, isTemp) {
 
     Building.call(this, world, startX, startY, archetype, isTemp);
 
-    this.associatedArchetype = _Archetypes2.default.MINER;
+    this.inhabitants.addArchetype(_Archetypes2.default.MINER);
 }
 
 Miner.constructor = Miner;
@@ -33548,7 +33526,7 @@ function Forester(world, startX, startY, archetype, isTemp) {
 
     Building.call(this, world, startX, startY, archetype, isTemp);
 
-    this.associatedArchetype = _Archetypes2.default.FORESTER;
+    this.inhabitants.addArchetype(_Archetypes2.default.FORESTER);
 }
 
 Forester.constructor = Forester;
@@ -33575,7 +33553,7 @@ function Mason(world, startX, startY, archetype, isTemp) {
 
     Building.call(this, world, startX, startY, archetype, isTemp);
 
-    this.associatedArchetype = _Archetypes2.default.MASON;
+    this.inhabitants.addArchetype(_Archetypes2.default.MASON);
 }
 
 Mason.constructor = Mason;
@@ -33602,7 +33580,7 @@ function Healer(world, startX, startY, archetype, isTemp) {
 
     Building.call(this, world, startX, startY, archetype, isTemp);
 
-    this.associatedArchetype = _Archetypes2.default.HEALER;
+    this.inhabitants.addArchetype(_Archetypes2.default.HEALER);
 }
 
 Healer.constructor = Healer;
@@ -33621,7 +33599,7 @@ Healer.prototype.draw = function (graphics) {
 Healer.WIDTH = 12;
 Healer.HEIGHT = 12;
 
-},{"./Archetypes":210,"./Dwarf":214,"./Roles":221,"./utils/Maths":232,"./utils/value-min-max":233,"pixi.js":154}],212:[function(require,module,exports){
+},{"./Archetypes":210,"./Dwarf":214,"./Inhabitants":215,"./Roles":222,"./utils/Maths":233,"./utils/value-min-max":234,"pixi.js":154}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33866,6 +33844,11 @@ Creature.prototype.healthChanged = function () {
         this.healthBar.visible = true;
         this.healthBar.setValue(this.health.val());
     }
+
+    if (this.health.isMin()) {
+
+        this.emit('death', this);
+    }
 };
 
 Creature.prototype.update = function (timeDelta, world) {
@@ -33912,7 +33895,7 @@ Creature.prototype.isAlive = function () {
     return !this.health.isMin();
 };
 
-},{"./Inventory":215,"./Roles":221,"./ui/ValueBarUI":231,"./utils/Maths":232,"./utils/value-min-max":233,"pixi.js":154}],214:[function(require,module,exports){
+},{"./Inventory":216,"./Roles":222,"./ui/ValueBarUI":232,"./utils/Maths":233,"./utils/value-min-max":234,"pixi.js":154}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34000,7 +33983,115 @@ Dwarf.SPEED = .75;
 
 Dwarf.TYPE = 'dwarf';
 
-},{"./Creature":213,"./utils/Maths":232,"pixi.js":154}],215:[function(require,module,exports){
+},{"./Creature":213,"./utils/Maths":233,"pixi.js":154}],215:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = Inhabitants;
+exports.Inhabitant = Inhabitant;
+
+var _pixi = require('pixi.js');
+
+var _pixi2 = _interopRequireDefault(_pixi);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function Inhabitants(world, building) {
+
+    _pixi2.default.utils.EventEmitter.call(this);
+
+    this.world = world;
+    this.building = building;
+
+    this.list = [];
+}
+
+Inhabitants.constructor = Inhabitants;
+Inhabitants.prototype = Object.create(_pixi2.default.utils.EventEmitter.prototype);
+
+Inhabitants.prototype.addArchetype = function (archetypeId) {
+
+    var archetype = this.world.archetypes.getById(archetypeId);
+
+    this.list.push(new Inhabitant(this.world, this.building, archetype));
+};
+
+Inhabitants.prototype.spawn = function () {
+
+    this.list.forEach(function (inhabitant) {
+
+        if (!inhabitant.isFilled) {
+
+            inhabitant.spawn(false, true);
+        }
+    });
+};
+
+function Inhabitant(world, building, archetype) {
+
+    _pixi2.default.utils.EventEmitter.call(this);
+
+    this.world = world;
+    this.building = building;
+    this.archetype = archetype;
+
+    this.isFilled = false;
+}
+
+Inhabitant.constructor = Inhabitant;
+Inhabitant.prototype = Object.create(_pixi2.default.utils.EventEmitter.prototype);
+
+Inhabitant.prototype.spawn = function (isPurchased, ignoreContructionState) {
+
+    //if (this.timeSinceSpawn > Building.SPAWN_RATE && this.isConstructed) {
+    if (this.building.isConstructed || ignoreContructionState) {
+
+        this.building.timeSinceSpawn = 0;
+
+        var dwarf = void 0;
+
+        console.log('Inhabitant.prototype.spawn(', this.archetype.id, ')');
+
+        if (isPurchased) {
+
+            dwarf = this.world.buyDwarf(this.building.x + Math.random() * 3, this.building.y + Math.random() * 3, this.archetype.id);
+        } else {
+
+            dwarf = this.world.addDwarf(this.building.x + Math.random() * 3, this.building.y + Math.random() * 3, this.archetype.id);
+        }
+
+        if (dwarf) {
+
+            dwarf.home = this.building;
+
+            dwarf.on('death', this.onDeath.bind(this));
+
+            this.isFilled = true;
+
+            this.dwarf = dwarf;
+
+            this.emit('filled:true');
+        } else {
+
+            console.warn('Inhabitant.spawn( COULDN\'T AFFORD TO SPAWN )');
+        }
+    }
+};
+
+Inhabitant.prototype.onDeath = function (dwarf) {
+
+    this.isFilled = false;
+
+    this.dwarf = false;
+
+    this.emit('filled:false');
+};
+
+},{"pixi.js":154}],216:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34081,7 +34172,7 @@ Inventory.prototype.free = function () {
 Inventory.LIMIT = 20;
 Inventory.VERBOSE = false;
 
-},{}],216:[function(require,module,exports){
+},{}],217:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -34092,7 +34183,7 @@ exports.default = {
     HEIGHT: 640
 };
 
-},{}],217:[function(require,module,exports){
+},{}],218:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34275,7 +34366,7 @@ Lighting.prototype.update = function (timeDelta, world) {
     this.alpha = world.timeOfDay.getSunValue();
 };
 
-},{"./Tile":223,"./World":228,"pixi.js":154}],218:[function(require,module,exports){
+},{"./Tile":224,"./World":229,"pixi.js":154}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34383,7 +34474,7 @@ function AnimalArchetype(id, startTime, endTime, maxConcurrent, c, archetype) {
 
 AnimalArchetype.constructor = AnimalArchetype;
 
-},{"./Animal":209,"./Archetypes":210,"./Tile":223,"./World":228}],219:[function(require,module,exports){
+},{"./Animal":209,"./Archetypes":210,"./Tile":224,"./World":229}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34444,7 +34535,7 @@ PanelController.prototype.panelOff = function (id) {
     }
 };
 
-},{"./utils/Maths":232,"./utils/value-min-max":233}],220:[function(require,module,exports){
+},{"./utils/Maths":233,"./utils/value-min-max":234}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34500,7 +34591,7 @@ Rock.HEIGHT = 10;
 Rock.TYPE = 'rock';
 Rock.SUPPLY = 250;
 
-},{"./utils/value-min-max":233,"pixi.js":154}],221:[function(require,module,exports){
+},{"./utils/value-min-max":234,"pixi.js":154}],222:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34971,11 +35062,11 @@ var RoleHunter = exports.RoleHunter = {
 
                 var animal = entity.target;
 
-                animal.health.decrement(entity.damage);
+                animal.takeDamage(entity.damage, entity);
 
                 entity.tookAction();
 
-                if (animal.health.isMin()) {
+                if (!animal.isAlive()) {
 
                     world.ui.log.log('Dwarf "' + entity.name + '" killed "' + animal.name + '"');
 
@@ -35323,7 +35414,7 @@ var Utils = {
     }
 };
 
-},{"./Dwarf":214,"./Rock":220,"./Tree":225,"./utils/Maths":232}],222:[function(require,module,exports){
+},{"./Dwarf":214,"./Rock":221,"./Tree":226,"./utils/Maths":233}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35381,7 +35472,7 @@ Supply.prototype.update = function (timeDelta, world) {
 Supply.WOOD = 1000; //150;
 Supply.STONE = 1000; //150;
 
-},{"./utils/value-min-max":233,"pixi.js":154}],223:[function(require,module,exports){
+},{"./utils/value-min-max":234,"pixi.js":154}],224:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35462,7 +35553,7 @@ Tile.TILE_COLOURS = {
     grass: '#002C00'
 };
 
-},{"pixi.js":154}],224:[function(require,module,exports){
+},{"pixi.js":154}],225:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35582,7 +35673,7 @@ TimeOfDay.prototype.isDuringPeriod = function (start, end) {
     }
 };
 
-},{"./utils/value-min-max":233,"pixi.js":154}],225:[function(require,module,exports){
+},{"./utils/value-min-max":234,"pixi.js":154}],226:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35661,7 +35752,7 @@ Tree.HEIGHT = 24;
 Tree.TYPE = 'tree';
 Tree.SUPPLY = 100;
 
-},{"./Tile":223,"./utils/value-min-max":233,"pixi.js":154}],226:[function(require,module,exports){
+},{"./Tile":224,"./utils/value-min-max":234,"pixi.js":154}],227:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35670,6 +35761,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = UI;
 exports.PanelUI = PanelUI;
 exports.BuildingUI = BuildingUI;
+exports.InhabitantsUI = InhabitantsUI;
+exports.InhabitantUI = InhabitantUI;
 exports.SupplyUI = SupplyUI;
 exports.TimeUI = TimeUI;
 exports.ConstructionUI = ConstructionUI;
@@ -35844,6 +35937,11 @@ function BuildingUI(world) {
     this.integrity.x = 20;
     this.integrity.y = this.background.height - 30;
     this.background.addChild(this.integrity);
+
+    this.inhabitants = new InhabitantsUI(this.background.width - 40, 200);
+    this.inhabitants.x = 20;
+    this.inhabitants.y = 90;
+    this.background.addChild(this.inhabitants);
 }
 
 BuildingUI.constructor = BuildingUI;
@@ -35859,11 +35957,137 @@ BuildingUI.prototype.update = function (timeDelta, world) {
 
 BuildingUI.prototype.setBuilding = function (building) {
 
-    this.activeBuilding = building;
+    if (this.activeBuilding != building) {
 
-    this.textTitle.setText(building.archetype.title);
-    this.textDescription.setText(building.archetype.description);
-    this.integrity.setValue(building.integrity.val());
+        this.activeBuilding = building;
+
+        this.textTitle.text = building.archetype.title;
+        this.textDescription.text = building.archetype.description;
+        this.integrity.setValue(building.integrity.val());
+
+        this.inhabitants.setInhabitants(building.inhabitants);
+    }
+};
+
+/* ---------------------------- */
+/* ---------------- Inhabitants */
+/* ---------------------------- */
+
+function InhabitantsUI(width, height) {
+
+    _pixi2.default.Container.call(this);
+
+    this.widthMax = width;
+    this.heightMax = height;
+
+    this.inhabitants = [];
+}
+
+InhabitantsUI.constructor = InhabitantsUI;
+InhabitantsUI.prototype = Object.create(_pixi2.default.Container.prototype);
+
+InhabitantsUI.prototype.setInhabitants = function (inhabitants) {
+
+    this.clearInhabitants();
+
+    if (this.activeInhabitants != inhabitants) {
+
+        this.activeInhabitants = inhabitants;
+
+        inhabitants.list.forEach(function (inhabitant, index) {
+
+            var inhabitantUI = new InhabitantUI(this.widthMax, 40);
+            inhabitantUI.x = 0;
+            inhabitantUI.y = index * 50;
+            inhabitantUI.setInhabitant(inhabitant);
+            this.addChild(inhabitantUI);
+
+            this.inhabitants.push(inhabitantUI);
+        }.bind(this));
+    }
+};
+
+InhabitantsUI.prototype.clearInhabitants = function () {
+
+    this.inhabitants.forEach(function (inhabitantUI) {
+
+        inhabitantUI.destroy();
+    });
+};
+
+/* ---------------------------- */
+/* ----------------- Inhabitant */
+/* ---------------------------- */
+
+function InhabitantUI(width, height) {
+
+    _pixi2.default.Container.call(this);
+
+    this.widthMax = width;
+    this.heightMax = height;
+
+    var style = {
+        font: '16px Arial',
+        fill: '#FFFFFF',
+        wordWrap: true,
+        wordWrapWidth: this.widthMax - 40
+    };
+
+    this.textTitle = new _pixi2.default.Text('title', style);
+    this.addChild(this.textTitle);
+
+    style.font = '12px Arial';
+
+    this.textDescription = new _pixi2.default.Text('description', style);
+    this.textDescription.y = 20;
+    this.textDescription.alpha = .75;
+    this.addChild(this.textDescription);
+}
+
+InhabitantUI.constructor = InhabitantUI;
+InhabitantUI.prototype = Object.create(_pixi2.default.Container.prototype);
+
+InhabitantUI.prototype.setInhabitant = function (inhabitant) {
+
+    this.activeInhabitant = inhabitant;
+
+    inhabitant.on('filled:true', this.update.bind(this));
+    inhabitant.on('filled:false', this.update.bind(this));
+
+    this.on('mousedown', this.onDown.bind(this));
+    this.on('touchstart', this.onDown.bind(this));
+
+    this.update();
+};
+
+InhabitantUI.prototype.update = function () {
+
+    console.log('sajdashdkashdjh');
+
+    if (this.activeInhabitant.isFilled) {
+
+        this.textTitle.text = this.activeInhabitant.dwarf.name;
+        this.textDescription.text = this.activeInhabitant.archetype.id;
+    } else {
+
+        this.textTitle.text = 'Hire replacement ' + this.activeInhabitant.archetype.id;
+        this.textDescription.text = 'For ' + this.activeInhabitant.archetype.cWood + ' wood and ' + this.activeInhabitant.archetype.cStone + ' stone.';
+    }
+
+    this.interactive = !this.activeInhabitant.isFilled;
+};
+
+InhabitantUI.prototype.clearInhabitants = function () {
+
+    this.inhabitants.forEach(function (inhabitantUI) {
+
+        inhabitantUI.destroy();
+    });
+};
+
+InhabitantUI.prototype.onDown = function () {
+
+    this.activeInhabitant.spawn(true, false);
 };
 
 /* ---------------------------- */
@@ -36261,7 +36485,7 @@ LogUI.prototype.onButtonDown = function (event) {
     this.toggle(undefined, true);
 };
 
-},{"./Layout":216,"./PanelController":219,"./ui/ValueBarUI":231,"./utils/Maths":232,"pixi.js":154}],227:[function(require,module,exports){
+},{"./Layout":217,"./PanelController":220,"./ui/ValueBarUI":232,"./utils/Maths":233,"pixi.js":154}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36393,7 +36617,7 @@ Viewport.prototype.disable = function () {
     this.isEnabled = false;
 };
 
-},{"./utils/Maths":232,"pixi.js":154}],228:[function(require,module,exports){
+},{"./utils/Maths":233,"pixi.js":154}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36567,16 +36791,6 @@ function World() {
 
     var camp = this.addBuilding(_Buildings2.default.ARCHETYPE_CAMP.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT - 5));
 
-    // Add dwarves
-
-    var forester = this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _Archetypes2.default.FORESTER);
-    var miner = this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _Archetypes2.default.MINER);
-    var builder = this.addDwarf(World.WIDTH * .5 * _Tile2.default.WIDTH - 25, World.HEIGHT * _Tile2.default.HEIGHT + 30, _Archetypes2.default.MASON);
-    // let hunter = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, Archetypes.HUNTER);
-
-    forester.home = builder.home = miner.home = camp;
-    // forester.home = builder.home = miner.home = hunter.home = camp;
-
     // Add resources
 
     this.tiles.forEach(function (tile) {
@@ -36714,14 +36928,17 @@ World.prototype.addBuilding = function (id, tileX, tileY) {
 World.prototype.buyDwarf = function (x, y, archetypeId) {
 
     var archetype = this.archetypes.getById(archetypeId);
-    var canAfford = this.supply.wood >= archetype.cWood && this.supply.stone >= archetype.cStone;
+    var canAfford = this.supply.wood.get() >= archetype.cWood && this.supply.stone.get() >= archetype.cStone;
 
     if (canAfford) {
 
-        this.supply.wood -= archetype.cWood;
-        this.supply.stone -= archetype.cStone;
+        this.supply.wood.decrement(archetype.cWood);
+        this.supply.stone.decrement(archetype.cStone);
 
         return this.addDwarf(x, y, archetype.id);
+    } else {
+
+        return false;
     }
 };
 
@@ -36906,7 +37123,7 @@ World.prototype.getTile = function (x, y) {
 World.WIDTH = 48;
 World.HEIGHT = 32;
 
-},{"./Animal":209,"./Archetypes":210,"./Buildings":212,"./Dwarf":214,"./Layout":216,"./Lighting":217,"./MotherNature":218,"./Rock":220,"./Roles":221,"./Supply":222,"./Tile":223,"./TimeOfDay":224,"./Tree":225,"./UI":226,"./Viewport":227,"./ZOrdered":229,"noisejs":30,"pixi.js":154}],229:[function(require,module,exports){
+},{"./Animal":209,"./Archetypes":210,"./Buildings":212,"./Dwarf":214,"./Layout":217,"./Lighting":218,"./MotherNature":219,"./Rock":221,"./Roles":222,"./Supply":223,"./Tile":224,"./TimeOfDay":225,"./Tree":226,"./UI":227,"./Viewport":228,"./ZOrdered":230,"noisejs":30,"pixi.js":154}],230:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36919,7 +37136,7 @@ exports.default = {
     }
 };
 
-},{}],230:[function(require,module,exports){
+},{}],231:[function(require,module,exports){
 'use strict';
 
 var _pixi = require('pixi.js');
@@ -36996,7 +37213,7 @@ function startGame() {
     }
 }
 
-},{"./Layout":216,"./World":228,"pixi.js":154,"raf":187}],231:[function(require,module,exports){
+},{"./Layout":217,"./World":229,"pixi.js":154,"raf":187}],232:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37054,7 +37271,7 @@ ValueBarUI.prototype.setValue = function (value) {
     this.bar.scale.x = value;
 };
 
-},{"pixi.js":154}],232:[function(require,module,exports){
+},{"pixi.js":154}],233:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -37084,7 +37301,7 @@ exports.default = {
     }
 };
 
-},{}],233:[function(require,module,exports){
+},{}],234:[function(require,module,exports){
 "use strict";
 
 module.exports = function (min, max, initial) {
@@ -37159,4 +37376,4 @@ module.exports = function (min, max, initial) {
 	return api;
 };
 
-},{}]},{},[230]);
+},{}]},{},[231]);

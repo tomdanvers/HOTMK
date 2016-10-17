@@ -164,6 +164,12 @@ Creature.prototype.healthChanged = function() {
 
     }
 
+    if (this.health.isMin()) {
+
+        this.emit('death', this);
+
+    }
+
 }
 
 Creature.prototype.update = function(timeDelta, world) {

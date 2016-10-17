@@ -133,16 +133,6 @@ export default function World() {
 
     let camp = this.addBuilding(Buildings.ARCHETYPE_CAMP.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT - 5));
 
-    // Add dwarves
-
-    let forester = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, Archetypes.FORESTER);
-    let miner = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, Archetypes.MINER);
-    let builder = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, Archetypes.MASON);
-    // let hunter = this.addDwarf(World.WIDTH * .5 * Tile.WIDTH - 25, World.HEIGHT * Tile.HEIGHT + 30, Archetypes.HUNTER);
-
-    forester.home = builder.home = miner.home = camp;
-    // forester.home = builder.home = miner.home = hunter.home = camp;
-
     // Add resources
 
     this.tiles.forEach(function(tile) {
@@ -299,14 +289,18 @@ World.prototype.addBuilding = function(id, tileX, tileY) {
 World.prototype.buyDwarf = function(x, y, archetypeId) {
 
     let archetype = this.archetypes.getById(archetypeId);
-    let canAfford = this.supply.wood >= archetype.cWood && this.supply.stone >= archetype.cStone;
+    let canAfford = this.supply.wood.get() >= archetype.cWood && this.supply.stone.get() >= archetype.cStone;
 
     if (canAfford) {
 
-        this.supply.wood -= archetype.cWood;
-        this.supply.stone -= archetype.cStone;
+        this.supply.wood.decrement(archetype.cWood);
+        this.supply.stone.decrement(archetype.cStone);
 
         return this.addDwarf(x, y, archetype.id);
+
+    } else {
+
+        return false;
 
     }
 

@@ -531,11 +531,11 @@ export const RoleHunter = {
 
                 let animal = entity.target;
 
-                animal.health.decrement(entity.damage);
+                animal.takeDamage(entity.damage, entity);
 
                 entity.tookAction();
 
-                if (animal.health.isMin()) {
+                if (!animal.isAlive()) {
 
                     world.ui.log.log('Dwarf "' + entity.name + '" killed "' + animal.name + '"');
 

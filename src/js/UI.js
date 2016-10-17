@@ -159,6 +159,11 @@ export function BuildingUI(world) {
     this.integrity.y = this.background.height - 30;
     this.background.addChild(this.integrity);
 
+    this.inhabitants = new InhabitantsUI(this.background.width - 40, 200);
+    this.inhabitants.x = 20;
+    this.inhabitants.y = 90;
+    this.background.addChild(this.inhabitants)
+
 }
 
 BuildingUI.constructor = BuildingUI;
@@ -176,11 +181,153 @@ BuildingUI.prototype.update = function(timeDelta, world) {
 
 BuildingUI.prototype.setBuilding = function(building) {
 
-    this.activeBuilding = building;
+    if (this.activeBuilding != building) {
 
-    this.textTitle.setText(building.archetype.title);
-    this.textDescription.setText(building.archetype.description);
-    this.integrity.setValue(building.integrity.val());
+        this.activeBuilding = building;
+
+        this.textTitle.text = building.archetype.title;
+        this.textDescription.text = building.archetype.description;
+        this.integrity.setValue(building.integrity.val());
+
+        this.inhabitants.setInhabitants(building.inhabitants);
+
+    }
+
+}
+
+
+/* ---------------------------- */
+/* ---------------- Inhabitants */
+/* ---------------------------- */
+
+export function InhabitantsUI(width, height) {
+
+    PIXI.Container.call(this);
+
+    this.widthMax = width;
+    this.heightMax = height;
+
+    this.inhabitants = [];
+
+}
+
+InhabitantsUI.constructor = InhabitantsUI;
+InhabitantsUI.prototype = Object.create(PIXI.Container.prototype);
+
+InhabitantsUI.prototype.setInhabitants = function(inhabitants) {
+
+    this.clearInhabitants();
+
+    if (this.activeInhabitants != inhabitants) {
+
+        this.activeInhabitants = inhabitants;
+
+        inhabitants.list.forEach(function(inhabitant, index) {
+
+            let inhabitantUI = new InhabitantUI(this.widthMax, 40);
+            inhabitantUI.x = 0;
+            inhabitantUI.y = index * 50;
+            inhabitantUI.setInhabitant(inhabitant);
+            this.addChild(inhabitantUI);
+
+            this.inhabitants.push(inhabitantUI);
+
+        }.bind(this));
+
+    }
+
+}
+
+InhabitantsUI.prototype.clearInhabitants = function() {
+
+    this.inhabitants.forEach(function(inhabitantUI) {
+
+        inhabitantUI.destroy();
+
+    });
+
+}
+
+/* ---------------------------- */
+/* ----------------- Inhabitant */
+/* ---------------------------- */
+
+export function InhabitantUI(width, height) {
+
+    PIXI.Container.call(this);
+
+    this.widthMax = width;
+    this.heightMax = height;
+
+    var style = {
+        font : '16px Arial',
+        fill : '#FFFFFF',
+        wordWrap : true,
+        wordWrapWidth : this.widthMax - 40
+    };
+
+    this.textTitle = new PIXI.Text('title', style);
+    this.addChild(this.textTitle);
+
+    style.font = '12px Arial';
+
+    this.textDescription = new PIXI.Text('description', style);
+    this.textDescription.y = 20;
+    this.textDescription.alpha = .75;
+    this.addChild(this.textDescription);
+
+}
+
+InhabitantUI.constructor = InhabitantUI;
+InhabitantUI.prototype = Object.create(PIXI.Container.prototype);
+
+InhabitantUI.prototype.setInhabitant = function(inhabitant) {
+
+    this.activeInhabitant = inhabitant;
+
+    inhabitant.on('filled:true', this.update.bind(this));
+    inhabitant.on('filled:false', this.update.bind(this));
+
+    this.on('mousedown', this.onDown.bind(this));
+    this.on('touchstart', this.onDown.bind(this));
+
+    this.update();
+
+}
+
+InhabitantUI.prototype.update = function() {
+
+    console.log('sajdashdkashdjh')
+
+    if (this.activeInhabitant.isFilled) {
+
+        this.textTitle.text = this.activeInhabitant.dwarf.name;
+        this.textDescription.text = this.activeInhabitant.archetype.id;
+
+    } else {
+
+        this.textTitle.text = 'Hire replacement ' + this.activeInhabitant.archetype.id;
+        this.textDescription.text = 'For ' + this.activeInhabitant.archetype.cWood + ' wood and ' + this.activeInhabitant.archetype.cStone+' stone.';
+
+    }
+
+    this.interactive = !this.activeInhabitant.isFilled;
+
+}
+
+InhabitantUI.prototype.clearInhabitants = function() {
+
+    this.inhabitants.forEach(function(inhabitantUI) {
+
+        inhabitantUI.destroy();
+
+    });
+
+}
+
+InhabitantUI.prototype.onDown = function() {
+
+    this.activeInhabitant.spawn(true, false);
 
 }
 

@@ -2,6 +2,7 @@ import PIXI from 'pixi.js';
 
 import Dwarf from './Dwarf';
 import Roles from './Roles';
+import Inhabitants from './Inhabitants';
 import Archetypes from './Archetypes';
 import ValueMinMax from './utils/value-min-max';
 import Maths from './utils/Maths';
@@ -14,8 +15,7 @@ export function Building(world, startX, startY, archetype, isTemp) {
 
     this.archetype = archetype;
 
-    this.inhabitantCount = 1;
-    this.inhabitants = [];
+    this.inhabitants = new Inhabitants(world, this);
 
     this.integrity = new ValueMinMax(0, Building.INTEGRITY, Building.INTEGRITY * .25);
 
@@ -79,52 +79,13 @@ Building.prototype.onDown = function(event) {
 
 }
 
-Building.prototype.spawn = function(isPurchased) {
-
-    //if (this.timeSinceSpawn > Building.SPAWN_RATE && this.isConstructed) {
-    if (this.isConstructed) {
-
-        this.timeSinceSpawn = 0;
-
-        let dwarf;
-
-        if (isPurchased) {
-
-            dwarf = this.world.buyDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedArchetype);
-
-        } else {
-
-            dwarf = this.world.addDwarf(this.position.x + Math.random() * 3, this.position.y + Math.random() * 3, this.associatedArchetype);
-
-        }
-
-        dwarf.home = this;
-
-        this.inhabitants.push(dwarf);
-
-    }
-
-}
-
 Building.prototype.constructed = function() {
 
     this.isConstructed = true;
 
     this.alpha = 1;
 
-    if (this.associatedArchetype) {
-
-        // Add dwarf/dwarves with associated role
-
-        let inhabitantCount = this.inhabitantCount || 1;
-
-        for (let i = 0; i < inhabitantCount; i ++) {
-
-            this.spawn(false);
-
-        }
-
-    }
+    this.inhabitants.spawn();
 
     this.onConstructed();
 
@@ -154,6 +115,12 @@ export function Camp(world, startX, startY, archetype, isTemp) {
 
     Building.call(this, world, startX, startY, archetype, isTemp);
 
+    this.inhabitants.addArchetype(Archetypes.MASON);
+    this.inhabitants.addArchetype(Archetypes.FORESTER);
+    this.inhabitants.addArchetype(Archetypes.MINER);
+
+    this.inhabitants.spawn();
+
 }
 
 Camp.constructor = Camp;
@@ -181,11 +148,13 @@ export function NightWatch(world, startX, startY, archetype, isTemp) {
 
     Building.call(this, world, startX, startY, archetype, isTemp);
 
-    this.inhabitantCount = 3;
     this.patrolRoute = false;
     this.patrolRadius = 300;
     this.lightRadius = 125;
-    this.associatedArchetype = Archetypes.WATCH_NIGHT;
+
+    this.inhabitants.addArchetype(Archetypes.WATCH_NIGHT);
+    this.inhabitants.addArchetype(Archetypes.WATCH_NIGHT);
+    this.inhabitants.addArchetype(Archetypes.WATCH_NIGHT);
 
 }
 
@@ -276,7 +245,7 @@ export function Hunter(world, startX, startY, archetype, isTemp) {
 
     Building.call(this, world, startX, startY, archetype, isTemp);
 
-    this.associatedArchetype = Archetypes.HUNTER;
+    this.inhabitants.addArchetype(Archetypes.HUNTER);
 
 }
 
@@ -306,7 +275,7 @@ export function Miner(world, startX, startY, archetype, isTemp) {
 
     Building.call(this, world, startX, startY, archetype, isTemp);
 
-    this.associatedArchetype = Archetypes.MINER;
+    this.inhabitants.addArchetype(Archetypes.MINER);
 
 }
 
@@ -338,7 +307,7 @@ export function Forester(world, startX, startY, archetype, isTemp) {
 
     Building.call(this, world, startX, startY, archetype, isTemp);
 
-    this.associatedArchetype = Archetypes.FORESTER;
+    this.inhabitants.addArchetype(Archetypes.FORESTER);
 
 }
 
@@ -370,7 +339,7 @@ export function Mason(world, startX, startY, archetype, isTemp) {
 
     Building.call(this, world, startX, startY, archetype, isTemp);
 
-    this.associatedArchetype = Archetypes.MASON;
+    this.inhabitants.addArchetype(Archetypes.MASON);
 
 }
 
@@ -401,7 +370,7 @@ export function Healer(world, startX, startY, archetype, isTemp) {
 
     Building.call(this, world, startX, startY, archetype, isTemp);
 
-    this.associatedArchetype = Archetypes.HEALER;
+    this.inhabitants.addArchetype(Archetypes.HEALER);
 
 }
 
