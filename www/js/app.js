@@ -33110,7 +33110,7 @@ function Rabbit() {
     Animal.call(this);
 
     this.id = Archetypes.ANIMAL_RABBIT;
-    this.role = _Roles2.default.PREDATOR;
+    this.role = _Roles2.default.PREY;
 
     this.colour = 0x553333;
 
@@ -33131,7 +33131,7 @@ function Deer() {
     Animal.call(this);
 
     this.id = Archetypes.ANIMAL_DEER;
-    this.role = _Roles2.default.PREDATOR;
+    this.role = _Roles2.default.PREY;
 
     this.colour = 0x553333;
 
@@ -33152,7 +33152,7 @@ function Fox() {
     Animal.call(this);
 
     this.id = Archetypes.ANIMAL_FOX;
-    this.role = _Roles2.default.PREDATOR;
+    this.role = _Roles2.default.PREY;
 
     this.colour = 0x553333;
 
@@ -34331,7 +34331,7 @@ MotherNature.prototype.update = function (timeDelta) {
 
 MotherNature.prototype.spawn = function (animalArchetype) {
 
-    var animal = new animalArchetype.c(this.world, _World2.default.WIDTH * _Tile2.default.WIDTH * Math.random(), _World2.default.HEIGHT * _Tile2.default.HEIGHT * Math.random() * .7, animalArchetype.archetype); // * .7
+    var animal = new animalArchetype.c(this.world, _World2.default.WIDTH * _Tile2.default.WIDTH * Math.random(), _World2.default.HEIGHT * _Tile2.default.HEIGHT * Math.random() * .7, animalArchetype.archetype);
 
     this.world.addToZOrdered(animal);
 
@@ -34805,7 +34805,7 @@ var RoleHealer = exports.RoleHealer = {
     },
     update: function update(timeDelta, entity, world) {
 
-        if (!entity.target || entity.target.type !== 'dwarf') {
+        if (!entity.target || entity.target.type !== 'dwarf' || !entity.target.isAlive()) {
 
             var target = Utils.nearestWithoutProperty('health', entity, world.dwarves) || false;
 
@@ -35284,7 +35284,9 @@ var Utils = {
 
         items.forEach(function (item) {
 
-            if (!item[property].isMin()) {
+            var valid = item.isAlive !== undefined && !item.isAlive() ? false : !item[property].isMin();
+
+            if (valid) {
 
                 var distance = _Maths2.default.distanceBetween(referencePoint, item);
 
@@ -35304,7 +35306,9 @@ var Utils = {
 
         items.forEach(function (item) {
 
-            if (!item[property].isMax()) {
+            var valid = item.isAlive !== undefined && !item.isAlive() ? false : !item[property].isMax();
+
+            if (valid) {
 
                 var distance = _Maths2.default.distanceBetween(referencePoint, item);
 
@@ -35374,8 +35378,8 @@ Supply.prototype.update = function (timeDelta, world) {
     }
 };
 
-Supply.WOOD = 150;
-Supply.STONE = 150;
+Supply.WOOD = 1000; //150;
+Supply.STONE = 1000; //150;
 
 },{"./utils/value-min-max":233,"pixi.js":154}],223:[function(require,module,exports){
 'use strict';
@@ -36943,7 +36947,9 @@ Array.prototype.random = function () {
     return this[Math.floor(Math.random() * this.length)];
 };
 
-if (window.location.hostname === 'localhost') {
+var DEBUG = window.location.hostname;
+
+if (DEBUG) {
 
     startGame();
 } else {
@@ -36974,7 +36980,7 @@ function startGame() {
 
     function tick(time) {
 
-        if (document.hasFocus()) {
+        if (document.hasFocus() || DEBUG) {
 
             count += window.TICK_RATE || 1;
 

@@ -46,7 +46,7 @@ MotherNature.prototype.update = function(timeDelta) {
 
 MotherNature.prototype.spawn = function(animalArchetype) {
 
-    let animal = new animalArchetype.c(this.world, World.WIDTH * Tile.WIDTH * Math.random(), World.HEIGHT * Tile.HEIGHT * Math.random() * .7, animalArchetype.archetype);// * .7
+    let animal = new animalArchetype.c(this.world, World.WIDTH * Tile.WIDTH * Math.random(), World.HEIGHT * Tile.HEIGHT * Math.random() * .7, animalArchetype.archetype);
 
     this.world.addToZOrdered(animal);
 

@@ -330,7 +330,7 @@ export const RoleHealer = {
 
     update(timeDelta, entity, world) {
 
-        if ( !entity.target || entity.target.type !== 'dwarf' ) {
+        if ( !entity.target || entity.target.type !== 'dwarf' || !entity.target.isAlive()) {
 
             let target = Utils.nearestWithoutProperty('health', entity, world.dwarves) || false;
 
@@ -917,7 +917,9 @@ const Utils = {
 
         items.forEach(function(item) {
 
-            if (!item[property].isMin()) {
+            let valid = item.isAlive !== undefined && !item.isAlive() ? false : !item[property].isMin();
+
+            if (valid) {
 
                 let distance = Maths.distanceBetween(referencePoint, item);
 
@@ -941,7 +943,9 @@ const Utils = {
 
         items.forEach(function(item) {
 
-            if (!item[property].isMax()) {
+            let valid = item.isAlive !== undefined && !item.isAlive() ? false : !item[property].isMax();
+
+            if (valid) {
 
                 let distance = Maths.distanceBetween(referencePoint, item);
 

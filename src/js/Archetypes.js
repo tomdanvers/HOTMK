@@ -265,7 +265,7 @@ export function Rabbit() {
     Animal.call(this);
 
     this.id = Archetypes.ANIMAL_RABBIT;
-    this.role = Roles.PREDATOR;
+    this.role = Roles.PREY;
 
     this.colour = 0x553333;
 
@@ -290,7 +290,7 @@ export function Deer() {
     Animal.call(this);
 
     this.id = Archetypes.ANIMAL_DEER;
-    this.role = Roles.PREDATOR;
+    this.role = Roles.PREY;
 
     this.colour = 0x553333;
 
@@ -315,7 +315,7 @@ export function Fox() {
     Animal.call(this);
 
     this.id = Archetypes.ANIMAL_FOX;
-    this.role = Roles.PREDATOR;
+    this.role = Roles.PREY;
 
     this.colour = 0x553333;
 

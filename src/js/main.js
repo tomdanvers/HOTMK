@@ -4,7 +4,9 @@ Array.prototype.random = function() {
 
 }
 
-if (window.location.hostname === 'localhost') {
+let DEBUG = window.location.hostname;
+
+if (DEBUG) {
 
     startGame();
 
@@ -43,7 +45,7 @@ function startGame() {
 
     function tick(time) {
 
-        if (document.hasFocus()) {
+        if (document.hasFocus() || DEBUG) {
 
             count += window.TICK_RATE || 1;
 
