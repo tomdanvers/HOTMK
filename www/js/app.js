@@ -35469,8 +35469,8 @@ Supply.prototype.update = function (timeDelta, world) {
     }
 };
 
-Supply.WOOD = 1000; //150;
-Supply.STONE = 1000; //150;
+Supply.WOOD = 150;
+Supply.STONE = 150;
 
 },{"./utils/value-min-max":234,"pixi.js":154}],224:[function(require,module,exports){
 'use strict';
