@@ -33791,6 +33791,11 @@ Creature.prototype.changeRole = function (roleId) {
         console.log('Creature.changeRole(', this.archetype.id, this.id, '|', this.roleId, '>', roleId, ')');
     }
 
+    if (this.role && this.role.exit !== undefined) {
+
+        this.role.exit(this, this.world);
+    }
+
     this.role = this.world.roles.getById(roleId);
     this.roleId = roleId;
 
@@ -34792,6 +34797,10 @@ var RoleResting = exports.RoleResting = {
             entity.target = entity.home;
         }
     },
+    exit: function exit(entity, world) {
+
+        entity.visible = true;
+    },
     update: function update(timeDelta, entity, world) {
 
         if (entity.careerRole.startTime && entity.careerRole.endTime && world.timeOfDay.isDuringPeriod(entity.careerRole.startTime, entity.careerRole.endTime)) {
@@ -34802,6 +34811,8 @@ var RoleResting = exports.RoleResting = {
     targetProximity: function targetProximity(timeDelta, entity, world) {
 
         entity.target = false;
+
+        entity.visible = false;
     }
 };
 
@@ -35041,7 +35052,7 @@ var RoleHunter = exports.RoleHunter = {
 
                 if (!animal.isAlive()) {
 
-                    world.ui.log.log('Dwarf "' + entity.name + '" killed "' + animal.name + '"');
+                    world.ui.log.log('Dwarf "' + entity.name + '" killed "' + animal.name + '" with "' + entity.weapon.title + '"');
 
                     entity.target = false;
                     entity.range = this.range;
@@ -35253,7 +35264,7 @@ var RolePredator = exports.RolePredator = {
 
             if (!target.isAlive()) {
 
-                world.ui.log.log('"' + entity.name + '" killed "' + target.name + '"');
+                world.ui.log.log('"' + entity.name + '" killed "' + target.name + '" with "' + entity.weapon.title + '"');
 
                 entity.target = false;
 

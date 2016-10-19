@@ -86,6 +86,12 @@ Creature.prototype.changeRole = function(roleId) {
 
     }
 
+    if (this.role && this.role.exit !== undefined) {
+
+        this.role.exit(this, this.world);
+
+    }
+
     this.role = this.world.roles.getById(roleId);
     this.roleId = roleId;
 
