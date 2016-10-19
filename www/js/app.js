@@ -32699,6 +32699,8 @@ function Animal(world, startX, startY, archetype) {
     _Creature2.default.call(this, world, startX, startY, archetype);
 
     this.name = 'animal';
+
+    this.type = Animal.TYPE;
 }
 
 Animal.constructor = Animal;
@@ -32850,7 +32852,7 @@ Boar.prototype.draw = function (graphics) {
 Boar.WIDTH = 8;
 Boar.HEIGHT = 5;
 
-},{"./Creature":213,"./utils/Maths":233,"./utils/value-min-max":234,"pixi.js":154}],210:[function(require,module,exports){
+},{"./Creature":213,"./utils/Maths":234,"./utils/value-min-max":235,"pixi.js":154}],210:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -32872,6 +32874,10 @@ exports.Wolf = Wolf;
 var _Roles = require('./Roles');
 
 var _Roles2 = _interopRequireDefault(_Roles);
+
+var _Weapons = require('./Weapons');
+
+var _Weapons2 = _interopRequireDefault(_Weapons);
 
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
@@ -32924,9 +32930,8 @@ function Dwarf() {
     this.timeBetweenActions = 1500;
 
     this.range = 5;
-    this.rangeWeapon = 50;
     this.rangePerception = 150;
-    this.rangeLimit = 400;
+    this.rangeLimit = 300;
 
     this.lightRadius = 45;
 
@@ -32934,11 +32939,12 @@ function Dwarf() {
 
     this.speed = .75;
     this.stealthiness = .25;
-    this.damage = 10;
     this.health = 100;
 
     this.cWood = 5;
     this.cStone = 5;
+
+    this.weapons = [_Weapons2.default.FISTS];
 }
 
 Dwarf.constructor = Dwarf;
@@ -32958,6 +32964,8 @@ function Mason() {
 
     this.cWood = 50;
     this.cStone = 50;
+
+    this.weapons = [_Weapons2.default.HAMMER];
 }
 Mason.constructor = Mason;
 Mason.prototype = Object.create(Dwarf.prototype);
@@ -32977,6 +32985,8 @@ function Miner() {
 
     this.cWood = 40;
     this.cStone = 20;
+
+    this.weapons = [_Weapons2.default.PICKAXE];
 }
 Miner.constructor = Miner;
 Miner.prototype = Object.create(Dwarf.prototype);
@@ -32998,6 +33008,8 @@ function Forester() {
 
     this.cWood = 20;
     this.cStone = 40;
+
+    this.weapons = [_Weapons2.default.AXE];
 }
 Forester.constructor = Forester;
 Forester.prototype = Object.create(Dwarf.prototype);
@@ -33013,17 +33025,18 @@ function Hunter() {
     this.id = Archetypes.HUNTER;
     this.role = _Roles2.default.HUNTER;
 
-    this.range = 10;
-
     this.lightRadius = 60;
+
+    this.rangePerception = 150;
 
     this.colour = 0x58240A;
 
     this.stealthiness = .9;
-    this.damage = 10;
 
     this.cWood = 50;
     this.cStone = 50;
+
+    this.weapons = [_Weapons2.default.BOW];
 }
 Hunter.constructor = Hunter;
 Hunter.prototype = Object.create(Dwarf.prototype);
@@ -33043,10 +33056,10 @@ function WatchNight() {
 
     this.stealthiness = .25;
 
-    this.damage = 20;
-
     this.cWood = 50;
     this.cStone = 50;
+
+    this.weapons = [_Weapons2.default.BOW, _Weapons2.default.BATTLEAXE];
 }
 WatchNight.constructor = WatchNight;
 WatchNight.prototype = Object.create(Dwarf.prototype);
@@ -33066,10 +33079,10 @@ function Healer() {
 
     this.stealthiness = .25;
 
-    this.damage = 20;
-
     this.cWood = 50;
     this.cStone = 50;
+
+    this.weapons = [];
 }
 Healer.constructor = Healer;
 Healer.prototype = Object.create(Dwarf.prototype);
@@ -33083,7 +33096,6 @@ function Animal() {
     this.timeBetweenActions = 1500;
 
     this.range = 5;
-    this.rangeWeapon = 50;
     this.rangePerception = 150;
     this.rangeLimit = 400;
 
@@ -33093,11 +33105,12 @@ function Animal() {
 
     this.speed = .75;
     this.stealthiness = .25;
-    this.damage = .25;
     this.health = 10;
 
     this.cWood = 0;
     this.cStone = 0;
+
+    this.weapons = [];
 }
 Animal.constructor = Animal;
 
@@ -33116,7 +33129,6 @@ function Rabbit() {
 
     this.speed = .8;
     this.rangePerception = 60;
-    this.damage = 1;
     this.health = 5;
 }
 Rabbit.constructor = Rabbit;
@@ -33137,7 +33149,6 @@ function Deer() {
 
     this.speed = .9;
     this.rangePerception = 100;
-    this.damage = 1;
     this.health = 20;
 }
 Deer.constructor = Deer;
@@ -33158,7 +33169,6 @@ function Fox() {
 
     this.speed = .9;
     this.rangePerception = 70;
-    this.damage = 5;
     this.health = 10;
 }
 Fox.constructor = Fox;
@@ -33179,8 +33189,9 @@ function Boar() {
 
     this.speed = .6;
     this.rangePerception = 60;
-    this.damage = 10;
     this.health = 100;
+
+    this.weapons = [_Weapons2.default.TUSKS];
 }
 Boar.constructor = Boar;
 Boar.prototype = Object.create(Animal.prototype);
@@ -33200,13 +33211,14 @@ function Wolf() {
 
     this.speed = .9;
     this.rangePerception = 120;
-    this.damage = 10;
     this.health = 80;
+
+    this.weapons = [_Weapons2.default.CLAWS];
 }
 Wolf.constructor = Wolf;
 Wolf.prototype = Object.create(Animal.prototype);
 
-},{"./Roles":222}],211:[function(require,module,exports){
+},{"./Roles":222,"./Weapons":229}],211:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33599,7 +33611,7 @@ Healer.prototype.draw = function (graphics) {
 Healer.WIDTH = 12;
 Healer.HEIGHT = 12;
 
-},{"./Archetypes":210,"./Dwarf":214,"./Inhabitants":215,"./Roles":222,"./utils/Maths":233,"./utils/value-min-max":234,"pixi.js":154}],212:[function(require,module,exports){
+},{"./Archetypes":210,"./Dwarf":214,"./Inhabitants":215,"./Roles":222,"./utils/Maths":234,"./utils/value-min-max":235,"pixi.js":154}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33715,7 +33727,9 @@ function Creature(world, startX, startY, archetype) {
     this.home = null;
 
     this.inventory = new _Inventory2.default(this);
-    this.inventory.add('weapon', 1);
+
+    this.weapons = archetype.weapons;
+    this.weapon = this.weapons.length > 0 ? this.weapons[0] : false;
 
     this.angle = 0;
 
@@ -33727,11 +33741,11 @@ function Creature(world, startX, startY, archetype) {
     this.changeRole(this.careerRole.id);
 
     this.health = new _valueMinMax2.default(0, archetype.health, archetype.health);
-    this.damage = archetype.damage;
     this.speed = archetype.speed;
     this.stealthiness = archetype.stealthiness;
     this.range = archetype.range;
     this.rangePerception = archetype.rangePerception;
+    this.rangeLimit = archetype.rangeLimit;
     this.isAggressive = archetype.isAggressive;
 
     this.base = this.getAppearance();
@@ -33774,10 +33788,7 @@ Creature.prototype.changeRole = function (roleId) {
 
     if (this.id) {
 
-        console.log('Creature.changeRole(', this.id, this.roleId, '>', roleId, ')');
-    } else {
-
-        console.log('Creature.changeRole(', this.roleId, '>', roleId, ')');
+        console.log('Creature.changeRole(', this.archetype.id, this.id, '|', this.roleId, '>', roleId, ')');
     }
 
     this.role = this.world.roles.getById(roleId);
@@ -33820,9 +33831,9 @@ Creature.prototype.takeDamage = function (damage, attacker) {
 
     // Self defense
 
-    if (!this.role.isAggressive && attacker) {
+    if (this.isAlive() && !this.role.isWeaponBased && attacker) {
 
-        if (this.inventory.has('weapon')) {
+        if (this.isArmed()) {
 
             this.target = attacker;
 
@@ -33845,7 +33856,7 @@ Creature.prototype.healthChanged = function () {
         this.healthBar.setValue(this.health.val());
     }
 
-    if (this.health.isMin()) {
+    if (!this.isAlive()) {
 
         this.emit('death', this);
     }
@@ -33878,7 +33889,9 @@ Creature.prototype.update = function (timeDelta, world) {
 
             var distance = _Maths2.default.distanceBetween(this, this.target);
 
-            if (distance < this.range && this.role.targetProximity) {
+            var range = this.role.isWeaponBased ? this.weapon.range : this.range;
+
+            if (distance < range && this.role.targetProximity) {
 
                 this.role.targetProximity(timeDelta, this, world);
             } else {
@@ -33895,7 +33908,12 @@ Creature.prototype.isAlive = function () {
     return !this.health.isMin();
 };
 
-},{"./Inventory":216,"./Roles":222,"./ui/ValueBarUI":232,"./utils/Maths":233,"./utils/value-min-max":234,"pixi.js":154}],214:[function(require,module,exports){
+Creature.prototype.isArmed = function () {
+
+    return this.weapons && this.weapons.length > 0;
+};
+
+},{"./Inventory":216,"./Roles":222,"./ui/ValueBarUI":233,"./utils/Maths":234,"./utils/value-min-max":235,"pixi.js":154}],214:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -33922,6 +33940,8 @@ function _interopRequireDefault(obj) {
 function Dwarf(world, startX, startY, archetype) {
 
     _Creature2.default.call(this, world, startX, startY, archetype);
+
+    this.type = Dwarf.TYPE;
 
     this.name = Dwarf.getName();
 
@@ -33983,7 +34003,7 @@ Dwarf.SPEED = .75;
 
 Dwarf.TYPE = 'dwarf';
 
-},{"./Creature":213,"./utils/Maths":233,"pixi.js":154}],215:[function(require,module,exports){
+},{"./Creature":213,"./utils/Maths":234,"pixi.js":154}],215:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34366,7 +34386,7 @@ Lighting.prototype.update = function (timeDelta, world) {
     this.alpha = world.timeOfDay.getSunValue();
 };
 
-},{"./Tile":224,"./World":229,"pixi.js":154}],219:[function(require,module,exports){
+},{"./Tile":224,"./World":230,"pixi.js":154}],219:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34413,7 +34433,7 @@ MotherNature.prototype.update = function (timeDelta) {
 
         if (Math.random() > .99 && this.animalsMap[animalArchetype.id].length < animalArchetype.maxConcurrent && this.world.timeOfDay.isDuringPeriod(animalArchetype.startTime, animalArchetype.endTime)) {
 
-            console.log('MotherNature.spawnAnimal(', animalArchetype.id, ')');
+            // console.log('MotherNature.spawnAnimal(',animalArchetype.id,')');
 
             this.spawn(animalArchetype);
         }
@@ -34474,7 +34494,7 @@ function AnimalArchetype(id, startTime, endTime, maxConcurrent, c, archetype) {
 
 AnimalArchetype.constructor = AnimalArchetype;
 
-},{"./Animal":209,"./Archetypes":210,"./Tile":224,"./World":229}],220:[function(require,module,exports){
+},{"./Animal":209,"./Archetypes":210,"./Tile":224,"./World":230}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34535,7 +34555,7 @@ PanelController.prototype.panelOff = function (id) {
     }
 };
 
-},{"./utils/Maths":233,"./utils/value-min-max":234}],221:[function(require,module,exports){
+},{"./utils/Maths":234,"./utils/value-min-max":235}],221:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34591,7 +34611,7 @@ Rock.HEIGHT = 10;
 Rock.TYPE = 'rock';
 Rock.SUPPLY = 250;
 
-},{"./utils/value-min-max":234,"pixi.js":154}],222:[function(require,module,exports){
+},{"./utils/value-min-max":235,"pixi.js":154}],222:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34723,10 +34743,7 @@ var RoleSelfDefense = exports.RoleSelfDefense = {
 
     id: 'self-defense',
 
-    range: 5,
-    rangeWeapon: 50,
-    rangePerception: 150,
-    rangeLimit: 400,
+    isWeaponBased: true,
 
     update: function update(timeDelta, entity, world) {
 
@@ -34747,7 +34764,7 @@ var RoleSelfDefense = exports.RoleSelfDefense = {
 
                 var target = entity.target;
 
-                target.takeDamage(entity.damage, entity);
+                target.takeDamage(entity.weapon.damage, entity);
 
                 entity.tookAction();
 
@@ -34767,8 +34784,6 @@ var RoleSelfDefense = exports.RoleSelfDefense = {
 var RoleResting = exports.RoleResting = {
 
     id: 'resting',
-
-    range: 2,
 
     enter: function enter(entity, world) {
 
@@ -34796,17 +34811,6 @@ var RoleWatchNight = exports.RoleWatchNight = {
 
     startTime: 19,
     endTime: 7,
-
-    range: 10,
-
-    lightRadius: 45,
-
-    colour: 0x553333,
-
-    stealthiness: .25,
-
-    cWood: 50,
-    cStone: 50,
 
     enter: function enter(entity, world) {
 
@@ -34883,13 +34887,6 @@ var RoleHealer = exports.RoleHealer = {
     startTime: 5.5,
     endTime: 20,
 
-    range: 10,
-
-    colour: 0xFFFFFF,
-
-    cWood: 50,
-    cStone: 50,
-
     checkCanPerform: function checkCanPerform(timeDelta, entity, world) {
 
         return Utils.nearestWithoutProperty('health', entity, world.dwarves);
@@ -34939,13 +34936,6 @@ var RoleBuilder = exports.RoleBuilder = {
 
     startTime: 5.5,
     endTime: 20,
-
-    range: 10,
-
-    colour: 0x333355,
-
-    cWood: 50,
-    cStone: 50,
 
     checkCanPerform: function checkCanPerform(timeDelta, entity, world) {
 
@@ -35002,51 +34992,34 @@ var RoleHunter = exports.RoleHunter = {
     startTime: 5,
     endTime: 19.5,
 
-    range: 5,
-    rangeWeapon: 50,
-    rangePerception: 150,
-    rangeLimit: 400,
-
-    lightRadius: 60,
-
-    colour: 0x58240A,
-
-    stealthiness: .9,
-    damage: 10,
-
-    cWood: 50,
-    cStone: 50,
-
-    isAggressive: true,
+    isWeaponBased: true,
 
     checkCanPerform: function checkCanPerform(timeDelta, entity, world) {
 
         var target = Utils.nearestWithProperty('health', entity, world.motherNature.animals);
 
-        return target && _Maths2.default.distanceBetween(entity, target) <= this.rangePerception && _Maths2.default.distanceBetween(entity, entity.home) <= this.rangeLimit;
+        return target && _Maths2.default.distanceBetween(entity, target) <= entity.rangePerception && _Maths2.default.distanceBetween(entity, entity.home) <= entity.rangeLimit;
     },
     update: function update(timeDelta, entity, world) {
 
         if (entity.target) {
 
-            if (_Maths2.default.distanceBetween(entity, entity.home) > this.rangeLimit) {
+            if (_Maths2.default.distanceBetween(entity, entity.home) > entity.rangeLimit) {
 
                 // This critter got away...
 
                 entity.target = false;
+
+                return Roles.IDLE;
             }
         } else {
 
             var target = Utils.nearestWithProperty('health', entity, world.motherNature.animals);
 
-            if (target && _Maths2.default.distanceBetween(entity, target) <= this.rangePerception && _Maths2.default.distanceBetween(entity, entity.home) <= this.rangeLimit) {
+            if (target && _Maths2.default.distanceBetween(entity, target) <= entity.rangePerception && _Maths2.default.distanceBetween(entity, entity.home) <= entity.rangeLimit) {
 
                 entity.target = target;
-                entity.range = this.rangeWeapon;
             } else {
-
-                entity.target = false;
-                entity.range = this.range;
 
                 return Roles.IDLE;
             }
@@ -35054,7 +35027,7 @@ var RoleHunter = exports.RoleHunter = {
     },
     targetProximity: function targetProximity(timeDelta, entity, world) {
 
-        if (entity.target && entity.target.health && !entity.target.health.isMin()) {
+        if (entity.target && entity.target.isAlive !== undefined && entity.target.isAlive()) {
 
             if (entity.canTakeAction()) {
 
@@ -35062,7 +35035,7 @@ var RoleHunter = exports.RoleHunter = {
 
                 var animal = entity.target;
 
-                animal.takeDamage(entity.damage, entity);
+                animal.takeDamage(entity.weapon.damage, entity);
 
                 entity.tookAction();
 
@@ -35089,13 +35062,6 @@ var RoleCollectWood = exports.RoleCollectWood = {
 
     startTime: 5.5,
     endTime: 20,
-
-    colour: 0x335533,
-
-    stealthiness: .8,
-
-    cWood: 20,
-    cStone: 40,
 
     checkCanPerform: function checkCanPerform(timeDelta, entity, world) {
 
@@ -35173,11 +35139,6 @@ var RoleCollectStone = exports.RoleCollectStone = {
     startTime: 5.5,
     endTime: 20,
 
-    colour: 0x444444,
-
-    cWood: 40,
-    cStone: 20,
-
     checkCanPerform: function checkCanPerform(timeDelta, entity, world) {
 
         return Utils.nearestWithProperty('supply', entity, world.rocks);
@@ -35247,7 +35208,7 @@ var RolePredator = exports.RolePredator = {
 
     id: 'predator',
 
-    isAggressive: true,
+    isWeaponBased: true,
 
     checkCanPerform: function checkCanPerform(timeDelta, entity, world) {
 
@@ -35286,7 +35247,7 @@ var RolePredator = exports.RolePredator = {
 
             var target = entity.target;
 
-            target.takeDamage(entity.damage, entity);
+            target.takeDamage(entity.weapon.damage, entity);
 
             entity.tookAction();
 
@@ -35414,7 +35375,7 @@ var Utils = {
     }
 };
 
-},{"./Dwarf":214,"./Rock":221,"./Tree":226,"./utils/Maths":233}],223:[function(require,module,exports){
+},{"./Dwarf":214,"./Rock":221,"./Tree":226,"./utils/Maths":234}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35472,7 +35433,7 @@ Supply.prototype.update = function (timeDelta, world) {
 Supply.WOOD = 150;
 Supply.STONE = 150;
 
-},{"./utils/value-min-max":234,"pixi.js":154}],224:[function(require,module,exports){
+},{"./utils/value-min-max":235,"pixi.js":154}],224:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35673,7 +35634,7 @@ TimeOfDay.prototype.isDuringPeriod = function (start, end) {
     }
 };
 
-},{"./utils/value-min-max":234,"pixi.js":154}],226:[function(require,module,exports){
+},{"./utils/value-min-max":235,"pixi.js":154}],226:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -35752,7 +35713,7 @@ Tree.HEIGHT = 24;
 Tree.TYPE = 'tree';
 Tree.SUPPLY = 100;
 
-},{"./Tile":224,"./utils/value-min-max":234,"pixi.js":154}],227:[function(require,module,exports){
+},{"./Tile":224,"./utils/value-min-max":235,"pixi.js":154}],227:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36485,7 +36446,7 @@ LogUI.prototype.onButtonDown = function (event) {
     this.toggle(undefined, true);
 };
 
-},{"./Layout":217,"./PanelController":220,"./ui/ValueBarUI":232,"./utils/Maths":233,"pixi.js":154}],228:[function(require,module,exports){
+},{"./Layout":217,"./PanelController":220,"./ui/ValueBarUI":233,"./utils/Maths":234,"pixi.js":154}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36617,7 +36578,50 @@ Viewport.prototype.disable = function () {
     this.isEnabled = false;
 };
 
-},{"./utils/Maths":233,"pixi.js":154}],229:[function(require,module,exports){
+},{"./utils/Maths":234,"pixi.js":154}],229:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = Weapons;
+function Weapons(world) {
+
+    this.world = world;
+
+    this.archetypes = [Weapons.FISTS];
+
+    this.archetypesMap = {};
+
+    this.archetypes.forEach(function (archetype) {
+        this.archetypesMap[archetype.id] = archetype;
+    }.bind(this));
+}
+
+Weapons.constructor = Weapons;
+
+Weapons.FISTS = new WeaponArchetype('fists', 'Bare fists', 1, 5);
+Weapons.HAMMER = new WeaponArchetype('hammer', 'Mason\'s hammer', 3, 5);
+Weapons.PICKAXE = new WeaponArchetype('pickaxe', 'Miner\'s pickaxe', 3, 5);
+Weapons.AXE = new WeaponArchetype('axe', 'Forester\'s wood axe', 5, 5);
+Weapons.BATTLEAXE = new WeaponArchetype('battleaxe', 'Battle axe', 15, 5);
+Weapons.BOW = new WeaponArchetype('bow', 'Short bow', 20, 100);
+
+Weapons.TUSKS = new WeaponArchetype('tusks', 'Tusks', 8, 5);
+Weapons.CLAWS = new WeaponArchetype('claws', 'Claws', 10, 5);
+
+function WeaponArchetype(id, title, damage, range) {
+
+    this.id = id;
+    this.type = 'weapon';
+    this.title = title;
+    this.damage = damage;
+    this.range = range;
+}
+
+WeaponArchetype.constructor = WeaponArchetype;
+
+},{}],230:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37123,7 +37127,7 @@ World.prototype.getTile = function (x, y) {
 World.WIDTH = 48;
 World.HEIGHT = 32;
 
-},{"./Animal":209,"./Archetypes":210,"./Buildings":212,"./Dwarf":214,"./Layout":217,"./Lighting":218,"./MotherNature":219,"./Rock":221,"./Roles":222,"./Supply":223,"./Tile":224,"./TimeOfDay":225,"./Tree":226,"./UI":227,"./Viewport":228,"./ZOrdered":230,"noisejs":30,"pixi.js":154}],230:[function(require,module,exports){
+},{"./Animal":209,"./Archetypes":210,"./Buildings":212,"./Dwarf":214,"./Layout":217,"./Lighting":218,"./MotherNature":219,"./Rock":221,"./Roles":222,"./Supply":223,"./Tile":224,"./TimeOfDay":225,"./Tree":226,"./UI":227,"./Viewport":228,"./ZOrdered":231,"noisejs":30,"pixi.js":154}],231:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -37136,7 +37140,7 @@ exports.default = {
     }
 };
 
-},{}],231:[function(require,module,exports){
+},{}],232:[function(require,module,exports){
 'use strict';
 
 var _pixi = require('pixi.js');
@@ -37199,7 +37203,7 @@ function startGame() {
 
         if (document.hasFocus() || DEBUG) {
 
-            count += window.TICK_RATE || 1;
+            count += window.TICK_RATE || 2;
 
             if (count % 2 === 0) {
 
@@ -37213,7 +37217,7 @@ function startGame() {
     }
 }
 
-},{"./Layout":217,"./World":229,"pixi.js":154,"raf":187}],232:[function(require,module,exports){
+},{"./Layout":217,"./World":230,"pixi.js":154,"raf":187}],233:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37271,7 +37275,7 @@ ValueBarUI.prototype.setValue = function (value) {
     this.bar.scale.x = value;
 };
 
-},{"pixi.js":154}],233:[function(require,module,exports){
+},{"pixi.js":154}],234:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -37301,7 +37305,7 @@ exports.default = {
     }
 };
 
-},{}],234:[function(require,module,exports){
+},{}],235:[function(require,module,exports){
 "use strict";
 
 module.exports = function (min, max, initial) {
@@ -37376,4 +37380,4 @@ module.exports = function (min, max, initial) {
 	return api;
 };
 
-},{}]},{},[231]);
+},{}]},{},[232]);

@@ -18,7 +18,9 @@ export default function Creature(world, startX, startY, archetype) {
     this.home = null;
 
     this.inventory = new Inventory(this);
-    this.inventory.add('weapon', 1);
+
+    this.weapons = archetype.weapons;
+    this.weapon = this.weapons.length > 0 ? this.weapons[0] : false;
 
     this.angle = 0;
 
@@ -30,11 +32,11 @@ export default function Creature(world, startX, startY, archetype) {
     this.changeRole(this.careerRole.id);
 
     this.health = new MinMaxValue(0, archetype.health, archetype.health);
-    this.damage = archetype.damage;
     this.speed = archetype.speed;
     this.stealthiness = archetype.stealthiness;
     this.range = archetype.range;
     this.rangePerception = archetype.rangePerception;
+    this.rangeLimit = archetype.rangeLimit;
     this.isAggressive = archetype.isAggressive;
 
     this.base = this.getAppearance();
@@ -80,11 +82,7 @@ Creature.prototype.changeRole = function(roleId) {
 
     if (this.id) {
 
-        console.log('Creature.changeRole(', this.id, this.roleId, '>', roleId, ')');
-
-    } else {
-
-        console.log('Creature.changeRole(', this.roleId, '>', roleId, ')');
+        console.log('Creature.changeRole(', this.archetype.id, this.id, '|', this.roleId, '>', roleId, ')');
 
     }
 
@@ -133,9 +131,9 @@ Creature.prototype.takeDamage = function(damage, attacker) {
 
         // Self defense
 
-    if (!this.role.isAggressive && attacker) {
+    if (this.isAlive() && !this.role.isWeaponBased && attacker) {
 
-        if (this.inventory.has('weapon')) {
+        if (this.isArmed()) {
 
             this.target = attacker;
 
@@ -164,7 +162,7 @@ Creature.prototype.healthChanged = function() {
 
     }
 
-    if (this.health.isMin()) {
+    if (!this.isAlive()) {
 
         this.emit('death', this);
 
@@ -202,7 +200,9 @@ Creature.prototype.update = function(timeDelta, world) {
 
             let distance = Maths.distanceBetween(this, this.target);
 
-            if (distance < this.range && this.role.targetProximity) {
+            let range = this.role.isWeaponBased ? this.weapon.range : this.range;
+
+            if (distance < range && this.role.targetProximity) {
 
                 this.role.targetProximity(timeDelta, this, world);
 
@@ -222,5 +222,11 @@ Creature.prototype.update = function(timeDelta, world) {
 Creature.prototype.isAlive = function() {
 
     return !this.health.isMin();
+
+}
+
+Creature.prototype.isArmed = function() {
+
+    return this.weapons && this.weapons.length > 0;
 
 }

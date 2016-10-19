@@ -123,10 +123,7 @@ export const RoleSelfDefense = {
 
     id: 'self-defense',
 
-    range: 5,
-    rangeWeapon: 50,
-    rangePerception: 150,
-    rangeLimit: 400,
+    isWeaponBased: true,
 
     update(timeDelta, entity, world) {
 
@@ -150,7 +147,7 @@ export const RoleSelfDefense = {
 
                 let target = entity.target;
 
-                target.takeDamage(entity.damage, entity);
+                target.takeDamage(entity.weapon.damage, entity);
 
                 entity.tookAction();
 
@@ -175,8 +172,6 @@ export const RoleSelfDefense = {
 export const RoleResting = {
 
     id: 'resting',
-
-    range: 2,
 
     enter(entity, world) {
 
@@ -212,17 +207,6 @@ export const RoleWatchNight = {
 
     startTime: 19,
     endTime: 7,
-
-    range: 10,
-
-    lightRadius: 45,
-
-    colour: 0x553333,
-
-    stealthiness: .25,
-
-    cWood: 50,
-    cStone: 50,
 
     enter(entity, world) {
 
@@ -315,13 +299,6 @@ export const RoleHealer = {
     startTime: 5.5,
     endTime: 20,
 
-    range: 10,
-
-    colour: 0xFFFFFF,
-
-    cWood: 50,
-    cStone: 50,
-
     checkCanPerform(timeDelta, entity, world) {
 
         return Utils.nearestWithoutProperty('health', entity, world.dwarves);
@@ -385,13 +362,6 @@ export const RoleBuilder = {
 
     startTime: 5.5,
     endTime: 20,
-
-    range: 10,
-
-    colour: 0x333355,
-
-    cWood: 50,
-    cStone: 50,
 
     checkCanPerform(timeDelta, entity, world) {
 
@@ -461,28 +431,13 @@ export const RoleHunter = {
     startTime: 5,
     endTime: 19.5,
 
-    range: 5,
-    rangeWeapon: 50,
-    rangePerception: 150,
-    rangeLimit: 400,
-
-    lightRadius: 60,
-
-    colour: 0x58240A,
-
-    stealthiness: .9,
-    damage: 10,
-
-    cWood: 50,
-    cStone: 50,
-
-    isAggressive: true,
+    isWeaponBased: true,
 
     checkCanPerform(timeDelta, entity, world) {
 
         let target = Utils.nearestWithProperty('health', entity, world.motherNature.animals);
 
-        return (target && Maths.distanceBetween(entity, target) <= this.rangePerception && Maths.distanceBetween(entity, entity.home) <= this.rangeLimit);
+        return (target && Maths.distanceBetween(entity, target) <= entity.rangePerception && Maths.distanceBetween(entity, entity.home) <= entity.rangeLimit);
 
     },
 
@@ -491,11 +446,13 @@ export const RoleHunter = {
 
         if (entity.target) {
 
-            if (Maths.distanceBetween(entity, entity.home) > this.rangeLimit) {
+            if (Maths.distanceBetween(entity, entity.home) > entity.rangeLimit) {
 
                 // This critter got away...
 
                 entity.target = false;
+
+                return Roles.IDLE;
 
             }
 
@@ -503,19 +460,16 @@ export const RoleHunter = {
 
             let target = Utils.nearestWithProperty('health', entity, world.motherNature.animals);
 
-            if (target && Maths.distanceBetween(entity, target) <= this.rangePerception && Maths.distanceBetween(entity, entity.home) <= this.rangeLimit) {
+            if (target && Maths.distanceBetween(entity, target) <= entity.rangePerception && Maths.distanceBetween(entity, entity.home) <= entity.rangeLimit) {
 
                 entity.target = target;
-                entity.range = this.rangeWeapon;
 
             } else {
-
-                entity.target = false;
-                entity.range = this.range;
 
                 return Roles.IDLE;
 
             }
+
 
         }
 
@@ -523,7 +477,7 @@ export const RoleHunter = {
 
     targetProximity(timeDelta, entity, world) {
 
-        if (entity.target && entity.target.health && !entity.target.health.isMin()) {
+        if (entity.target && entity.target.isAlive !== undefined && entity.target.isAlive()) {
 
             if (entity.canTakeAction()) {
 
@@ -531,7 +485,7 @@ export const RoleHunter = {
 
                 let animal = entity.target;
 
-                animal.takeDamage(entity.damage, entity);
+                animal.takeDamage(entity.weapon.damage, entity);
 
                 entity.tookAction();
 
@@ -565,13 +519,6 @@ export const RoleCollectWood = {
 
     startTime: 5.5,
     endTime: 20,
-
-    colour: 0x335533,
-
-    stealthiness: .8,
-
-    cWood: 20,
-    cStone: 40,
 
     checkCanPerform(timeDelta, entity, world) {
 
@@ -666,11 +613,6 @@ export const RoleCollectStone = {
     startTime: 5.5,
     endTime: 20,
 
-    colour: 0x444444,
-
-    cWood: 40,
-    cStone: 20,
-
     checkCanPerform(timeDelta, entity, world) {
 
         return Utils.nearestWithProperty('supply', entity, world.rocks);
@@ -758,7 +700,7 @@ export const RolePredator = {
 
     id: 'predator',
 
-    isAggressive: true,
+    isWeaponBased: true,
 
     checkCanPerform(timeDelta, entity, world) {
 
@@ -808,7 +750,7 @@ export const RolePredator = {
 
             let target = entity.target;
 
-            target.takeDamage(entity.damage, entity);
+            target.takeDamage(entity.weapon.damage, entity);
 
             entity.tookAction();
 

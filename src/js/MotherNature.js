@@ -34,7 +34,7 @@ MotherNature.prototype.update = function(timeDelta) {
 
         if (Math.random() > .99 && this.animalsMap[animalArchetype.id].length < animalArchetype.maxConcurrent && this.world.timeOfDay.isDuringPeriod(animalArchetype.startTime, animalArchetype.endTime)) {
 
-            console.log('MotherNature.spawnAnimal(',animalArchetype.id,')');
+            // console.log('MotherNature.spawnAnimal(',animalArchetype.id,')');
 
             this.spawn(animalArchetype);
 

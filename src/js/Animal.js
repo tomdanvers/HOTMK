@@ -10,6 +10,9 @@ export default function Animal(world, startX, startY, archetype) {
     Creature.call(this, world, startX, startY, archetype);
 
     this.name = 'animal';
+
+    this.type = Animal.TYPE;
+
 }
 
 Animal.constructor = Animal;

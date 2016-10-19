@@ -1,4 +1,5 @@
 import Roles from './Roles';
+import Weapons from './Weapons';
 
 export default function Archetypes() {
 
@@ -51,9 +52,8 @@ function Dwarf() {
     this.timeBetweenActions = 1500;
 
     this.range = 5;
-    this.rangeWeapon = 50;
     this.rangePerception = 150;
-    this.rangeLimit = 400;
+    this.rangeLimit = 300;
 
     this.lightRadius = 45;
 
@@ -61,11 +61,12 @@ function Dwarf() {
 
     this.speed = .75;
     this.stealthiness = .25;
-    this.damage = 10;
     this.health = 100;
 
     this.cWood = 5;
     this.cStone = 5;
+
+    this.weapons = [Weapons.FISTS];
 
 }
 
@@ -89,6 +90,8 @@ export function Mason() {
     this.cWood = 50;
     this.cStone = 50;
 
+    this.weapons = [Weapons.HAMMER];
+
 }
 Mason.constructor = Mason;
 Mason.prototype = Object.create(Dwarf.prototype);
@@ -110,6 +113,8 @@ export function Miner() {
 
     this.cWood = 40;
     this.cStone = 20;
+
+    this.weapons = [Weapons.PICKAXE];
 
 }
 Miner.constructor = Miner;
@@ -135,6 +140,8 @@ export function Forester() {
     this.cWood = 20;
     this.cStone = 40;
 
+    this.weapons = [Weapons.AXE];
+
 }
 Forester.constructor = Forester;
 Forester.prototype = Object.create(Dwarf.prototype);
@@ -152,17 +159,18 @@ export function Hunter() {
     this.id = Archetypes.HUNTER;
     this.role = Roles.HUNTER;
 
-    this.range = 10;
-
     this.lightRadius = 60;
+
+    this.rangePerception = 150;
 
     this.colour = 0x58240A;
 
     this.stealthiness = .9;
-    this.damage = 10;
 
     this.cWood = 50;
     this.cStone = 50;
+
+    this.weapons = [Weapons.BOW];
 
 }
 Hunter.constructor = Hunter;
@@ -186,10 +194,10 @@ export function WatchNight() {
 
     this.stealthiness = .25;
 
-    this.damage = 20;
-
     this.cWood = 50;
     this.cStone = 50;
+
+    this.weapons = [Weapons.BOW, Weapons.BATTLEAXE];
 
 }
 WatchNight.constructor = WatchNight;
@@ -212,10 +220,10 @@ export function Healer() {
 
     this.stealthiness = .25;
 
-    this.damage = 20;
-
     this.cWood = 50;
     this.cStone = 50;
+
+    this.weapons = [];
 
 }
 Healer.constructor = Healer;
@@ -233,7 +241,6 @@ function Animal() {
     this.timeBetweenActions = 1500;
 
     this.range = 5;
-    this.rangeWeapon = 50;
     this.rangePerception = 150;
     this.rangeLimit = 400;
 
@@ -243,11 +250,12 @@ function Animal() {
 
     this.speed = .75;
     this.stealthiness = .25;
-    this.damage = .25;
     this.health = 10;
 
     this.cWood = 0;
     this.cStone = 0;
+
+    this.weapons = [];
 
 }
 Animal.constructor = Animal;
@@ -270,7 +278,6 @@ export function Rabbit() {
 
     this.speed = .8;
     this.rangePerception = 60;
-    this.damage = 1;
     this.health = 5;
 
 }
@@ -295,7 +302,6 @@ export function Deer() {
 
     this.speed = .9;
     this.rangePerception = 100;
-    this.damage = 1;
     this.health = 20;
 
 }
@@ -320,7 +326,6 @@ export function Fox() {
 
     this.speed = .9;
     this.rangePerception = 70;
-    this.damage = 5;
     this.health = 10;
 
 }
@@ -345,8 +350,9 @@ export function Boar() {
 
     this.speed = .6;
     this.rangePerception = 60;
-    this.damage = 10;
     this.health = 100;
+
+    this.weapons = [Weapons.TUSKS];
 
 }
 Boar.constructor = Boar;
@@ -370,8 +376,9 @@ export function Wolf() {
 
     this.speed = .9;
     this.rangePerception = 120;
-    this.damage = 10;
     this.health = 80;
+
+    this.weapons = [Weapons.CLAWS];
 
 }
 Wolf.constructor = Wolf;

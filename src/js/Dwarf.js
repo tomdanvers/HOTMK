@@ -7,6 +7,8 @@ export default function Dwarf(world, startX, startY, archetype) {
 
     Creature.call(this, world, startX, startY, archetype);
 
+    this.type = Dwarf.TYPE;
+
     this.name = Dwarf.getName();
 
     this.light = this.world.lighting.addEmitter(this, this.careerRole.lightRadius || 30, 0, -10);
