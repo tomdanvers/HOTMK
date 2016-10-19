@@ -161,7 +161,7 @@ export function Hunter() {
 
     this.lightRadius = 60;
 
-    this.rangePerception = 150;
+    this.rangePerception = 200;
 
     this.colour = 0x58240A;
 

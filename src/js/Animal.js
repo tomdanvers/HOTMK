@@ -48,7 +48,7 @@ Animal.VERBOSE = false;
 
 
 /* -------------- */
-/* --------- Deer */
+/* --------- DEER */
 /* -------------- */
 
 export function Deer(world, startX, startY, archetype) {
@@ -74,7 +74,7 @@ Deer.WIDTH = 10;
 Deer.HEIGHT = 6;
 
 /* -------------- */
-/* ------- Rabbit */
+/* ------- RABBIT */
 /* -------------- */
 
 export function Rabbit(world, startX, startY, archetype) {
@@ -100,7 +100,7 @@ Rabbit.WIDTH = 2;
 Rabbit.HEIGHT = 2;
 
 /* -------------- */
-/* ---------- Fox */
+/* ---------- FOX */
 /* -------------- */
 
 export function Fox(world, startX, startY, archetype) {
@@ -126,7 +126,7 @@ Fox.WIDTH = 4;
 Fox.HEIGHT = 2;
 
 /* -------------- */
-/* --------- Wolf */
+/* --------- WOLF */
 /* -------------- */
 
 export function Wolf(world, startX, startY, archetype) {
@@ -152,7 +152,7 @@ Wolf.WIDTH = 8;
 Wolf.HEIGHT = 4;
 
 /* -------------- */
-/* --------- Wolf */
+/* --------- WOLF */
 /* -------------- */
 
 export function Boar(world, startX, startY, archetype) {

@@ -32733,7 +32733,7 @@ Animal.TYPE = 'animal';
 Animal.VERBOSE = false;
 
 /* -------------- */
-/* --------- Deer */
+/* --------- DEER */
 /* -------------- */
 
 function Deer(world, startX, startY, archetype) {
@@ -32757,7 +32757,7 @@ Deer.WIDTH = 10;
 Deer.HEIGHT = 6;
 
 /* -------------- */
-/* ------- Rabbit */
+/* ------- RABBIT */
 /* -------------- */
 
 function Rabbit(world, startX, startY, archetype) {
@@ -32781,7 +32781,7 @@ Rabbit.WIDTH = 2;
 Rabbit.HEIGHT = 2;
 
 /* -------------- */
-/* ---------- Fox */
+/* ---------- FOX */
 /* -------------- */
 
 function Fox(world, startX, startY, archetype) {
@@ -32805,7 +32805,7 @@ Fox.WIDTH = 4;
 Fox.HEIGHT = 2;
 
 /* -------------- */
-/* --------- Wolf */
+/* --------- WOLF */
 /* -------------- */
 
 function Wolf(world, startX, startY, archetype) {
@@ -32829,7 +32829,7 @@ Wolf.WIDTH = 8;
 Wolf.HEIGHT = 4;
 
 /* -------------- */
-/* --------- Wolf */
+/* --------- WOLF */
 /* -------------- */
 
 function Boar(world, startX, startY, archetype) {
@@ -33027,7 +33027,7 @@ function Hunter() {
 
     this.lightRadius = 60;
 
-    this.rangePerception = 150;
+    this.rangePerception = 200;
 
     this.colour = 0x58240A;
 
