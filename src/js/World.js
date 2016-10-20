@@ -70,7 +70,7 @@ export default function World() {
 
     this.timeOfLastUpdate = 0;
 
-    this.supply = new Supply();
+    this.supply = new Supply(World.DEBUG);
 
     this.timeOfDay = new TimeOfDay();
 

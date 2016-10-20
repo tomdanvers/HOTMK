@@ -1,12 +1,12 @@
 import PIXI from 'pixi.js';
 import ValueMinMax from './utils/value-min-max';
 
-export default function Supply() {
+export default function Supply(debug) {
 
-    this.wood = new ValueMinMax(0, 100000, Supply.WOOD);
+    this.wood = new ValueMinMax(0, 100000, debug ? 1000 : Supply.WOOD);
     this.woodOld = 0;
 
-    this.stone = new ValueMinMax(0, 100000, Supply.STONE);
+    this.stone = new ValueMinMax(0, 100000, debug ? 1000 : Supply.STONE);
     this.stoneOld = 0;
 
     return this;
@@ -42,5 +42,5 @@ Supply.prototype.update = function(timeDelta, world) {
 
 }
 
-Supply.WOOD = 1000;//150
-Supply.STONE = 1000;//150
+Supply.WOOD = 150;
+Supply.STONE = 150;

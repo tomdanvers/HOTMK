@@ -8,6 +8,7 @@ export default function Archetypes() {
         'miner': new Miner(),
         'forester': new Forester(),
         'hunter': new Hunter(),
+        'watch-day': new WatchDay(),
         'watch-night': new WatchNight(),
         'healer': new Healer(),
 
@@ -32,6 +33,7 @@ Archetypes.MASON = 'mason';
 Archetypes.MINER = 'miner';
 Archetypes.FORESTER = 'forester';
 Archetypes.HUNTER = 'hunter';
+Archetypes.WATCH_DAY = 'watch-day';
 Archetypes.WATCH_NIGHT = 'watch-night';
 Archetypes.HEALER = 'healer';
 
@@ -179,6 +181,33 @@ Hunter.prototype = Object.create(Dwarf.prototype);
 
 
 /* --------------------------------- */
+/* ----------------------- WATCH DAY */
+/* --------------------------------- */
+
+
+export function WatchDay() {
+
+    Dwarf.call(this);
+
+    this.id = Archetypes.WATCH_DAY;
+    this.role = Roles.WATCH_DAY;
+
+    this.colour = 0x555533;
+
+    this.stealthiness = .25;
+
+    this.cWood = 50;
+    this.cStone = 50;
+
+    this.weapons = [Weapons.BOW, Weapons.BATTLEAXE];
+
+}
+WatchDay.constructor = WatchDay;
+WatchDay.prototype = Object.create(Dwarf.prototype);
+
+
+
+/* --------------------------------- */
 /* --------------------- WATCH NIGHT */
 /* --------------------------------- */
 
@@ -219,6 +248,9 @@ export function Healer() {
     this.colour = 0x999999;
 
     this.stealthiness = .25;
+
+    this.speed = .85;
+    this.range = 10;
 
     this.cWood = 50;
     this.cStone = 50;

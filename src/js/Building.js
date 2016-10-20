@@ -141,38 +141,34 @@ Camp.WIDTH = 12;
 Camp.HEIGHT = 12;
 
 /* -------------- */
-/* --- NightWatch */
+/* -------- Watch */
 /* -------------- */
 
-export function NightWatch(world, startX, startY, archetype, isTemp) {
+export function Watch(world, startX, startY, archetype, isTemp) {
 
     Building.call(this, world, startX, startY, archetype, isTemp);
 
     this.patrolRoute = false;
-    this.patrolRadius = 300;
-    this.lightRadius = 125;
-
-    this.inhabitants.addArchetype(Archetypes.WATCH_NIGHT);
-    this.inhabitants.addArchetype(Archetypes.WATCH_NIGHT);
-    this.inhabitants.addArchetype(Archetypes.WATCH_NIGHT);
+    this.patrolRadius = 225;
+    this.lightRadius = 150;
 
 }
 
-NightWatch.constructor = NightWatch;
-NightWatch.prototype = Object.create(Building.prototype);
+Watch.constructor = Watch;
+Watch.prototype = Object.create(Building.prototype);
 
-NightWatch.prototype.draw = function(graphics) {
+Watch.prototype.draw = function(graphics) {
 
     graphics.beginFill(0x999999);
-    graphics.drawRect(- NightWatch.WIDTH * .5, - NightWatch.HEIGHT, NightWatch.WIDTH, NightWatch.HEIGHT);
+    graphics.drawRect(- Watch.WIDTH * .5, - Watch.HEIGHT, Watch.WIDTH, Watch.HEIGHT);
     graphics.endFill();
     graphics.beginFill(0x222222);
-    graphics.drawRect(- NightWatch.WIDTH * .5 + 4, -6, NightWatch.WIDTH - 8, 6);
+    graphics.drawRect(- Watch.WIDTH * .5 + 4, -6, Watch.WIDTH - 8, 6);
     graphics.endFill();
 
 }
 
-NightWatch.prototype.updatePatrolRoute = function() {
+Watch.prototype.updatePatrolRoute = function() {
 
     let patrolRadius = this.patrolRadius;
 
@@ -228,12 +224,78 @@ NightWatch.prototype.updatePatrolRoute = function() {
 
     });
 
-    // console.log('NightWatch.updatePatrolRoute(',this.patrolRoute,')');
+    // console.log('Watch.updatePatrolRoute(',this.patrolRoute,')');
+
+}
+
+Watch.WIDTH = 12;
+Watch.HEIGHT = 18;
+
+
+
+/* -------------- */
+/* --- NightWatch */
+/* -------------- */
+
+export function NightWatch(world, startX, startY, archetype, isTemp) {
+
+    Watch.call(this, world, startX, startY, archetype, isTemp);
+
+    this.inhabitants.addArchetype(Archetypes.WATCH_NIGHT);
+    this.inhabitants.addArchetype(Archetypes.WATCH_NIGHT);
+    this.inhabitants.addArchetype(Archetypes.WATCH_NIGHT);
+
+}
+
+NightWatch.constructor = NightWatch;
+NightWatch.prototype = Object.create(Watch.prototype);
+
+NightWatch.prototype.draw = function(graphics) {
+
+    graphics.beginFill(0x999999);
+    graphics.drawRect(- NightWatch.WIDTH * .5, - NightWatch.HEIGHT, NightWatch.WIDTH, NightWatch.HEIGHT);
+    graphics.endFill();
+    graphics.beginFill(0x222222);
+    graphics.drawRect(- NightWatch.WIDTH * .5 + 4, -6, NightWatch.WIDTH - 8, 6);
+    graphics.endFill();
 
 }
 
 NightWatch.WIDTH = 12;
 NightWatch.HEIGHT = 18;
+
+
+
+/* -------------- */
+/* ----- DayWatch */
+/* -------------- */
+
+export function DayWatch(world, startX, startY, archetype, isTemp) {
+
+    Watch.call(this, world, startX, startY, archetype, isTemp);
+
+    this.inhabitants.addArchetype(Archetypes.WATCH_DAY);
+    this.inhabitants.addArchetype(Archetypes.WATCH_DAY);
+    this.inhabitants.addArchetype(Archetypes.WATCH_DAY);
+
+}
+
+DayWatch.constructor = DayWatch;
+DayWatch.prototype = Object.create(Watch.prototype);
+
+DayWatch.prototype.draw = function(graphics) {
+
+    graphics.beginFill(0x999999);
+    graphics.drawRect(- DayWatch.WIDTH * .5, - DayWatch.HEIGHT, DayWatch.WIDTH, DayWatch.HEIGHT);
+    graphics.endFill();
+    graphics.beginFill(0x222222);
+    graphics.drawRect(- DayWatch.WIDTH * .5 + 4, -6, DayWatch.WIDTH - 8, 6);
+    graphics.endFill();
+
+}
+
+DayWatch.WIDTH = 12;
+DayWatch.HEIGHT = 18;
 
 
 

@@ -185,7 +185,7 @@ Creature.prototype.update = function(timeDelta, world) {
 
     let newRoleId = this.role.update(timeDelta, this, world) || false;
 
-    if (this.roleId !== Roles.RESTING && this.careerRole.startTime && this.careerRole.endTime && !world.timeOfDay.isDuringPeriod(this.careerRole.startTime + this.offsetStartTime, this.careerRole.endTime + this.offsetEndTime)) {
+    if (this.roleId !== Roles.RESTING && this.roleId !== Roles.SELF_DEFENSE && this.careerRole.startTime && this.careerRole.endTime && !world.timeOfDay.isDuringPeriod(this.careerRole.startTime + this.offsetStartTime, this.careerRole.endTime + this.offsetEndTime)) {
 
         newRoleId = Roles.RESTING;
 
