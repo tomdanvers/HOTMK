@@ -502,7 +502,6 @@ export const RoleHunter = {
                     world.ui.log.log('Dwarf "' + entity.name + '" killed "' + animal.name + '" with "' + entity.weapon.title + '"');
 
                     entity.target = false;
-                    entity.range = this.range;
 
                     return Roles.IDLE;
 
