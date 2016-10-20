@@ -34823,6 +34823,12 @@ var RoleWatchNight = exports.RoleWatchNight = {
     startTime: 19,
     endTime: 7,
 
+    isWeaponBased: true,
+
+    checkCanPerform: function checkCanPerform(timeDelta, entity, world) {
+
+        return true;
+    },
     enter: function enter(entity, world) {
 
         if (entity.home) {
@@ -34852,6 +34858,20 @@ var RoleWatchNight = exports.RoleWatchNight = {
         if (entity.patrolRouteVersion !== entity.home.patrolRoute.version) {
 
             this.updateRoute(entity, world);
+        }
+
+        var targets = Utils.percievedEntities(entity, world.motherNature.animals);
+
+        if (targets.length > 0) {
+
+            console.log(targets);
+        }
+
+        if (targets.length > 0) {
+
+            entity.target = targets[0];
+
+            return Roles.PREDATOR;
         }
     },
     targetProximity: function targetProximity(timeDelta, entity, world) {
@@ -35440,8 +35460,8 @@ Supply.prototype.update = function (timeDelta, world) {
     }
 };
 
-Supply.WOOD = 150;
-Supply.STONE = 150;
+Supply.WOOD = 1000; //150
+Supply.STONE = 1000; //150
 
 },{"./utils/value-min-max":235,"pixi.js":154}],224:[function(require,module,exports){
 'use strict';
@@ -35546,7 +35566,7 @@ function _interopRequireDefault(obj) {
 
 function TimeOfDay() {
 
-    this.time = 8;
+    this.time = 16;
     this.count = 0;
 }
 

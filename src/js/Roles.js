@@ -216,6 +216,14 @@ export const RoleWatchNight = {
     startTime: 19,
     endTime: 7,
 
+    isWeaponBased: true,
+
+    checkCanPerform(timeDelta, entity, world) {
+
+        return true;
+
+    },
+
     enter(entity, world) {
 
         if (entity.home) {
@@ -252,6 +260,22 @@ export const RoleWatchNight = {
         if (entity.patrolRouteVersion !== entity.home.patrolRoute.version) {
 
             this.updateRoute(entity, world);
+
+        }
+
+        let targets = Utils.percievedEntities(entity, world.motherNature.animals);
+
+        if (targets.length > 0) {
+
+            console.log(targets);
+
+        }
+
+        if (targets.length > 0) {
+
+            entity.target = targets[0];
+
+            return Roles.PREDATOR;
 
         }
 
