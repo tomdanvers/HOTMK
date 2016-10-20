@@ -4,9 +4,15 @@ Array.prototype.random = function() {
 
 }
 
-let DEBUG = window.location.hostname;
 
-if (DEBUG) {
+import PIXI from 'pixi.js';
+import raf from 'raf';
+import World from './World';
+import Layout from './Layout';
+
+World.DEBUG = window.location.hostname !== "";
+
+if (World.DEBUG) {
 
     startGame();
 
@@ -15,11 +21,6 @@ if (DEBUG) {
     document.addEventListener('deviceready', startGame, false);
 
 }
-
-import PIXI from 'pixi.js';
-import raf from 'raf';
-import World from './World';
-import Layout from './Layout';
 
 function startGame() {
 
@@ -45,9 +46,9 @@ function startGame() {
 
     function tick(time) {
 
-        if (document.hasFocus() || DEBUG) {
+        if (document.hasFocus() || World.DEBUG) {
 
-            count += window.TICK_RATE || 2;
+            count += window.TICK_RATE || (World.DEBUG ? 2 : 1);
 
             if (count % 2 === 0) {
 

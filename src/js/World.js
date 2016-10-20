@@ -54,7 +54,7 @@ export default function World() {
 
     this.randomSeed = Math.floor(Math.random() * 1000);
 
-    console.log('World(', World.WIDTH, World.HEIGHT, this.randomSeed,')');
+    console.log('World(', World.WIDTH, World.HEIGHT, this.randomSeed, (World.DEBUG ? 'Debug Mode' : 'Production Mode'), ')');
 
     // GOOD RANDOM SEEDS
     // 182

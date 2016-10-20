@@ -27,6 +27,9 @@ export default function Creature(world, startX, startY, archetype) {
     this.timeBetweenActions = archetype.timeBetweenActions;
     this.timeSinceAction = this.timeBetweenActions;
 
+    this.offsetStartTime = Math.random() - .5;
+    this.offsetEndTime = Math.random() - .5;
+
     this.roleId = null;
     this.careerRole = this.world.roles.getById(archetype.role);
     this.changeRole(this.careerRole.id);
@@ -137,7 +140,7 @@ Creature.prototype.takeDamage = function(damage, attacker) {
 
         // Self defense
 
-    if (this.isAlive() && !this.role.isWeaponBased && attacker) {
+    if (this.isAlive() && this.isAwake() && !this.role.isWeaponBased && attacker) {
 
         if (this.isArmed()) {
 
@@ -182,7 +185,7 @@ Creature.prototype.update = function(timeDelta, world) {
 
     let newRoleId = this.role.update(timeDelta, this, world) || false;
 
-    if (this.roleId !== Roles.RESTING && this.careerRole.startTime && this.careerRole.endTime && !world.timeOfDay.isDuringPeriod(this.careerRole.startTime, this.careerRole.endTime)) {
+    if (this.roleId !== Roles.RESTING && this.careerRole.startTime && this.careerRole.endTime && !world.timeOfDay.isDuringPeriod(this.careerRole.startTime + this.offsetStartTime, this.careerRole.endTime + this.offsetEndTime)) {
 
         newRoleId = Roles.RESTING;
 
@@ -234,5 +237,11 @@ Creature.prototype.isAlive = function() {
 Creature.prototype.isArmed = function() {
 
     return this.weapons && this.weapons.length > 0;
+
+}
+
+Creature.prototype.isAwake = function() {
+
+    return this.visible;
 
 }

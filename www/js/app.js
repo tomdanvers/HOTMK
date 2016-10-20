@@ -33736,6 +33736,9 @@ function Creature(world, startX, startY, archetype) {
     this.timeBetweenActions = archetype.timeBetweenActions;
     this.timeSinceAction = this.timeBetweenActions;
 
+    this.offsetStartTime = Math.random() - .5;
+    this.offsetEndTime = Math.random() - .5;
+
     this.roleId = null;
     this.careerRole = this.world.roles.getById(archetype.role);
     this.changeRole(this.careerRole.id);
@@ -33836,7 +33839,7 @@ Creature.prototype.takeDamage = function (damage, attacker) {
 
     // Self defense
 
-    if (this.isAlive() && !this.role.isWeaponBased && attacker) {
+    if (this.isAlive() && this.isAwake() && !this.role.isWeaponBased && attacker) {
 
         if (this.isArmed()) {
 
@@ -33873,7 +33876,7 @@ Creature.prototype.update = function (timeDelta, world) {
 
     var newRoleId = this.role.update(timeDelta, this, world) || false;
 
-    if (this.roleId !== _Roles2.default.RESTING && this.careerRole.startTime && this.careerRole.endTime && !world.timeOfDay.isDuringPeriod(this.careerRole.startTime, this.careerRole.endTime)) {
+    if (this.roleId !== _Roles2.default.RESTING && this.careerRole.startTime && this.careerRole.endTime && !world.timeOfDay.isDuringPeriod(this.careerRole.startTime + this.offsetStartTime, this.careerRole.endTime + this.offsetEndTime)) {
 
         newRoleId = _Roles2.default.RESTING;
     }
@@ -33916,6 +33919,11 @@ Creature.prototype.isAlive = function () {
 Creature.prototype.isArmed = function () {
 
     return this.weapons && this.weapons.length > 0;
+};
+
+Creature.prototype.isAwake = function () {
+
+    return this.visible;
 };
 
 },{"./Inventory":216,"./Roles":222,"./ui/ValueBarUI":233,"./utils/Maths":234,"./utils/value-min-max":235,"pixi.js":154}],214:[function(require,module,exports){
@@ -34822,8 +34830,6 @@ var RoleWatchNight = exports.RoleWatchNight = {
 
     startTime: 19,
     endTime: 7,
-
-    isWeaponBased: true,
 
     checkCanPerform: function checkCanPerform(timeDelta, entity, world) {
 
@@ -36748,7 +36754,7 @@ function World() {
 
     this.randomSeed = Math.floor(Math.random() * 1000);
 
-    console.log('World(', World.WIDTH, World.HEIGHT, this.randomSeed, ')');
+    console.log('World(', World.WIDTH, World.HEIGHT, this.randomSeed, World.DEBUG ? 'Debug Mode' : 'Production Mode', ')');
 
     // GOOD RANDOM SEEDS
     // 182
@@ -37198,9 +37204,9 @@ Array.prototype.random = function () {
     return this[Math.floor(Math.random() * this.length)];
 };
 
-var DEBUG = window.location.hostname;
+_World2.default.DEBUG = window.location.hostname !== "";
 
-if (DEBUG) {
+if (_World2.default.DEBUG) {
 
     startGame();
 } else {
@@ -37231,9 +37237,9 @@ function startGame() {
 
     function tick(time) {
 
-        if (document.hasFocus() || DEBUG) {
+        if (document.hasFocus() || _World2.default.DEBUG) {
 
-            count += window.TICK_RATE || 2;
+            count += window.TICK_RATE || (_World2.default.DEBUG ? 2 : 1);
 
             if (count % 2 === 0) {
 

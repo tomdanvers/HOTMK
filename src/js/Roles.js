@@ -216,8 +216,6 @@ export const RoleWatchNight = {
     startTime: 19,
     endTime: 7,
 
-    isWeaponBased: true,
-
     checkCanPerform(timeDelta, entity, world) {
 
         return true;
