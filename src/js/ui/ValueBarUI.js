@@ -4,7 +4,12 @@ export default function ValueBarUI(w, h, value) {
 
     PIXI.Container.call(this);
 
-    let border = w >= 10 && h >= 10;
+    w = Math.round(w);
+    h = Math.round(h);
+
+    let border = w >= 20 && h >= 20;
+
+    console.log('border', border)
 
     this.background = new PIXI.Graphics();
     this.background.beginFill(0x333333);

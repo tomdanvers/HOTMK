@@ -32694,9 +32694,9 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Animal(world, startX, startY, archetype) {
+function Animal(world, startX, startY, archetype, appearanceWidth, appearanceHeight) {
 
-    _Creature2.default.call(this, world, startX, startY, archetype);
+    _Creature2.default.call(this, world, startX, startY, archetype, appearanceWidth, appearanceHeight);
 
     this.name = 'animal';
 
@@ -32708,25 +32708,9 @@ Animal.prototype = Object.create(_Creature2.default.prototype);
 
 Animal.prototype.getAppearance = function (roleId) {
 
-    var base = new _pixi2.default.Graphics();
-
-    this.draw(base);
-
+    var base = new _pixi2.default.Sprite(_pixi2.default.Texture.fromImage('img/' + this.archetype.id + '.png'));
     return base;
 };
-
-Animal.prototype.draw = function (graphics) {
-
-    graphics.beginFill(0xAAAAAA);
-    graphics.drawRect(-Animal.WIDTH * .5, -Animal.HEIGHT, Animal.WIDTH, Animal.HEIGHT);
-    graphics.endFill();
-    graphics.beginFill(0x666666);
-    graphics.drawRect(-Animal.WIDTH * .5 + 4, -10, Animal.WIDTH - 8, 10);
-    graphics.endFill();
-};
-
-Animal.WIDTH = 10;
-Animal.HEIGHT = 6;
 
 Animal.TYPE = 'animal';
 
@@ -32738,7 +32722,7 @@ Animal.VERBOSE = false;
 
 function Deer(world, startX, startY, archetype) {
 
-    Animal.call(this, world, startX, startY, archetype);
+    Animal.call(this, world, startX, startY, archetype, 15, 11);
 
     this.name = 'Deer';
 }
@@ -32746,23 +32730,13 @@ function Deer(world, startX, startY, archetype) {
 Deer.constructor = Deer;
 Deer.prototype = Object.create(Animal.prototype);
 
-Deer.prototype.draw = function (graphics) {
-
-    graphics.beginFill(0x523013);
-    graphics.drawRect(-Deer.WIDTH * .5, -Deer.HEIGHT, Deer.WIDTH, Deer.HEIGHT);
-    graphics.endFill();
-};
-
-Deer.WIDTH = 10;
-Deer.HEIGHT = 6;
-
 /* -------------- */
 /* ------- RABBIT */
 /* -------------- */
 
 function Rabbit(world, startX, startY, archetype) {
 
-    Animal.call(this, world, startX, startY, archetype);
+    Animal.call(this, world, startX, startY, archetype, 2, 3);
 
     this.name = 'Rabbit';
 }
@@ -32770,23 +32744,13 @@ function Rabbit(world, startX, startY, archetype) {
 Rabbit.constructor = Rabbit;
 Rabbit.prototype = Object.create(Animal.prototype);
 
-Rabbit.prototype.draw = function (graphics) {
-
-    graphics.beginFill(0x61443A);
-    graphics.drawRect(-Rabbit.WIDTH * .5, -Rabbit.HEIGHT, Rabbit.WIDTH, Rabbit.HEIGHT);
-    graphics.endFill();
-};
-
-Rabbit.WIDTH = 2;
-Rabbit.HEIGHT = 2;
-
 /* -------------- */
 /* ---------- FOX */
 /* -------------- */
 
 function Fox(world, startX, startY, archetype) {
 
-    Animal.call(this, world, startX, startY, archetype);
+    Animal.call(this, world, startX, startY, archetype, 9, 4);
 
     this.name = 'Fox';
 }
@@ -32794,23 +32758,13 @@ function Fox(world, startX, startY, archetype) {
 Fox.constructor = Fox;
 Fox.prototype = Object.create(Animal.prototype);
 
-Fox.prototype.draw = function (graphics) {
-
-    graphics.beginFill(0x8C3C12);
-    graphics.drawRect(-Fox.WIDTH * .5, -Fox.HEIGHT, Fox.WIDTH, Fox.HEIGHT);
-    graphics.endFill();
-};
-
-Fox.WIDTH = 4;
-Fox.HEIGHT = 2;
-
 /* -------------- */
 /* --------- WOLF */
 /* -------------- */
 
 function Wolf(world, startX, startY, archetype) {
 
-    Animal.call(this, world, startX, startY, archetype);
+    Animal.call(this, world, startX, startY, archetype, 16, 9);
 
     this.name = 'Wolf';
 }
@@ -32818,39 +32772,19 @@ function Wolf(world, startX, startY, archetype) {
 Wolf.constructor = Wolf;
 Wolf.prototype = Object.create(Animal.prototype);
 
-Wolf.prototype.draw = function (graphics) {
-
-    graphics.beginFill(0x4C484A);
-    graphics.drawRect(-Wolf.WIDTH * .5, -Wolf.HEIGHT, Wolf.WIDTH, Wolf.HEIGHT);
-    graphics.endFill();
-};
-
-Wolf.WIDTH = 8;
-Wolf.HEIGHT = 4;
-
 /* -------------- */
-/* --------- WOLF */
+/* --------- BOAR */
 /* -------------- */
 
 function Boar(world, startX, startY, archetype) {
 
-    Animal.call(this, world, startX, startY, archetype);
+    Animal.call(this, world, startX, startY, archetype, 12, 8);
 
     this.name = 'Boar';
 }
 
 Boar.constructor = Boar;
 Boar.prototype = Object.create(Animal.prototype);
-
-Boar.prototype.draw = function (graphics) {
-
-    graphics.beginFill(0x191719);
-    graphics.drawRect(-Boar.WIDTH * .5, -Boar.HEIGHT, Boar.WIDTH, Boar.HEIGHT);
-    graphics.endFill();
-};
-
-Boar.WIDTH = 8;
-Boar.HEIGHT = 5;
 
 },{"./Creature":213,"./utils/Maths":234,"./utils/value-min-max":235,"pixi.js":154}],210:[function(require,module,exports){
 'use strict';
@@ -32933,8 +32867,8 @@ function Dwarf() {
     this.timeBetweenActions = 1500;
 
     this.range = 5;
-    this.rangePerception = 150;
-    this.rangeLimit = 300;
+    this.rangePerception = 125;
+    this.rangeLimit = 200;
 
     this.lightRadius = 0;
 
@@ -33421,7 +33355,7 @@ function Watch(world, startX, startY, archetype, isTemp) {
 
     this.patrolRoute = false;
     this.patrolRadius = 225;
-    this.lightRadius = 150;
+    this.lightRadius = 125;
 }
 
 Watch.constructor = Watch;
@@ -33793,7 +33727,7 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Creature(world, startX, startY, archetype) {
+function Creature(world, startX, startY, archetype, appearanceWidth, appearanceHeight) {
 
     _pixi2.default.Container.call(this);
 
@@ -33829,17 +33763,31 @@ function Creature(world, startX, startY, archetype) {
     this.rangeLimit = archetype.rangeLimit;
     this.isAggressive = archetype.isAggressive;
 
+    this.appearanceWidth = appearanceWidth || 6;
+    this.appearanceHeight = appearanceHeight || 12;
+
+    this.container = new _pixi2.default.Container();
+    this.addChild(this.container);
+
     this.base = this.getAppearance();
-    this.addChild(this.base);
+    this.base.x = -this.appearanceWidth * .5;
+    this.base.y = -this.appearanceHeight;
+    this.container.addChild(this.base);
+
+    /*let red = new PIXI.Graphics();
+    red.beginFill(0xFF0000);
+    red.drawRect(-1, 0, 2, 1);
+    red.endFill();
+    this.addChild(red);*/
 
     this.healthBar = new _ValueBarUI2.default(10, 2);
     this.healthBar.x = -5;
-    this.healthBar.y = -this.base.height - 5;
+    this.healthBar.y = -this.appearanceHeight - 5;
     this.healthBar.visible = false;
     this.addChild(this.healthBar);
 
-    this.x = this.startX = startX;
-    this.y = this.startY = startY;
+    this.xFloat = this.x = this.startX = Math.round(startX);
+    this.yFloat = this.y = this.startY = Math.round(startY);
 }
 
 Creature.constructor = Creature;
@@ -33849,15 +33797,11 @@ Creature.prototype.getAppearance = function (roleId) {
 
     var base = new _pixi2.default.Graphics();
 
-    var w = 10;
-    var h = 10;
-
     base.beginFill(0xFF000);
-    base.drawRect(0, 0, w, h);
+    base.drawRect(0, 0, this.appearanceWidth, appearanceWidth);
     base.endFill();
 
-    base.x = -w * .5;
-    base.y = -h;
+    return base;
 };
 
 Creature.prototype.changeRole = function (roleId) {
@@ -33982,8 +33926,15 @@ Creature.prototype.update = function (timeDelta, world) {
                 this.role.targetProximity(timeDelta, this, world);
             } else {
 
-                this.x += Math.cos(this.angle) * this.speed * timeDelta / 30;
-                this.y += Math.sin(this.angle) * this.speed * timeDelta / 30;
+                var xPrevious = this.xFloat;
+
+                this.xFloat += Math.cos(this.angle) * this.speed * timeDelta / 30;
+                this.yFloat += Math.sin(this.angle) * this.speed * timeDelta / 30;
+
+                this.container.scale.set(xPrevious > this.xFloat ? 1 : -1, 1);
+
+                this.x = Math.round(this.xFloat);
+                this.y = Math.round(this.yFloat);
             }
         }
     }
@@ -34030,7 +33981,7 @@ function _interopRequireDefault(obj) {
 
 function Dwarf(world, startX, startY, archetype) {
 
-    _Creature2.default.call(this, world, startX, startY, archetype);
+    _Creature2.default.call(this, world, startX, startY, archetype, 6, 12);
 
     this.type = Dwarf.TYPE;
 
@@ -34049,36 +34000,7 @@ Dwarf.prototype = Object.create(_Creature2.default.prototype);
 
 Dwarf.prototype.getAppearance = function (roleId) {
 
-    var base = new _pixi2.default.Graphics();
-
-    var heightFactor = .6;
-    var headWidth = 2;
-    var headHeight = 4;
-    var colour = this.archetype.colour;
-
-    // Body
-    base.beginFill(colour);
-    base.drawRect(0, 0, Dwarf.WIDTH, Dwarf.HEIGHT * heightFactor);
-    base.endFill();
-
-    // Head
-    base.beginFill(colour);
-    base.drawRect(Dwarf.WIDTH * .5 - headWidth * .5, -headHeight, headWidth, headHeight);
-    base.endFill();
-
-    // Left Leg
-    base.beginFill(colour);
-    base.drawRect(0, Dwarf.HEIGHT * heightFactor, 1, Dwarf.HEIGHT * (1 - heightFactor));
-    base.endFill();
-
-    // Right Leg
-    base.beginFill(colour);
-    base.drawRect(Dwarf.WIDTH - 1, Dwarf.HEIGHT * heightFactor, 1, Dwarf.HEIGHT * (1 - heightFactor));
-    base.endFill();
-
-    base.x = -Dwarf.WIDTH * .5;
-    base.y = -Dwarf.HEIGHT;
-
+    var base = new _pixi2.default.Sprite(_pixi2.default.Texture.fromImage('img/dwarf.png'));
     return base;
 };
 
@@ -37003,6 +36925,7 @@ function World() {
 
     // GOOD RANDOM SEEDS
     // 182
+    // 197
     // 353
     // 686
     // 746
@@ -37186,8 +37109,6 @@ World.prototype.addBuilding = function (id, tileX, tileY) {
         var building = this.buildings.add(id, tile.x + _Tile2.default.WIDTH * .5, tile.y + _Tile2.default.HEIGHT * .5);
 
         building.on('constructed', this.onBuildingConstructed.bind(this));
-
-        // console.log('World.addBuilding(', id, ')');
 
         this.ui.log.log('Added building of type "' + id + '"');
 
@@ -37497,7 +37418,7 @@ function startGame() {
 
         if (document.hasFocus() || _World2.default.DEBUG) {
 
-            count += window.TICK_RATE || (_World2.default.DEBUG ? 2 : 1);
+            count += window.TICK_RATE || (_World2.default.DEBUG ? 3 : 1);
 
             if (count % 2 === 0) {
 
@@ -37531,7 +37452,12 @@ function ValueBarUI(w, h, value) {
 
     _pixi2.default.Container.call(this);
 
-    var border = w >= 10 && h >= 10;
+    w = Math.round(w);
+    h = Math.round(h);
+
+    var border = w >= 20 && h >= 20;
+
+    console.log('border', border);
 
     this.background = new _pixi2.default.Graphics();
     this.background.beginFill(0x333333);

@@ -5,7 +5,7 @@ import Creature from './Creature';
 
 export default function Dwarf(world, startX, startY, archetype) {
 
-    Creature.call(this, world, startX, startY, archetype);
+    Creature.call(this, world, startX, startY, archetype, 6, 12);
 
     this.type = Dwarf.TYPE;
 
@@ -26,36 +26,7 @@ Dwarf.prototype = Object.create(Creature.prototype);
 
 Dwarf.prototype.getAppearance = function(roleId) {
 
-    let base = new PIXI.Graphics();
-
-    let heightFactor = .6;
-    let headWidth = 2;
-    let headHeight = 4;
-    let colour = this.archetype.colour;
-
-    // Body
-    base.beginFill(colour);
-    base.drawRect(0, 0, Dwarf.WIDTH, Dwarf.HEIGHT * heightFactor);
-    base.endFill();
-
-    // Head
-    base.beginFill(colour);
-    base.drawRect(Dwarf.WIDTH * .5 - headWidth * .5, -headHeight, headWidth, headHeight);
-    base.endFill();
-
-    // Left Leg
-    base.beginFill(colour);
-    base.drawRect(0, Dwarf.HEIGHT * heightFactor, 1, Dwarf.HEIGHT * (1-heightFactor));
-    base.endFill();
-
-    // Right Leg
-    base.beginFill(colour);
-    base.drawRect(Dwarf.WIDTH - 1, Dwarf.HEIGHT * heightFactor, 1, Dwarf.HEIGHT * (1-heightFactor));
-    base.endFill();
-
-    base.x = - Dwarf.WIDTH * .5;
-    base.y = - Dwarf.HEIGHT;
-
+    let base = new PIXI.Sprite(PIXI.Texture.fromImage('img/dwarf.png'));
     return base;
 
 }

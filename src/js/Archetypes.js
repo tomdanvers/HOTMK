@@ -54,8 +54,8 @@ function Dwarf() {
     this.timeBetweenActions = 1500;
 
     this.range = 5;
-    this.rangePerception = 150;
-    this.rangeLimit = 300;
+    this.rangePerception = 125;
+    this.rangeLimit = 200;
 
     this.lightRadius = 0;
 

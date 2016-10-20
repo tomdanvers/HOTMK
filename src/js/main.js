@@ -48,7 +48,7 @@ function startGame() {
 
         if (document.hasFocus() || World.DEBUG) {
 
-            count += window.TICK_RATE || (World.DEBUG ? 2 : 1);
+            count += window.TICK_RATE || (World.DEBUG ? 3 : 1);
 
             if (count % 2 === 0) {
 

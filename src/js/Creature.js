@@ -6,7 +6,7 @@ import ValueBar from './ui/ValueBarUI';
 import Inventory from './Inventory';
 import Roles from './Roles';
 
-export default function Creature(world, startX, startY, archetype) {
+export default function Creature(world, startX, startY, archetype, appearanceWidth, appearanceHeight) {
 
     PIXI.Container.call(this);
 
@@ -42,17 +42,31 @@ export default function Creature(world, startX, startY, archetype) {
     this.rangeLimit = archetype.rangeLimit;
     this.isAggressive = archetype.isAggressive;
 
+    this.appearanceWidth = appearanceWidth || 6;
+    this.appearanceHeight = appearanceHeight || 12;
+
+    this.container = new PIXI.Container();
+    this.addChild(this.container);
+
     this.base = this.getAppearance();
-    this.addChild(this.base);
+    this.base.x = - this.appearanceWidth * .5;
+    this.base.y = - this.appearanceHeight;
+    this.container.addChild(this.base);
+
+    /*let red = new PIXI.Graphics();
+    red.beginFill(0xFF0000);
+    red.drawRect(-1, 0, 2, 1);
+    red.endFill();
+    this.addChild(red);*/
 
     this.healthBar = new ValueBar(10, 2);
     this.healthBar.x = - 5;
-    this.healthBar.y = - this.base.height - 5;
+    this.healthBar.y = - this.appearanceHeight - 5;
     this.healthBar.visible = false;
     this.addChild(this.healthBar);
 
-    this.x = this.startX = startX;
-    this.y = this.startY = startY;
+    this.xFloat = this.x = this.startX = Math.round(startX);
+    this.yFloat = this.y = this.startY = Math.round(startY);
 
 }
 
@@ -63,15 +77,11 @@ Creature.prototype.getAppearance = function(roleId) {
 
     let base = new PIXI.Graphics();
 
-    let w = 10;
-    let h = 10;
-
     base.beginFill(0xFF000);
-    base.drawRect(0, 0, w, h);
+    base.drawRect(0, 0, this.appearanceWidth, appearanceWidth);
     base.endFill();
 
-    base.x = - w * .5;
-    base.y = - h;
+    return base;
 
 }
 
@@ -217,8 +227,15 @@ Creature.prototype.update = function(timeDelta, world) {
 
             } else {
 
-                this.x += Math.cos(this.angle) * this.speed * timeDelta / 30;
-                this.y += Math.sin(this.angle) * this.speed * timeDelta / 30;
+                let xPrevious = this.xFloat;
+
+                this.xFloat += Math.cos(this.angle) * this.speed * timeDelta / 30;
+                this.yFloat += Math.sin(this.angle) * this.speed * timeDelta / 30;
+
+                this.container.scale.set(xPrevious > this.xFloat ? 1 : -1, 1);
+
+                this.x = Math.round(this.xFloat);
+                this.y = Math.round(this.yFloat);
 
             }
 

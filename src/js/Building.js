@@ -139,7 +139,7 @@ export function Watch(world, startX, startY, archetype, isTemp) {
 
     this.patrolRoute = false;
     this.patrolRadius = 225;
-    this.lightRadius = 150;
+    this.lightRadius = 125;
 
 }
 
