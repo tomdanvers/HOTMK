@@ -57,7 +57,7 @@ function Dwarf() {
     this.rangePerception = 150;
     this.rangeLimit = 300;
 
-    this.lightRadius = 45;
+    this.lightRadius = 0;
 
     this.colour = 0xFF0000;
 
@@ -161,7 +161,7 @@ export function Hunter() {
     this.id = Archetypes.HUNTER;
     this.role = Roles.HUNTER;
 
-    this.lightRadius = 60;
+    this.lightRadius = 45;
 
     this.rangePerception = 200;
 
@@ -222,6 +222,8 @@ export function WatchNight() {
     this.colour = 0x553333;
 
     this.stealthiness = .25;
+
+    this.lightRadius = 60;
 
     this.cWood = 50;
     this.cStone = 50;

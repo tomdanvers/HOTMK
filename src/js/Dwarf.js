@@ -11,7 +11,11 @@ export default function Dwarf(world, startX, startY, archetype) {
 
     this.name = Dwarf.getName();
 
-    this.light = this.world.lighting.addEmitter(this, this.careerRole.lightRadius || 30, 0, -10);
+    if (archetype.lightRadius) {
+
+        this.light = this.world.lighting.addEmitter(this, archetype.lightRadius, 0, -10);
+
+    }
 
     this.takeDamage(10);
 

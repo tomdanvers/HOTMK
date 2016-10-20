@@ -32936,7 +32936,7 @@ function Dwarf() {
     this.rangePerception = 150;
     this.rangeLimit = 300;
 
-    this.lightRadius = 45;
+    this.lightRadius = 0;
 
     this.colour = 0xFF0000;
 
@@ -33028,7 +33028,7 @@ function Hunter() {
     this.id = Archetypes.HUNTER;
     this.role = _Roles2.default.HUNTER;
 
-    this.lightRadius = 60;
+    this.lightRadius = 45;
 
     this.rangePerception = 200;
 
@@ -33081,6 +33081,8 @@ function WatchNight() {
     this.colour = 0x553333;
 
     this.stealthiness = .25;
+
+    this.lightRadius = 60;
 
     this.cWood = 50;
     this.cStone = 50;
@@ -33318,11 +33320,6 @@ function Building(world, startX, startY, archetype, isTemp) {
 
     this.lightRadius = 50;
 
-    if (!isTemp) {
-
-        this.light = this.world.lighting.addStatic(startX, startY, this.lightRadius, 0, -5);
-    }
-
     this.x = startX;
     this.y = startY;
 
@@ -33370,14 +33367,9 @@ Building.prototype.constructed = function () {
 
     this.inhabitants.spawn();
 
-    this.onConstructed();
-};
+    this.light = this.world.lighting.addStatic(this.x, this.y, this.lightRadius, 0, -5);
 
-Building.prototype.onConstructed = function () {
-
-    // Stub to override
-
-
+    this.emit('constructed', this);
 };
 
 Building.WIDTH = 14;
@@ -34044,7 +34036,10 @@ function Dwarf(world, startX, startY, archetype) {
 
     this.name = Dwarf.getName();
 
-    this.light = this.world.lighting.addEmitter(this, this.careerRole.lightRadius || 30, 0, -10);
+    if (archetype.lightRadius) {
+
+        this.light = this.world.lighting.addEmitter(this, archetype.lightRadius, 0, -10);
+    }
 
     this.takeDamage(10);
 }
@@ -34330,18 +34325,40 @@ function Lighting(world) {
 
     _pixi2.default.Sprite.call(this);
 
+    var w = _World2.default.WIDTH * _Tile2.default.WIDTH;
+    var h = _World2.default.HEIGHT * _Tile2.default.HEIGHT;
+
+    // Combined lighting
+
     this.lightCanvas = document.createElement('canvas');
+    this.lightCanvas.width = w;
+    this.lightCanvas.height = h;
+
     this.lightCtx = this.lightCanvas.getContext('2d');
 
+    // Yellow glow
+
+    this.glowCanvas = document.createElement('canvas');
+    this.glowCanvas.width = w;
+    this.glowCanvas.height = h;
+
+    this.glowCtx = this.glowCanvas.getContext('2d');
+    this.glowCtx.fillStyle = 'rgba(250, 224, 77, .15)';
+    this.glowCtx.fillRect(0, 0, w, h);
+
+    // Darkness with lights cut out
+
     this.shadowCanvas = document.createElement('canvas');
-    this.shadowCanvas.width = _World2.default.WIDTH * _Tile2.default.WIDTH;
-    this.shadowCanvas.height = _World2.default.HEIGHT * _Tile2.default.HEIGHT;
+    this.shadowCanvas.width = w;
+    this.shadowCanvas.height = h;
 
     this.shadowCtx = this.shadowCanvas.getContext('2d');
 
+    // Static lights
+
     this.staticCanvas = document.createElement('canvas');
-    this.staticCanvas.width = _World2.default.WIDTH * _Tile2.default.WIDTH;
-    this.staticCanvas.height = _World2.default.HEIGHT * _Tile2.default.HEIGHT;
+    this.staticCanvas.width = w;
+    this.staticCanvas.height = h;
 
     this.staticCtx = this.staticCanvas.getContext('2d');
 
@@ -34369,6 +34386,8 @@ Lighting.prototype.addStatic = function (x, y, radius, xOffset, yOffset) {
     this.staticCtx.beginPath();
     this.staticCtx.arc(x + xOffset, y + yOffset, radius, 0, 2 * Math.PI);
     this.staticCtx.fill();
+
+    return false;
 
     return this.createLight(radius, xOffset, yOffset, 1);
 };
@@ -34462,6 +34481,16 @@ Lighting.prototype.update = function (timeDelta, world) {
         var width = _World2.default.WIDTH * _Tile2.default.WIDTH;
         var height = _World2.default.HEIGHT * _Tile2.default.HEIGHT;
 
+        // Reset lighting
+
+        this.lightCtx.clearRect(0, 0, width, height);
+
+        // Draw glow
+
+        this.lightCtx.drawImage(this.glowCanvas, 0, 0);
+
+        // Darkness with lights cut out
+
         this.shadowCtx.clearRect(0, 0, width, height);
 
         this.shadowCtx.fillStyle = 'rgba(0, 0, 0, .7)';
@@ -34478,7 +34507,9 @@ Lighting.prototype.update = function (timeDelta, world) {
 
         this.shadowCtx.globalCompositeOperation = 'source-over';
 
-        this.texture = _pixi2.default.Texture.fromCanvas(this.shadowCanvas);
+        this.lightCtx.drawImage(this.shadowCanvas, 0, 0);
+
+        this.texture = _pixi2.default.Texture.fromCanvas(this.lightCanvas);
         this.texture.update();
     }
 
@@ -37154,6 +37185,8 @@ World.prototype.addBuilding = function (id, tileX, tileY) {
 
         var building = this.buildings.add(id, tile.x + _Tile2.default.WIDTH * .5, tile.y + _Tile2.default.HEIGHT * .5);
 
+        building.on('constructed', this.onBuildingConstructed.bind(this));
+
         // console.log('World.addBuilding(', id, ')');
 
         this.ui.log.log('Added building of type "' + id + '"');
@@ -37176,6 +37209,17 @@ World.prototype.addBuilding = function (id, tileX, tileY) {
         console.warn('Can\'t place building at', tileX, tileY, 'there is not enough space.');
 
         return false;
+    }
+};
+
+World.prototype.onBuildingConstructed = function (building) {
+
+    if (building.light) {
+
+        this.containerLights.addChild(building.light);
+
+        building.light.x = building.x;
+        building.light.y = building.y;
     }
 };
 

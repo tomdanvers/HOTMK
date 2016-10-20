@@ -255,6 +255,8 @@ World.prototype.addBuilding = function(id, tileX, tileY) {
 
         let building = this.buildings.add(id, tile.x + Tile.WIDTH * .5, tile.y + Tile.HEIGHT * .5);
 
+        building.on('constructed', this.onBuildingConstructed.bind(this));
+
         // console.log('World.addBuilding(', id, ')');
 
         this.ui.log.log('Added building of type "' + id + '"');
@@ -283,6 +285,19 @@ World.prototype.addBuilding = function(id, tileX, tileY) {
 
     }
 
+
+}
+
+World.prototype.onBuildingConstructed = function(building) {
+
+    if (building.light) {
+
+        this.containerLights.addChild(building.light);
+
+        building.light.x = building.x;
+        building.light.y = building.y;
+
+    }
 
 }
 

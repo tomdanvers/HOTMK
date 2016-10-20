@@ -7,18 +7,44 @@ export default function Lighting(world) {
 
     PIXI.Sprite.call(this);
 
+    let w = World.WIDTH * Tile.WIDTH;
+    let h = World.HEIGHT * Tile.HEIGHT;
+
+
+    // Combined lighting
+
     this.lightCanvas = document.createElement('canvas');
+    this.lightCanvas.width = w;
+    this.lightCanvas.height = h;
+
     this.lightCtx = this.lightCanvas.getContext('2d');
 
+
+    // Yellow glow
+
+    this.glowCanvas = document.createElement('canvas');
+    this.glowCanvas.width = w;
+    this.glowCanvas.height = h;
+
+    this.glowCtx = this.glowCanvas.getContext('2d');
+    this.glowCtx.fillStyle = 'rgba(250, 224, 77, .15)';
+    this.glowCtx.fillRect(0, 0, w, h);
+
+
+    // Darkness with lights cut out
+
     this.shadowCanvas = document.createElement('canvas');
-    this.shadowCanvas.width = World.WIDTH * Tile.WIDTH;
-    this.shadowCanvas.height = World.HEIGHT * Tile.HEIGHT;
+    this.shadowCanvas.width = w;
+    this.shadowCanvas.height = h;
 
     this.shadowCtx = this.shadowCanvas.getContext('2d');
 
+
+    // Static lights
+
     this.staticCanvas = document.createElement('canvas');
-    this.staticCanvas.width = World.WIDTH * Tile.WIDTH;
-    this.staticCanvas.height = World.HEIGHT * Tile.HEIGHT;
+    this.staticCanvas.width = w;
+    this.staticCanvas.height = h;
 
     this.staticCtx = this.staticCanvas.getContext('2d');
 
@@ -48,6 +74,8 @@ Lighting.prototype.addStatic = function(x, y, radius, xOffset, yOffset) {
     this.staticCtx.beginPath();
     this.staticCtx.arc(x + xOffset, y + yOffset, radius, 0, 2 * Math.PI);
     this.staticCtx.fill();
+
+    return false;
 
     return this.createLight(radius, xOffset, yOffset, 1);
 
@@ -148,6 +176,16 @@ Lighting.prototype.update = function(timeDelta, world) {
         let width = World.WIDTH * Tile.WIDTH;
         let height = World.HEIGHT * Tile.HEIGHT;
 
+        // Reset lighting
+
+        this.lightCtx.clearRect(0, 0, width, height);
+
+        // Draw glow
+
+        this.lightCtx.drawImage(this.glowCanvas, 0, 0);
+
+        // Darkness with lights cut out
+
         this.shadowCtx.clearRect(0, 0, width, height);
 
         this.shadowCtx.fillStyle = 'rgba(0, 0, 0, .7)';
@@ -165,7 +203,9 @@ Lighting.prototype.update = function(timeDelta, world) {
 
         this.shadowCtx.globalCompositeOperation = 'source-over';
 
-        this.texture = PIXI.Texture.fromCanvas(this.shadowCanvas);
+        this.lightCtx.drawImage(this.shadowCanvas, 0, 0);
+
+        this.texture = PIXI.Texture.fromCanvas(this.lightCanvas);
         this.texture.update();
 
     }

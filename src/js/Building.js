@@ -29,12 +29,6 @@ export function Building(world, startX, startY, archetype, isTemp) {
 
     this.lightRadius = 50;
 
-    if (!isTemp) {
-
-        this.light = this.world.lighting.addStatic(startX, startY, this.lightRadius, 0, -5);
-
-    }
-
     this.x = startX;
     this.y = startY;
 
@@ -87,14 +81,9 @@ Building.prototype.constructed = function() {
 
     this.inhabitants.spawn();
 
-    this.onConstructed();
+    this.light = this.world.lighting.addStatic(this.x, this.y, this.lightRadius, 0, -5);
 
-}
-
-Building.prototype.onConstructed = function() {
-
-    // Stub to override
-
+    this.emit('constructed', this);
 
 }
 
