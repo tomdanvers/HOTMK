@@ -39,6 +39,7 @@ function startGame() {
     let world = new World();
     stage.addChild(world);
 
+    let frame = 0;
     let count = 0;
     let msPerFrame = 1000/60;
 
@@ -48,9 +49,11 @@ function startGame() {
 
         if (document.hasFocus() || World.DEBUG) {
 
-            count += window.TICK_RATE || (World.DEBUG ? 3 : 1);
+            frame ++;
 
-            if (count % 2 === 0) {
+            count += World.TICK_RATE;
+
+            if (frame % 2 === 0) {
 
                 world.update(count * msPerFrame);
 

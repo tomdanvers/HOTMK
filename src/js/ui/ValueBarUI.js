@@ -9,8 +9,6 @@ export default function ValueBarUI(w, h, value) {
 
     let border = w >= 20 && h >= 20;
 
-    console.log('border', border)
-
     this.background = new PIXI.Graphics();
     this.background.beginFill(0x333333);
     this.background.drawRect(0, 0, w, h);

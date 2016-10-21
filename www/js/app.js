@@ -33981,7 +33981,7 @@ function _interopRequireDefault(obj) {
 
 function Dwarf(world, startX, startY, archetype) {
 
-    _Creature2.default.call(this, world, startX, startY, archetype, 6, 12);
+    _Creature2.default.call(this, world, startX, startY, archetype, 6, 14);
 
     this.type = Dwarf.TYPE;
 
@@ -34011,11 +34011,6 @@ Dwarf.getName = function () {
 
     return Dwarf.NAMES_FIRST.random() + ' ' + Dwarf.NAMES_LAST.random();
 };
-
-Dwarf.WIDTH = 6;
-Dwarf.HEIGHT = 12;
-
-Dwarf.SPEED = .75;
 
 Dwarf.TYPE = 'dwarf';
 
@@ -35924,6 +35919,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = UI;
 exports.PanelUI = PanelUI;
+exports.GameSpeedUI = GameSpeedUI;
 exports.BuildingUI = BuildingUI;
 exports.InhabitantsUI = InhabitantsUI;
 exports.InhabitantUI = InhabitantUI;
@@ -35943,6 +35939,10 @@ var _Maths2 = _interopRequireDefault(_Maths);
 var _Layout = require('./Layout');
 
 var _Layout2 = _interopRequireDefault(_Layout);
+
+var _World = require('./World');
+
+var _World2 = _interopRequireDefault(_World);
 
 var _PanelController = require('./PanelController');
 
@@ -35983,6 +35983,9 @@ function UI(world) {
 
     this.building = new BuildingUI(world);
     this.addChild(this.building);
+
+    this.gameSpeed = new GameSpeedUI(world);
+    this.addChild(this.gameSpeed);
 
     this.panelController.add(this.building);
     this.panelController.add(this.construction);
@@ -36067,6 +36070,74 @@ PanelUI.prototype.toggle = function (show, dispatchEvent) {
 
         this.emit(isVisible ? 'toggle:on' : 'toggle:off', this.id);
     }
+};
+
+/* ---------------------------- */
+/* ----------------- GAME SPEED */
+/* ---------------------------- */
+
+function GameSpeedUI(world) {
+
+    _pixi2.default.Container.call(this);
+
+    this.world = world;
+
+    this.buttonW = 40;
+    this.buttonH = 40;
+
+    this.button = new _pixi2.default.Graphics();
+    this.button.beginFill(0x000000, .5);
+    this.button.drawRect(0, 0, this.buttonW, this.buttonH);
+    this.button.endFill();
+
+    this.button.x = _Layout2.default.WIDTH - this.buttonW;
+    this.button.y = 0;
+
+    this.button.interactive = true;
+
+    this.button.on('mousedown', this.onButtonDown.bind(this));
+    this.button.on('touchstart', this.onButtonDown.bind(this));
+
+    this.addChild(this.button);
+
+    var style = {
+        font: '16px Arial',
+        fill: '#FFFFFF'
+    };
+
+    this.text = new _pixi2.default.Text('x1', style);
+    this.text.y = 10;
+    this.button.addChild(this.text);
+
+    this.speedIndex = 0;
+    this.speeds = [1, 2, 4];
+
+    this.updateButton();
+}
+
+GameSpeedUI.constructor = GameSpeedUI;
+GameSpeedUI.prototype = Object.create(_pixi2.default.Container.prototype);
+
+GameSpeedUI.prototype.onButtonDown = function (event) {
+
+    this.speedIndex++;
+
+    if (this.speedIndex >= this.speeds.length) {
+
+        this.speedIndex = 0;
+    }
+
+    this.updateButton();
+};
+
+GameSpeedUI.prototype.updateButton = function () {
+
+    var speed = this.speeds[this.speedIndex];
+
+    this.text.text = 'x' + speed;
+    this.text.x = (this.buttonW - this.text.width) * .5;
+
+    _World2.default.TICK_RATE = speed;
 };
 
 /* ---------------------------- */
@@ -36649,7 +36720,7 @@ LogUI.prototype.onButtonDown = function (event) {
     this.toggle(undefined, true);
 };
 
-},{"./Layout":217,"./PanelController":220,"./ui/ValueBarUI":233,"./utils/Maths":234,"pixi.js":154}],228:[function(require,module,exports){
+},{"./Layout":217,"./PanelController":220,"./World":230,"./ui/ValueBarUI":233,"./utils/Maths":234,"pixi.js":154}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37341,6 +37412,7 @@ World.prototype.getTile = function (x, y) {
 
 World.WIDTH = 48;
 World.HEIGHT = 32;
+World.TICK_RATE = 1;
 
 },{"./Animal":209,"./Archetypes":210,"./Buildings":212,"./Dwarf":214,"./Layout":217,"./Lighting":218,"./MotherNature":219,"./Rock":221,"./Roles":222,"./Supply":223,"./Tile":224,"./TimeOfDay":225,"./Tree":226,"./UI":227,"./Viewport":228,"./ZOrdered":231,"noisejs":30,"pixi.js":154}],231:[function(require,module,exports){
 "use strict";
@@ -37409,6 +37481,7 @@ function startGame() {
     var world = new _World2.default();
     stage.addChild(world);
 
+    var frame = 0;
     var count = 0;
     var msPerFrame = 1000 / 60;
 
@@ -37418,9 +37491,11 @@ function startGame() {
 
         if (document.hasFocus() || _World2.default.DEBUG) {
 
-            count += window.TICK_RATE || (_World2.default.DEBUG ? 3 : 1);
+            frame++;
 
-            if (count % 2 === 0) {
+            count += _World2.default.TICK_RATE;
+
+            if (frame % 2 === 0) {
 
                 world.update(count * msPerFrame);
 
@@ -37456,8 +37531,6 @@ function ValueBarUI(w, h, value) {
     h = Math.round(h);
 
     var border = w >= 20 && h >= 20;
-
-    console.log('border', border);
 
     this.background = new _pixi2.default.Graphics();
     this.background.beginFill(0x333333);

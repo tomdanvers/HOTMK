@@ -533,3 +533,4 @@ World.prototype.getTile = function(x, y) {
 
 World.WIDTH = 48;
 World.HEIGHT = 32;
+World.TICK_RATE = 1;

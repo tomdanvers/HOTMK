@@ -5,7 +5,7 @@ import Creature from './Creature';
 
 export default function Dwarf(world, startX, startY, archetype) {
 
-    Creature.call(this, world, startX, startY, archetype, 6, 12);
+    Creature.call(this, world, startX, startY, archetype, 6, 14);
 
     this.type = Dwarf.TYPE;
 
@@ -39,11 +39,6 @@ Dwarf.getName = function() {
     return Dwarf.NAMES_FIRST.random() + ' ' + Dwarf.NAMES_LAST.random();
 
 }
-
-Dwarf.WIDTH = 6;
-Dwarf.HEIGHT = 12;
-
-Dwarf.SPEED = .75;
 
 Dwarf.TYPE = 'dwarf';
 
