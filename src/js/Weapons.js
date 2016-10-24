@@ -1,20 +1,38 @@
-export default function Weapons(world) {
+export default class Weapons {
 
-    this.world = world;
+    constructor(world) {
 
-    this.archetypes = [
-        Weapons.FISTS
-    ];
+        this.world = world;
 
-    this.archetypesMap = {};
+        this.archetypes = [
+            Weapons.FISTS
+        ];
 
-    this.archetypes.forEach(function(archetype) {
-        this.archetypesMap[archetype.id] = archetype;
-    }.bind(this));
+        this.archetypesMap = {};
+
+        this.archetypes.forEach(function(archetype) {
+
+            this.archetypesMap[archetype.id] = archetype;
+
+        }.bind(this));
+
+    }
 
 }
 
-Weapons.constructor = Weapons;
+class WeaponArchetype {
+
+    constructor(id, title, damage, range) {
+
+        this.id = id;
+        this.type = 'weapon';
+        this.title = title;
+        this.damage = damage;
+        this.range = range;
+
+    }
+
+}
 
 Weapons.FISTS = new WeaponArchetype('fists', 'Bare fists', 1, 5);
 Weapons.HAMMER = new WeaponArchetype('hammer', 'Mason\'s hammer', 3, 5);
@@ -26,15 +44,3 @@ Weapons.BOW = new WeaponArchetype('bow', 'Short bow', 20, 100);
 Weapons.TUSKS = new WeaponArchetype('tusks', 'Tusks', 8, 5);
 Weapons.CLAWS = new WeaponArchetype('claws', 'Claws', 10, 5);
 
-
-function WeaponArchetype(id, title, damage, range) {
-
-    this.id = id;
-    this.type = 'weapon';
-    this.title = title;
-    this.damage = damage;
-    this.range = range;
-
-}
-
-WeaponArchetype.constructor = WeaponArchetype;

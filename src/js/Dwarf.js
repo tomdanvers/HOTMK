@@ -3,31 +3,33 @@ import Maths from './utils/Maths';
 
 import Creature from './Creature';
 
-export default function Dwarf(world, startX, startY, archetype) {
+export default class Dwarf extends Creature {
 
-    Creature.call(this, world, startX, startY, archetype, 6, 14);
+    constructor(world, startX, startY, archetype) {
 
-    this.type = Dwarf.TYPE;
+        super(world, startX, startY, archetype, 6, 14);
 
-    this.name = Dwarf.getName();
+        this.type = Dwarf.TYPE;
 
-    if (archetype.lightRadius) {
+        this.name = Dwarf.getName();
 
-        this.light = this.world.lighting.addEmitter(this, archetype.lightRadius, 0, -10);
+        if (archetype.lightRadius) {
+
+            this.light = this.world.lighting.addEmitter(this, archetype.lightRadius, 0, -10);
+
+        }
+
+        // TEMP test healer
+        this.takeDamage(10);
 
     }
 
-    this.takeDamage(10);
+    getAppearance(roleId) {
 
-}
+        let base = new PIXI.Sprite(PIXI.Texture.fromImage('img/dwarf.png'));
+        return base;
 
-Dwarf.constructor = Dwarf;
-Dwarf.prototype = Object.create(Creature.prototype);
-
-Dwarf.prototype.getAppearance = function(roleId) {
-
-    let base = new PIXI.Sprite(PIXI.Texture.fromImage('img/dwarf.png'));
-    return base;
+    }
 
 }
 
@@ -41,4 +43,3 @@ Dwarf.getName = function() {
 }
 
 Dwarf.TYPE = 'dwarf';
-

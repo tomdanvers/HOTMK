@@ -1,52 +1,71 @@
 import {Camp, Miner, Forester, Mason, Hunter, NightWatch, DayWatch, Healer} from './Building';
 
-export default function Buildings(world) {
+export default class Buildings {
 
-    this.world = world;
+    constructor(world) {
 
-    this.archetypes = [
-        Buildings.ARCHETYPE_MINER,
-        Buildings.ARCHETYPE_FORESTER,
-        Buildings.ARCHETYPE_MASON,
-        Buildings.ARCHETYPE_HUNTER,
-        Buildings.ARCHETYPE_DAYWATCH,
-        Buildings.ARCHETYPE_NIGHTWATCH,
-        Buildings.ARCHETYPE_HEALER
-    ];
+        this.world = world;
 
-    this.archetypesMap = {};
+        this.archetypes = [
+            Buildings.ARCHETYPE_MINER,
+            Buildings.ARCHETYPE_FORESTER,
+            Buildings.ARCHETYPE_MASON,
+            Buildings.ARCHETYPE_HUNTER,
+            Buildings.ARCHETYPE_DAYWATCH,
+            Buildings.ARCHETYPE_NIGHTWATCH,
+            Buildings.ARCHETYPE_HEALER
+        ];
 
-    this.archetypes.forEach(function(archetype) {
-        this.archetypesMap[archetype.id] = archetype;
-    }.bind(this));
+        this.archetypesMap = {};
 
-    this.archetypesMap['camp'] = Buildings.ARCHETYPE_CAMP;
+        this.archetypes.forEach(function(archetype) {
 
-    this.buildings = [];
+            this.archetypesMap[archetype.id] = archetype;
+
+        }.bind(this));
+
+        this.archetypesMap['camp'] = Buildings.ARCHETYPE_CAMP;
+
+        this.buildings = [];
+
+    }
+
+    add(id, x, y) {
+
+        let archetype = this.archetypesMap[id];
+
+        let building = new archetype.c(this.world, x, y, archetype, false);
+
+        this.buildings.push(building);
+
+        return building;
+
+    }
+
+    update(timeDelta) {
+
+        this.buildings.forEach(function(building) {
+
+            building.update(timeDelta, this.world);
+
+        }.bind(this));
+
+    }
 
 }
 
-Buildings.constructor = Buildings;
+class BuildingArchetype {
 
-Buildings.prototype.add = function(id, x, y) {
+    constructor(id, title, description, cWood, cStone, c) {
 
-    let archetype = this.archetypesMap[id];
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.cWood = cWood;
+        this.cStone = cStone;
+        this.c = c || false;
 
-    let building = new archetype.c(this.world, x, y, archetype, false);
-
-    this.buildings.push(building);
-
-    return building;
-
-}
-
-Buildings.prototype.update = function(timeDelta) {
-
-    this.buildings.forEach(function(building) {
-
-        building.update(timeDelta, this.world);
-
-    }.bind(this));
+    }
 
 }
 
@@ -58,17 +77,3 @@ Buildings.ARCHETYPE_HUNTER = new BuildingArchetype('hunter', 'Hunter\'s Shack', 
 Buildings.ARCHETYPE_DAYWATCH = new BuildingArchetype('day-watch', 'The Watch', 'A watch house that patrols during the day', 200, 200, DayWatch);
 Buildings.ARCHETYPE_NIGHTWATCH = new BuildingArchetype('night-watch', 'The Night Watch', 'A watch house that patrols during the hours of darkness', 200, 200, NightWatch);
 Buildings.ARCHETYPE_HEALER = new BuildingArchetype('healer', 'Healer\'s Home', 'A den of herbal healing', 120, 80, Healer);
-
-
-function BuildingArchetype(id, title, description, cWood, cStone, c) {
-
-    this.id = id;
-    this.title = title;
-    this.description = description;
-    this.cWood = cWood;
-    this.cStone = cStone;
-    this.c = c || false;
-
-}
-
-BuildingArchetype.constructor = BuildingArchetype;

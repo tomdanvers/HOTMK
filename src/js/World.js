@@ -34,501 +34,502 @@ import TimeOfDay from './TimeOfDay';
 
 import ZOrdered from './ZOrdered';
 
-export default function World() {
+export default class World extends PIXI.Container {
 
-    PIXI.Container.call(this);
+    constructor() {
 
-    let heightMultiplier = 2;
+        super();
 
-    World.WIDTH = Math.ceil(Layout.WIDTH / Tile.WIDTH);
-    World.HEIGHT = Math.ceil(Layout.HEIGHT / Tile.HEIGHT) * heightMultiplier;
+        let heightMultiplier = 2;
 
-    this.viewport = new Viewport(
-        this,
-        Math.ceil(Layout.WIDTH / Tile.WIDTH) * Tile.WIDTH,
-        Math.ceil(Layout.HEIGHT / Tile.HEIGHT) * Tile.HEIGHT,
-        World.WIDTH * Tile.WIDTH,
-        World.HEIGHT * Tile.HEIGHT,
-        heightMultiplier > 1
-    );
+        World.WIDTH = Math.ceil(Layout.WIDTH / Tile.WIDTH);
+        World.HEIGHT = Math.ceil(Layout.HEIGHT / Tile.HEIGHT) * heightMultiplier;
 
-    this.randomSeed = Math.floor(Math.random() * 1000);
+        this.viewport = new Viewport(
+            this,
+            Math.ceil(Layout.WIDTH / Tile.WIDTH) * Tile.WIDTH,
+            Math.ceil(Layout.HEIGHT / Tile.HEIGHT) * Tile.HEIGHT,
+            World.WIDTH * Tile.WIDTH,
+            World.HEIGHT * Tile.HEIGHT,
+            heightMultiplier > 1
+        );
 
-    console.log('World(', World.WIDTH, World.HEIGHT, this.randomSeed, (World.DEBUG ? 'Debug Mode' : 'Production Mode'), ')');
+        this.randomSeed = Math.floor(Math.random() * 1000);
 
-    // GOOD RANDOM SEEDS
-    // 182
-    // 197
-    // 353
-    // 686
-    // 746
-    // 776
-    // 806
-    // 870
-    // 841
-    // 929
+        console.log('World(', World.WIDTH, World.HEIGHT, this.randomSeed, (World.DEBUG ? 'Debug Mode' : 'Production Mode'), ')');
 
-    this.noise = new Noise.Noise(this.randomSeed);
+        // GOOD RANDOM SEEDS
+        // 182
+        // 197
+        // 353
+        // 686
+        // 746
+        // 776
+        // 806
+        // 870
+        // 841
+        // 929
 
-    this.timeOfLastUpdate = 0;
+        this.noise = new Noise.Noise(this.randomSeed);
 
-    this.supply = new Supply(World.DEBUG);
+        this.timeOfLastUpdate = 0;
 
-    this.timeOfDay = new TimeOfDay();
+        this.supply = new Supply(World.DEBUG);
 
-    this.motherNature = new MotherNature(this);
+        this.timeOfDay = new TimeOfDay();
 
-    this.buildings = new Buildings(this);
+        this.motherNature = new MotherNature(this);
 
-    this.roles = new Roles(this);
+        this.buildings = new Buildings(this);
 
-    this.archetypes = new Archetypes(this);
+        this.roles = new Roles(this);
 
-    this.tiles = [];
-    this.resources = [];
-    this.trees = [];
-    this.rocks = [];
-    this.dwarves = [];
-    this.zOrdered = [];
+        this.archetypes = new Archetypes(this);
 
-    this.containerZOrdered = new PIXI.Container();
+        this.tiles = [];
+        this.resources = [];
+        this.trees = [];
+        this.rocks = [];
+        this.dwarves = [];
+        this.zOrdered = [];
 
-    this.ui = new UI(this);
+        this.containerZOrdered = new PIXI.Container();
 
-    this.ui.log.log('New game started. Random seed is ' + this.randomSeed);
+        this.ui = new UI(this);
 
-    let background = document.createElement('canvas');
-    background.width = World.WIDTH * Tile.WIDTH;
-    background.height = World.HEIGHT * Tile.HEIGHT;
+        this.ui.log.log('New game started. Random seed is ' + this.randomSeed);
 
-    this.lighting = new Lighting(this);
+        let background = document.createElement('canvas');
+        background.width = World.WIDTH * Tile.WIDTH;
+        background.height = World.HEIGHT * Tile.HEIGHT;
 
-    this.containerLights = new PIXI.Container();
-    this.containerLights.blendMode = PIXI.BLEND_MODES.SCREEN;
+        this.lighting = new Lighting(this);
 
-    let backgroundCtx = background.getContext('2d');
-    for (let y = 0; y < World.HEIGHT; y ++) {
+        this.containerLights = new PIXI.Container();
+        this.containerLights.blendMode = PIXI.BLEND_MODES.SCREEN;
 
-        for (let x = 0; x < World.WIDTH; x ++) {
+        let backgroundCtx = background.getContext('2d');
+        for (let y = 0; y < World.HEIGHT; y ++) {
 
-            let tile = this.addTile(x, y);
+            for (let x = 0; x < World.WIDTH; x ++) {
 
-            backgroundCtx.drawImage(tile.canvas, x * Tile.WIDTH, y * Tile.HEIGHT);
+                let tile = this.addTile(x, y);
 
-        }
-
-    }
-
-    this.background = new PIXI.Sprite(PIXI.Texture.fromCanvas(background));
-
-    this.content = new PIXI.Container();
-
-    this.content.addChild(this.background);
-    this.content.addChild(this.containerZOrdered);
-    this.content.addChild(this.containerLights);
-    this.content.addChild(this.lighting);
-
-    this.addChild(this.content);
-    this.addChild(this.ui);
-
-    // Add buildings
-
-    let camp = this.addBuilding(Buildings.ARCHETYPE_CAMP.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT - 5));
-
-    // Add resources
-
-    this.tiles.forEach(function(tile) {
-
-        if (tile.type === Tile.TYPE_GRASS && tile.elevation < .4 && Math.random() > .6) {
-
-            let tree = this.addTree(tile.tileX, tile.tileY);
-
-        } else if (tile.type === Tile.TYPE_GRASS && (tile.elevation > .9 && Math.random() > .5 || Math.random() > .99)) {
-
-            let rock = this.addRock(tile.tileX, tile.tileY);
-
-        }
-
-    }.bind(this));
-
-}
-
-World.constructor = World;
-World.prototype = Object.create(PIXI.Container.prototype);
-
-World.prototype.addTile = function(x, y) {
-
-    let tile = new Tile(x, y, this.noise.simplex2(x / World.WIDTH * 2, y / World.WIDTH * 2));
-
-    this.tiles.push(tile);
-
-    return tile;
-
-}
-
-World.prototype.addToZOrdered = function(item) {
-
-    item.id = ZOrdered.getUniqueID();
-    this.zOrdered.push(item);
-    this.containerZOrdered.addChild(item);
-
-    if (item.light) {
-
-        this.containerLights.addChild(item.light);
-
-        item.light.x = item.x;
-        item.light.y = item.y;
-
-    }
-
-}
-
-World.prototype.addTree = function(tileX, tileY) {
-
-    if (this.spaceAvailable(tileX, tileY, 1, 1)) {
-
-        let tile = this.getTile(tileX, tileY);
-
-        tile.occupy();
-
-        let offsetX = Tile.WIDTH * .3 * Math.random() - Tile.WIDTH * .15;
-        let offsetY = Tile.HEIGHT * .3 * Math.random() - Tile.HEIGHT * .15;
-
-        let tree = new Tree();
-        tree.x = tile.x + Tile.WIDTH * .5 + offsetX;
-        tree.y = tile.y + Tile.HEIGHT * .5 + offsetY;
-
-        this.resources.push(tree);
-        this.trees.push(tree);
-
-        this.addToZOrdered(tree);
-
-        return tree;
-
-    } else {
-
-        console.warn('Can\'t place tree at', tileX, tileY, 'there is not enough space.');
-
-        return false;
-
-    }
-
-}
-
-World.prototype.addRock = function(tileX, tileY) {
-
-    if (this.spaceAvailable(tileX, tileY, 1, 1)) {
-
-        let tile = this.getTile(tileX, tileY);
-
-        tile.occupy();
-
-        let rock = new Rock();
-        rock.x = tile.x + Tile.WIDTH * .5;
-        rock.y = tile.y + Tile.HEIGHT * .5;
-
-        this.resources.push(rock);
-        this.rocks.push(rock);
-
-        this.addToZOrdered(rock);
-
-        return rock;
-
-    } else {
-
-        console.warn('Can\'t place rock at', tileX, tileY, 'there is not enough space.');
-
-        return false;
-
-    }
-
-}
-
-World.prototype.addBuilding = function(id, tileX, tileY) {
-
-    let buildingWidth = 1;
-    let buildingHeight = 1
-
-    if (this.spaceAvailable(tileX, tileY, buildingWidth, buildingHeight)) {
-
-        let tile = this.getTile(tileX, tileY);
-
-        tile.occupy();
-
-        let building = this.buildings.add(id, tile.x + Tile.WIDTH * .5, tile.y + Tile.HEIGHT * .5);
-
-        building.on('constructed', this.onBuildingConstructed.bind(this));
-
-        this.ui.log.log('Added building of type "' + id + '"');
-
-        this.addToZOrdered(building);
-
-        // Update watchmen patrol routes
-
-        this.buildings.buildings.forEach(function(building) {
-
-            if (building.patrolRoute !== undefined) {
-
-                building.updatePatrolRoute();
+                backgroundCtx.drawImage(tile.canvas, x * Tile.WIDTH, y * Tile.HEIGHT);
 
             }
 
-        });
+        }
 
-        return building;
+        this.background = new PIXI.Sprite(PIXI.Texture.fromCanvas(background));
 
-    } else {
+        this.content = new PIXI.Container();
 
-        console.warn('Can\'t place building at', tileX, tileY, 'there is not enough space.');
+        this.content.addChild(this.background);
+        this.content.addChild(this.containerZOrdered);
+        this.content.addChild(this.containerLights);
+        this.content.addChild(this.lighting);
 
-        return false;
+        this.addChild(this.content);
+        this.addChild(this.ui);
 
-    }
+        // Add buildings
 
+        let camp = this.addBuilding(Buildings.ARCHETYPE_CAMP.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT - 5));
 
-}
+        // Add resources
 
-World.prototype.onBuildingConstructed = function(building) {
+        this.tiles.forEach(function(tile) {
 
-    if (building.light) {
+            if (tile.type === Tile.TYPE_GRASS && tile.elevation < .4 && Math.random() > .6) {
 
-        this.containerLights.addChild(building.light);
+                let tree = this.addTree(tile.tileX, tile.tileY);
 
-        building.light.x = building.x;
-        building.light.y = building.y;
+            } else if (tile.type === Tile.TYPE_GRASS && (tile.elevation > .9 && Math.random() > .5 || Math.random() > .99)) {
 
-    }
+                let rock = this.addRock(tile.tileX, tile.tileY);
 
-}
+            }
 
-World.prototype.buyDwarf = function(x, y, archetypeId) {
-
-    let archetype = this.archetypes.getById(archetypeId);
-    let canAfford = this.supply.wood.get() >= archetype.cWood && this.supply.stone.get() >= archetype.cStone;
-
-    if (canAfford) {
-
-        this.supply.wood.decrement(archetype.cWood);
-        this.supply.stone.decrement(archetype.cStone);
-
-        return this.addDwarf(x, y, archetype.id);
-
-    } else {
-
-        return false;
+        }.bind(this));
 
     }
 
+    addTile(x, y) {
 
-}
+        let tile = new Tile(x, y, this.noise.simplex2(x / World.WIDTH * 2, y / World.WIDTH * 2));
 
-World.prototype.addDwarf = function(x, y, archetypeId) {
+        this.tiles.push(tile);
 
-    let dwarf = new Dwarf(this, x, y, this.archetypes.getById(archetypeId));
+        return tile;
 
-    this.ui.log.log('Added dwarf of type "' + archetypeId + '" called "' + dwarf.name + '"');
+    }
 
-    this.dwarves.push(dwarf);
+    addToZOrdered(item) {
 
-    this.addToZOrdered(dwarf);
+        item.id = ZOrdered.getUniqueID();
+        this.zOrdered.push(item);
+        this.containerZOrdered.addChild(item);
 
-    return dwarf;
+        if (item.light) {
 
-}
+            this.containerLights.addChild(item.light);
 
-World.prototype.update = function(time) {
-
-    let timeDelta = time - this.timeOfLastUpdate;
-
-    this.timeOfLastUpdate = time;
-
-    this.timeOfDay.update(timeDelta, this);
-
-    this.motherNature.update(timeDelta, this);
-
-    this.lighting.update(timeDelta, this);
-
-    this.viewport.update(timeDelta, this);
-
-    this.content.y = - this.viewport.scroll;
-
-    let killed = [];
-
-    this.motherNature.animals.forEach(function(animal, index) {
-
-        if (animal.isAlive()) {
-
-            animal.update(timeDelta, this);
-
-        } else {
-
-            killed.push(animal);
+            item.light.x = item.x;
+            item.light.y = item.y;
 
         }
 
-    }.bind(this));
+    }
 
-    this.dwarves.forEach(function(dwarf, index) {
+    addTree(tileX, tileY) {
 
-        if (dwarf.isAlive()) {
+        if (this.spaceAvailable(tileX, tileY, 1, 1)) {
 
-            dwarf.update(timeDelta, this);
+            let tile = this.getTile(tileX, tileY);
+
+            tile.occupy();
+
+            let offsetX = Tile.WIDTH * .3 * Math.random() - Tile.WIDTH * .15;
+            let offsetY = Tile.HEIGHT * .3 * Math.random() - Tile.HEIGHT * .15;
+
+            let tree = new Tree();
+            tree.x = tile.x + Tile.WIDTH * .5 + offsetX;
+            tree.y = tile.y + Tile.HEIGHT * .5 + offsetY;
+
+            this.resources.push(tree);
+            this.trees.push(tree);
+
+            this.addToZOrdered(tree);
+
+            return tree;
 
         } else {
 
-            killed.push(dwarf);
+            console.warn('Can\'t place tree at', tileX, tileY, 'there is not enough space.');
+
+            return false;
 
         }
 
-    }.bind(this));
+    }
 
-    this.resources.forEach(function(resource) {
+    addRock(tileX, tileY) {
 
-        resource.update(timeDelta, this);
+        if (this.spaceAvailable(tileX, tileY, 1, 1)) {
 
-    }.bind(this));
+            let tile = this.getTile(tileX, tileY);
 
-    this.buildings.update(timeDelta);
+            tile.occupy();
 
-    this.ui.update(timeDelta, this);
+            let rock = new Rock();
+            rock.x = tile.x + Tile.WIDTH * .5;
+            rock.y = tile.y + Tile.HEIGHT * .5;
 
-    // Z-Sorting
+            this.resources.push(rock);
+            this.rocks.push(rock);
 
-    this.zOrdered.sort(function(a, b) {
+            this.addToZOrdered(rock);
 
-        if (a.y > b.y) {
-
-            return 1;
-
-        } else if(a.y < b.y) {
-
-            return -1;
+            return rock;
 
         } else {
 
-            if (a.id > b.id) {
+            console.warn('Can\'t place rock at', tileX, tileY, 'there is not enough space.');
+
+            return false;
+
+        }
+
+    }
+
+    addBuilding(id, tileX, tileY) {
+
+        let buildingWidth = 1;
+        let buildingHeight = 1
+
+        if (this.spaceAvailable(tileX, tileY, buildingWidth, buildingHeight)) {
+
+            let tile = this.getTile(tileX, tileY);
+
+            tile.occupy();
+
+            let building = this.buildings.add(id, tile.x + Tile.WIDTH * .5, tile.y + Tile.HEIGHT * .5);
+
+            building.on('constructed', this.onBuildingConstructed.bind(this));
+
+            this.ui.log.log('Added building of type "' + id + '"');
+
+            this.addToZOrdered(building);
+
+            // Update watchmen patrol routes
+
+            this.buildings.buildings.forEach(function(building) {
+
+                if (building.patrolRoute !== undefined) {
+
+                    building.updatePatrolRoute();
+
+                }
+
+            });
+
+            return building;
+
+        } else {
+
+            console.warn('Can\'t place building at', tileX, tileY, 'there is not enough space.');
+
+            return false;
+
+        }
+
+
+    }
+
+    onBuildingConstructed(building) {
+
+        if (building.light) {
+
+            this.containerLights.addChild(building.light);
+
+            building.light.x = building.x;
+            building.light.y = building.y;
+
+        }
+
+    }
+
+    buyDwarf(x, y, archetypeId) {
+
+        let archetype = this.archetypes.getById(archetypeId);
+        let canAfford = this.supply.wood.get() >= archetype.cWood && this.supply.stone.get() >= archetype.cStone;
+
+        if (canAfford) {
+
+            this.supply.wood.decrement(archetype.cWood);
+            this.supply.stone.decrement(archetype.cStone);
+
+            return this.addDwarf(x, y, archetype.id);
+
+        } else {
+
+            return false;
+
+        }
+
+
+    }
+
+    addDwarf(x, y, archetypeId) {
+
+        let dwarf = new Dwarf(this, x, y, this.archetypes.getById(archetypeId));
+
+        this.ui.log.log('Added dwarf of type "' + archetypeId + '" called "' + dwarf.name + '"');
+
+        this.dwarves.push(dwarf);
+
+        this.addToZOrdered(dwarf);
+
+        return dwarf;
+
+    }
+
+    update(time) {
+
+        let timeDelta = time - this.timeOfLastUpdate;
+
+        this.timeOfLastUpdate = time;
+
+        this.timeOfDay.update(timeDelta, this);
+
+        this.motherNature.update(timeDelta, this);
+
+        this.lighting.update(timeDelta, this);
+
+        this.viewport.update(timeDelta, this);
+
+        this.content.y = - this.viewport.scroll;
+
+        let killed = [];
+
+        this.motherNature.animals.forEach(function(animal, index) {
+
+            if (animal.isAlive()) {
+
+                animal.update(timeDelta, this);
+
+            } else {
+
+                killed.push(animal);
+
+            }
+
+        }.bind(this));
+
+        this.dwarves.forEach(function(dwarf, index) {
+
+            if (dwarf.isAlive()) {
+
+                dwarf.update(timeDelta, this);
+
+            } else {
+
+                killed.push(dwarf);
+
+            }
+
+        }.bind(this));
+
+        this.resources.forEach(function(resource) {
+
+            resource.update(timeDelta, this);
+
+        }.bind(this));
+
+        this.buildings.update(timeDelta);
+
+        this.ui.update(timeDelta, this);
+
+        // Z-Sorting
+
+        this.zOrdered.sort(function(a, b) {
+
+            if (a.y > b.y) {
 
                 return 1;
 
-            } else if (a.id < b.id) {
+            } else if(a.y < b.y) {
 
                 return -1;
 
             } else {
 
-                return 0;
+                if (a.id > b.id) {
 
-            }
+                    return 1;
 
-        }
+                } else if (a.id < b.id) {
 
-    });
+                    return -1;
 
-    this.zOrdered.forEach(function(item, index) {
+                } else {
 
-        if (item.parent === null) {
-
-            this.zOrdered = this.zOrdered.splice(index, 1);
-
-        } else {
-
-            this.containerZOrdered.setChildIndex(item, index);
-
-            if (item.light && this.timeOfDay.getSunValue() > 0) {
-
-                item.light.x = item.x - item.light.radius + item.light.xOffset;
-                item.light.y = item.y - item.light.radius + item.light.yOffset;
-
-                item.light.alpha = (this.timeOfDay.getSunValue() - (Math.random() > .9 ? Math.random() * .15 : 0)) * item.light.alphaMultiplier;
-
-            }
-
-        }
-
-
-    }.bind(this));
-
-    this.supply.update(timeDelta, this);
-
-    killed.forEach(function(entity) {
-
-        switch(entity.type) {
-            case Dwarf.TYPE:
-
-                for(let d = 0; d < this.dwarves.length; d ++) {
-
-                    if (this.dwarves[d] === entity) {
-
-                        this.dwarves.splice(d, 1);
-                        break;
-
-                    }
+                    return 0;
 
                 }
 
-                break;
-            case Animal.TYPE:
+            }
 
-                this.motherNature.removeAnimal(entity);
+        });
 
-                break;
-        }
+        this.zOrdered.forEach(function(item, index) {
 
-        for(let i = 0; i < this.zOrdered.length; i ++) {
+            if (item.parent === null) {
 
-            if (this.zOrdered[i] === entity) {
+                this.zOrdered = this.zOrdered.splice(index, 1);
 
-                this.zOrdered.splice(i, 1);
-                break;
+            } else {
+
+                this.containerZOrdered.setChildIndex(item, index);
+
+                if (item.light && this.timeOfDay.getSunValue() > 0) {
+
+                    item.light.x = item.x - item.light.radius + item.light.xOffset;
+                    item.light.y = item.y - item.light.radius + item.light.yOffset;
+
+                    item.light.alpha = (this.timeOfDay.getSunValue() - (Math.random() > .9 ? Math.random() * .15 : 0)) * item.light.alphaMultiplier;
+
+                }
 
             }
 
-        }
 
-        this.lighting.removeEmitter(entity);
+        }.bind(this));
 
-        if (entity.light) {
+        this.supply.update(timeDelta, this);
 
-            entity.light.destroy();
+        killed.forEach(function(entity) {
 
-        }
+            switch(entity.type) {
+                case Dwarf.TYPE:
 
-        entity.destroy();
+                    for(let d = 0; d < this.dwarves.length; d ++) {
 
-    }.bind(this));
+                        if (this.dwarves[d] === entity) {
 
-}
+                            this.dwarves.splice(d, 1);
+                            break;
 
-World.prototype.spaceAvailable = function(tileX, tileY, w, h) {
+                        }
 
-    let valid = true;
+                    }
 
-    for (let i = tileX; i < tileX + w; i ++) {
-        for (let j = tileY; j < tileY + h; j ++) {
+                    break;
+                case Animal.TYPE:
 
-            if (this.getTile(i, j).isOccupied) {
+                    this.motherNature.removeAnimal(entity);
 
-                valid = false;
-                break;
+                    break;
+            }
+
+            for(let i = 0; i < this.zOrdered.length; i ++) {
+
+                if (this.zOrdered[i] === entity) {
+
+                    this.zOrdered.splice(i, 1);
+                    break;
+
+                }
 
             }
 
-        }
+            this.lighting.removeEmitter(entity);
+
+            if (entity.light) {
+
+                entity.light.destroy();
+
+            }
+
+            entity.destroy();
+
+        }.bind(this));
+
     }
 
-    return valid;
+    spaceAvailable(tileX, tileY, w, h) {
 
-}
+        let valid = true;
 
-World.prototype.getTileFromWorld = function(x, y) {
+        for (let i = tileX; i < tileX + w; i ++) {
+            for (let j = tileY; j < tileY + h; j ++) {
 
-    return this.getTile(Math.floor(x / Tile.WIDTH), Math.floor(y / Tile.HEIGHT));
+                if (this.getTile(i, j).isOccupied) {
 
-}
+                    valid = false;
+                    break;
 
-World.prototype.getTile = function(x, y) {
+                }
 
-    return this.tiles[y * World.WIDTH + x] || false;
+            }
+        }
+
+        return valid;
+
+    }
+
+    getTileFromWorld(x, y) {
+
+        return this.getTile(Math.floor(x / Tile.WIDTH), Math.floor(y / Tile.HEIGHT));
+
+    }
+
+    getTile(x, y) {
+
+        return this.tiles[y * World.WIDTH + x] || false;
+
+    }
 
 }
 

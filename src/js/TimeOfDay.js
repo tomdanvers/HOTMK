@@ -1,5 +1,5 @@
 import PIXI from 'pixi.js';
-import ValueMinMax from './utils/value-min-max';
+import ValueMinMax from './utils/ValueMinMax';
 
 export default function TimeOfDay() {
 

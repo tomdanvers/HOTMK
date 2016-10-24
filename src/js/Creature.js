@@ -1,241 +1,165 @@
 import PIXI from 'pixi.js';
 import Maths from './utils/Maths';
-import MinMaxValue from './utils/value-min-max';
+import MinMaxValue from './utils/ValueMinMax';
 
 import ValueBar from './ui/ValueBarUI';
 import Inventory from './Inventory';
 import Roles from './Roles';
 
-export default function Creature(world, startX, startY, archetype, appearanceWidth, appearanceHeight) {
+export default class Creature extends PIXI.Container {
 
-    PIXI.Container.call(this);
+    constructor(world, startX, startY, archetype, appearanceWidth, appearanceHeight) {
 
-    this.world = world;
+        super();
 
-    this.archetype = archetype;
+        this.world = world;
 
-    this.target = null;
-    this.home = null;
+        this.archetype = archetype;
 
-    this.inventory = new Inventory(this);
+        this.target = null;
+        this.home = null;
 
-    this.weapons = archetype.weapons;
-    this.weapon = this.weapons.length > 0 ? this.weapons[0] : false;
+        this.inventory = new Inventory(this);
 
-    this.angle = 0;
+        this.weapons = archetype.weapons;
+        this.weapon = this.weapons.length > 0 ? this.weapons[0] : false;
 
-    this.timeBetweenActions = archetype.timeBetweenActions;
-    this.timeSinceAction = this.timeBetweenActions;
+        this.angle = 0;
 
-    this.offsetStartTime = Math.random() - .5;
-    this.offsetEndTime = Math.random() - .5;
+        this.timeBetweenActions = archetype.timeBetweenActions;
+        this.timeSinceAction = this.timeBetweenActions;
 
-    this.roleId = null;
-    this.careerRole = this.world.roles.getById(archetype.role);
-    this.changeRole(this.careerRole.id);
+        this.offsetStartTime = Math.random() - .5;
+        this.offsetEndTime = Math.random() - .5;
 
-    this.health = new MinMaxValue(0, archetype.health, archetype.health);
-    this.speed = archetype.speed;
-    this.stealthiness = archetype.stealthiness;
-    this.range = archetype.range;
-    this.rangePerception = archetype.rangePerception;
-    this.rangeLimit = archetype.rangeLimit;
-    this.isAggressive = archetype.isAggressive;
+        this.roleId = null;
+        this.careerRole = this.world.roles.getById(archetype.role);
+        this.changeRole(this.careerRole.id);
 
-    this.appearanceWidth = appearanceWidth || 6;
-    this.appearanceHeight = appearanceHeight || 12;
+        this.health = new MinMaxValue(0, archetype.health, archetype.health);
+        this.speed = archetype.speed;
+        this.stealthiness = archetype.stealthiness;
+        this.range = archetype.range;
+        this.rangePerception = archetype.rangePerception;
+        this.rangeLimit = archetype.rangeLimit;
+        this.isAggressive = archetype.isAggressive;
 
-    this.container = new PIXI.Container();
-    this.addChild(this.container);
+        this.appearanceWidth = appearanceWidth || 6;
+        this.appearanceHeight = appearanceHeight || 12;
 
-    this.base = this.getAppearance();
-    this.base.x = - this.appearanceWidth * .5;
-    this.base.y = - this.appearanceHeight;
-    this.container.addChild(this.base);
+        this.container = new PIXI.Container();
+        this.addChild(this.container);
 
-    /*let red = new PIXI.Graphics();
-    red.beginFill(0xFF0000);
-    red.drawRect(-1, 0, 2, 1);
-    red.endFill();
-    this.addChild(red);*/
+        this.base = this.getAppearance();
+        this.base.x = - this.appearanceWidth * .5;
+        this.base.y = - this.appearanceHeight;
+        this.container.addChild(this.base);
 
-    this.healthBar = new ValueBar(10, 2);
-    this.healthBar.x = - 5;
-    this.healthBar.y = - this.appearanceHeight - 5;
-    this.healthBar.visible = false;
-    this.addChild(this.healthBar);
+        /*let red = new PIXI.Graphics();
+        red.beginFill(0xFF0000);
+        red.drawRect(-1, 0, 2, 1);
+        red.endFill();
+        this.addChild(red);*/
 
-    this.xFloat = this.x = this.startX = Math.round(startX);
-    this.yFloat = this.y = this.startY = Math.round(startY);
+        this.healthBar = new ValueBar(10, 2);
+        this.healthBar.x = - 5;
+        this.healthBar.y = - this.appearanceHeight - 5;
+        this.healthBar.visible = false;
+        this.addChild(this.healthBar);
 
-}
-
-Creature.constructor = Creature;
-Creature.prototype = Object.create(PIXI.Container.prototype);
-
-Creature.prototype.getAppearance = function(roleId) {
-
-    let base = new PIXI.Graphics();
-
-    base.beginFill(0xFF000);
-    base.drawRect(0, 0, this.appearanceWidth, appearanceWidth);
-    base.endFill();
-
-    return base;
-
-}
-
-Creature.prototype.changeRole = function(roleId) {
-
-    if (this.roleId === roleId) {
-
-        return;
+        this.xFloat = this.x = this.startX = Math.round(startX);
+        this.yFloat = this.y = this.startY = Math.round(startY);
 
     }
 
-    if (this.id) {
+    getAppearance(roleId) {
 
-        console.log('Creature.changeRole(', this.archetype.id, this.id, '|', this.roleId, '>', roleId, ')');
+        let base = new PIXI.Graphics();
 
-    }
+        base.beginFill(0xFF000);
+        base.drawRect(0, 0, this.appearanceWidth, appearanceWidth);
+        base.endFill();
 
-    if (this.role && this.role.exit !== undefined) {
-
-        this.role.exit(this, this.world);
-
-    }
-
-    this.role = this.world.roles.getById(roleId);
-    this.roleId = roleId;
-
-    if (this.role.enter !== undefined) {
-
-        this.role.enter(this, this.world);
+        return base;
 
     }
 
-}
+    changeRole(roleId) {
 
-Creature.prototype.canTakeAction = function() {
+        if (this.roleId === roleId) {
 
-    return this.timeSinceAction > this.timeBetweenActions;
+            return;
 
-}
+        }
 
-Creature.prototype.tookAction = function() {
+        if (this.id) {
 
-    this.timeSinceAction = 0;
+            console.log('Creature.changeRole(', this.archetype.id, this.id, '|', this.roleId, '>', roleId, ')');
 
-}
+        }
 
-Creature.prototype.takeHealing = function(heal, healer) {
+        if (this.role && this.role.exit !== undefined) {
 
-    this.health.increment(heal);
+            this.role.exit(this, this.world);
 
-    this.healthChanged();
+        }
 
-}
+        this.role = this.world.roles.getById(roleId);
+        this.roleId = roleId;
 
-Creature.prototype.takeDamage = function(damage, attacker) {
+        if (this.role.enter !== undefined) {
 
-    this.health.decrement(damage);
-
-    this.healthChanged();
-
-    // If the unit is aggressive then ignore as behaviour is dealing with combat
-
-    // otherwise
-
-    // Change behaviour to ...
-
-        // Self defense
-
-    if (this.isAlive() && this.isAwake() && !this.role.isWeaponBased && attacker) {
-
-        if (this.isArmed()) {
-
-            this.target = attacker;
-
-            this.changeRole(Roles.SELF_DEFENSE);
-
-        } else {
-
-            this.changeRole(Roles.FLEE);
+            this.role.enter(this, this.world);
 
         }
 
     }
 
-}
+    canTakeAction() {
 
-Creature.prototype.healthChanged = function() {
-
-    if (this.health.isMax()) {
-
-        this.healthBar.visible = false;
-
-    } else {
-
-        this.healthBar.visible = true;
-        this.healthBar.setValue(this.health.val());
+        return this.timeSinceAction > this.timeBetweenActions;
 
     }
 
-    if (!this.isAlive()) {
+    tookAction() {
 
-        this.emit('death', this);
-
-    }
-
-}
-
-Creature.prototype.update = function(timeDelta, world) {
-
-    this.timeSinceAction += timeDelta;
-
-    let newRoleId = this.role.update(timeDelta, this, world) || false;
-
-    if (this.roleId !== Roles.RESTING && this.roleId !== Roles.SELF_DEFENSE && this.careerRole.startTime && this.careerRole.endTime && !world.timeOfDay.isDuringPeriod(this.careerRole.startTime + this.offsetStartTime, this.careerRole.endTime + this.offsetEndTime)) {
-
-        newRoleId = Roles.RESTING;
+        this.timeSinceAction = 0;
 
     }
 
-    if (newRoleId) {
+    takeHealing(heal, healer) {
 
-        this.changeRole(newRoleId);
+        this.health.increment(heal);
+
+        this.healthChanged();
 
     }
 
-    if (this.target) {
+    takeDamage(damage, attacker) {
 
-        if (this.target.isAlive !== undefined && !this.target.isAlive()) {
+        this.health.decrement(damage);
 
-            this.target = false;
+        this.healthChanged();
 
-        } else {
+        // If the unit is aggressive then ignore as behaviour is dealing with combat
 
-            this.angle = Math.atan2(this.target.y - this.y, this.target.x - this.x);
+        // otherwise
 
-            let distance = Maths.distanceBetween(this, this.target);
+        // Change behaviour to ...
 
-            let range = this.role.isWeaponBased ? this.weapon.range : this.range;
+            // Self defense
 
-            if (distance < range && this.role.targetProximity) {
+        if (this.isAlive() && this.isAwake() && !this.role.isWeaponBased && attacker) {
 
-                this.role.targetProximity(timeDelta, this, world);
+            if (this.isArmed()) {
+
+                this.target = attacker;
+
+                this.changeRole(Roles.SELF_DEFENSE);
 
             } else {
 
-                let xPrevious = this.xFloat;
-
-                this.xFloat += Math.cos(this.angle) * this.speed * timeDelta / 30;
-                this.yFloat += Math.sin(this.angle) * this.speed * timeDelta / 30;
-
-                this.container.scale.set(xPrevious > this.xFloat ? 1 : -1, 1);
-
-                this.x = Math.round(this.xFloat);
-                this.y = Math.round(this.yFloat);
+                this.changeRole(Roles.FLEE);
 
             }
 
@@ -243,22 +167,100 @@ Creature.prototype.update = function(timeDelta, world) {
 
     }
 
+    healthChanged() {
+
+        if (this.health.isMax()) {
+
+            this.healthBar.visible = false;
+
+        } else {
+
+            this.healthBar.visible = true;
+            this.healthBar.setValue(this.health.val());
+
+        }
+
+        if (!this.isAlive()) {
+
+            this.emit('death', this);
+
+        }
+
+    }
+
+    update(timeDelta, world) {
+
+        this.timeSinceAction += timeDelta;
+
+        let newRoleId = this.role.update(timeDelta, this, world) || false;
+
+        if (this.roleId !== Roles.RESTING && this.roleId !== Roles.SELF_DEFENSE && this.careerRole.startTime && this.careerRole.endTime && !world.timeOfDay.isDuringPeriod(this.careerRole.startTime + this.offsetStartTime, this.careerRole.endTime + this.offsetEndTime)) {
+
+            newRoleId = Roles.RESTING;
+
+        }
+
+        if (newRoleId) {
+
+            this.changeRole(newRoleId);
+
+        }
+
+        if (this.target) {
+
+            if (this.target.isAlive !== undefined && !this.target.isAlive()) {
+
+                this.target = false;
+
+            } else {
+
+                this.angle = Math.atan2(this.target.y - this.y, this.target.x - this.x);
+
+                let distance = Maths.distanceBetween(this, this.target);
+
+                let range = this.role.isWeaponBased ? this.weapon.range : this.range;
+
+                if (distance < range && this.role.targetProximity) {
+
+                    this.role.targetProximity(timeDelta, this, world);
+
+                } else {
+
+                    let xPrevious = this.xFloat;
+
+                    this.xFloat += Math.cos(this.angle) * this.speed * timeDelta / 30;
+                    this.yFloat += Math.sin(this.angle) * this.speed * timeDelta / 30;
+
+                    this.container.scale.set(xPrevious > this.xFloat ? 1 : -1, 1);
+
+                    this.x = Math.round(this.xFloat);
+                    this.y = Math.round(this.yFloat);
+
+                }
+
+            }
+
+        }
+
+    }
+
+    isAlive() {
+
+        return !this.health.isMin();
+
+    }
+
+    isArmed() {
+
+        return this.weapons && this.weapons.length > 0;
+
+    }
+
+    isAwake() {
+
+        return this.visible;
+
+    }
+
 }
 
-Creature.prototype.isAlive = function() {
-
-    return !this.health.isMin();
-
-}
-
-Creature.prototype.isArmed = function() {
-
-    return this.weapons && this.weapons.length > 0;
-
-}
-
-Creature.prototype.isAwake = function() {
-
-    return this.visible;
-
-}

@@ -32664,147 +32664,211 @@ module.exports = {
 },{}],209:[function(require,module,exports){
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = Animal;
-exports.Deer = Deer;
-exports.Rabbit = Rabbit;
-exports.Fox = Fox;
-exports.Wolf = Wolf;
-exports.Boar = Boar;
+exports.Boar = exports.Wolf = exports.Fox = exports.Rabbit = exports.Deer = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _pixi = require('pixi.js');
 
 var _pixi2 = _interopRequireDefault(_pixi);
 
-var _valueMinMax = require('./utils/value-min-max');
+var _ValueMinMax = require('./utils/ValueMinMax');
 
-var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
+var _ValueMinMax2 = _interopRequireDefault(_ValueMinMax);
 
 var _Maths = require('./utils/Maths');
 
 var _Maths2 = _interopRequireDefault(_Maths);
 
-var _Creature = require('./Creature');
+var _Creature2 = require('./Creature');
 
-var _Creature2 = _interopRequireDefault(_Creature);
+var _Creature3 = _interopRequireDefault(_Creature2);
 
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Animal(world, startX, startY, archetype, appearanceWidth, appearanceHeight) {
-
-    _Creature2.default.call(this, world, startX, startY, archetype, appearanceWidth, appearanceHeight);
-
-    this.name = 'animal';
-
-    this.type = Animal.TYPE;
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
 }
 
-Animal.constructor = Animal;
-Animal.prototype = Object.create(_Creature2.default.prototype);
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
 
-Animal.prototype.getAppearance = function (roleId) {
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
-    var base = new _pixi2.default.Sprite(_pixi2.default.Texture.fromImage('img/' + this.archetype.id + '.png'));
-    return base;
-};
+var Animal = function (_Creature) {
+    _inherits(Animal, _Creature);
+
+    function Animal(world, startX, startY, archetype, appearanceWidth, appearanceHeight) {
+        _classCallCheck(this, Animal);
+
+        var _this = _possibleConstructorReturn(this, (Animal.__proto__ || Object.getPrototypeOf(Animal)).call(this, world, startX, startY, archetype, appearanceWidth, appearanceHeight));
+
+        _this.name = 'animal';
+
+        _this.type = Animal.TYPE;
+
+        return _this;
+    }
+
+    _createClass(Animal, [{
+        key: 'getAppearance',
+        value: function getAppearance(roleId) {
+
+            return new _pixi2.default.Sprite(_pixi2.default.Texture.fromImage('img/' + this.archetype.id + '.png'));
+        }
+    }]);
+
+    return Animal;
+}(_Creature3.default);
+
+exports.default = Animal;
 
 Animal.TYPE = 'animal';
-
 Animal.VERBOSE = false;
 
 /* -------------- */
 /* --------- DEER */
 /* -------------- */
 
-function Deer(world, startX, startY, archetype) {
+var Deer = exports.Deer = function (_Animal) {
+    _inherits(Deer, _Animal);
 
-    Animal.call(this, world, startX, startY, archetype, 15, 11);
+    function Deer(world, startX, startY, archetype) {
+        _classCallCheck(this, Deer);
 
-    this.name = 'Deer';
-}
+        var _this2 = _possibleConstructorReturn(this, (Deer.__proto__ || Object.getPrototypeOf(Deer)).call(this, world, startX, startY, archetype, 15, 11));
 
-Deer.constructor = Deer;
-Deer.prototype = Object.create(Animal.prototype);
+        _this2.name = 'Deer';
+
+        return _this2;
+    }
+
+    return Deer;
+}(Animal);
 
 /* -------------- */
 /* ------- RABBIT */
 /* -------------- */
 
-function Rabbit(world, startX, startY, archetype) {
+var Rabbit = exports.Rabbit = function (_Animal2) {
+    _inherits(Rabbit, _Animal2);
 
-    Animal.call(this, world, startX, startY, archetype, 2, 3);
+    function Rabbit(world, startX, startY, archetype) {
+        _classCallCheck(this, Rabbit);
 
-    this.name = 'Rabbit';
-}
+        var _this3 = _possibleConstructorReturn(this, (Rabbit.__proto__ || Object.getPrototypeOf(Rabbit)).call(this, world, startX, startY, archetype, 2, 3));
 
-Rabbit.constructor = Rabbit;
-Rabbit.prototype = Object.create(Animal.prototype);
+        _this3.name = 'Rabbit';
+
+        return _this3;
+    }
+
+    return Rabbit;
+}(Animal);
 
 /* -------------- */
 /* ---------- FOX */
 /* -------------- */
 
-function Fox(world, startX, startY, archetype) {
+var Fox = exports.Fox = function (_Animal3) {
+    _inherits(Fox, _Animal3);
 
-    Animal.call(this, world, startX, startY, archetype, 9, 4);
+    function Fox(world, startX, startY, archetype) {
+        _classCallCheck(this, Fox);
 
-    this.name = 'Fox';
-}
+        var _this4 = _possibleConstructorReturn(this, (Fox.__proto__ || Object.getPrototypeOf(Fox)).call(this, world, startX, startY, archetype, 9, 4));
 
-Fox.constructor = Fox;
-Fox.prototype = Object.create(Animal.prototype);
+        _this4.name = 'Fox';
+
+        return _this4;
+    }
+
+    return Fox;
+}(Animal);
 
 /* -------------- */
 /* --------- WOLF */
 /* -------------- */
 
-function Wolf(world, startX, startY, archetype) {
+var Wolf = exports.Wolf = function (_Animal4) {
+    _inherits(Wolf, _Animal4);
 
-    Animal.call(this, world, startX, startY, archetype, 16, 9);
+    function Wolf(world, startX, startY, archetype) {
+        _classCallCheck(this, Wolf);
 
-    this.name = 'Wolf';
-}
+        var _this5 = _possibleConstructorReturn(this, (Wolf.__proto__ || Object.getPrototypeOf(Wolf)).call(this, world, startX, startY, archetype, 16, 9));
 
-Wolf.constructor = Wolf;
-Wolf.prototype = Object.create(Animal.prototype);
+        _this5.name = 'Wolf';
+
+        return _this5;
+    }
+
+    return Wolf;
+}(Animal);
 
 /* -------------- */
 /* --------- BOAR */
 /* -------------- */
 
-function Boar(world, startX, startY, archetype) {
+var Boar = exports.Boar = function (_Animal5) {
+    _inherits(Boar, _Animal5);
 
-    Animal.call(this, world, startX, startY, archetype, 12, 8);
+    function Boar(world, startX, startY, archetype) {
+        _classCallCheck(this, Boar);
 
-    this.name = 'Boar';
-}
+        var _this6 = _possibleConstructorReturn(this, (Boar.__proto__ || Object.getPrototypeOf(Boar)).call(this, world, startX, startY, archetype, 12, 8));
 
-Boar.constructor = Boar;
-Boar.prototype = Object.create(Animal.prototype);
+        _this6.name = 'Boar';
 
-},{"./Creature":213,"./utils/Maths":234,"./utils/value-min-max":235,"pixi.js":154}],210:[function(require,module,exports){
+        return _this6;
+    }
+
+    return Boar;
+}(Animal);
+
+},{"./Creature":213,"./utils/Maths":234,"./utils/ValueMinMax":235,"pixi.js":154}],210:[function(require,module,exports){
 'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = Archetypes;
-exports.Mason = Mason;
-exports.Miner = Miner;
-exports.Forester = Forester;
-exports.Hunter = Hunter;
-exports.WatchDay = WatchDay;
-exports.WatchNight = WatchNight;
-exports.Healer = Healer;
-exports.Rabbit = Rabbit;
-exports.Deer = Deer;
-exports.Fox = Fox;
-exports.Boar = Boar;
-exports.Wolf = Wolf;
+exports.Wolf = exports.Boar = exports.Fox = exports.Deer = exports.Rabbit = exports.Healer = exports.WatchNight = exports.WatchDay = exports.Hunter = exports.Forester = exports.Miner = exports.Mason = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _Roles = require('./Roles');
 
@@ -32818,31 +32882,57 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Archetypes() {
-
-    this.archetypesMap = {
-        'mason': new Mason(),
-        'miner': new Miner(),
-        'forester': new Forester(),
-        'hunter': new Hunter(),
-        'watch-day': new WatchDay(),
-        'watch-night': new WatchNight(),
-        'healer': new Healer(),
-
-        'animal-rabbit': new Rabbit(),
-        'animal-deer': new Deer(),
-        'animal-fox': new Fox(),
-        'animal-boar': new Boar(),
-        'animal-wolf': new Wolf()
-    };
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
 }
 
-Archetypes.constructor = Archetypes;
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
-Archetypes.prototype.getById = function (id) {
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
 
-    return this.archetypesMap[id];
-};
+var Archetypes = function () {
+    function Archetypes() {
+        _classCallCheck(this, Archetypes);
+
+        this.archetypesMap = {
+            'mason': new Mason(),
+            'miner': new Miner(),
+            'forester': new Forester(),
+            'hunter': new Hunter(),
+            'watch-day': new WatchDay(),
+            'watch-night': new WatchNight(),
+            'healer': new Healer(),
+
+            'animal-rabbit': new Rabbit(),
+            'animal-deer': new Deer(),
+            'animal-fox': new Fox(),
+            'animal-boar': new Boar(),
+            'animal-wolf': new Wolf()
+        };
+    }
+
+    _createClass(Archetypes, [{
+        key: 'getById',
+        value: function getById(id) {
+
+            return this.archetypesMap[id];
+        }
+    }]);
+
+    return Archetypes;
+}();
+
+exports.default = Archetypes;
 
 Archetypes.MASON = 'mason';
 Archetypes.MINER = 'miner';
@@ -32862,7 +32952,8 @@ Archetypes.ANIMAL_WOLF = 'animal-wolf';
 /* ---------------------- DWARF BASE */
 /* --------------------------------- */
 
-function Dwarf() {
+var Dwarf = function Dwarf() {
+    _classCallCheck(this, Dwarf);
 
     this.timeBetweenActions = 1500;
 
@@ -32882,181 +32973,229 @@ function Dwarf() {
     this.cStone = 5;
 
     this.weapons = [_Weapons2.default.FISTS];
-}
-
-Dwarf.constructor = Dwarf;
+};
 
 /* --------------------------------- */
 /* --------------------------- MASON */
 /* --------------------------------- */
 
-function Mason() {
+var Mason = exports.Mason = function (_Dwarf) {
+    _inherits(Mason, _Dwarf);
 
-    Dwarf.call(this);
+    function Mason() {
+        _classCallCheck(this, Mason);
 
-    this.id = Archetypes.MASON;
-    this.role = _Roles2.default.BUILDER;
+        var _this = _possibleConstructorReturn(this, (Mason.__proto__ || Object.getPrototypeOf(Mason)).call(this));
 
-    this.colour = 0x333355;
+        _this.id = Archetypes.MASON;
+        _this.role = _Roles2.default.BUILDER;
 
-    this.cWood = 50;
-    this.cStone = 50;
+        _this.colour = 0x333355;
 
-    this.weapons = [_Weapons2.default.HAMMER];
-}
-Mason.constructor = Mason;
-Mason.prototype = Object.create(Dwarf.prototype);
+        _this.cWood = 50;
+        _this.cStone = 50;
+
+        _this.weapons = [_Weapons2.default.HAMMER];
+
+        return _this;
+    }
+
+    return Mason;
+}(Dwarf);
 
 /* --------------------------------- */
 /* --------------------------- MINER */
 /* --------------------------------- */
 
-function Miner() {
+var Miner = exports.Miner = function (_Dwarf2) {
+    _inherits(Miner, _Dwarf2);
 
-    Dwarf.call(this);
+    function Miner() {
+        _classCallCheck(this, Miner);
 
-    this.id = Archetypes.MINER;
-    this.role = _Roles2.default.COLLECT_STONE;
+        var _this2 = _possibleConstructorReturn(this, (Miner.__proto__ || Object.getPrototypeOf(Miner)).call(this));
 
-    this.colour = 0x444444;
+        _this2.id = Archetypes.MINER;
+        _this2.role = _Roles2.default.COLLECT_STONE;
 
-    this.cWood = 40;
-    this.cStone = 20;
+        _this2.colour = 0x444444;
 
-    this.weapons = [_Weapons2.default.PICKAXE];
-}
-Miner.constructor = Miner;
-Miner.prototype = Object.create(Dwarf.prototype);
+        _this2.cWood = 40;
+        _this2.cStone = 20;
+
+        _this2.weapons = [_Weapons2.default.PICKAXE];
+
+        return _this2;
+    }
+
+    return Miner;
+}(Dwarf);
 
 /* --------------------------------- */
 /* ------------------------ FORESTER */
 /* --------------------------------- */
 
-function Forester() {
+var Forester = exports.Forester = function (_Dwarf3) {
+    _inherits(Forester, _Dwarf3);
 
-    Dwarf.call(this);
+    function Forester() {
+        _classCallCheck(this, Forester);
 
-    this.id = Archetypes.FORESTER;
-    this.role = _Roles2.default.COLLECT_WOOD;
+        var _this3 = _possibleConstructorReturn(this, (Forester.__proto__ || Object.getPrototypeOf(Forester)).call(this));
 
-    this.colour = 0x335533;
+        _this3.id = Archetypes.FORESTER;
+        _this3.role = _Roles2.default.COLLECT_WOOD;
 
-    this.stealthiness = .8;
+        _this3.colour = 0x335533;
 
-    this.cWood = 20;
-    this.cStone = 40;
+        _this3.stealthiness = .8;
 
-    this.weapons = [_Weapons2.default.AXE];
-}
-Forester.constructor = Forester;
-Forester.prototype = Object.create(Dwarf.prototype);
+        _this3.cWood = 20;
+        _this3.cStone = 40;
+
+        _this3.weapons = [_Weapons2.default.AXE];
+
+        return _this3;
+    }
+
+    return Forester;
+}(Dwarf);
 
 /* --------------------------------- */
 /* -------------------------- HUNTER */
 /* --------------------------------- */
 
-function Hunter() {
+var Hunter = exports.Hunter = function (_Dwarf4) {
+    _inherits(Hunter, _Dwarf4);
 
-    Dwarf.call(this);
+    function Hunter() {
+        _classCallCheck(this, Hunter);
 
-    this.id = Archetypes.HUNTER;
-    this.role = _Roles2.default.HUNTER;
+        var _this4 = _possibleConstructorReturn(this, (Hunter.__proto__ || Object.getPrototypeOf(Hunter)).call(this));
 
-    this.lightRadius = 45;
+        _this4.id = Archetypes.HUNTER;
+        _this4.role = _Roles2.default.HUNTER;
 
-    this.rangePerception = 200;
+        _this4.lightRadius = 45;
 
-    this.colour = 0x58240A;
+        _this4.rangePerception = 200;
 
-    this.stealthiness = .9;
+        _this4.colour = 0x58240A;
 
-    this.cWood = 50;
-    this.cStone = 50;
+        _this4.stealthiness = .9;
 
-    this.weapons = [_Weapons2.default.BOW];
-}
-Hunter.constructor = Hunter;
-Hunter.prototype = Object.create(Dwarf.prototype);
+        _this4.cWood = 50;
+        _this4.cStone = 50;
+
+        _this4.weapons = [_Weapons2.default.BOW];
+
+        return _this4;
+    }
+
+    return Hunter;
+}(Dwarf);
 
 /* --------------------------------- */
 /* ----------------------- WATCH DAY */
 /* --------------------------------- */
 
-function WatchDay() {
+var WatchDay = exports.WatchDay = function (_Dwarf5) {
+    _inherits(WatchDay, _Dwarf5);
 
-    Dwarf.call(this);
+    function WatchDay() {
+        _classCallCheck(this, WatchDay);
 
-    this.id = Archetypes.WATCH_DAY;
-    this.role = _Roles2.default.WATCH_DAY;
+        var _this5 = _possibleConstructorReturn(this, (WatchDay.__proto__ || Object.getPrototypeOf(WatchDay)).call(this));
 
-    this.colour = 0x555533;
+        _this5.id = Archetypes.WATCH_DAY;
+        _this5.role = _Roles2.default.WATCH_DAY;
 
-    this.stealthiness = .25;
+        _this5.colour = 0x555533;
 
-    this.cWood = 50;
-    this.cStone = 50;
+        _this5.stealthiness = .25;
 
-    this.weapons = [_Weapons2.default.BOW, _Weapons2.default.BATTLEAXE];
-}
-WatchDay.constructor = WatchDay;
-WatchDay.prototype = Object.create(Dwarf.prototype);
+        _this5.cWood = 50;
+        _this5.cStone = 50;
+
+        _this5.weapons = [_Weapons2.default.BOW, _Weapons2.default.BATTLEAXE];
+
+        return _this5;
+    }
+
+    return WatchDay;
+}(Dwarf);
 
 /* --------------------------------- */
 /* --------------------- WATCH NIGHT */
 /* --------------------------------- */
 
-function WatchNight() {
+var WatchNight = exports.WatchNight = function (_Dwarf6) {
+    _inherits(WatchNight, _Dwarf6);
 
-    Dwarf.call(this);
+    function WatchNight() {
+        _classCallCheck(this, WatchNight);
 
-    this.id = Archetypes.WATCH_NIGHT;
-    this.role = _Roles2.default.WATCH_NIGHT;
+        var _this6 = _possibleConstructorReturn(this, (WatchNight.__proto__ || Object.getPrototypeOf(WatchNight)).call(this));
 
-    this.colour = 0x553333;
+        _this6.id = Archetypes.WATCH_NIGHT;
+        _this6.role = _Roles2.default.WATCH_NIGHT;
 
-    this.stealthiness = .25;
+        _this6.colour = 0x553333;
 
-    this.lightRadius = 60;
+        _this6.stealthiness = .25;
 
-    this.cWood = 50;
-    this.cStone = 50;
+        _this6.lightRadius = 60;
 
-    this.weapons = [_Weapons2.default.BOW, _Weapons2.default.BATTLEAXE];
-}
-WatchNight.constructor = WatchNight;
-WatchNight.prototype = Object.create(Dwarf.prototype);
+        _this6.cWood = 50;
+        _this6.cStone = 50;
+
+        _this6.weapons = [_Weapons2.default.BOW, _Weapons2.default.BATTLEAXE];
+
+        return _this6;
+    }
+
+    return WatchNight;
+}(Dwarf);
 
 /* --------------------------------- */
 /* -------------------------- HEALER */
 /* --------------------------------- */
 
-function Healer() {
+var Healer = exports.Healer = function (_Dwarf7) {
+    _inherits(Healer, _Dwarf7);
 
-    Dwarf.call(this);
+    function Healer() {
+        _classCallCheck(this, Healer);
 
-    this.id = Archetypes.HEALER;
-    this.role = _Roles2.default.HEALER;
+        var _this7 = _possibleConstructorReturn(this, (Healer.__proto__ || Object.getPrototypeOf(Healer)).call(this));
 
-    this.colour = 0x999999;
+        _this7.id = Archetypes.HEALER;
+        _this7.role = _Roles2.default.HEALER;
 
-    this.stealthiness = .25;
+        _this7.colour = 0x999999;
 
-    this.speed = .85;
-    this.range = 10;
+        _this7.stealthiness = .25;
 
-    this.cWood = 50;
-    this.cStone = 50;
+        _this7.speed = .85;
+        _this7.range = 10;
 
-    this.weapons = [];
-}
-Healer.constructor = Healer;
-Healer.prototype = Object.create(Dwarf.prototype);
+        _this7.cWood = 50;
+        _this7.cStone = 50;
+
+        _this7.weapons = [];
+
+        return _this7;
+    }
+
+    return Healer;
+}(Dwarf);
 
 /* --------------------------------- */
 /* --------------------- ANIMAL BASE */
 /* --------------------------------- */
 
-function Animal() {
+var Animal = function Animal() {
+    _classCallCheck(this, Animal);
 
     this.timeBetweenActions = 1500;
 
@@ -33076,129 +33215,166 @@ function Animal() {
     this.cStone = 0;
 
     this.weapons = [];
-}
-Animal.constructor = Animal;
+};
 
 /* --------------------------------- */
 /* -------------------------- RABBIT */
 /* --------------------------------- */
 
-function Rabbit() {
+var Rabbit = exports.Rabbit = function (_Animal) {
+    _inherits(Rabbit, _Animal);
 
-    Animal.call(this);
+    function Rabbit() {
+        _classCallCheck(this, Rabbit);
 
-    this.id = Archetypes.ANIMAL_RABBIT;
-    this.role = _Roles2.default.PREY;
+        var _this8 = _possibleConstructorReturn(this, (Rabbit.__proto__ || Object.getPrototypeOf(Rabbit)).call(this));
 
-    this.colour = 0x553333;
+        _this8.id = Archetypes.ANIMAL_RABBIT;
+        _this8.role = _Roles2.default.PREY;
 
-    this.speed = .8;
-    this.rangePerception = 60;
-    this.health = 5;
-}
-Rabbit.constructor = Rabbit;
-Rabbit.prototype = Object.create(Animal.prototype);
+        _this8.colour = 0x553333;
+
+        _this8.speed = .8;
+        _this8.rangePerception = 60;
+        _this8.health = 5;
+
+        return _this8;
+    }
+
+    return Rabbit;
+}(Animal);
 
 /* --------------------------------- */
 /* ---------------------------- DEER */
 /* --------------------------------- */
 
-function Deer() {
+var Deer = exports.Deer = function (_Animal2) {
+    _inherits(Deer, _Animal2);
 
-    Animal.call(this);
+    function Deer() {
+        _classCallCheck(this, Deer);
 
-    this.id = Archetypes.ANIMAL_DEER;
-    this.role = _Roles2.default.PREY;
+        var _this9 = _possibleConstructorReturn(this, (Deer.__proto__ || Object.getPrototypeOf(Deer)).call(this));
 
-    this.colour = 0x553333;
+        _this9.id = Archetypes.ANIMAL_DEER;
+        _this9.role = _Roles2.default.PREY;
 
-    this.speed = .9;
-    this.rangePerception = 100;
-    this.health = 20;
-}
-Deer.constructor = Deer;
-Deer.prototype = Object.create(Animal.prototype);
+        _this9.colour = 0x553333;
+
+        _this9.speed = .9;
+        _this9.rangePerception = 100;
+        _this9.health = 20;
+
+        return _this9;
+    }
+
+    return Deer;
+}(Animal);
 
 /* --------------------------------- */
 /* ----------------------------- FOX */
 /* --------------------------------- */
 
-function Fox() {
+var Fox = exports.Fox = function (_Animal3) {
+    _inherits(Fox, _Animal3);
 
-    Animal.call(this);
+    function Fox() {
+        _classCallCheck(this, Fox);
 
-    this.id = Archetypes.ANIMAL_FOX;
-    this.role = _Roles2.default.PREY;
+        var _this10 = _possibleConstructorReturn(this, (Fox.__proto__ || Object.getPrototypeOf(Fox)).call(this));
 
-    this.colour = 0x553333;
+        _this10.id = Archetypes.ANIMAL_FOX;
+        _this10.role = _Roles2.default.PREY;
 
-    this.speed = .9;
-    this.rangePerception = 70;
-    this.health = 10;
-}
-Fox.constructor = Fox;
-Fox.prototype = Object.create(Animal.prototype);
+        _this10.colour = 0x553333;
+
+        _this10.speed = .9;
+        _this10.rangePerception = 70;
+        _this10.health = 10;
+
+        return _this10;
+    }
+
+    return Fox;
+}(Animal);
 
 /* --------------------------------- */
 /* ---------------------------- BOAR */
 /* --------------------------------- */
 
-function Boar() {
+var Boar = exports.Boar = function (_Animal4) {
+    _inherits(Boar, _Animal4);
 
-    Animal.call(this);
+    function Boar() {
+        _classCallCheck(this, Boar);
 
-    this.id = Archetypes.ANIMAL_BOAR;
-    this.role = _Roles2.default.PREDATOR;
+        var _this11 = _possibleConstructorReturn(this, (Boar.__proto__ || Object.getPrototypeOf(Boar)).call(this));
 
-    this.colour = 0x553333;
+        _this11.id = Archetypes.ANIMAL_BOAR;
+        _this11.role = _Roles2.default.PREDATOR;
 
-    this.speed = .6;
-    this.rangePerception = 60;
-    this.health = 100;
+        _this11.colour = 0x553333;
 
-    this.weapons = [_Weapons2.default.TUSKS];
-}
-Boar.constructor = Boar;
-Boar.prototype = Object.create(Animal.prototype);
+        _this11.speed = .6;
+        _this11.rangePerception = 60;
+        _this11.health = 100;
+
+        _this11.weapons = [_Weapons2.default.TUSKS];
+
+        return _this11;
+    }
+
+    return Boar;
+}(Animal);
 
 /* --------------------------------- */
 /* ---------------------------- WOLF */
 /* --------------------------------- */
 
-function Wolf() {
+var Wolf = exports.Wolf = function (_Animal5) {
+    _inherits(Wolf, _Animal5);
 
-    Animal.call(this);
+    function Wolf() {
+        _classCallCheck(this, Wolf);
 
-    this.id = Archetypes.ANIMAL_WOLF;
-    this.role = _Roles2.default.PREDATOR;
+        var _this12 = _possibleConstructorReturn(this, (Wolf.__proto__ || Object.getPrototypeOf(Wolf)).call(this));
 
-    this.colour = 0x553333;
+        _this12.id = Archetypes.ANIMAL_WOLF;
+        _this12.role = _Roles2.default.PREDATOR;
 
-    this.speed = .9;
-    this.rangePerception = 120;
-    this.health = 80;
+        _this12.colour = 0x553333;
 
-    this.weapons = [_Weapons2.default.CLAWS];
-}
-Wolf.constructor = Wolf;
-Wolf.prototype = Object.create(Animal.prototype);
+        _this12.speed = .9;
+        _this12.rangePerception = 120;
+        _this12.health = 80;
+
+        _this12.weapons = [_Weapons2.default.CLAWS];
+
+        return _this12;
+    }
+
+    return Wolf;
+}(Animal);
 
 },{"./Roles":222,"./Weapons":229}],211:[function(require,module,exports){
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Building = Building;
-exports.Camp = Camp;
-exports.Watch = Watch;
-exports.NightWatch = NightWatch;
-exports.DayWatch = DayWatch;
-exports.Hunter = Hunter;
-exports.Miner = Miner;
-exports.Forester = Forester;
-exports.Mason = Mason;
-exports.Healer = Healer;
+exports.Healer = exports.Mason = exports.Forester = exports.Miner = exports.Hunter = exports.DayWatch = exports.NightWatch = exports.Watch = exports.Camp = exports.Building = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _pixi = require('pixi.js');
 
@@ -33220,9 +33396,9 @@ var _Archetypes = require('./Archetypes');
 
 var _Archetypes2 = _interopRequireDefault(_Archetypes);
 
-var _valueMinMax = require('./utils/value-min-max');
+var _ValueMinMax = require('./utils/ValueMinMax');
 
-var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
+var _ValueMinMax2 = _interopRequireDefault(_ValueMinMax);
 
 var _Maths = require('./utils/Maths');
 
@@ -33232,79 +33408,107 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Building(world, startX, startY, archetype, isTemp) {
-
-    _pixi2.default.Container.call(this);
-
-    this.world = world;
-
-    this.archetype = archetype;
-
-    this.inhabitants = new _Inhabitants2.default(world, this);
-
-    this.integrity = new _valueMinMax2.default(0, Building.INTEGRITY, Building.INTEGRITY * .25);
-
-    this.isConstructed = this.integrity.isMax();
-
-    this.timeSinceSpawn = Building.SPAWN_RATE;
-
-    var base = new _pixi2.default.Graphics();
-    this.draw(base);
-    this.addChild(base);
-
-    this.lightRadius = 50;
-
-    this.x = startX;
-    this.y = startY;
-
-    this.interactive = true;
-    this.on('mousedown', this.onDown);
-    this.on('touchstart', this.onDown);
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
 }
 
-Building.constructor = Building;
-Building.prototype = Object.create(_pixi2.default.Container.prototype);
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
 
-Building.prototype.draw = function (graphics) {
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
-    graphics.beginFill(0xAAAAAA);
-    graphics.drawRect(-Building.WIDTH * .5, -Building.HEIGHT, Building.WIDTH, Building.HEIGHT);
-    graphics.endFill();
-    graphics.beginFill(0x666666);
-    graphics.drawRect(-Building.WIDTH * .5 + 4, -10, Building.WIDTH - 8, 10);
-    graphics.endFill();
-};
+var Building = exports.Building = function (_PIXI$Container) {
+    _inherits(Building, _PIXI$Container);
 
-Building.prototype.update = function (timeDelta) {
+    function Building(world, startX, startY, archetype, isTemp) {
+        _classCallCheck(this, Building);
 
-    this.timeSinceSpawn += timeDelta;
+        var _this = _possibleConstructorReturn(this, (Building.__proto__ || Object.getPrototypeOf(Building)).call(this));
 
-    if (!this.isConstructed) {
+        _this.world = world;
 
-        this.alpha = this.integrity.val();
+        _this.archetype = archetype;
+
+        _this.inhabitants = new _Inhabitants2.default(world, _this);
+
+        _this.integrity = new _ValueMinMax2.default(0, Building.INTEGRITY, Building.INTEGRITY * .25);
+
+        _this.isConstructed = _this.integrity.isMax();
+
+        _this.timeSinceSpawn = Building.SPAWN_RATE;
+
+        var base = new _pixi2.default.Graphics();
+        _this.draw(base);
+        _this.addChild(base);
+
+        _this.lightRadius = 50;
+
+        _this.x = startX;
+        _this.y = startY;
+
+        _this.interactive = true;
+        _this.on('mousedown', _this.onDown);
+        _this.on('touchstart', _this.onDown);
+
+        return _this;
     }
-};
 
-Building.prototype.onDown = function (event) {
+    _createClass(Building, [{
+        key: 'draw',
+        value: function draw(graphics) {
 
-    console.log('Building.onDown(', this.id, ')');
+            graphics.beginFill(0xAAAAAA);
+            graphics.drawRect(-Building.WIDTH * .5, -Building.HEIGHT, Building.WIDTH, Building.HEIGHT);
+            graphics.endFill();
+            graphics.beginFill(0x666666);
+            graphics.drawRect(-Building.WIDTH * .5 + 4, -10, Building.WIDTH - 8, 10);
+            graphics.endFill();
+        }
+    }, {
+        key: 'update',
+        value: function update(timeDelta) {
 
-    this.world.ui.building.setBuilding(this);
-    this.world.ui.building.toggle(true, true);
-};
+            this.timeSinceSpawn += timeDelta;
 
-Building.prototype.constructed = function () {
+            if (!this.isConstructed) {
 
-    this.isConstructed = true;
+                this.alpha = this.integrity.val();
+            }
+        }
+    }, {
+        key: 'onDown',
+        value: function onDown(event) {
 
-    this.alpha = 1;
+            this.world.ui.building.setBuilding(this);
+            this.world.ui.building.toggle(true, true);
+        }
+    }, {
+        key: 'constructed',
+        value: function constructed() {
 
-    this.inhabitants.spawn();
+            this.isConstructed = true;
 
-    this.light = this.world.lighting.addStatic(this.x, this.y, this.lightRadius, 0, -5);
+            this.alpha = 1;
 
-    this.emit('constructed', this);
-};
+            this.inhabitants.spawn();
+
+            this.light = this.world.lighting.addStatic(this.x, this.y, this.lightRadius, 0, -5);
+
+            this.emit('constructed', this);
+        }
+    }]);
+
+    return Building;
+}(_pixi2.default.Container);
 
 Building.WIDTH = 14;
 Building.HEIGHT = 18;
@@ -33318,29 +33522,38 @@ Building.TYPE = 'building';
 /* --------- Camp */
 /* -------------- */
 
-function Camp(world, startX, startY, archetype, isTemp) {
+var Camp = exports.Camp = function (_Building) {
+    _inherits(Camp, _Building);
 
-    Building.call(this, world, startX, startY, archetype, isTemp);
+    function Camp(world, startX, startY, archetype, isTemp) {
+        _classCallCheck(this, Camp);
 
-    this.inhabitants.addArchetype(_Archetypes2.default.MASON);
-    this.inhabitants.addArchetype(_Archetypes2.default.FORESTER);
-    this.inhabitants.addArchetype(_Archetypes2.default.MINER);
+        var _this2 = _possibleConstructorReturn(this, (Camp.__proto__ || Object.getPrototypeOf(Camp)).call(this, world, startX, startY, archetype, isTemp));
 
-    this.inhabitants.spawn();
-}
+        _this2.inhabitants.addArchetype(_Archetypes2.default.MASON);
+        _this2.inhabitants.addArchetype(_Archetypes2.default.FORESTER);
+        _this2.inhabitants.addArchetype(_Archetypes2.default.MINER);
 
-Camp.constructor = Camp;
-Camp.prototype = Object.create(Building.prototype);
+        _this2.inhabitants.spawn();
 
-Camp.prototype.draw = function (graphics) {
+        return _this2;
+    }
 
-    graphics.beginFill(0x999999);
-    graphics.drawRect(-Camp.WIDTH * .5, -Camp.HEIGHT, Camp.WIDTH, Camp.HEIGHT);
-    graphics.endFill();
-    graphics.beginFill(0x222222);
-    graphics.drawRect(-Camp.WIDTH * .5 + 4, -6, Camp.WIDTH - 8, 6);
-    graphics.endFill();
-};
+    _createClass(Camp, [{
+        key: 'draw',
+        value: function draw(graphics) {
+
+            graphics.beginFill(0x999999);
+            graphics.drawRect(-Camp.WIDTH * .5, -Camp.HEIGHT, Camp.WIDTH, Camp.HEIGHT);
+            graphics.endFill();
+            graphics.beginFill(0x222222);
+            graphics.drawRect(-Camp.WIDTH * .5 + 4, -6, Camp.WIDTH - 8, 6);
+            graphics.endFill();
+        }
+    }]);
+
+    return Camp;
+}(Building);
 
 Camp.WIDTH = 12;
 Camp.HEIGHT = 12;
@@ -33349,82 +33562,92 @@ Camp.HEIGHT = 12;
 /* -------- Watch */
 /* -------------- */
 
-function Watch(world, startX, startY, archetype, isTemp) {
+var Watch = exports.Watch = function (_Building2) {
+    _inherits(Watch, _Building2);
 
-    Building.call(this, world, startX, startY, archetype, isTemp);
+    function Watch(world, startX, startY, archetype, isTemp) {
+        _classCallCheck(this, Watch);
 
-    this.patrolRoute = false;
-    this.patrolRadius = 225;
-    this.lightRadius = 125;
-}
+        var _this3 = _possibleConstructorReturn(this, (Watch.__proto__ || Object.getPrototypeOf(Watch)).call(this, world, startX, startY, archetype, isTemp));
 
-Watch.constructor = Watch;
-Watch.prototype = Object.create(Building.prototype);
+        _this3.patrolRoute = false;
+        _this3.patrolRadius = 225;
+        _this3.lightRadius = 125;
 
-Watch.prototype.draw = function (graphics) {
-
-    graphics.beginFill(0x999999);
-    graphics.drawRect(-Watch.WIDTH * .5, -Watch.HEIGHT, Watch.WIDTH, Watch.HEIGHT);
-    graphics.endFill();
-    graphics.beginFill(0x222222);
-    graphics.drawRect(-Watch.WIDTH * .5 + 4, -6, Watch.WIDTH - 8, 6);
-    graphics.endFill();
-};
-
-Watch.prototype.updatePatrolRoute = function () {
-
-    var patrolRadius = this.patrolRadius;
-
-    var patrolRouteVersion = !this.patrolRoute ? 1 : this.patrolRoute.version + 1;
-
-    this.patrolRoute = [];
-
-    this.patrolRoute.version = patrolRouteVersion;
-
-    var closest = false;
-    var closestDistance = Number.MAX_VALUE;
-
-    this.world.buildings.buildings.forEach(function (building) {
-
-        var distance = _Maths2.default.distanceBetween(this, building);
-        if (building !== this && distance <= patrolRadius) {
-
-            var angle = Math.atan2(building.y - this.y, building.x - this.x);
-
-            this.patrolRoute.push({
-                building: building,
-                angle: angle
-            });
-
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closest = building;
-            }
-        }
-    }.bind(this));
-
-    if (this.patrolRoute.length === 1) {
-        this.patrolRoute.push({
-            building: this,
-            angle: 0
-        });
+        return _this3;
     }
 
-    // Sort the patrol route based on its relative angle to watch tower
+    _createClass(Watch, [{
+        key: 'draw',
+        value: function draw(graphics) {
 
-    this.patrolRoute.sort(function (a, b) {
-
-        if (a.angle > b.angle) {
-            return 1;
-        } else if (a.angle < b.angle) {
-            return -1;
-        } else {
-            return 0;
+            graphics.beginFill(0x999999);
+            graphics.drawRect(-Watch.WIDTH * .5, -Watch.HEIGHT, Watch.WIDTH, Watch.HEIGHT);
+            graphics.endFill();
+            graphics.beginFill(0x222222);
+            graphics.drawRect(-Watch.WIDTH * .5 + 4, -6, Watch.WIDTH - 8, 6);
+            graphics.endFill();
         }
-    });
+    }, {
+        key: 'updatePatrolRoute',
+        value: function updatePatrolRoute() {
 
-    // console.log('Watch.updatePatrolRoute(',this.patrolRoute,')');
-};
+            var patrolRadius = this.patrolRadius;
+
+            var patrolRouteVersion = !this.patrolRoute ? 1 : this.patrolRoute.version + 1;
+
+            this.patrolRoute = [];
+
+            this.patrolRoute.version = patrolRouteVersion;
+
+            var closest = false;
+            var closestDistance = Number.MAX_VALUE;
+
+            this.world.buildings.buildings.forEach(function (building) {
+
+                var distance = _Maths2.default.distanceBetween(this, building);
+                if (building !== this && distance <= patrolRadius) {
+
+                    var angle = Math.atan2(building.y - this.y, building.x - this.x);
+
+                    this.patrolRoute.push({
+                        building: building,
+                        angle: angle
+                    });
+
+                    if (distance < closestDistance) {
+                        closestDistance = distance;
+                        closest = building;
+                    }
+                }
+            }.bind(this));
+
+            if (this.patrolRoute.length === 1) {
+                this.patrolRoute.push({
+                    building: this,
+                    angle: 0
+                });
+            }
+
+            // Sort the patrol route based on its relative angle to watch tower
+
+            this.patrolRoute.sort(function (a, b) {
+
+                if (a.angle > b.angle) {
+                    return 1;
+                } else if (a.angle < b.angle) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            });
+
+            // console.log('Watch.updatePatrolRoute(',this.patrolRoute,')');
+        }
+    }]);
+
+    return Watch;
+}(Building);
 
 Watch.WIDTH = 12;
 Watch.HEIGHT = 18;
@@ -33433,27 +33656,36 @@ Watch.HEIGHT = 18;
 /* --- NightWatch */
 /* -------------- */
 
-function NightWatch(world, startX, startY, archetype, isTemp) {
+var NightWatch = exports.NightWatch = function (_Building3) {
+    _inherits(NightWatch, _Building3);
 
-    Watch.call(this, world, startX, startY, archetype, isTemp);
+    function NightWatch(world, startX, startY, archetype, isTemp) {
+        _classCallCheck(this, NightWatch);
 
-    this.inhabitants.addArchetype(_Archetypes2.default.WATCH_NIGHT);
-    this.inhabitants.addArchetype(_Archetypes2.default.WATCH_NIGHT);
-    this.inhabitants.addArchetype(_Archetypes2.default.WATCH_NIGHT);
-}
+        var _this4 = _possibleConstructorReturn(this, (NightWatch.__proto__ || Object.getPrototypeOf(NightWatch)).call(this, world, startX, startY, archetype, isTemp));
 
-NightWatch.constructor = NightWatch;
-NightWatch.prototype = Object.create(Watch.prototype);
+        _this4.inhabitants.addArchetype(_Archetypes2.default.WATCH_NIGHT);
+        _this4.inhabitants.addArchetype(_Archetypes2.default.WATCH_NIGHT);
+        _this4.inhabitants.addArchetype(_Archetypes2.default.WATCH_NIGHT);
 
-NightWatch.prototype.draw = function (graphics) {
+        return _this4;
+    }
 
-    graphics.beginFill(0x999999);
-    graphics.drawRect(-NightWatch.WIDTH * .5, -NightWatch.HEIGHT, NightWatch.WIDTH, NightWatch.HEIGHT);
-    graphics.endFill();
-    graphics.beginFill(0x222222);
-    graphics.drawRect(-NightWatch.WIDTH * .5 + 4, -6, NightWatch.WIDTH - 8, 6);
-    graphics.endFill();
-};
+    _createClass(NightWatch, [{
+        key: 'draw',
+        value: function draw(graphics) {
+
+            graphics.beginFill(0x999999);
+            graphics.drawRect(-NightWatch.WIDTH * .5, -NightWatch.HEIGHT, NightWatch.WIDTH, NightWatch.HEIGHT);
+            graphics.endFill();
+            graphics.beginFill(0x222222);
+            graphics.drawRect(-NightWatch.WIDTH * .5 + 4, -6, NightWatch.WIDTH - 8, 6);
+            graphics.endFill();
+        }
+    }]);
+
+    return NightWatch;
+}(Building);
 
 NightWatch.WIDTH = 12;
 NightWatch.HEIGHT = 18;
@@ -33462,27 +33694,36 @@ NightWatch.HEIGHT = 18;
 /* ----- DayWatch */
 /* -------------- */
 
-function DayWatch(world, startX, startY, archetype, isTemp) {
+var DayWatch = exports.DayWatch = function (_Building4) {
+    _inherits(DayWatch, _Building4);
 
-    Watch.call(this, world, startX, startY, archetype, isTemp);
+    function DayWatch(world, startX, startY, archetype, isTemp) {
+        _classCallCheck(this, DayWatch);
 
-    this.inhabitants.addArchetype(_Archetypes2.default.WATCH_DAY);
-    this.inhabitants.addArchetype(_Archetypes2.default.WATCH_DAY);
-    this.inhabitants.addArchetype(_Archetypes2.default.WATCH_DAY);
-}
+        var _this5 = _possibleConstructorReturn(this, (DayWatch.__proto__ || Object.getPrototypeOf(DayWatch)).call(this, world, startX, startY, archetype, isTemp));
 
-DayWatch.constructor = DayWatch;
-DayWatch.prototype = Object.create(Watch.prototype);
+        _this5.inhabitants.addArchetype(_Archetypes2.default.WATCH_DAY);
+        _this5.inhabitants.addArchetype(_Archetypes2.default.WATCH_DAY);
+        _this5.inhabitants.addArchetype(_Archetypes2.default.WATCH_DAY);
 
-DayWatch.prototype.draw = function (graphics) {
+        return _this5;
+    }
 
-    graphics.beginFill(0x999999);
-    graphics.drawRect(-DayWatch.WIDTH * .5, -DayWatch.HEIGHT, DayWatch.WIDTH, DayWatch.HEIGHT);
-    graphics.endFill();
-    graphics.beginFill(0x222222);
-    graphics.drawRect(-DayWatch.WIDTH * .5 + 4, -6, DayWatch.WIDTH - 8, 6);
-    graphics.endFill();
-};
+    _createClass(DayWatch, [{
+        key: 'draw',
+        value: function draw(graphics) {
+
+            graphics.beginFill(0x999999);
+            graphics.drawRect(-DayWatch.WIDTH * .5, -DayWatch.HEIGHT, DayWatch.WIDTH, DayWatch.HEIGHT);
+            graphics.endFill();
+            graphics.beginFill(0x222222);
+            graphics.drawRect(-DayWatch.WIDTH * .5 + 4, -6, DayWatch.WIDTH - 8, 6);
+            graphics.endFill();
+        }
+    }]);
+
+    return DayWatch;
+}(Building);
 
 DayWatch.WIDTH = 12;
 DayWatch.HEIGHT = 18;
@@ -33491,25 +33732,34 @@ DayWatch.HEIGHT = 18;
 /* ------- Hunter */
 /* -------------- */
 
-function Hunter(world, startX, startY, archetype, isTemp) {
+var Hunter = exports.Hunter = function (_Building5) {
+    _inherits(Hunter, _Building5);
 
-    Building.call(this, world, startX, startY, archetype, isTemp);
+    function Hunter(world, startX, startY, archetype, isTemp) {
+        _classCallCheck(this, Hunter);
 
-    this.inhabitants.addArchetype(_Archetypes2.default.HUNTER);
-}
+        var _this6 = _possibleConstructorReturn(this, (Hunter.__proto__ || Object.getPrototypeOf(Hunter)).call(this, world, startX, startY, archetype, isTemp));
 
-Hunter.constructor = Hunter;
-Hunter.prototype = Object.create(Building.prototype);
+        _this6.inhabitants.addArchetype(_Archetypes2.default.HUNTER);
 
-Hunter.prototype.draw = function (graphics) {
+        return _this6;
+    }
 
-    graphics.beginFill(0x999999);
-    graphics.drawRect(-Hunter.WIDTH * .5, -Hunter.HEIGHT, Hunter.WIDTH, Hunter.HEIGHT);
-    graphics.endFill();
-    graphics.beginFill(0x58240A);
-    graphics.drawRect(-Hunter.WIDTH * .5 + 4, -6, Hunter.WIDTH - 8, 6);
-    graphics.endFill();
-};
+    _createClass(Hunter, [{
+        key: 'draw',
+        value: function draw(graphics) {
+
+            graphics.beginFill(0x999999);
+            graphics.drawRect(-Hunter.WIDTH * .5, -Hunter.HEIGHT, Hunter.WIDTH, Hunter.HEIGHT);
+            graphics.endFill();
+            graphics.beginFill(0x58240A);
+            graphics.drawRect(-Hunter.WIDTH * .5 + 4, -6, Hunter.WIDTH - 8, 6);
+            graphics.endFill();
+        }
+    }]);
+
+    return Hunter;
+}(Building);
 
 Hunter.WIDTH = 12;
 Hunter.HEIGHT = 12;
@@ -33518,25 +33768,34 @@ Hunter.HEIGHT = 12;
 /* -------- Miner */
 /* -------------- */
 
-function Miner(world, startX, startY, archetype, isTemp) {
+var Miner = exports.Miner = function (_Building6) {
+    _inherits(Miner, _Building6);
 
-    Building.call(this, world, startX, startY, archetype, isTemp);
+    function Miner(world, startX, startY, archetype, isTemp) {
+        _classCallCheck(this, Miner);
 
-    this.inhabitants.addArchetype(_Archetypes2.default.MINER);
-}
+        var _this7 = _possibleConstructorReturn(this, (Miner.__proto__ || Object.getPrototypeOf(Miner)).call(this, world, startX, startY, archetype, isTemp));
 
-Miner.constructor = Miner;
-Miner.prototype = Object.create(Building.prototype);
+        _this7.inhabitants.addArchetype(_Archetypes2.default.MINER);
 
-Miner.prototype.draw = function (graphics) {
+        return _this7;
+    }
 
-    graphics.beginFill(0x999999);
-    graphics.drawRect(-Miner.WIDTH * .5, -Miner.HEIGHT, Miner.WIDTH, Miner.HEIGHT);
-    graphics.endFill();
-    graphics.beginFill(0x222222);
-    graphics.drawRect(-Miner.WIDTH * .5 + 4, -6, Miner.WIDTH - 8, 6);
-    graphics.endFill();
-};
+    _createClass(Miner, [{
+        key: 'draw',
+        value: function draw(graphics) {
+
+            graphics.beginFill(0x999999);
+            graphics.drawRect(-Miner.WIDTH * .5, -Miner.HEIGHT, Miner.WIDTH, Miner.HEIGHT);
+            graphics.endFill();
+            graphics.beginFill(0x222222);
+            graphics.drawRect(-Miner.WIDTH * .5 + 4, -6, Miner.WIDTH - 8, 6);
+            graphics.endFill();
+        }
+    }]);
+
+    return Miner;
+}(Building);
 
 Miner.WIDTH = 12;
 Miner.HEIGHT = 12;
@@ -33545,25 +33804,34 @@ Miner.HEIGHT = 12;
 /* ----- Forester */
 /* -------------- */
 
-function Forester(world, startX, startY, archetype, isTemp) {
+var Forester = exports.Forester = function (_Building7) {
+    _inherits(Forester, _Building7);
 
-    Building.call(this, world, startX, startY, archetype, isTemp);
+    function Forester(world, startX, startY, archetype, isTemp) {
+        _classCallCheck(this, Forester);
 
-    this.inhabitants.addArchetype(_Archetypes2.default.FORESTER);
-}
+        var _this8 = _possibleConstructorReturn(this, (Forester.__proto__ || Object.getPrototypeOf(Forester)).call(this, world, startX, startY, archetype, isTemp));
 
-Forester.constructor = Forester;
-Forester.prototype = Object.create(Building.prototype);
+        _this8.inhabitants.addArchetype(_Archetypes2.default.FORESTER);
 
-Forester.prototype.draw = function (graphics) {
+        return _this8;
+    }
 
-    graphics.beginFill(0x999999);
-    graphics.drawRect(-Forester.WIDTH * .5, -Forester.HEIGHT, Forester.WIDTH, Forester.HEIGHT);
-    graphics.endFill();
-    graphics.beginFill(0x228822);
-    graphics.drawRect(-Forester.WIDTH * .5 + 4, -6, Forester.WIDTH - 8, 6);
-    graphics.endFill();
-};
+    _createClass(Forester, [{
+        key: 'draw',
+        value: function draw(graphics) {
+
+            graphics.beginFill(0x999999);
+            graphics.drawRect(-Forester.WIDTH * .5, -Forester.HEIGHT, Forester.WIDTH, Forester.HEIGHT);
+            graphics.endFill();
+            graphics.beginFill(0x228822);
+            graphics.drawRect(-Forester.WIDTH * .5 + 4, -6, Forester.WIDTH - 8, 6);
+            graphics.endFill();
+        }
+    }]);
+
+    return Forester;
+}(Building);
 
 Forester.WIDTH = 12;
 Forester.HEIGHT = 12;
@@ -33572,25 +33840,34 @@ Forester.HEIGHT = 12;
 /* -------- Mason */
 /* -------------- */
 
-function Mason(world, startX, startY, archetype, isTemp) {
+var Mason = exports.Mason = function (_Building8) {
+    _inherits(Mason, _Building8);
 
-    Building.call(this, world, startX, startY, archetype, isTemp);
+    function Mason(world, startX, startY, archetype, isTemp) {
+        _classCallCheck(this, Mason);
 
-    this.inhabitants.addArchetype(_Archetypes2.default.MASON);
-}
+        var _this9 = _possibleConstructorReturn(this, (Mason.__proto__ || Object.getPrototypeOf(Mason)).call(this, world, startX, startY, archetype, isTemp));
 
-Mason.constructor = Mason;
-Mason.prototype = Object.create(Building.prototype);
+        _this9.inhabitants.addArchetype(_Archetypes2.default.MASON);
 
-Mason.prototype.draw = function (graphics) {
+        return _this9;
+    }
 
-    graphics.beginFill(0x999999);
-    graphics.drawRect(-Mason.WIDTH * .5, -Mason.HEIGHT, Mason.WIDTH, Mason.HEIGHT);
-    graphics.endFill();
-    graphics.beginFill(0x333333);
-    graphics.drawRect(-Mason.WIDTH * .5 + 4, -6, Mason.WIDTH - 8, 6);
-    graphics.endFill();
-};
+    _createClass(Mason, [{
+        key: 'draw',
+        value: function draw(graphics) {
+
+            graphics.beginFill(0x999999);
+            graphics.drawRect(-Mason.WIDTH * .5, -Mason.HEIGHT, Mason.WIDTH, Mason.HEIGHT);
+            graphics.endFill();
+            graphics.beginFill(0x333333);
+            graphics.drawRect(-Mason.WIDTH * .5 + 4, -6, Mason.WIDTH - 8, 6);
+            graphics.endFill();
+        }
+    }]);
+
+    return Mason;
+}(Building);
 
 Mason.WIDTH = 13;
 Mason.HEIGHT = 14;
@@ -33599,75 +33876,120 @@ Mason.HEIGHT = 14;
 /* ------- Healer */
 /* -------------- */
 
-function Healer(world, startX, startY, archetype, isTemp) {
+var Healer = exports.Healer = function (_Building9) {
+    _inherits(Healer, _Building9);
 
-    Building.call(this, world, startX, startY, archetype, isTemp);
+    function Healer(world, startX, startY, archetype, isTemp) {
+        _classCallCheck(this, Healer);
 
-    this.inhabitants.addArchetype(_Archetypes2.default.HEALER);
-}
+        var _this10 = _possibleConstructorReturn(this, (Healer.__proto__ || Object.getPrototypeOf(Healer)).call(this, world, startX, startY, archetype, isTemp));
 
-Healer.constructor = Healer;
-Healer.prototype = Object.create(Building.prototype);
+        _this10.inhabitants.addArchetype(_Archetypes2.default.HEALER);
 
-Healer.prototype.draw = function (graphics) {
+        return _this10;
+    }
 
-    graphics.beginFill(0x999999);
-    graphics.drawRect(-Healer.WIDTH * .5, -Healer.HEIGHT, Healer.WIDTH, Healer.HEIGHT);
-    graphics.endFill();
-    graphics.beginFill(0xFFFFFF);
-    graphics.drawRect(-Healer.WIDTH * .5 + 4, -6, Healer.WIDTH - 8, 6);
-    graphics.endFill();
-};
+    _createClass(Healer, [{
+        key: 'draw',
+        value: function draw(graphics) {
+
+            graphics.beginFill(0x999999);
+            graphics.drawRect(-Healer.WIDTH * .5, -Healer.HEIGHT, Healer.WIDTH, Healer.HEIGHT);
+            graphics.endFill();
+            graphics.beginFill(0xFFFFFF);
+            graphics.drawRect(-Healer.WIDTH * .5 + 4, -6, Healer.WIDTH - 8, 6);
+            graphics.endFill();
+        }
+    }]);
+
+    return Healer;
+}(Building);
 
 Healer.WIDTH = 12;
 Healer.HEIGHT = 12;
 
-},{"./Archetypes":210,"./Dwarf":214,"./Inhabitants":215,"./Roles":222,"./utils/Maths":234,"./utils/value-min-max":235,"pixi.js":154}],212:[function(require,module,exports){
+},{"./Archetypes":210,"./Dwarf":214,"./Inhabitants":215,"./Roles":222,"./utils/Maths":234,"./utils/ValueMinMax":235,"pixi.js":154}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = Buildings;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _Building = require('./Building');
 
-function Buildings(world) {
-
-    this.world = world;
-
-    this.archetypes = [Buildings.ARCHETYPE_MINER, Buildings.ARCHETYPE_FORESTER, Buildings.ARCHETYPE_MASON, Buildings.ARCHETYPE_HUNTER, Buildings.ARCHETYPE_DAYWATCH, Buildings.ARCHETYPE_NIGHTWATCH, Buildings.ARCHETYPE_HEALER];
-
-    this.archetypesMap = {};
-
-    this.archetypes.forEach(function (archetype) {
-        this.archetypesMap[archetype.id] = archetype;
-    }.bind(this));
-
-    this.archetypesMap['camp'] = Buildings.ARCHETYPE_CAMP;
-
-    this.buildings = [];
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
 }
 
-Buildings.constructor = Buildings;
+var Buildings = function () {
+    function Buildings(world) {
+        _classCallCheck(this, Buildings);
 
-Buildings.prototype.add = function (id, x, y) {
+        this.world = world;
 
-    var archetype = this.archetypesMap[id];
+        this.archetypes = [Buildings.ARCHETYPE_MINER, Buildings.ARCHETYPE_FORESTER, Buildings.ARCHETYPE_MASON, Buildings.ARCHETYPE_HUNTER, Buildings.ARCHETYPE_DAYWATCH, Buildings.ARCHETYPE_NIGHTWATCH, Buildings.ARCHETYPE_HEALER];
 
-    var building = new archetype.c(this.world, x, y, archetype, false);
+        this.archetypesMap = {};
 
-    this.buildings.push(building);
+        this.archetypes.forEach(function (archetype) {
 
-    return building;
-};
+            this.archetypesMap[archetype.id] = archetype;
+        }.bind(this));
 
-Buildings.prototype.update = function (timeDelta) {
+        this.archetypesMap['camp'] = Buildings.ARCHETYPE_CAMP;
 
-    this.buildings.forEach(function (building) {
+        this.buildings = [];
+    }
 
-        building.update(timeDelta, this.world);
-    }.bind(this));
+    _createClass(Buildings, [{
+        key: 'add',
+        value: function add(id, x, y) {
+
+            var archetype = this.archetypesMap[id];
+
+            var building = new archetype.c(this.world, x, y, archetype, false);
+
+            this.buildings.push(building);
+
+            return building;
+        }
+    }, {
+        key: 'update',
+        value: function update(timeDelta) {
+
+            this.buildings.forEach(function (building) {
+
+                building.update(timeDelta, this.world);
+            }.bind(this));
+        }
+    }]);
+
+    return Buildings;
+}();
+
+exports.default = Buildings;
+
+var BuildingArchetype = function BuildingArchetype(id, title, description, cWood, cStone, c) {
+    _classCallCheck(this, BuildingArchetype);
+
+    this.id = id;
+    this.title = title;
+    this.description = description;
+    this.cWood = cWood;
+    this.cStone = cStone;
+    this.c = c || false;
 };
 
 Buildings.ARCHETYPE_CAMP = new BuildingArchetype('camp', 'Camp', 'A settler\'s camp', 0, 0, _Building.Camp);
@@ -33679,25 +34001,24 @@ Buildings.ARCHETYPE_DAYWATCH = new BuildingArchetype('day-watch', 'The Watch', '
 Buildings.ARCHETYPE_NIGHTWATCH = new BuildingArchetype('night-watch', 'The Night Watch', 'A watch house that patrols during the hours of darkness', 200, 200, _Building.NightWatch);
 Buildings.ARCHETYPE_HEALER = new BuildingArchetype('healer', 'Healer\'s Home', 'A den of herbal healing', 120, 80, _Building.Healer);
 
-function BuildingArchetype(id, title, description, cWood, cStone, c) {
-
-    this.id = id;
-    this.title = title;
-    this.description = description;
-    this.cWood = cWood;
-    this.cStone = cStone;
-    this.c = c || false;
-}
-
-BuildingArchetype.constructor = BuildingArchetype;
-
 },{"./Building":211}],213:[function(require,module,exports){
 'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = Creature;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _pixi = require('pixi.js');
 
@@ -33707,9 +34028,9 @@ var _Maths = require('./utils/Maths');
 
 var _Maths2 = _interopRequireDefault(_Maths);
 
-var _valueMinMax = require('./utils/value-min-max');
+var _ValueMinMax = require('./utils/ValueMinMax');
 
-var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
+var _ValueMinMax2 = _interopRequireDefault(_ValueMinMax);
 
 var _ValueBarUI = require('./ui/ValueBarUI');
 
@@ -33727,241 +34048,291 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Creature(world, startX, startY, archetype, appearanceWidth, appearanceHeight) {
-
-    _pixi2.default.Container.call(this);
-
-    this.world = world;
-
-    this.archetype = archetype;
-
-    this.target = null;
-    this.home = null;
-
-    this.inventory = new _Inventory2.default(this);
-
-    this.weapons = archetype.weapons;
-    this.weapon = this.weapons.length > 0 ? this.weapons[0] : false;
-
-    this.angle = 0;
-
-    this.timeBetweenActions = archetype.timeBetweenActions;
-    this.timeSinceAction = this.timeBetweenActions;
-
-    this.offsetStartTime = Math.random() - .5;
-    this.offsetEndTime = Math.random() - .5;
-
-    this.roleId = null;
-    this.careerRole = this.world.roles.getById(archetype.role);
-    this.changeRole(this.careerRole.id);
-
-    this.health = new _valueMinMax2.default(0, archetype.health, archetype.health);
-    this.speed = archetype.speed;
-    this.stealthiness = archetype.stealthiness;
-    this.range = archetype.range;
-    this.rangePerception = archetype.rangePerception;
-    this.rangeLimit = archetype.rangeLimit;
-    this.isAggressive = archetype.isAggressive;
-
-    this.appearanceWidth = appearanceWidth || 6;
-    this.appearanceHeight = appearanceHeight || 12;
-
-    this.container = new _pixi2.default.Container();
-    this.addChild(this.container);
-
-    this.base = this.getAppearance();
-    this.base.x = -this.appearanceWidth * .5;
-    this.base.y = -this.appearanceHeight;
-    this.container.addChild(this.base);
-
-    /*let red = new PIXI.Graphics();
-    red.beginFill(0xFF0000);
-    red.drawRect(-1, 0, 2, 1);
-    red.endFill();
-    this.addChild(red);*/
-
-    this.healthBar = new _ValueBarUI2.default(10, 2);
-    this.healthBar.x = -5;
-    this.healthBar.y = -this.appearanceHeight - 5;
-    this.healthBar.visible = false;
-    this.addChild(this.healthBar);
-
-    this.xFloat = this.x = this.startX = Math.round(startX);
-    this.yFloat = this.y = this.startY = Math.round(startY);
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
 }
 
-Creature.constructor = Creature;
-Creature.prototype = Object.create(_pixi2.default.Container.prototype);
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
 
-Creature.prototype.getAppearance = function (roleId) {
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
-    var base = new _pixi2.default.Graphics();
+var Creature = function (_PIXI$Container) {
+    _inherits(Creature, _PIXI$Container);
 
-    base.beginFill(0xFF000);
-    base.drawRect(0, 0, this.appearanceWidth, appearanceWidth);
-    base.endFill();
+    function Creature(world, startX, startY, archetype, appearanceWidth, appearanceHeight) {
+        _classCallCheck(this, Creature);
 
-    return base;
-};
+        var _this = _possibleConstructorReturn(this, (Creature.__proto__ || Object.getPrototypeOf(Creature)).call(this));
 
-Creature.prototype.changeRole = function (roleId) {
+        _this.world = world;
 
-    if (this.roleId === roleId) {
+        _this.archetype = archetype;
 
-        return;
+        _this.target = null;
+        _this.home = null;
+
+        _this.inventory = new _Inventory2.default(_this);
+
+        _this.weapons = archetype.weapons;
+        _this.weapon = _this.weapons.length > 0 ? _this.weapons[0] : false;
+
+        _this.angle = 0;
+
+        _this.timeBetweenActions = archetype.timeBetweenActions;
+        _this.timeSinceAction = _this.timeBetweenActions;
+
+        _this.offsetStartTime = Math.random() - .5;
+        _this.offsetEndTime = Math.random() - .5;
+
+        _this.roleId = null;
+        _this.careerRole = _this.world.roles.getById(archetype.role);
+        _this.changeRole(_this.careerRole.id);
+
+        _this.health = new _ValueMinMax2.default(0, archetype.health, archetype.health);
+        _this.speed = archetype.speed;
+        _this.stealthiness = archetype.stealthiness;
+        _this.range = archetype.range;
+        _this.rangePerception = archetype.rangePerception;
+        _this.rangeLimit = archetype.rangeLimit;
+        _this.isAggressive = archetype.isAggressive;
+
+        _this.appearanceWidth = appearanceWidth || 6;
+        _this.appearanceHeight = appearanceHeight || 12;
+
+        _this.container = new _pixi2.default.Container();
+        _this.addChild(_this.container);
+
+        _this.base = _this.getAppearance();
+        _this.base.x = -_this.appearanceWidth * .5;
+        _this.base.y = -_this.appearanceHeight;
+        _this.container.addChild(_this.base);
+
+        /*let red = new PIXI.Graphics();
+        red.beginFill(0xFF0000);
+        red.drawRect(-1, 0, 2, 1);
+        red.endFill();
+        this.addChild(red);*/
+
+        _this.healthBar = new _ValueBarUI2.default(10, 2);
+        _this.healthBar.x = -5;
+        _this.healthBar.y = -_this.appearanceHeight - 5;
+        _this.healthBar.visible = false;
+        _this.addChild(_this.healthBar);
+
+        _this.xFloat = _this.x = _this.startX = Math.round(startX);
+        _this.yFloat = _this.y = _this.startY = Math.round(startY);
+
+        return _this;
     }
 
-    if (this.id) {
+    _createClass(Creature, [{
+        key: 'getAppearance',
+        value: function getAppearance(roleId) {
 
-        console.log('Creature.changeRole(', this.archetype.id, this.id, '|', this.roleId, '>', roleId, ')');
-    }
+            var base = new _pixi2.default.Graphics();
 
-    if (this.role && this.role.exit !== undefined) {
+            base.beginFill(0xFF000);
+            base.drawRect(0, 0, this.appearanceWidth, appearanceWidth);
+            base.endFill();
 
-        this.role.exit(this, this.world);
-    }
-
-    this.role = this.world.roles.getById(roleId);
-    this.roleId = roleId;
-
-    if (this.role.enter !== undefined) {
-
-        this.role.enter(this, this.world);
-    }
-};
-
-Creature.prototype.canTakeAction = function () {
-
-    return this.timeSinceAction > this.timeBetweenActions;
-};
-
-Creature.prototype.tookAction = function () {
-
-    this.timeSinceAction = 0;
-};
-
-Creature.prototype.takeHealing = function (heal, healer) {
-
-    this.health.increment(heal);
-
-    this.healthChanged();
-};
-
-Creature.prototype.takeDamage = function (damage, attacker) {
-
-    this.health.decrement(damage);
-
-    this.healthChanged();
-
-    // If the unit is aggressive then ignore as behaviour is dealing with combat
-
-    // otherwise
-
-    // Change behaviour to ...
-
-    // Self defense
-
-    if (this.isAlive() && this.isAwake() && !this.role.isWeaponBased && attacker) {
-
-        if (this.isArmed()) {
-
-            this.target = attacker;
-
-            this.changeRole(_Roles2.default.SELF_DEFENSE);
-        } else {
-
-            this.changeRole(_Roles2.default.FLEE);
+            return base;
         }
-    }
-};
+    }, {
+        key: 'changeRole',
+        value: function changeRole(roleId) {
 
-Creature.prototype.healthChanged = function () {
+            if (this.roleId === roleId) {
 
-    if (this.health.isMax()) {
+                return;
+            }
 
-        this.healthBar.visible = false;
-    } else {
+            if (this.id) {
 
-        this.healthBar.visible = true;
-        this.healthBar.setValue(this.health.val());
-    }
+                console.log('Creature.changeRole(', this.archetype.id, this.id, '|', this.roleId, '>', roleId, ')');
+            }
 
-    if (!this.isAlive()) {
+            if (this.role && this.role.exit !== undefined) {
 
-        this.emit('death', this);
-    }
-};
+                this.role.exit(this, this.world);
+            }
 
-Creature.prototype.update = function (timeDelta, world) {
+            this.role = this.world.roles.getById(roleId);
+            this.roleId = roleId;
 
-    this.timeSinceAction += timeDelta;
+            if (this.role.enter !== undefined) {
 
-    var newRoleId = this.role.update(timeDelta, this, world) || false;
-
-    if (this.roleId !== _Roles2.default.RESTING && this.roleId !== _Roles2.default.SELF_DEFENSE && this.careerRole.startTime && this.careerRole.endTime && !world.timeOfDay.isDuringPeriod(this.careerRole.startTime + this.offsetStartTime, this.careerRole.endTime + this.offsetEndTime)) {
-
-        newRoleId = _Roles2.default.RESTING;
-    }
-
-    if (newRoleId) {
-
-        this.changeRole(newRoleId);
-    }
-
-    if (this.target) {
-
-        if (this.target.isAlive !== undefined && !this.target.isAlive()) {
-
-            this.target = false;
-        } else {
-
-            this.angle = Math.atan2(this.target.y - this.y, this.target.x - this.x);
-
-            var distance = _Maths2.default.distanceBetween(this, this.target);
-
-            var range = this.role.isWeaponBased ? this.weapon.range : this.range;
-
-            if (distance < range && this.role.targetProximity) {
-
-                this.role.targetProximity(timeDelta, this, world);
-            } else {
-
-                var xPrevious = this.xFloat;
-
-                this.xFloat += Math.cos(this.angle) * this.speed * timeDelta / 30;
-                this.yFloat += Math.sin(this.angle) * this.speed * timeDelta / 30;
-
-                this.container.scale.set(xPrevious > this.xFloat ? 1 : -1, 1);
-
-                this.x = Math.round(this.xFloat);
-                this.y = Math.round(this.yFloat);
+                this.role.enter(this, this.world);
             }
         }
-    }
-};
+    }, {
+        key: 'canTakeAction',
+        value: function canTakeAction() {
 
-Creature.prototype.isAlive = function () {
+            return this.timeSinceAction > this.timeBetweenActions;
+        }
+    }, {
+        key: 'tookAction',
+        value: function tookAction() {
 
-    return !this.health.isMin();
-};
+            this.timeSinceAction = 0;
+        }
+    }, {
+        key: 'takeHealing',
+        value: function takeHealing(heal, healer) {
 
-Creature.prototype.isArmed = function () {
+            this.health.increment(heal);
 
-    return this.weapons && this.weapons.length > 0;
-};
+            this.healthChanged();
+        }
+    }, {
+        key: 'takeDamage',
+        value: function takeDamage(damage, attacker) {
 
-Creature.prototype.isAwake = function () {
+            this.health.decrement(damage);
 
-    return this.visible;
-};
+            this.healthChanged();
 
-},{"./Inventory":216,"./Roles":222,"./ui/ValueBarUI":233,"./utils/Maths":234,"./utils/value-min-max":235,"pixi.js":154}],214:[function(require,module,exports){
+            // If the unit is aggressive then ignore as behaviour is dealing with combat
+
+            // otherwise
+
+            // Change behaviour to ...
+
+            // Self defense
+
+            if (this.isAlive() && this.isAwake() && !this.role.isWeaponBased && attacker) {
+
+                if (this.isArmed()) {
+
+                    this.target = attacker;
+
+                    this.changeRole(_Roles2.default.SELF_DEFENSE);
+                } else {
+
+                    this.changeRole(_Roles2.default.FLEE);
+                }
+            }
+        }
+    }, {
+        key: 'healthChanged',
+        value: function healthChanged() {
+
+            if (this.health.isMax()) {
+
+                this.healthBar.visible = false;
+            } else {
+
+                this.healthBar.visible = true;
+                this.healthBar.setValue(this.health.val());
+            }
+
+            if (!this.isAlive()) {
+
+                this.emit('death', this);
+            }
+        }
+    }, {
+        key: 'update',
+        value: function update(timeDelta, world) {
+
+            this.timeSinceAction += timeDelta;
+
+            var newRoleId = this.role.update(timeDelta, this, world) || false;
+
+            if (this.roleId !== _Roles2.default.RESTING && this.roleId !== _Roles2.default.SELF_DEFENSE && this.careerRole.startTime && this.careerRole.endTime && !world.timeOfDay.isDuringPeriod(this.careerRole.startTime + this.offsetStartTime, this.careerRole.endTime + this.offsetEndTime)) {
+
+                newRoleId = _Roles2.default.RESTING;
+            }
+
+            if (newRoleId) {
+
+                this.changeRole(newRoleId);
+            }
+
+            if (this.target) {
+
+                if (this.target.isAlive !== undefined && !this.target.isAlive()) {
+
+                    this.target = false;
+                } else {
+
+                    this.angle = Math.atan2(this.target.y - this.y, this.target.x - this.x);
+
+                    var distance = _Maths2.default.distanceBetween(this, this.target);
+
+                    var range = this.role.isWeaponBased ? this.weapon.range : this.range;
+
+                    if (distance < range && this.role.targetProximity) {
+
+                        this.role.targetProximity(timeDelta, this, world);
+                    } else {
+
+                        var xPrevious = this.xFloat;
+
+                        this.xFloat += Math.cos(this.angle) * this.speed * timeDelta / 30;
+                        this.yFloat += Math.sin(this.angle) * this.speed * timeDelta / 30;
+
+                        this.container.scale.set(xPrevious > this.xFloat ? 1 : -1, 1);
+
+                        this.x = Math.round(this.xFloat);
+                        this.y = Math.round(this.yFloat);
+                    }
+                }
+            }
+        }
+    }, {
+        key: 'isAlive',
+        value: function isAlive() {
+
+            return !this.health.isMin();
+        }
+    }, {
+        key: 'isArmed',
+        value: function isArmed() {
+
+            return this.weapons && this.weapons.length > 0;
+        }
+    }, {
+        key: 'isAwake',
+        value: function isAwake() {
+
+            return this.visible;
+        }
+    }]);
+
+    return Creature;
+}(_pixi2.default.Container);
+
+exports.default = Creature;
+
+},{"./Inventory":216,"./Roles":222,"./ui/ValueBarUI":233,"./utils/Maths":234,"./utils/ValueMinMax":235,"pixi.js":154}],214:[function(require,module,exports){
 'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = Dwarf;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _pixi = require('pixi.js');
 
@@ -33971,38 +34342,68 @@ var _Maths = require('./utils/Maths');
 
 var _Maths2 = _interopRequireDefault(_Maths);
 
-var _Creature = require('./Creature');
+var _Creature2 = require('./Creature');
 
-var _Creature2 = _interopRequireDefault(_Creature);
+var _Creature3 = _interopRequireDefault(_Creature2);
 
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Dwarf(world, startX, startY, archetype) {
-
-    _Creature2.default.call(this, world, startX, startY, archetype, 6, 14);
-
-    this.type = Dwarf.TYPE;
-
-    this.name = Dwarf.getName();
-
-    if (archetype.lightRadius) {
-
-        this.light = this.world.lighting.addEmitter(this, archetype.lightRadius, 0, -10);
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
     }
-
-    this.takeDamage(10);
 }
 
-Dwarf.constructor = Dwarf;
-Dwarf.prototype = Object.create(_Creature2.default.prototype);
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
 
-Dwarf.prototype.getAppearance = function (roleId) {
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
-    var base = new _pixi2.default.Sprite(_pixi2.default.Texture.fromImage('img/dwarf.png'));
-    return base;
-};
+var Dwarf = function (_Creature) {
+    _inherits(Dwarf, _Creature);
+
+    function Dwarf(world, startX, startY, archetype) {
+        _classCallCheck(this, Dwarf);
+
+        var _this = _possibleConstructorReturn(this, (Dwarf.__proto__ || Object.getPrototypeOf(Dwarf)).call(this, world, startX, startY, archetype, 6, 14));
+
+        _this.type = Dwarf.TYPE;
+
+        _this.name = Dwarf.getName();
+
+        if (archetype.lightRadius) {
+
+            _this.light = _this.world.lighting.addEmitter(_this, archetype.lightRadius, 0, -10);
+        }
+
+        // TEMP test healer
+        _this.takeDamage(10);
+
+        return _this;
+    }
+
+    _createClass(Dwarf, [{
+        key: 'getAppearance',
+        value: function getAppearance(roleId) {
+
+            var base = new _pixi2.default.Sprite(_pixi2.default.Texture.fromImage('img/dwarf.png'));
+            return base;
+        }
+    }]);
+
+    return Dwarf;
+}(_Creature3.default);
+
+exports.default = Dwarf;
 
 Dwarf.NAMES_FIRST = ['Snorri', 'Ori', 'Nori', 'Gloin', 'Oin', 'Bifur', 'Bofur', 'Thorin', 'Balin'];
 Dwarf.NAMES_LAST = ['Oakenshield', 'Bittenaxe', 'Longbeard', 'Undermountain', 'Ironskull', 'Steelhammer', 'Goldring'];
@@ -34017,11 +34418,22 @@ Dwarf.TYPE = 'dwarf';
 },{"./Creature":213,"./utils/Maths":234,"pixi.js":154}],215:[function(require,module,exports){
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = Inhabitants;
-exports.Inhabitant = Inhabitant;
+exports.Inhabitant = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _pixi = require('pixi.js');
 
@@ -34031,96 +34443,135 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Inhabitants(world, building) {
-
-    _pixi2.default.utils.EventEmitter.call(this);
-
-    this.world = world;
-    this.building = building;
-
-    this.list = [];
-}
-
-Inhabitants.constructor = Inhabitants;
-Inhabitants.prototype = Object.create(_pixi2.default.utils.EventEmitter.prototype);
-
-Inhabitants.prototype.addArchetype = function (archetypeId) {
-
-    var archetype = this.world.archetypes.getById(archetypeId);
-
-    this.list.push(new Inhabitant(this.world, this.building, archetype));
-};
-
-Inhabitants.prototype.spawn = function () {
-
-    this.list.forEach(function (inhabitant) {
-
-        if (!inhabitant.isFilled) {
-
-            inhabitant.spawn(false, true);
-        }
-    });
-};
-
-function Inhabitant(world, building, archetype) {
-
-    _pixi2.default.utils.EventEmitter.call(this);
-
-    this.world = world;
-    this.building = building;
-    this.archetype = archetype;
-
-    this.isFilled = false;
-}
-
-Inhabitant.constructor = Inhabitant;
-Inhabitant.prototype = Object.create(_pixi2.default.utils.EventEmitter.prototype);
-
-Inhabitant.prototype.spawn = function (isPurchased, ignoreContructionState) {
-
-    //if (this.timeSinceSpawn > Building.SPAWN_RATE && this.isConstructed) {
-    if (this.building.isConstructed || ignoreContructionState) {
-
-        this.building.timeSinceSpawn = 0;
-
-        var dwarf = void 0;
-
-        console.log('Inhabitant.prototype.spawn(', this.archetype.id, ')');
-
-        if (isPurchased) {
-
-            dwarf = this.world.buyDwarf(this.building.x + Math.random() * 3, this.building.y + Math.random() * 3, this.archetype.id);
-        } else {
-
-            dwarf = this.world.addDwarf(this.building.x + Math.random() * 3, this.building.y + Math.random() * 3, this.archetype.id);
-        }
-
-        if (dwarf) {
-
-            dwarf.home = this.building;
-
-            dwarf.on('death', this.onDeath.bind(this));
-
-            this.isFilled = true;
-
-            this.dwarf = dwarf;
-
-            this.emit('filled:true');
-        } else {
-
-            console.warn('Inhabitant.spawn( COULDN\'T AFFORD TO SPAWN )');
-        }
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
     }
-};
+}
 
-Inhabitant.prototype.onDeath = function (dwarf) {
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
 
-    this.isFilled = false;
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
-    this.dwarf = false;
+var Inhabitants = function (_PIXI$utils$EventEmit) {
+    _inherits(Inhabitants, _PIXI$utils$EventEmit);
 
-    this.emit('filled:false');
-};
+    function Inhabitants(world, building) {
+        _classCallCheck(this, Inhabitants);
+
+        var _this = _possibleConstructorReturn(this, (Inhabitants.__proto__ || Object.getPrototypeOf(Inhabitants)).call(this));
+
+        _this.world = world;
+        _this.building = building;
+
+        _this.list = [];
+
+        return _this;
+    }
+
+    _createClass(Inhabitants, [{
+        key: 'addArchetype',
+        value: function addArchetype(archetypeId) {
+
+            var archetype = this.world.archetypes.getById(archetypeId);
+
+            this.list.push(new Inhabitant(this.world, this.building, archetype));
+        }
+    }, {
+        key: 'spawn',
+        value: function spawn() {
+
+            this.list.forEach(function (inhabitant) {
+
+                if (!inhabitant.isFilled) {
+
+                    inhabitant.spawn(false, true);
+                }
+            });
+        }
+    }]);
+
+    return Inhabitants;
+}(_pixi2.default.utils.EventEmitter);
+
+exports.default = Inhabitants;
+
+var Inhabitant = exports.Inhabitant = function (_PIXI$utils$EventEmit2) {
+    _inherits(Inhabitant, _PIXI$utils$EventEmit2);
+
+    function Inhabitant(world, building, archetype) {
+        _classCallCheck(this, Inhabitant);
+
+        var _this2 = _possibleConstructorReturn(this, (Inhabitant.__proto__ || Object.getPrototypeOf(Inhabitant)).call(this));
+
+        _this2.world = world;
+        _this2.building = building;
+        _this2.archetype = archetype;
+
+        _this2.isFilled = false;
+
+        return _this2;
+    }
+
+    _createClass(Inhabitant, [{
+        key: 'spawn',
+        value: function spawn(isPurchased, ignoreContructionState) {
+
+            if (this.building.isConstructed || ignoreContructionState) {
+
+                this.building.timeSinceSpawn = 0;
+
+                var dwarf = void 0;
+
+                console.log('Inhabitant.prototype.spawn(', this.archetype.id, ')');
+
+                if (isPurchased) {
+
+                    dwarf = this.world.buyDwarf(this.building.x + Math.random() * 3, this.building.y + Math.random() * 3, this.archetype.id);
+                } else {
+
+                    dwarf = this.world.addDwarf(this.building.x + Math.random() * 3, this.building.y + Math.random() * 3, this.archetype.id);
+                }
+
+                if (dwarf) {
+
+                    dwarf.home = this.building;
+
+                    dwarf.on('death', this.onDeath.bind(this));
+
+                    this.isFilled = true;
+
+                    this.dwarf = dwarf;
+
+                    this.emit('filled:true');
+                } else {
+
+                    console.warn('Inhabitant.spawn( COULDN\'T AFFORD TO SPAWN )');
+                }
+            }
+        }
+    }, {
+        key: 'onDeath',
+        value: function onDeath(dwarf) {
+
+            this.isFilled = false;
+
+            this.dwarf = false;
+
+            this.emit('filled:false');
+        }
+    }]);
+
+    return Inhabitant;
+}(_pixi2.default.utils.EventEmitter);
 
 },{"pixi.js":154}],216:[function(require,module,exports){
 'use strict';
@@ -34128,77 +34579,105 @@ Inhabitant.prototype.onDeath = function (dwarf) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = Inventory;
-function Inventory(owner) {
 
-    this.owner = owner;
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
-    this.limit = Inventory.LIMIT;
-
-    this.count = 0;
-
-    this.inventory = {};
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
 }
 
-Inventory.constructor = Inventory;
+var Inventory = function () {
+    function Inventory(owner) {
+        _classCallCheck(this, Inventory);
 
-Inventory.prototype.isFull = function () {
+        this.owner = owner;
 
-    return this.count >= this.limit;
-};
+        this.limit = Inventory.LIMIT;
 
-Inventory.prototype.has = function (type) {
+        this.count = 0;
 
-    return this.inventory[type] && this.inventory[type] > 0;
-};
-
-Inventory.prototype.add = function (type, count) {
-
-    if (!this.inventory[type]) {
-
-        this.inventory[type] = 0;
+        this.inventory = {};
     }
 
-    this.inventory[type] += count;
+    _createClass(Inventory, [{
+        key: 'isFull',
+        value: function isFull() {
 
-    this.count += count;
+            return this.count >= this.limit;
+        }
+    }, {
+        key: 'has',
+        value: function has(type) {
 
-    if (Inventory.VERBOSE) {
+            return this.inventory[type] && this.inventory[type] > 0;
+        }
+    }, {
+        key: 'add',
+        value: function add(type, count) {
 
-        console.log('Inventory.add(', this.count, '/', this.limit, ')');
-    }
-};
+            if (!this.inventory[type]) {
 
-Inventory.prototype.remove = function (type, count) {
+                this.inventory[type] = 0;
+            }
 
-    var amount = void 0;
+            this.inventory[type] += count;
 
-    if (count === undefined) {
+            this.count += count;
 
-        amount = this.inventory[type] || 0;
+            if (Inventory.VERBOSE) {
 
-        delete this.inventory[type];
-    } else {
+                console.log('Inventory.add(', this.count, '/', this.limit, ')');
+            }
+        }
+    }, {
+        key: 'remove',
+        value: function remove(type, count) {
 
-        amount = Math.min(this.inventory[type], count);
+            var amount = void 0;
 
-        this.inventory[type] = amount;
-    }
+            if (count === undefined) {
 
-    this.count -= amount;
+                amount = this.inventory[type] || 0;
 
-    if (Inventory.VERBOSE) {
+                delete this.inventory[type];
+            } else {
 
-        console.log('Inventory.remove(', this.count, '/', this.limit, ')');
-    }
+                amount = Math.min(this.inventory[type], count);
 
-    return amount;
-};
+                this.inventory[type] = amount;
+            }
 
-Inventory.prototype.free = function () {
+            this.count -= amount;
 
-    return this.limit - this.count;
-};
+            if (Inventory.VERBOSE) {
+
+                console.log('Inventory.remove(', this.count, '/', this.limit, ')');
+            }
+
+            return amount;
+        }
+    }, {
+        key: 'free',
+        value: function free() {
+
+            return this.limit - this.count;
+        }
+    }]);
+
+    return Inventory;
+}();
+
+exports.default = Inventory;
 
 Inventory.LIMIT = 20;
 Inventory.VERBOSE = false;
@@ -34217,10 +34696,21 @@ exports.default = {
 },{}],218:[function(require,module,exports){
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = Lighting;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _pixi = require('pixi.js');
 
@@ -34238,200 +34728,233 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Lighting(world) {
-
-    _pixi2.default.Sprite.call(this);
-
-    var w = _World2.default.WIDTH * _Tile2.default.WIDTH;
-    var h = _World2.default.HEIGHT * _Tile2.default.HEIGHT;
-
-    // Combined lighting
-
-    this.lightCanvas = document.createElement('canvas');
-    this.lightCanvas.width = w;
-    this.lightCanvas.height = h;
-
-    this.lightCtx = this.lightCanvas.getContext('2d');
-
-    // Yellow glow
-
-    this.glowCanvas = document.createElement('canvas');
-    this.glowCanvas.width = w;
-    this.glowCanvas.height = h;
-
-    this.glowCtx = this.glowCanvas.getContext('2d');
-    this.glowCtx.fillStyle = 'rgba(250, 224, 77, .15)';
-    this.glowCtx.fillRect(0, 0, w, h);
-
-    // Darkness with lights cut out
-
-    this.shadowCanvas = document.createElement('canvas');
-    this.shadowCanvas.width = w;
-    this.shadowCanvas.height = h;
-
-    this.shadowCtx = this.shadowCanvas.getContext('2d');
-
-    // Static lights
-
-    this.staticCanvas = document.createElement('canvas');
-    this.staticCanvas.width = w;
-    this.staticCanvas.height = h;
-
-    this.staticCtx = this.staticCanvas.getContext('2d');
-
-    this.emitters = [];
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
 }
 
-Lighting.constructor = Lighting;
-Lighting.prototype = Object.create(_pixi2.default.Sprite.prototype);
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
 
-Lighting.VERBOSE = false;
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
-Lighting.prototype.addStatic = function (x, y, radius, xOffset, yOffset) {
+var Lighting = function (_PIXI$Sprite) {
+    _inherits(Lighting, _PIXI$Sprite);
 
-    if (Lighting.VERBOSE) {
+    function Lighting(world) {
+        _classCallCheck(this, Lighting);
 
-        console.log('Lighting.addStatic(', x, y, radius, xOffset, yOffset, ')');
-    }
+        var _this = _possibleConstructorReturn(this, (Lighting.__proto__ || Object.getPrototypeOf(Lighting)).call(this));
 
-    var gradient = this.shadowCtx.createRadialGradient(x + xOffset, y + yOffset, 0, x + xOffset, y + yOffset, radius);
-    gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
-    gradient.addColorStop(.4, 'rgba(0, 0, 0, 1)');
-    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        var w = _World2.default.WIDTH * _Tile2.default.WIDTH;
+        var h = _World2.default.HEIGHT * _Tile2.default.HEIGHT;
 
-    this.staticCtx.fillStyle = gradient;
-    this.staticCtx.beginPath();
-    this.staticCtx.arc(x + xOffset, y + yOffset, radius, 0, 2 * Math.PI);
-    this.staticCtx.fill();
+        // Combined lighting
 
-    return false;
+        _this.lightCanvas = document.createElement('canvas');
+        _this.lightCanvas.width = w;
+        _this.lightCanvas.height = h;
 
-    return this.createLight(radius, xOffset, yOffset, 1);
-};
+        _this.lightCtx = _this.lightCanvas.getContext('2d');
 
-Lighting.prototype.addEmitter = function (owner, radius, xOffset, yOffset) {
+        // Yellow glow
 
-    var canvas = document.createElement('canvas');
-    canvas.width = radius * 2;
-    canvas.height = radius * 2;
+        _this.glowCanvas = document.createElement('canvas');
+        _this.glowCanvas.width = w;
+        _this.glowCanvas.height = h;
 
-    var ctx = canvas.getContext('2d');
-
-    var gradient = ctx.createRadialGradient(radius, radius, 0, radius, radius, radius);
-    gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
-    gradient.addColorStop(.4, 'rgba(0, 0, 0, 1)');
-    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-
-    ctx.fillStyle = gradient;
-    ctx.beginPath();
-    ctx.arc(radius, radius, radius, 0, 2 * Math.PI);
-    ctx.fill();
-
-    var emitter = {
-        owner: owner,
-        radius: radius,
-        canvas: canvas,
-        xOffset: xOffset,
-        yOffset: yOffset
-    };
-
-    this.emitters.push(emitter);
-
-    if (Lighting.VERBOSE) {
-
-        console.log('Lighting.addEmitter(', owner, radius, xOffset, yOffset, ')');
-    }
-
-    return false; // No light
-
-    return this.createLight(radius, xOffset, yOffset, 0);
-};
-
-Lighting.prototype.removeEmitter = function (owner) {
-
-    for (var i = 0; i < this.emitters.length; i++) {
-
-        if (this.emitters[i].owner === owner) {
-
-            this.emitters.splice(i, 1);
-
-            break;
-        }
-    }
-};
-
-Lighting.prototype.createLight = function (radius, xOffset, yOffset, alphaMultiplier) {
-
-    var canvas = document.createElement('canvas');
-
-    canvas.width = canvas.height = radius * 2;
-
-    var ctx = canvas.getContext('2d');
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    var lightGradient = ctx.createRadialGradient(radius, radius, 0, radius, radius, radius);
-    lightGradient.addColorStop(0, 'rgba(250, 224, 77, .25)');
-    lightGradient.addColorStop(.6, 'rgba(250, 224, 77, .15)');
-    lightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-
-    ctx.fillStyle = lightGradient;
-    ctx.beginPath();
-    ctx.arc(radius, radius, radius, 0, 2 * Math.PI);
-    ctx.fill();
-
-    var light = new _pixi2.default.Sprite(_pixi2.default.Texture.fromCanvas(canvas));
-    light.alphaMultiplier = alphaMultiplier;
-    light.alpha = 0;
-    light.radius = radius;
-    light.xOffset = xOffset;
-    light.yOffset = yOffset;
-    light.blendMode = _pixi2.default.BLEND_MODES.SCREEN;
-
-    return light;
-};
-
-Lighting.prototype.update = function (timeDelta, world) {
-
-    if (world.timeOfDay.getSunValue() > 0) {
-
-        var width = _World2.default.WIDTH * _Tile2.default.WIDTH;
-        var height = _World2.default.HEIGHT * _Tile2.default.HEIGHT;
-
-        // Reset lighting
-
-        this.lightCtx.clearRect(0, 0, width, height);
-
-        // Draw glow
-
-        this.lightCtx.drawImage(this.glowCanvas, 0, 0);
+        _this.glowCtx = _this.glowCanvas.getContext('2d');
+        _this.glowCtx.fillStyle = 'rgba(250, 224, 77, .15)';
+        _this.glowCtx.fillRect(0, 0, w, h);
 
         // Darkness with lights cut out
 
-        this.shadowCtx.clearRect(0, 0, width, height);
+        _this.shadowCanvas = document.createElement('canvas');
+        _this.shadowCanvas.width = w;
+        _this.shadowCanvas.height = h;
 
-        this.shadowCtx.fillStyle = 'rgba(0, 0, 0, .7)';
-        this.shadowCtx.fillRect(0, 0, width, height);
+        _this.shadowCtx = _this.shadowCanvas.getContext('2d');
 
-        this.shadowCtx.globalCompositeOperation = 'destination-out';
+        // Static lights
 
-        this.shadowCtx.drawImage(this.staticCanvas, 0, 0);
+        _this.staticCanvas = document.createElement('canvas');
+        _this.staticCanvas.width = w;
+        _this.staticCanvas.height = h;
 
-        this.emitters.forEach(function (emitter) {
+        _this.staticCtx = _this.staticCanvas.getContext('2d');
 
-            this.shadowCtx.drawImage(emitter.canvas, emitter.owner.x - emitter.radius + emitter.xOffset, emitter.owner.y - emitter.radius + emitter.yOffset);
-        }.bind(this));
+        _this.emitters = [];
 
-        this.shadowCtx.globalCompositeOperation = 'source-over';
-
-        this.lightCtx.drawImage(this.shadowCanvas, 0, 0);
-
-        this.texture = _pixi2.default.Texture.fromCanvas(this.lightCanvas);
-        this.texture.update();
+        return _this;
     }
 
-    this.alpha = world.timeOfDay.getSunValue();
-};
+    _createClass(Lighting, [{
+        key: 'addStatic',
+        value: function addStatic(x, y, radius, xOffset, yOffset) {
+
+            if (Lighting.VERBOSE) {
+
+                console.log('Lighting.addStatic(', x, y, radius, xOffset, yOffset, ')');
+            }
+
+            var gradient = this.shadowCtx.createRadialGradient(x + xOffset, y + yOffset, 0, x + xOffset, y + yOffset, radius);
+            gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
+            gradient.addColorStop(.4, 'rgba(0, 0, 0, 1)');
+            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+            this.staticCtx.fillStyle = gradient;
+            this.staticCtx.beginPath();
+            this.staticCtx.arc(x + xOffset, y + yOffset, radius, 0, 2 * Math.PI);
+            this.staticCtx.fill();
+
+            return false;
+
+            return this.createLight(radius, xOffset, yOffset, 1);
+        }
+    }, {
+        key: 'addEmitter',
+        value: function addEmitter(owner, radius, xOffset, yOffset) {
+
+            var canvas = document.createElement('canvas');
+            canvas.width = radius * 2;
+            canvas.height = radius * 2;
+
+            var ctx = canvas.getContext('2d');
+
+            var gradient = ctx.createRadialGradient(radius, radius, 0, radius, radius, radius);
+            gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
+            gradient.addColorStop(.4, 'rgba(0, 0, 0, 1)');
+            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(radius, radius, radius, 0, 2 * Math.PI);
+            ctx.fill();
+
+            var emitter = {
+                owner: owner,
+                radius: radius,
+                canvas: canvas,
+                xOffset: xOffset,
+                yOffset: yOffset
+            };
+
+            this.emitters.push(emitter);
+
+            if (Lighting.VERBOSE) {
+
+                console.log('Lighting.addEmitter(', owner, radius, xOffset, yOffset, ')');
+            }
+
+            return false; // No light
+
+            return this.createLight(radius, xOffset, yOffset, 0);
+        }
+    }, {
+        key: 'removeEmitter',
+        value: function removeEmitter(owner) {
+
+            for (var i = 0; i < this.emitters.length; i++) {
+
+                if (this.emitters[i].owner === owner) {
+
+                    this.emitters.splice(i, 1);
+
+                    break;
+                }
+            }
+        }
+    }, {
+        key: 'createLight',
+        value: function createLight(radius, xOffset, yOffset, alphaMultiplier) {
+
+            var canvas = document.createElement('canvas');
+
+            canvas.width = canvas.height = radius * 2;
+
+            var ctx = canvas.getContext('2d');
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            var lightGradient = ctx.createRadialGradient(radius, radius, 0, radius, radius, radius);
+            lightGradient.addColorStop(0, 'rgba(250, 224, 77, .25)');
+            lightGradient.addColorStop(.6, 'rgba(250, 224, 77, .15)');
+            lightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+            ctx.fillStyle = lightGradient;
+            ctx.beginPath();
+            ctx.arc(radius, radius, radius, 0, 2 * Math.PI);
+            ctx.fill();
+
+            var light = new _pixi2.default.Sprite(_pixi2.default.Texture.fromCanvas(canvas));
+            light.alphaMultiplier = alphaMultiplier;
+            light.alpha = 0;
+            light.radius = radius;
+            light.xOffset = xOffset;
+            light.yOffset = yOffset;
+            light.blendMode = _pixi2.default.BLEND_MODES.SCREEN;
+
+            return light;
+        }
+    }, {
+        key: 'update',
+        value: function update(timeDelta, world) {
+
+            if (world.timeOfDay.getSunValue() > 0) {
+
+                var width = _World2.default.WIDTH * _Tile2.default.WIDTH;
+                var height = _World2.default.HEIGHT * _Tile2.default.HEIGHT;
+
+                // Reset lighting
+
+                this.lightCtx.clearRect(0, 0, width, height);
+
+                // Draw glow
+
+                this.lightCtx.drawImage(this.glowCanvas, 0, 0);
+
+                // Darkness with lights cut out
+
+                this.shadowCtx.clearRect(0, 0, width, height);
+
+                this.shadowCtx.fillStyle = 'rgba(0, 0, 0, .7)';
+                this.shadowCtx.fillRect(0, 0, width, height);
+
+                this.shadowCtx.globalCompositeOperation = 'destination-out';
+
+                this.shadowCtx.drawImage(this.staticCanvas, 0, 0);
+
+                this.emitters.forEach(function (emitter) {
+
+                    this.shadowCtx.drawImage(emitter.canvas, emitter.owner.x - emitter.radius + emitter.xOffset, emitter.owner.y - emitter.radius + emitter.yOffset);
+                }.bind(this));
+
+                this.shadowCtx.globalCompositeOperation = 'source-over';
+
+                this.lightCtx.drawImage(this.shadowCanvas, 0, 0);
+
+                this.texture = _pixi2.default.Texture.fromCanvas(this.lightCanvas);
+                this.texture.update();
+            }
+
+            this.alpha = world.timeOfDay.getSunValue();
+        }
+    }]);
+
+    return Lighting;
+}(_pixi2.default.Sprite);
+
+exports.default = Lighting;
+
+Lighting.VERBOSE = false;
 
 },{"./Tile":224,"./World":230,"pixi.js":154}],219:[function(require,module,exports){
 'use strict';
@@ -34439,7 +34962,16 @@ Lighting.prototype.update = function (timeDelta, world) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = MotherNature;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _World = require('./World');
 
@@ -34457,70 +34989,97 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function MotherNature(world) {
-
-    this.world = world;
-
-    this.animalArchetypes = [AnimalArchetype.DEER, AnimalArchetype.RABBIT, AnimalArchetype.FOX, AnimalArchetype.WOLF, AnimalArchetype.BOAR];
-
-    this.animalsMap = {};
-    this.animals = [];
-
-    this.animalArchetypes.forEach(function (animalArchetype) {
-
-        this.animalsMap[animalArchetype.id] = [];
-    }.bind(this));
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
 }
 
-MotherNature.constructor = MotherNature;
+var MotherNature = function () {
+    function MotherNature(world) {
+        _classCallCheck(this, MotherNature);
 
-MotherNature.prototype.update = function (timeDelta) {
+        this.world = world;
 
-    this.animalArchetypes.forEach(function (animalArchetype) {
+        this.animalArchetypes = [AnimalArchetype.DEER, AnimalArchetype.RABBIT, AnimalArchetype.FOX, AnimalArchetype.WOLF, AnimalArchetype.BOAR];
 
-        if (Math.random() > .99 && this.animalsMap[animalArchetype.id].length < animalArchetype.maxConcurrent && this.world.timeOfDay.isDuringPeriod(animalArchetype.startTime, animalArchetype.endTime)) {
+        this.animalsMap = {};
+        this.animals = [];
 
-            // console.log('MotherNature.spawnAnimal(',animalArchetype.id,')');
+        this.animalArchetypes.forEach(function (animalArchetype) {
 
-            this.spawn(animalArchetype);
+            this.animalsMap[animalArchetype.id] = [];
+        }.bind(this));
+    }
+
+    _createClass(MotherNature, [{
+        key: 'update',
+        value: function update(timeDelta) {
+
+            this.animalArchetypes.forEach(function (animalArchetype) {
+
+                if (Math.random() > .99 && this.animalsMap[animalArchetype.id].length < animalArchetype.maxConcurrent && this.world.timeOfDay.isDuringPeriod(animalArchetype.startTime, animalArchetype.endTime)) {
+
+                    // console.log('MotherNature.spawnAnimal(',animalArchetype.id,')');
+
+                    this.spawn(animalArchetype);
+                }
+            }.bind(this));
         }
-    }.bind(this));
-};
+    }, {
+        key: 'spawn',
+        value: function spawn(animalArchetype) {
 
-MotherNature.prototype.spawn = function (animalArchetype) {
+            var animal = new animalArchetype.c(this.world, _World2.default.WIDTH * _Tile2.default.WIDTH * Math.random(), _World2.default.HEIGHT * _Tile2.default.HEIGHT * Math.random() * .7, animalArchetype.archetype);
 
-    var animal = new animalArchetype.c(this.world, _World2.default.WIDTH * _Tile2.default.WIDTH * Math.random(), _World2.default.HEIGHT * _Tile2.default.HEIGHT * Math.random() * .7, animalArchetype.archetype);
+            this.world.addToZOrdered(animal);
 
-    this.world.addToZOrdered(animal);
+            this.animalsMap[animalArchetype.id].push(animal);
+            this.animals.push(animal);
+        }
+    }, {
+        key: 'removeAnimal',
+        value: function removeAnimal(animal) {
 
-    this.animalsMap[animalArchetype.id].push(animal);
-    this.animals.push(animal);
-};
+            this.animalArchetypes.forEach(function (animalArchetype) {
 
-MotherNature.prototype.removeAnimal = function (animal) {
+                for (var i = 0; i < this.animalsMap[animalArchetype.id].length; i++) {
 
-    this.animalArchetypes.forEach(function (animalArchetype) {
+                    if (animal === this.animalsMap[animalArchetype.id][i]) {
 
-        for (var i = 0; i < this.animalsMap[animalArchetype.id].length; i++) {
+                        this.animalsMap[animalArchetype.id].splice(i, 1);
 
-            if (animal === this.animalsMap[animalArchetype.id][i]) {
+                        break;
+                    }
+                }
+            }.bind(this));
 
-                this.animalsMap[animalArchetype.id].splice(i, 1);
+            for (var i = 0; i < this.animals.length; i++) {
 
-                break;
+                if (animal === this.animals[i]) {
+
+                    this.animals.splice(i, 1);
+
+                    break;
+                }
             }
         }
-    }.bind(this));
+    }]);
 
-    for (var i = 0; i < this.animals.length; i++) {
+    return MotherNature;
+}();
 
-        if (animal === this.animals[i]) {
+exports.default = MotherNature;
 
-            this.animals.splice(i, 1);
+var AnimalArchetype = function AnimalArchetype(id, startTime, endTime, maxConcurrent, c, archetype) {
+    _classCallCheck(this, AnimalArchetype);
 
-            break;
-        }
-    }
+    this.id = id;
+    this.startTime = startTime;
+    this.endTime = endTime;
+    this.maxConcurrent = maxConcurrent;
+    this.c = c || false;
+    this.archetype = archetype;
 };
 
 AnimalArchetype.RABBIT = new AnimalArchetype('rabbit', 4, 15, 4, _Animal.Rabbit, new _Archetypes.Rabbit());
@@ -34529,29 +35088,26 @@ AnimalArchetype.FOX = new AnimalArchetype('fox', 2, 24, 2, _Animal.Fox, new _Arc
 AnimalArchetype.BOAR = new AnimalArchetype('boar', 4, 23, 10, _Animal.Boar, new _Archetypes.Boar());
 AnimalArchetype.WOLF = new AnimalArchetype('wolf', 22, 5, 1, _Animal.Wolf, new _Archetypes.Wolf());
 
-function AnimalArchetype(id, startTime, endTime, maxConcurrent, c, archetype) {
-
-    this.id = id;
-    this.startTime = startTime;
-    this.endTime = endTime;
-    this.maxConcurrent = maxConcurrent;
-    this.c = c || false;
-    this.archetype = archetype;
-}
-
-AnimalArchetype.constructor = AnimalArchetype;
-
 },{"./Animal":209,"./Archetypes":210,"./Tile":224,"./World":230}],220:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = PanelController;
 
-var _valueMinMax = require('./utils/value-min-max');
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
-var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
+var _ValueMinMax = require('./utils/ValueMinMax');
+
+var _ValueMinMax2 = _interopRequireDefault(_ValueMinMax);
 
 var _Maths = require('./utils/Maths');
 
@@ -34561,96 +35117,153 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function PanelController() {
-
-    this.panels = [];
-    this.panelsMap = {};
-
-    this.current = false;
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
 }
 
-PanelController.constructor = PanelController;
+var PanelController = function () {
+    function PanelController() {
+        _classCallCheck(this, PanelController);
 
-PanelController.prototype.add = function (panel) {
-
-    if (panel.id === undefined) {
-        console.error('PanelController.add(PANEL HAS NO ID)');
-    }
-
-    this.panels.push(panel);
-    this.panelsMap[panel.id] = panel;
-
-    panel.on('toggle:on', this.panelOn.bind(this));
-    panel.on('toggle:off', this.panelOff.bind(this));
-};
-
-PanelController.prototype.panelOn = function (id) {
-
-    if (this.current) {
-
-        this.current.toggle(false, false);
-    }
-
-    this.current = this.panelsMap[id];
-};
-
-PanelController.prototype.panelOff = function (id) {
-
-    if (this.current && this.current.id === id) {
+        this.panels = [];
+        this.panelsMap = {};
 
         this.current = false;
     }
-};
 
-},{"./utils/Maths":234,"./utils/value-min-max":235}],221:[function(require,module,exports){
+    _createClass(PanelController, [{
+        key: 'add',
+        value: function add(panel) {
+
+            if (panel.id === undefined) {
+                console.error('PanelController.add(PANEL HAS NO ID)');
+            }
+
+            this.panels.push(panel);
+            this.panelsMap[panel.id] = panel;
+
+            panel.on('toggle:on', this.panelOn.bind(this));
+            panel.on('toggle:off', this.panelOff.bind(this));
+        }
+    }, {
+        key: 'panelOn',
+        value: function panelOn(id) {
+
+            if (this.current) {
+
+                this.current.toggle(false, false);
+            }
+
+            this.current = this.panelsMap[id];
+        }
+    }, {
+        key: 'panelOff',
+        value: function panelOff(id) {
+
+            if (this.current && this.current.id === id) {
+
+                this.current = false;
+            }
+        }
+    }]);
+
+    return PanelController;
+}();
+
+exports.default = PanelController;
+
+},{"./utils/Maths":234,"./utils/ValueMinMax":235}],221:[function(require,module,exports){
 'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = Rock;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _pixi = require('pixi.js');
 
 var _pixi2 = _interopRequireDefault(_pixi);
 
-var _valueMinMax = require('./utils/value-min-max');
+var _ValueMinMax = require('./utils/ValueMinMax');
 
-var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
+var _ValueMinMax2 = _interopRequireDefault(_ValueMinMax);
 
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Rock() {
-
-    _pixi2.default.Container.call(this);
-
-    this.type = Rock.TYPE;
-
-    this.supply = new _valueMinMax2.default(0, Rock.SUPPLY, 0);
-
-    var base = new _pixi2.default.Graphics();
-    base.beginFill(0x555555);
-    base.drawRect(-Rock.WIDTH * .5, -Rock.HEIGHT, Rock.WIDTH, Rock.HEIGHT);
-    base.endFill();
-
-    this.addChild(base);
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
 }
 
-Rock.constructor = Rock;
-Rock.prototype = Object.create(_pixi2.default.Container.prototype);
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
 
-Rock.prototype.update = function (timeDelta, world) {
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
-    this.visible = !this.supply.isMin();
-};
+var Rock = function (_PIXI$Container) {
+    _inherits(Rock, _PIXI$Container);
 
-Rock.prototype.hit = function () {
+    function Rock() {
+        _classCallCheck(this, Rock);
 
-    // this.quiverValue = 100;
+        var _this = _possibleConstructorReturn(this, (Rock.__proto__ || Object.getPrototypeOf(Rock)).call(this));
 
-};
+        _this.type = Rock.TYPE;
+
+        _this.supply = new _ValueMinMax2.default(0, Rock.SUPPLY, 0);
+
+        var base = new _pixi2.default.Graphics();
+        base.beginFill(0x555555);
+        base.drawRect(-Rock.WIDTH * .5, -Rock.HEIGHT, Rock.WIDTH, Rock.HEIGHT);
+        base.endFill();
+
+        _this.addChild(base);
+
+        return _this;
+    }
+
+    _createClass(Rock, [{
+        key: 'update',
+        value: function update(timeDelta, world) {
+
+            this.visible = !this.supply.isMin();
+        }
+    }, {
+        key: 'hit',
+        value: function hit() {
+
+            // this.quiverValue = 100;
+
+        }
+    }]);
+
+    return Rock;
+}(_pixi2.default.Container);
+
+exports.default = Rock;
 
 Rock.WIDTH = 10;
 Rock.HEIGHT = 10;
@@ -34658,13 +35271,24 @@ Rock.HEIGHT = 10;
 Rock.TYPE = 'rock';
 Rock.SUPPLY = 250;
 
-},{"./utils/value-min-max":235,"pixi.js":154}],222:[function(require,module,exports){
+},{"./utils/ValueMinMax":235,"pixi.js":154}],222:[function(require,module,exports){
 'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = Roles;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _Maths = require('./utils/Maths');
 
@@ -34686,33 +35310,57 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Roles() {
-
-    this.rolesMap = {
-        'idle': new RoleIdle(),
-        'resting': new RoleResting(),
-        'builder': new RoleBuilder(),
-        'hunter': new RoleHunter(),
-        'collect-wood': new RoleCollectWood(),
-        'collect-stone': new RoleCollectStone(),
-        'watch-day': new RoleWatchDay(),
-        'watch-night': new RoleWatchNight(),
-        'healer': new RoleHealer(),
-        'flee': new RoleFlee(),
-        'self-defense': new RoleSelfDefense(),
-        'predator': new RolePredator(),
-        'prey': new RolePrey()
-    };
-
-    // console.log('Roles(',this.rolesMap,')');
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
 }
 
-Roles.constructor = Roles;
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
-Roles.prototype.getById = function (id) {
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
 
-    return this.rolesMap[id];
-};
+var Roles = function () {
+    function Roles() {
+        _classCallCheck(this, Roles);
+
+        this.rolesMap = {
+            'idle': new RoleIdle(),
+            'resting': new RoleResting(),
+            'builder': new RoleBuilder(),
+            'hunter': new RoleHunter(),
+            'collect-wood': new RoleCollectWood(),
+            'collect-stone': new RoleCollectStone(),
+            'watch-day': new RoleWatchDay(),
+            'watch-night': new RoleWatchNight(),
+            'healer': new RoleHealer(),
+            'flee': new RoleFlee(),
+            'self-defense': new RoleSelfDefense(),
+            'predator': new RolePredator(),
+            'prey': new RolePrey()
+        };
+    }
+
+    _createClass(Roles, [{
+        key: 'getById',
+        value: function getById(id) {
+
+            return this.rolesMap[id];
+        }
+    }]);
+
+    return Roles;
+}();
+
+exports.default = Roles;
 
 Roles.IDLE = 'idle';
 Roles.RESTING = 'resting';
@@ -34733,774 +35381,883 @@ Roles.PREDATOR = 'predator';
 /* ---------------------------- IDLE */
 /* --------------------------------- */
 
-function RoleIdle() {
+var RoleIdle = function () {
+    function RoleIdle() {
+        _classCallCheck(this, RoleIdle);
 
-    this.id = 'idle';
-}
+        this.id = 'idle';
+    }
 
-RoleIdle.constructor = RoleIdle;
+    _createClass(RoleIdle, [{
+        key: 'update',
+        value: function update(timeDelta, entity, world) {
 
-RoleIdle.prototype.update = function (timeDelta, entity, world) {
+            if (entity.canTakeAction()) {
 
-    if (entity.canTakeAction()) {
+                if (Math.random() > .75) {
 
-        if (Math.random() > .75) {
+                    entity.target = {
+                        x: entity.startX + Math.random() * 60 - 30,
+                        y: entity.startY + Math.random() * 60 - 30
+                    };
+                }
 
-            entity.target = {
-                x: entity.startX + Math.random() * 60 - 30,
-                y: entity.startY + Math.random() * 60 - 30
-            };
+                entity.tookAction();
+            }
+
+            if (entity.careerRole.checkCanPerform(timeDelta, entity, world)) {
+
+                return entity.careerRole.id;
+            }
         }
+    }, {
+        key: 'targetProximity',
+        value: function targetProximity(timeDelta, entity, world) {
 
-        entity.tookAction();
-    }
+            entity.target = false;
+        }
+    }]);
 
-    if (entity.careerRole.checkCanPerform(timeDelta, entity, world)) {
-
-        return entity.careerRole.id;
-    }
-};
-
-RoleIdle.prototype.targetProximity = function (timeDelta, entity, world) {
-
-    entity.target = false;
-};
+    return RoleIdle;
+}();
 
 /* --------------------------------- */
 /* ---------------------------- FLEE */
 /* --------------------------------- */
 
-function RoleFlee() {
+var RoleFlee = function () {
+    function RoleFlee() {
+        _classCallCheck(this, RoleFlee);
 
-    this.id = 'flee';
-}
-
-RoleFlee.constructor = RoleFlee;
-
-RoleFlee.prototype.enter = function (entity, world) {
-
-    if (entity.home) {
-
-        entity.target = entity.home;
+        this.id = 'flee';
     }
-};
 
-RoleFlee.prototype.update = function (timeDelta, entity, world) {
+    _createClass(RoleFlee, [{
+        key: 'enter',
+        value: function enter(entity, world) {
 
-    // What to do when I get home?
+            if (entity.home) {
 
-    // If no enemies nearby then return to idle...
+                entity.target = entity.home;
+            }
+        }
+    }, {
+        key: 'update',
+        value: function update(timeDelta, entity, world) {
 
-    if (!entity.target) {
+            // What to do when I get home?
 
-        return Roles.IDLE;
-    }
-};
+            // If no enemies nearby then return to idle...
 
-RoleFlee.prototype.targetProximity = function (timeDelta, entity, world) {
+            if (!entity.target) {
 
-    entity.target = false;
-};
+                return Roles.IDLE;
+            }
+        }
+    }, {
+        key: 'targetProximity',
+        value: function targetProximity(timeDelta, entity, world) {
+
+            entity.target = false;
+        }
+    }]);
+
+    return RoleFlee;
+}();
 
 /* --------------------------------- */
 /* -------------------- SELF DEFENSE */
 /* --------------------------------- */
 
-function RoleSelfDefense() {
+var RoleSelfDefense = function () {
+    function RoleSelfDefense() {
+        _classCallCheck(this, RoleSelfDefense);
 
-    this.id = 'self-defense';
+        this.id = 'self-defense';
 
-    this.isWeaponBased = true;
-}
-
-RoleSelfDefense.constructor = RoleSelfDefense;
-
-RoleSelfDefense.prototype.update = function (timeDelta, entity, world) {
-
-    if (!entity.target || !entity.target.isAlive()) {
-
-        entity.target = false;
-
-        return Roles.IDLE;
+        this.isWeaponBased = true;
     }
-};
 
-RoleSelfDefense.prototype.targetProximity = function (timeDelta, entity, world) {
+    _createClass(RoleSelfDefense, [{
+        key: 'update',
+        value: function update(timeDelta, entity, world) {
 
-    if (entity.target && entity.target.isAlive && entity.target.isAlive()) {
-
-        if (entity.canTakeAction()) {
-
-            // Attack
-
-            var target = entity.target;
-
-            target.takeDamage(entity.weapon.damage, entity);
-
-            entity.tookAction();
-
-            if (!target.isAlive()) {
-
-                world.ui.log.log('"' + entity.name + '" killed "' + target.name + '"');
+            if (!entity.target || !entity.target.isAlive()) {
 
                 entity.target = false;
 
                 return Roles.IDLE;
             }
         }
-    }
-};
+    }, {
+        key: 'targetProximity',
+        value: function targetProximity(timeDelta, entity, world) {
+
+            if (entity.target && entity.target.isAlive && entity.target.isAlive()) {
+
+                if (entity.canTakeAction()) {
+
+                    // Attack
+
+                    var target = entity.target;
+
+                    target.takeDamage(entity.weapon.damage, entity);
+
+                    entity.tookAction();
+
+                    if (!target.isAlive()) {
+
+                        world.ui.log.log('"' + entity.name + '" killed "' + target.name + '"');
+
+                        entity.target = false;
+
+                        return Roles.IDLE;
+                    }
+                }
+            }
+        }
+    }]);
+
+    return RoleSelfDefense;
+}();
 
 /* --------------------------------- */
-/* -------------------- SELF DEFENSE */
+/* ------------------------- RESTING */
 /* --------------------------------- */
 
-function RoleResting() {
+var RoleResting = function () {
+    function RoleResting() {
+        _classCallCheck(this, RoleResting);
 
-    this.id = 'resting';
-}
-
-RoleResting.constructor = RoleResting;
-
-RoleResting.prototype.enter = function (entity, world) {
-
-    if (entity.home) {
-
-        entity.target = entity.home;
+        this.id = 'resting';
     }
-};
 
-RoleResting.prototype.exit = function (entity, world) {
+    _createClass(RoleResting, [{
+        key: 'enter',
+        value: function enter(entity, world) {
 
-    entity.visible = true;
-};
+            if (entity.home) {
 
-RoleResting.prototype.update = function (timeDelta, entity, world) {
+                entity.target = entity.home;
+            }
+        }
+    }, {
+        key: 'exit',
+        value: function exit(entity, world) {
 
-    if (entity.careerRole.startTime && entity.careerRole.endTime && world.timeOfDay.isDuringPeriod(entity.careerRole.startTime + entity.offsetStartTime, entity.careerRole.endTime + entity.offsetEndTime)) {
+            entity.visible = true;
+        }
+    }, {
+        key: 'update',
+        value: function update(timeDelta, entity, world) {
 
-        return entity.careerRole.id;
-    }
-};
+            if (entity.careerRole.startTime && entity.careerRole.endTime && world.timeOfDay.isDuringPeriod(entity.careerRole.startTime + entity.offsetStartTime, entity.careerRole.endTime + entity.offsetEndTime)) {
 
-RoleResting.prototype.targetProximity = function (timeDelta, entity, world) {
+                return entity.careerRole.id;
+            }
+        }
+    }, {
+        key: 'targetProximity',
+        value: function targetProximity(timeDelta, entity, world) {
 
-    entity.target = false;
+            entity.target = false;
 
-    entity.visible = false;
-};
+            entity.visible = false;
+        }
+    }]);
+
+    return RoleResting;
+}();
 
 /* --------------------------------- */
 /* --------------------------- WATCH */
 /* --------------------------------- */
 
-function RoleWatch() {
+var RoleWatch = function () {
+    function RoleWatch() {
+        _classCallCheck(this, RoleWatch);
 
-    this.id = 'watch';
-}
-
-RoleWatch.constructor = RoleWatch;
-
-RoleWatch.prototype.checkCanPerform = function (timeDelta, entity, world) {
-
-    return true;
-};
-
-RoleWatch.prototype.enter = function (entity, world) {
-
-    if (entity.home) {
-
-        entity.target = entity.home;
-    }
-};
-
-RoleWatch.prototype.updateRoute = function (entity, world) {
-
-    var watchTower = entity.home;
-
-    if (watchTower.patrolRoute.length > 0) {
-
-        entity.patrolRouteIndex = Math.floor(Math.random() * watchTower.patrolRoute.length);
-        entity.target = watchTower.patrolRoute[entity.patrolRouteIndex].building;
-
-        entity.patrolRouteVersion = watchTower.patrolRoute.version;
-    } else {
-
-        entity.patrolRouteVersion = 1;
-
-        entity.target = watchTower;
-    }
-};
-
-RoleWatch.prototype.update = function (timeDelta, entity, world) {
-
-    if (entity.patrolRouteVersion !== entity.home.patrolRoute.version) {
-
-        this.updateRoute(entity, world);
+        this.id = 'watch';
     }
 
-    var targets = Utils.percievedEntities(entity, world.motherNature.animals);
+    _createClass(RoleWatch, [{
+        key: 'checkCanPerform',
+        value: function checkCanPerform(timeDelta, entity, world) {
 
-    if (targets.length > 0) {
+            return true;
+        }
+    }, {
+        key: 'enter',
+        value: function enter(entity, world) {
 
-        entity.target = targets[0];
+            if (entity.home) {
 
-        return Roles.PREDATOR;
-    }
-};
+                entity.target = entity.home;
+            }
+        }
+    }, {
+        key: 'updateRoute',
+        value: function updateRoute(entity, world) {
 
-RoleWatch.prototype.targetProximity = function (timeDelta, entity, world) {
+            var watchTower = entity.home;
 
-    if (entity.canTakeAction()) {
+            if (watchTower.patrolRoute.length > 0) {
 
-        var watchTower = entity.home;
+                entity.patrolRouteIndex = Math.floor(Math.random() * watchTower.patrolRoute.length);
+                entity.target = watchTower.patrolRoute[entity.patrolRouteIndex].building;
 
-        // console.log('RoleWatchNight.targetProximity(', watchTower, ')');
+                entity.patrolRouteVersion = watchTower.patrolRoute.version;
+            } else {
 
-        if (watchTower.patrolRoute && watchTower.patrolRoute.length > 0) {
+                entity.patrolRouteVersion = 1;
 
-            var nextWaypointIndex = entity.patrolRouteIndex + 1;
+                entity.target = watchTower;
+            }
+        }
+    }, {
+        key: 'update',
+        value: function update(timeDelta, entity, world) {
 
-            if (nextWaypointIndex >= watchTower.patrolRoute.length) {
-                nextWaypointIndex = 0;
+            if (entity.patrolRouteVersion !== entity.home.patrolRoute.version) {
+
+                this.updateRoute(entity, world);
             }
 
-            entity.patrolRouteIndex = nextWaypointIndex;
+            var targets = Utils.percievedEntities(entity, world.motherNature.animals);
 
-            var nextWaypoint = watchTower.patrolRoute[entity.patrolRouteIndex];
+            if (targets.length > 0) {
 
-            entity.target = {
-                x: nextWaypoint.building.x + Math.random() * 40 - 20,
-                y: nextWaypoint.building.y + Math.random() * 40 - 20
-            };
-        } else {
+                entity.target = targets[0];
 
-            entity.target = {
-                x: watchTower.x + Math.random() * 80 - 40,
-                y: watchTower.y + Math.random() * 80 - 40
-            };
+                return Roles.PREDATOR;
+            }
         }
+    }, {
+        key: 'targetProximity',
+        value: function targetProximity(timeDelta, entity, world) {
 
-        entity.tookAction();
-    }
-};
+            if (entity.canTakeAction()) {
+
+                var watchTower = entity.home;
+
+                // console.log('RoleWatchNight.targetProximity(', watchTower, ')');
+
+                if (watchTower.patrolRoute && watchTower.patrolRoute.length > 0) {
+
+                    var nextWaypointIndex = entity.patrolRouteIndex + 1;
+
+                    if (nextWaypointIndex >= watchTower.patrolRoute.length) {
+                        nextWaypointIndex = 0;
+                    }
+
+                    entity.patrolRouteIndex = nextWaypointIndex;
+
+                    var nextWaypoint = watchTower.patrolRoute[entity.patrolRouteIndex];
+
+                    entity.target = {
+                        x: nextWaypoint.building.x + Math.random() * 40 - 20,
+                        y: nextWaypoint.building.y + Math.random() * 40 - 20
+                    };
+                } else {
+
+                    entity.target = {
+                        x: watchTower.x + Math.random() * 80 - 40,
+                        y: watchTower.y + Math.random() * 80 - 40
+                    };
+                }
+
+                entity.tookAction();
+            }
+        }
+    }]);
+
+    return RoleWatch;
+}();
 
 /* --------------------------------- */
 /* --------------------- WATCH NIGHT */
 /* --------------------------------- */
 
-function RoleWatchNight() {
+var RoleWatchNight = function (_RoleWatch) {
+    _inherits(RoleWatchNight, _RoleWatch);
 
-    RoleWatch.call(this);
+    function RoleWatchNight() {
+        _classCallCheck(this, RoleWatchNight);
 
-    this.id = 'watch-night';
+        var _this = _possibleConstructorReturn(this, (RoleWatchNight.__proto__ || Object.getPrototypeOf(RoleWatchNight)).call(this));
 
-    this.startTime = 19;
-    this.endTime = 7;
-}
+        _this.id = 'watch-night';
 
-RoleWatchNight.constructor = RoleWatchNight;
-RoleWatchNight.prototype = Object.create(RoleWatch.prototype);
+        _this.startTime = 19;
+        _this.endTime = 7;
+
+        return _this;
+    }
+
+    return RoleWatchNight;
+}(RoleWatch);
 
 /* --------------------------------- */
 /* ----------------------- WATCH DAY */
 /* --------------------------------- */
 
-function RoleWatchDay() {
+var RoleWatchDay = function (_RoleWatch2) {
+    _inherits(RoleWatchDay, _RoleWatch2);
 
-    RoleWatch.call(this);
+    function RoleWatchDay() {
+        _classCallCheck(this, RoleWatchDay);
 
-    this.id = 'watch-day';
+        var _this2 = _possibleConstructorReturn(this, (RoleWatchDay.__proto__ || Object.getPrototypeOf(RoleWatchDay)).call(this));
 
-    this.startTime = 7;
-    this.endTime = 18;
-}
+        _this2.id = 'watch-day';
 
-RoleWatchDay.constructor = RoleWatchDay;
-RoleWatchDay.prototype = Object.create(RoleWatch.prototype);
+        _this2.startTime = 7;
+        _this2.endTime = 18;
+
+        return _this2;
+    }
+
+    return RoleWatchDay;
+}(RoleWatch);
 
 /* --------------------------------- */
 /* -------------------------- HEALER */
 /* --------------------------------- */
 
-function RoleHealer() {
+var RoleHealer = function () {
+    function RoleHealer() {
+        _classCallCheck(this, RoleHealer);
 
-    this.id = 'healer';
+        this.id = 'healer';
 
-    this.startTime = 5.5;
-    this.endTime = 20;
-}
-
-RoleHealer.constructor = RoleHealer;
-
-RoleHealer.prototype.checkCanPerform = function (timeDelta, entity, world) {
-
-    return Utils.nearestWithoutProperty('health', entity, world.dwarves);
-};
-
-RoleHealer.prototype.update = function (timeDelta, entity, world) {
-
-    if (!entity.target || entity.target.type !== 'dwarf' || !entity.target.isAlive()) {
-
-        var target = Utils.nearestWithoutProperty('health', entity, world.dwarves) || false;
-
-        if (target) {
-
-            entity.target = target;
-        } else {
-
-            entity.startX = entity.x;
-            entity.startY = entity.y;
-
-            return Roles.IDLE;
-        }
+        this.startTime = 5.5;
+        this.endTime = 20;
     }
-};
 
-RoleHealer.prototype.targetProximity = function (timeDelta, entity, world) {
+    _createClass(RoleHealer, [{
+        key: 'checkCanPerform',
+        value: function checkCanPerform(timeDelta, entity, world) {
 
-    if (entity.canTakeAction()) {
-
-        var entityB = entity.target;
-
-        if (entityB.health.isMax() || entityB.health.isMin()) {
-
-            entity.target = false;
-        } else {
-
-            var rate = Math.min(3, entityB.health.getRemainder());
-
-            entityB.takeHealing(rate);
-
-            entity.tookAction();
+            return Utils.nearestWithoutProperty('health', entity, world.dwarves);
         }
-    }
-};
+    }, {
+        key: 'update',
+        value: function update(timeDelta, entity, world) {
+
+            if (!entity.target || entity.target.type !== 'dwarf' || !entity.target.isAlive()) {
+
+                var target = Utils.nearestWithoutProperty('health', entity, world.dwarves) || false;
+
+                if (target) {
+
+                    entity.target = target;
+                } else {
+
+                    entity.startX = entity.x;
+                    entity.startY = entity.y;
+
+                    return Roles.IDLE;
+                }
+            }
+        }
+    }, {
+        key: 'targetProximity',
+        value: function targetProximity(timeDelta, entity, world) {
+
+            if (entity.canTakeAction()) {
+
+                var entityB = entity.target;
+
+                if (entityB.health.isMax() || entityB.health.isMin()) {
+
+                    entity.target = false;
+                } else {
+
+                    var rate = Math.min(3, entityB.health.getRemainder());
+
+                    entityB.takeHealing(rate);
+
+                    entity.tookAction();
+                }
+            }
+        }
+    }]);
+
+    return RoleHealer;
+}();
 
 /* --------------------------------- */
 /* ------------------------- BUILDER */
 /* --------------------------------- */
 
-function RoleBuilder() {
+var RoleBuilder = function () {
+    function RoleBuilder() {
+        _classCallCheck(this, RoleBuilder);
 
-    this.id = 'builder';
+        this.id = 'builder';
 
-    this.startTime = 5.5;
-    this.endTime = 20;
-}
-
-RoleBuilder.constructor = RoleBuilder;
-
-RoleBuilder.prototype.checkCanPerform = function (timeDelta, entity, world) {
-
-    return Utils.nearestWithoutProperty('integrity', entity, world.buildings.buildings);
-};
-
-RoleBuilder.prototype.update = function (timeDelta, entity, world) {
-
-    if (!entity.target || entity.target.type !== 'building') {
-
-        var target = Utils.nearestWithoutProperty('integrity', entity, world.buildings.buildings) || false;
-
-        if (target) {
-
-            entity.target = target;
-        } else {
-
-            entity.startX = entity.x;
-            entity.startY = entity.y;
-
-            return Roles.IDLE;
-        }
+        this.startTime = 5.5;
+        this.endTime = 20;
     }
-};
 
-RoleBuilder.prototype.targetProximity = function (timeDelta, entity, world) {
+    _createClass(RoleBuilder, [{
+        key: 'checkCanPerform',
+        value: function checkCanPerform(timeDelta, entity, world) {
 
-    if (entity.canTakeAction()) {
+            return Utils.nearestWithoutProperty('integrity', entity, world.buildings.buildings);
+        }
+    }, {
+        key: 'update',
+        value: function update(timeDelta, entity, world) {
 
-        var building = entity.target;
+            if (!entity.target || entity.target.type !== 'building') {
 
-        if (!building.integrity.isMax()) {
+                var target = Utils.nearestWithoutProperty('integrity', entity, world.buildings.buildings) || false;
 
-            var rate = Math.min(10, building.integrity.getRemainder());
+                if (target) {
 
-            building.integrity.increment(rate);
+                    entity.target = target;
+                } else {
 
-            if (building.integrity.isMax() && !building.isConstructed) {
+                    entity.startX = entity.x;
+                    entity.startY = entity.y;
 
-                building.constructed();
+                    return Roles.IDLE;
+                }
             }
-
-            entity.tookAction();
-        } else {
-
-            entity.target = false;
         }
-    }
-};
+    }, {
+        key: 'targetProximity',
+        value: function targetProximity(timeDelta, entity, world) {
+
+            if (entity.canTakeAction()) {
+
+                var building = entity.target;
+
+                if (!building.integrity.isMax()) {
+
+                    var rate = Math.min(10, building.integrity.getRemainder());
+
+                    building.integrity.increment(rate);
+
+                    if (building.integrity.isMax() && !building.isConstructed) {
+
+                        building.constructed();
+                    }
+
+                    entity.tookAction();
+                } else {
+
+                    entity.target = false;
+                }
+            }
+        }
+    }]);
+
+    return RoleBuilder;
+}();
 
 /* --------------------------------- */
 /* -------------------------- HUNTER */
 /* --------------------------------- */
 
-function RoleHunter() {
+var RoleHunter = function () {
+    function RoleHunter() {
+        _classCallCheck(this, RoleHunter);
 
-    this.id = 'hunter';
+        this.id = 'hunter';
 
-    this.startTime = 5;
-    this.endTime = 19.5;
+        this.startTime = 5;
+        this.endTime = 19.5;
 
-    this.isWeaponBased = true;
-}
-
-RoleHunter.constructor = RoleHunter;
-
-RoleHunter.prototype.checkCanPerform = function (timeDelta, entity, world) {
-
-    var target = Utils.nearestWithProperty('health', entity, world.motherNature.animals);
-
-    return target && _Maths2.default.distanceBetween(entity, target) <= entity.rangePerception && _Maths2.default.distanceBetween(entity, entity.home) <= entity.rangeLimit;
-};
-
-RoleHunter.prototype.update = function (timeDelta, entity, world) {
-
-    if (entity.target) {
-
-        if (_Maths2.default.distanceBetween(entity, entity.home) > entity.rangeLimit) {
-
-            // This critter got away...
-
-            entity.target = false;
-
-            return Roles.IDLE;
-        }
-    } else {
-
-        var target = Utils.nearestWithProperty('health', entity, world.motherNature.animals);
-
-        if (target && _Maths2.default.distanceBetween(entity, target) <= entity.rangePerception && _Maths2.default.distanceBetween(entity, entity.home) <= entity.rangeLimit) {
-
-            entity.target = target;
-        } else {
-
-            return Roles.IDLE;
-        }
+        this.isWeaponBased = true;
     }
-};
 
-RoleHunter.prototype.targetProximity = function (timeDelta, entity, world) {
+    _createClass(RoleHunter, [{
+        key: 'checkCanPerform',
+        value: function checkCanPerform(timeDelta, entity, world) {
 
-    if (entity.target && entity.target.isAlive !== undefined && entity.target.isAlive()) {
+            var target = Utils.nearestWithProperty('health', entity, world.motherNature.animals);
 
-        if (entity.canTakeAction()) {
+            return target && _Maths2.default.distanceBetween(entity, target) <= entity.rangePerception && _Maths2.default.distanceBetween(entity, entity.home) <= entity.rangeLimit;
+        }
+    }, {
+        key: 'update',
+        value: function update(timeDelta, entity, world) {
 
-            // Attack
+            if (entity.target) {
 
-            var animal = entity.target;
+                if (_Maths2.default.distanceBetween(entity, entity.home) > entity.rangeLimit) {
 
-            animal.takeDamage(entity.weapon.damage, entity);
+                    // This critter got away...
 
-            entity.tookAction();
+                    entity.target = false;
 
-            if (!animal.isAlive()) {
+                    return Roles.IDLE;
+                }
+            } else {
 
-                world.ui.log.log('Dwarf "' + entity.name + '" killed "' + animal.name + '" with "' + entity.weapon.title + '"');
+                var target = Utils.nearestWithProperty('health', entity, world.motherNature.animals);
 
-                entity.target = false;
+                if (target && _Maths2.default.distanceBetween(entity, target) <= entity.rangePerception && _Maths2.default.distanceBetween(entity, entity.home) <= entity.rangeLimit) {
 
-                return Roles.IDLE;
+                    entity.target = target;
+                } else {
+
+                    return Roles.IDLE;
+                }
             }
         }
-    } else {
+    }, {
+        key: 'targetProximity',
+        value: function targetProximity(timeDelta, entity, world) {
 
-        entity.target = false;
-    }
-};
+            if (entity.target && entity.target.isAlive !== undefined && entity.target.isAlive()) {
+
+                if (entity.canTakeAction()) {
+
+                    // Attack
+
+                    var animal = entity.target;
+
+                    animal.takeDamage(entity.weapon.damage, entity);
+
+                    entity.tookAction();
+
+                    if (!animal.isAlive()) {
+
+                        world.ui.log.log('Dwarf "' + entity.name + '" killed "' + animal.name + '" with "' + entity.weapon.title + '"');
+
+                        entity.target = false;
+
+                        return Roles.IDLE;
+                    }
+                }
+            } else {
+
+                entity.target = false;
+            }
+        }
+    }]);
+
+    return RoleHunter;
+}();
 
 /* --------------------------------- */
 /* -------------------- COLLECT WOOD */
 /* --------------------------------- */
 
-function RoleCollectWood() {
+var RoleCollectWood = function () {
+    function RoleCollectWood() {
+        _classCallCheck(this, RoleCollectWood);
 
-    this.id = 'collect-wood';
+        this.id = 'collect-wood';
 
-    this.startTime = 5.5;
-    this.endTime = 20;
-}
+        this.startTime = 5.5;
+        this.endTime = 20;
+    }
 
-RoleCollectWood.constructor = RoleCollectWood;
+    _createClass(RoleCollectWood, [{
+        key: 'checkCanPerform',
+        value: function checkCanPerform(timeDelta, entity, world) {
 
-RoleCollectWood.prototype.checkCanPerform = function (timeDelta, entity, world) {
-
-    return Utils.nearestWithProperty('supply', entity, world.trees);
-};
-
-RoleCollectWood.prototype.update = function (timeDelta, entity, world) {
-
-    // Check inventory
-
-    if (entity.inventory.isFull()) {
-
-        if (!entity.target || entity.target !== entity.home) {
-
-            entity.target = entity.home;
+            return Utils.nearestWithProperty('supply', entity, world.trees);
         }
-    } else {
+    }, {
+        key: 'update',
+        value: function update(timeDelta, entity, world) {
 
-        if (!entity.target || entity.target.type !== _Tree2.default.TYPE) {
+            // Check inventory
 
-            var target = Utils.nearestWithProperty('supply', entity, world.trees) || false;
+            if (entity.inventory.isFull()) {
 
-            if (target) {
+                if (!entity.target || entity.target !== entity.home) {
 
-                entity.target = target;
+                    entity.target = entity.home;
+                }
             } else {
 
-                return Roles.IDLE;
+                if (!entity.target || entity.target.type !== _Tree2.default.TYPE) {
+
+                    var target = Utils.nearestWithProperty('supply', entity, world.trees) || false;
+
+                    if (target) {
+
+                        entity.target = target;
+                    } else {
+
+                        return Roles.IDLE;
+                    }
+                }
             }
         }
-    }
-};
+    }, {
+        key: 'targetProximity',
+        value: function targetProximity(timeDelta, entity, world) {
 
-RoleCollectWood.prototype.targetProximity = function (timeDelta, entity, world) {
+            if (entity.canTakeAction()) {
 
-    if (entity.canTakeAction()) {
+                if (entity.target === entity.home) {
 
-        if (entity.target === entity.home) {
+                    // Next to house so offload supply
 
-            // Next to house so offload supply
+                    world.supply.wood.increment(entity.inventory.remove('wood'));
 
-            world.supply.wood.increment(entity.inventory.remove('wood'));
+                    entity.target = false;
+                } else if (entity.target.type === _Tree2.default.TYPE) {
 
-            entity.target = false;
-        } else if (entity.target.type === _Tree2.default.TYPE) {
+                    // Next to tree so add supply to inventory
 
-            // Next to tree so add supply to inventory
+                    var tree = entity.target;
 
-            var tree = entity.target;
+                    if (!tree.supply.isMin()) {
 
-            if (!tree.supply.isMin()) {
+                        var rate = Math.min(1, tree.supply.get(), entity.inventory.free());
 
-                var rate = Math.min(1, tree.supply.get(), entity.inventory.free());
+                        tree.supply.decrement(rate);
 
-                tree.supply.decrement(rate);
+                        entity.inventory.add('wood', rate);
 
-                entity.inventory.add('wood', rate);
+                        //world.supply.wood.increment(rate);
 
-                //world.supply.wood.increment(rate);
+                        tree.hit();
 
-                tree.hit();
+                        entity.tookAction();
+                    } else {
 
-                entity.tookAction();
-            } else {
-
-                entity.target = false;
+                        entity.target = false;
+                    }
+                }
             }
         }
-    }
-};
+    }]);
+
+    return RoleCollectWood;
+}();
 
 /* --------------------------------- */
 /* ------------------- COLLECT STONE */
 /* --------------------------------- */
 
-function RoleCollectStone() {
+var RoleCollectStone = function () {
+    function RoleCollectStone() {
+        _classCallCheck(this, RoleCollectStone);
 
-    this.id = 'collect-stone';
+        this.id = 'collect-stone';
 
-    this.startTime = 5.5;
-    this.endTime = 20;
-}
+        this.startTime = 5.5;
+        this.endTime = 20;
+    }
 
-RoleCollectStone.constructor = RoleCollectStone;
+    _createClass(RoleCollectStone, [{
+        key: 'checkCanPerform',
+        value: function checkCanPerform(timeDelta, entity, world) {
 
-RoleCollectStone.prototype.checkCanPerform = function (timeDelta, entity, world) {
-
-    return Utils.nearestWithProperty('supply', entity, world.rocks);
-};
-
-RoleCollectStone.prototype.update = function (timeDelta, entity, world) {
-
-    if (entity.inventory.isFull()) {
-
-        if (!entity.target || entity.target !== entity.home) {
-
-            entity.target = entity.home;
+            return Utils.nearestWithProperty('supply', entity, world.rocks);
         }
-    } else {
+    }, {
+        key: 'update',
+        value: function update(timeDelta, entity, world) {
 
-        if (!entity.target || entity.target.type !== _Rock2.default.TYPE) {
+            if (entity.inventory.isFull()) {
 
-            var target = Utils.nearestWithProperty('supply', entity, world.rocks) || false;
+                if (!entity.target || entity.target !== entity.home) {
 
-            if (target) {
-
-                entity.target = target;
+                    entity.target = entity.home;
+                }
             } else {
 
-                return Roles.IDLE;
+                if (!entity.target || entity.target.type !== _Rock2.default.TYPE) {
+
+                    var target = Utils.nearestWithProperty('supply', entity, world.rocks) || false;
+
+                    if (target) {
+
+                        entity.target = target;
+                    } else {
+
+                        return Roles.IDLE;
+                    }
+                }
             }
         }
-    }
-};
+    }, {
+        key: 'targetProximity',
+        value: function targetProximity(timeDelta, entity, world) {
 
-RoleCollectStone.prototype.targetProximity = function (timeDelta, entity, world) {
+            if (entity.canTakeAction()) {
 
-    if (entity.canTakeAction()) {
+                if (entity.target === entity.home) {
 
-        if (entity.target === entity.home) {
+                    // Next to house so offload supply
 
-            // Next to house so offload supply
+                    world.supply.stone.increment(entity.inventory.remove('stone'));
 
-            world.supply.stone.increment(entity.inventory.remove('stone'));
+                    entity.target = false;
+                } else if (entity.target.type === _Rock2.default.TYPE) {
 
-            entity.target = false;
-        } else if (entity.target.type === _Rock2.default.TYPE) {
+                    // Next to rock so add supply to inventory
 
-            // Next to rock so add supply to inventory
+                    var rock = entity.target;
 
-            var rock = entity.target;
+                    if (!rock.supply.isMin()) {
 
-            if (!rock.supply.isMin()) {
+                        var rate = Math.min(1, rock.supply.get(), entity.inventory.free());
 
-                var rate = Math.min(1, rock.supply.get(), entity.inventory.free());
+                        rock.supply.decrement(rate);
 
-                rock.supply.decrement(rate);
+                        entity.inventory.add('stone', rate);
 
-                entity.inventory.add('stone', rate);
+                        rock.hit();
 
-                rock.hit();
+                        entity.tookAction();
+                    } else {
 
-                entity.tookAction();
-            } else {
-
-                entity.target = false;
+                        entity.target = false;
+                    }
+                }
             }
         }
-    }
-};
+    }]);
+
+    return RoleCollectStone;
+}();
 
 /* --------------------------------- */
 /* ------------------------ PREDATOR */
 /* --------------------------------- */
 
-function RolePredator() {
+var RolePredator = function () {
+    function RolePredator() {
+        _classCallCheck(this, RolePredator);
 
-    this.id = 'predator';
+        this.id = 'predator';
 
-    this.isWeaponBased = true;
-}
-
-RolePredator.constructor = RolePredator;
-
-RolePredator.prototype.checkCanPerform = function (timeDelta, entity, world) {
-
-    var targets = Utils.percievedEntities(entity, world.dwarves);
-
-    if (targets.length > 0) {
-
-        entity.target = targets.random();
-
-        return true;
-    } else {
-
-        return false;
+        this.isWeaponBased = true;
     }
-};
 
-RolePredator.prototype.update = function (timeDelta, entity, world) {
+    _createClass(RolePredator, [{
+        key: 'checkCanPerform',
+        value: function checkCanPerform(timeDelta, entity, world) {
 
-    if (entity.target) {
+            var targets = Utils.percievedEntities(entity, world.dwarves);
 
-        if (!entity.target.isAlive()) {
+            if (targets.length > 0) {
 
-            entity.target = false;
+                entity.target = targets.random();
 
-            return Roles.IDLE;
+                return true;
+            } else {
+
+                return false;
+            }
         }
-    } else {
+    }, {
+        key: 'update',
+        value: function update(timeDelta, entity, world) {
 
-        return Roles.IDLE;
-    }
-};
+            if (entity.target) {
 
-RolePredator.prototype.targetProximity = function (timeDelta, entity, world) {
+                if (!entity.target.isAlive()) {
 
-    if (entity.canTakeAction()) {
+                    entity.target = false;
 
-        // Attack
+                    return Roles.IDLE;
+                }
+            } else {
 
-        var target = entity.target;
-
-        target.takeDamage(entity.weapon.damage, entity);
-
-        entity.tookAction();
-
-        if (!target.isAlive()) {
-
-            world.ui.log.log('"' + entity.name + '" killed "' + target.name + '" with "' + entity.weapon.title + '"');
-
-            entity.target = false;
-
-            return Roles.IDLE;
+                return Roles.IDLE;
+            }
         }
-    }
-};
+    }, {
+        key: 'targetProximity',
+        value: function targetProximity(timeDelta, entity, world) {
+
+            if (entity.canTakeAction()) {
+
+                // Attack
+
+                var target = entity.target;
+
+                target.takeDamage(entity.weapon.damage, entity);
+
+                entity.tookAction();
+
+                if (!target.isAlive()) {
+
+                    world.ui.log.log('"' + entity.name + '" killed "' + target.name + '" with "' + entity.weapon.title + '"');
+
+                    entity.target = false;
+
+                    return Roles.IDLE;
+                }
+            }
+        }
+    }]);
+
+    return RolePredator;
+}();
 
 /* --------------------------------- */
 /* ---------------------------- PREY */
 /* --------------------------------- */
 
-function RolePrey() {
+var RolePrey = function () {
+    function RolePrey() {
+        _classCallCheck(this, RolePrey);
 
-    this.id = 'prey';
-}
+        this.id = 'prey';
+    }
 
-RolePrey.constructor = RolePrey;
+    _createClass(RolePrey, [{
+        key: 'checkCanPerform',
+        value: function checkCanPerform(timeDelta, entity, world) {
 
-RolePrey.prototype.checkCanPerform = function (timeDelta, entity, world) {
-
-    return Utils.percievedEntities(entity, world.dwarves).length > 0;
-};
-
-RolePrey.prototype.update = function (timeDelta, entity, world) {
-
-    if (world.timeOfDay.count % 10 === 0) {
-
-        var percievedEntities = Utils.percievedEntities(entity, world.dwarves);
-
-        if (percievedEntities.length > 0) {
-
-            var fleeVectorX = 0;
-            var fleeVectorY = 0;
-
-            percievedEntities.forEach(function (entityB) {
-
-                fleeVectorX += entity.x - entityB.x;
-                fleeVectorY += entity.y - entityB.y;
-            }.bind(this));
-
-            var fleeAngle = Math.atan2(fleeVectorY, fleeVectorX);
-
-            entity.target = {
-                x: entity.x + Math.cos(fleeAngle) * 150,
-                y: entity.y + Math.sin(fleeAngle) * 150
-            };
+            return Utils.percievedEntities(entity, world.dwarves).length > 0;
         }
-    }
+    }, {
+        key: 'update',
+        value: function update(timeDelta, entity, world) {
 
-    if (!entity.target) {
+            if (world.timeOfDay.count % 10 === 0) {
 
-        return Roles.IDLE;
-    }
-};
+                var percievedEntities = Utils.percievedEntities(entity, world.dwarves);
 
-RolePrey.prototype.targetProximity = function (timeDelta, entity, world) {
+                if (percievedEntities.length > 0) {
 
-    entity.target = false;
-};
+                    var fleeVectorX = 0;
+                    var fleeVectorY = 0;
+
+                    percievedEntities.forEach(function (entityB) {
+
+                        fleeVectorX += entity.x - entityB.x;
+                        fleeVectorY += entity.y - entityB.y;
+                    }.bind(this));
+
+                    var fleeAngle = Math.atan2(fleeVectorY, fleeVectorX);
+
+                    entity.target = {
+                        x: entity.x + Math.cos(fleeAngle) * 150,
+                        y: entity.y + Math.sin(fleeAngle) * 150
+                    };
+                }
+            }
+
+            if (!entity.target) {
+
+                return Roles.IDLE;
+            }
+        }
+    }, {
+        key: 'targetProximity',
+        value: function targetProximity(timeDelta, entity, world) {
+
+            entity.target = false;
+        }
+    }]);
+
+    return RolePrey;
+}();
 
 /* --------------------------------- */
 /* --------------------------- UTILS */
@@ -35579,65 +36336,97 @@ var Utils = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = Supply;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _pixi = require('pixi.js');
 
 var _pixi2 = _interopRequireDefault(_pixi);
 
-var _valueMinMax = require('./utils/value-min-max');
+var _ValueMinMax = require('./utils/ValueMinMax');
 
-var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
+var _ValueMinMax2 = _interopRequireDefault(_ValueMinMax);
 
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Supply(debug) {
-
-    this.wood = new _valueMinMax2.default(0, 100000, debug ? 1000 : Supply.WOOD);
-    this.woodOld = 0;
-
-    this.stone = new _valueMinMax2.default(0, 100000, debug ? 1000 : Supply.STONE);
-    this.stoneOld = 0;
-
-    return this;
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
 }
 
-Supply.prototype.update = function (timeDelta, world) {
+var Supply = function () {
+    function Supply(debug) {
+        _classCallCheck(this, Supply);
 
-    var dirty = false;
+        this.wood = new _ValueMinMax2.default(0, 100000, debug ? 1000 : Supply.WOOD);
+        this.woodOld = 0;
 
-    if (this.wood.get() !== this.woodOld) {
-
-        this.woodOld = this.wood.get();
-
-        dirty = true;
+        this.stone = new _ValueMinMax2.default(0, 100000, debug ? 1000 : Supply.STONE);
+        this.stoneOld = 0;
     }
 
-    if (this.stone.get() !== this.stoneOld) {
+    _createClass(Supply, [{
+        key: 'update',
+        value: function update(timeDelta, world) {
 
-        this.stoneOld = this.stone.get();
+            var dirty = false;
 
-        dirty = true;
-    }
+            if (this.wood.get() !== this.woodOld) {
 
-    if (dirty) {
+                this.woodOld = this.wood.get();
 
-        world.ui.updateSupply(this.wood.get(), this.stone.get());
-    }
-};
+                dirty = true;
+            }
+
+            if (this.stone.get() !== this.stoneOld) {
+
+                this.stoneOld = this.stone.get();
+
+                dirty = true;
+            }
+
+            if (dirty) {
+
+                world.ui.updateSupply(this.wood.get(), this.stone.get());
+            }
+        }
+    }]);
+
+    return Supply;
+}();
+
+exports.default = Supply;
 
 Supply.WOOD = 150;
 Supply.STONE = 150;
 
-},{"./utils/value-min-max":235,"pixi.js":154}],224:[function(require,module,exports){
+},{"./utils/ValueMinMax":235,"pixi.js":154}],224:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = Tile;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _pixi = require('pixi.js');
 
@@ -35647,59 +36436,74 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Tile(x, y, elevation) {
-
-    this.type = Math.random() > .2 ? Tile.TYPE_GRASS : Tile.TYPE_WATER;
-    this.type = Tile.TYPE_GRASS;
-
-    this.elevation = (elevation + 1) * .5;
-
-    this.tileX = x;
-    this.tileY = y;
-
-    this.x = x * Tile.WIDTH;
-    this.y = y * Tile.HEIGHT;
-
-    this.xCentre = this.x + Tile.WIDTH * .5;
-    this.yCentre = this.y + Tile.HEIGHT * .5;
-
-    this.isOccupied = false;
-
-    this.canvas = document.createElement('canvas');
-    this.canvas.width = Tile.WIDTH;
-    this.canvas.height = Tile.HEIGHT;
-
-    var ctx = this.canvas.getContext('2d');
-
-    ctx.fillStyle = this.getColourFromType();
-    ctx.fillRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
-
-    ctx.fillStyle = 'rgba(0, 0, 0, ' + (1 - this.elevation) * .25 + ')';
-    ctx.fillRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
-
-    ctx.fillStyle = 'rgba(255, 255, 255, .025)';
-    ctx.fillRect(0, 0, 1, Tile.HEIGHT);
-    ctx.fillRect(0, 0, Tile.WIDTH, 1);
-    // ctx.strokeRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
 }
 
-Tile.constructor = Tile;
-// Tile.prototype = Object;
+var Tile = function () {
+    function Tile(x, y, elevation) {
+        _classCallCheck(this, Tile);
 
-Tile.prototype.occupy = function () {
+        this.type = Math.random() > .2 ? Tile.TYPE_GRASS : Tile.TYPE_WATER;
+        this.type = Tile.TYPE_GRASS;
 
-    this.isOccupied = true;
-};
+        this.elevation = (elevation + 1) * .5;
 
-Tile.prototype.abandon = function () {
+        this.tileX = x;
+        this.tileY = y;
 
-    this.isOccupied = false;
-};
+        this.x = x * Tile.WIDTH;
+        this.y = y * Tile.HEIGHT;
 
-Tile.prototype.getColourFromType = function () {
+        this.xCentre = this.x + Tile.WIDTH * .5;
+        this.yCentre = this.y + Tile.HEIGHT * .5;
 
-    return Tile.TILE_COLOURS[this.type] || '#FF0000';
-};
+        this.isOccupied = false;
+
+        this.canvas = document.createElement('canvas');
+        this.canvas.width = Tile.WIDTH;
+        this.canvas.height = Tile.HEIGHT;
+
+        var ctx = this.canvas.getContext('2d');
+
+        ctx.fillStyle = this.getColourFromType();
+        ctx.fillRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
+
+        ctx.fillStyle = 'rgba(0, 0, 0, ' + (1 - this.elevation) * .25 + ')';
+        ctx.fillRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
+
+        ctx.fillStyle = 'rgba(255, 255, 255, .025)';
+        ctx.fillRect(0, 0, 1, Tile.HEIGHT);
+        ctx.fillRect(0, 0, Tile.WIDTH, 1);
+        // ctx.strokeRect(0, 0, Tile.WIDTH, Tile.HEIGHT);
+    }
+
+    _createClass(Tile, [{
+        key: 'occupy',
+        value: function occupy() {
+
+            this.isOccupied = true;
+        }
+    }, {
+        key: 'abandon',
+        value: function abandon() {
+
+            this.isOccupied = false;
+        }
+    }, {
+        key: 'getColourFromType',
+        value: function getColourFromType() {
+
+            return Tile.TILE_COLOURS[this.type] || '#FF0000';
+        }
+    }]);
+
+    return Tile;
+}();
+
+exports.default = Tile;
 
 Tile.WIDTH = 20;
 Tile.HEIGHT = 20;
@@ -35724,9 +36528,9 @@ var _pixi = require('pixi.js');
 
 var _pixi2 = _interopRequireDefault(_pixi);
 
-var _valueMinMax = require('./utils/value-min-max');
+var _ValueMinMax = require('./utils/ValueMinMax');
 
-var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
+var _ValueMinMax2 = _interopRequireDefault(_ValueMinMax);
 
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
@@ -35832,21 +36636,32 @@ TimeOfDay.prototype.isDuringPeriod = function (start, end) {
     }
 };
 
-},{"./utils/value-min-max":235,"pixi.js":154}],226:[function(require,module,exports){
+},{"./utils/ValueMinMax":235,"pixi.js":154}],226:[function(require,module,exports){
 'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = Tree;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _pixi = require('pixi.js');
 
 var _pixi2 = _interopRequireDefault(_pixi);
 
-var _valueMinMax = require('./utils/value-min-max');
+var _ValueMinMax = require('./utils/ValueMinMax');
 
-var _valueMinMax2 = _interopRequireDefault(_valueMinMax);
+var _ValueMinMax2 = _interopRequireDefault(_ValueMinMax);
 
 var _Tile = require('./Tile');
 
@@ -35856,49 +36671,78 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Tree() {
-
-    _pixi2.default.Container.call(this);
-
-    this.type = Tree.TYPE;
-
-    this.supply = new _valueMinMax2.default(0, Tree.SUPPLY, 0);
-
-    var base = new _pixi2.default.Graphics();
-
-    base.beginFill(0x613917);
-    base.drawRect(-1, -2, 2, 3);
-    base.endFill();
-
-    base.beginFill(0x004400);
-    base.moveTo(0, -Tree.HEIGHT - 2);
-    base.lineTo(-Tree.WIDTH * .5, -2);
-    base.lineTo(Tree.WIDTH * .5, -2);
-    base.lineTo(0, -Tree.HEIGHT - 2);
-    base.endFill();
-
-    this.addChild(base);
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
 }
 
-Tree.constructor = Tree;
-Tree.prototype = Object.create(_pixi2.default.Container.prototype);
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
 
-Tree.prototype.update = function (timeDelta, world) {
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
-    // this.alpha = this.supply / this.supplyMax;
+var Tree = function (_PIXI$Container) {
+    _inherits(Tree, _PIXI$Container);
 
-    this.visible = !this.supply.isMin();
+    function Tree() {
+        _classCallCheck(this, Tree);
 
-    if (this.quiverValue > 0) {
+        var _this = _possibleConstructorReturn(this, (Tree.__proto__ || Object.getPrototypeOf(Tree)).call(this));
 
-        this.quiverValue -= timeDelta * .3;
-    } else {
+        _this.type = Tree.TYPE;
 
-        this.quiverValue = 0;
+        _this.supply = new _ValueMinMax2.default(0, Tree.SUPPLY, 0);
+
+        var base = new _pixi2.default.Graphics();
+
+        base.beginFill(0x613917);
+        base.drawRect(-1, -2, 2, 3);
+        base.endFill();
+
+        base.beginFill(0x004400);
+        base.moveTo(0, -Tree.HEIGHT - 2);
+        base.lineTo(-Tree.WIDTH * .5, -2);
+        base.lineTo(Tree.WIDTH * .5, -2);
+        base.lineTo(0, -Tree.HEIGHT - 2);
+        base.endFill();
+
+        _this.addChild(base);
+
+        return _this;
     }
 
-    this.rotation = 0 + Math.sin(this.quiverValue * .15) * Math.PI * 0.05;
-};
+    _createClass(Tree, [{
+        key: 'update',
+        value: function update(timeDelta, world) {
+
+            // this.alpha = this.supply / this.supplyMax;
+
+            this.visible = !this.supply.isMin();
+
+            if (this.quiverValue > 0) {
+
+                this.quiverValue -= timeDelta * .3;
+            } else {
+
+                this.quiverValue = 0;
+            }
+
+            this.rotation = 0 + Math.sin(this.quiverValue * .15) * Math.PI * 0.05;
+        }
+    }]);
+
+    return Tree;
+}(_pixi2.default.Container);
+
+exports.default = Tree;
 
 Tree.prototype.hit = function () {
 
@@ -35911,22 +36755,25 @@ Tree.HEIGHT = 24;
 Tree.TYPE = 'tree';
 Tree.SUPPLY = 100;
 
-},{"./Tile":224,"./utils/value-min-max":235,"pixi.js":154}],227:[function(require,module,exports){
+},{"./Tile":224,"./utils/ValueMinMax":235,"pixi.js":154}],227:[function(require,module,exports){
 'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = UI;
-exports.PanelUI = PanelUI;
-exports.GameSpeedUI = GameSpeedUI;
-exports.BuildingUI = BuildingUI;
-exports.InhabitantsUI = InhabitantsUI;
-exports.InhabitantUI = InhabitantUI;
-exports.SupplyUI = SupplyUI;
-exports.TimeUI = TimeUI;
-exports.ConstructionUI = ConstructionUI;
-exports.LogUI = LogUI;
+exports.LogUI = exports.ConstructionUI = exports.TimeUI = exports.SupplyUI = exports.InhabitantUI = exports.InhabitantsUI = exports.BuildingUI = exports.GameSpeedUI = exports.PanelUI = undefined;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _pixi = require('pixi.js');
 
@@ -35956,769 +36803,889 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function UI(world) {
-
-    _pixi2.default.Container.call(this);
-
-    this.supply = new SupplyUI(world);
-    this.addChild(this.supply);
-
-    this.time = new TimeUI(world);
-    this.time.y = 50;
-    this.addChild(this.time);
-
-    this.panelController = new _PanelController2.default();
-
-    this.panelButtons = new _pixi2.default.Container();
-    this.addChild(this.panelButtons);
-
-    this.construction = new ConstructionUI(world);
-    this.addChild(this.construction);
-
-    this.log = new LogUI(world);
-    this.addChild(this.log);
-
-    this.panelButtons.addChild(this.construction.button);
-    this.panelButtons.addChild(this.log.button);
-
-    this.building = new BuildingUI(world);
-    this.addChild(this.building);
-
-    this.gameSpeed = new GameSpeedUI(world);
-    this.addChild(this.gameSpeed);
-
-    this.panelController.add(this.building);
-    this.panelController.add(this.construction);
-    this.panelController.add(this.log);
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
 }
 
-UI.constructor = UI;
-UI.prototype = Object.create(_pixi2.default.Container.prototype);
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
 
-UI.prototype.update = function (timeDelta, world) {
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
-    this.building.update(timeDelta, world);
-};
+var UI = function (_PIXI$Container) {
+    _inherits(UI, _PIXI$Container);
 
-UI.prototype.updateSupply = function (wood, stone) {
+    function UI(world) {
+        _classCallCheck(this, UI);
 
-    this.supply.update(wood, stone);
-    this.construction.update(wood, stone);
-};
+        var _this = _possibleConstructorReturn(this, (UI.__proto__ || Object.getPrototypeOf(UI)).call(this));
+
+        _this.supply = new SupplyUI(world);
+        _this.addChild(_this.supply);
+
+        _this.time = new TimeUI(world);
+        _this.time.y = 50;
+        _this.addChild(_this.time);
+
+        _this.panelController = new _PanelController2.default();
+
+        _this.panelButtons = new _pixi2.default.Container();
+        _this.addChild(_this.panelButtons);
+
+        _this.construction = new ConstructionUI(world);
+        _this.addChild(_this.construction);
+
+        _this.log = new LogUI(world);
+        _this.addChild(_this.log);
+
+        _this.panelButtons.addChild(_this.construction.button);
+        _this.panelButtons.addChild(_this.log.button);
+
+        _this.building = new BuildingUI(world);
+        _this.addChild(_this.building);
+
+        _this.gameSpeed = new GameSpeedUI(world);
+        _this.addChild(_this.gameSpeed);
+
+        _this.panelController.add(_this.building);
+        _this.panelController.add(_this.construction);
+        _this.panelController.add(_this.log);
+
+        return _this;
+    }
+
+    _createClass(UI, [{
+        key: 'update',
+        value: function update(timeDelta, world) {
+
+            this.building.update(timeDelta, world);
+        }
+    }, {
+        key: 'updateSupply',
+        value: function updateSupply(wood, stone) {
+
+            this.supply.update(wood, stone);
+            this.construction.update(wood, stone);
+        }
+    }]);
+
+    return UI;
+}(_pixi2.default.Container);
 
 /* ---------------------------- */
 /* ---------------------- Panel */
 /* ---------------------------- */
 
-function PanelUI(world, id) {
+exports.default = UI;
 
-    _pixi2.default.Container.call(this);
+var PanelUI = exports.PanelUI = function (_PIXI$Container2) {
+    _inherits(PanelUI, _PIXI$Container2);
 
-    this.world = world;
+    function PanelUI(world, id) {
+        _classCallCheck(this, PanelUI);
 
-    this.id = id;
+        var _this2 = _possibleConstructorReturn(this, (PanelUI.__proto__ || Object.getPrototypeOf(PanelUI)).call(this));
 
-    this.hit = new _pixi2.default.Graphics();
-    this.hit.beginFill(0x000000, .15);
-    this.hit.drawRect(0, 0, _Layout2.default.WIDTH, _Layout2.default.HEIGHT);
-    this.hit.endFill();
+        _this2.world = world;
 
-    this.hit.interactive = true;
-    this.hit.on('mousedown', this.onButtonDown.bind(this));
-    this.hit.on('touchstart', this.onButtonDown.bind(this));
+        _this2.id = id;
 
-    this.addChild(this.hit);
+        _this2.hit = new _pixi2.default.Graphics();
+        _this2.hit.beginFill(0x000000, .15);
+        _this2.hit.drawRect(0, 0, _Layout2.default.WIDTH, _Layout2.default.HEIGHT);
+        _this2.hit.endFill();
 
-    var backgroundW = _Layout2.default.WIDTH * .8;
-    var backgroundH = _Layout2.default.HEIGHT * .8;
+        _this2.hit.interactive = true;
+        _this2.hit.on('mousedown', _this2.onButtonDown.bind(_this2));
+        _this2.hit.on('touchstart', _this2.onButtonDown.bind(_this2));
 
-    this.background = new _pixi2.default.Graphics();
-    this.background.beginFill(0x000000, 1);
-    this.background.drawRect(0, 0, backgroundW, backgroundH);
-    this.background.endFill();
+        _this2.addChild(_this2.hit);
 
-    this.background.x = _Layout2.default.WIDTH * .5 - backgroundW * .5;
-    this.background.y = _Layout2.default.HEIGHT * .5 - backgroundH * .5;
+        var backgroundW = _Layout2.default.WIDTH * .8;
+        var backgroundH = _Layout2.default.HEIGHT * .8;
 
-    this.addChild(this.background);
+        _this2.background = new _pixi2.default.Graphics();
+        _this2.background.beginFill(0x000000, 1);
+        _this2.background.drawRect(0, 0, backgroundW, backgroundH);
+        _this2.background.endFill();
 
-    this.toggle(false);
-}
+        _this2.background.x = _Layout2.default.WIDTH * .5 - backgroundW * .5;
+        _this2.background.y = _Layout2.default.HEIGHT * .5 - backgroundH * .5;
 
-PanelUI.constructor = PanelUI;
-PanelUI.prototype = Object.create(_pixi2.default.Container.prototype);
+        _this2.addChild(_this2.background);
 
-PanelUI.prototype.onButtonDown = function (event) {
+        _this2.toggle(false);
 
-    this.toggle(undefined, true);
-};
-
-PanelUI.prototype.toggle = function (show, dispatchEvent) {
-
-    var isVisible = void 0;
-    if (typeof show === 'undefined') {
-        isVisible = !this.shown;
-    } else {
-        isVisible = show;
+        return _this2;
     }
 
-    dispatchEvent = typeof dispatchEvent === 'undefined' ? false : dispatchEvent;
+    _createClass(PanelUI, [{
+        key: 'onButtonDown',
+        value: function onButtonDown(event) {
 
-    this.visible = this.shown = isVisible;
+            this.toggle(undefined, true);
+        }
+    }, {
+        key: 'toggle',
+        value: function toggle(show, dispatchEvent) {
 
-    if (dispatchEvent) {
+            var isVisible = void 0;
+            if (typeof show === 'undefined') {
+                isVisible = !this.shown;
+            } else {
+                isVisible = show;
+            }
 
-        this.emit(isVisible ? 'toggle:on' : 'toggle:off', this.id);
-    }
-};
+            dispatchEvent = typeof dispatchEvent === 'undefined' ? false : dispatchEvent;
+
+            this.visible = this.shown = isVisible;
+
+            if (dispatchEvent) {
+
+                this.emit(isVisible ? 'toggle:on' : 'toggle:off', this.id);
+            }
+        }
+    }]);
+
+    return PanelUI;
+}(_pixi2.default.Container);
 
 /* ---------------------------- */
 /* ----------------- GAME SPEED */
 /* ---------------------------- */
 
-function GameSpeedUI(world) {
+var GameSpeedUI = exports.GameSpeedUI = function (_PIXI$Container3) {
+    _inherits(GameSpeedUI, _PIXI$Container3);
 
-    _pixi2.default.Container.call(this);
+    function GameSpeedUI(world) {
+        _classCallCheck(this, GameSpeedUI);
 
-    this.world = world;
+        var _this3 = _possibleConstructorReturn(this, (GameSpeedUI.__proto__ || Object.getPrototypeOf(GameSpeedUI)).call(this));
 
-    this.buttonW = 40;
-    this.buttonH = 40;
+        _this3.world = world;
 
-    this.button = new _pixi2.default.Graphics();
-    this.button.beginFill(0x000000, .5);
-    this.button.drawRect(0, 0, this.buttonW, this.buttonH);
-    this.button.endFill();
+        _this3.buttonW = 40;
+        _this3.buttonH = 40;
 
-    this.button.x = _Layout2.default.WIDTH - this.buttonW;
-    this.button.y = 0;
+        _this3.button = new _pixi2.default.Graphics();
+        _this3.button.beginFill(0x000000, .5);
+        _this3.button.drawRect(0, 0, _this3.buttonW, _this3.buttonH);
+        _this3.button.endFill();
 
-    this.button.interactive = true;
+        _this3.button.x = _Layout2.default.WIDTH - _this3.buttonW;
+        _this3.button.y = 0;
 
-    this.button.on('mousedown', this.onButtonDown.bind(this));
-    this.button.on('touchstart', this.onButtonDown.bind(this));
+        _this3.button.interactive = true;
 
-    this.addChild(this.button);
+        _this3.button.on('mousedown', _this3.onButtonDown.bind(_this3));
+        _this3.button.on('touchstart', _this3.onButtonDown.bind(_this3));
 
-    var style = {
-        font: '16px Arial',
-        fill: '#FFFFFF'
-    };
+        _this3.addChild(_this3.button);
 
-    this.text = new _pixi2.default.Text('x1', style);
-    this.text.y = 10;
-    this.button.addChild(this.text);
+        var style = {
+            font: '16px Arial',
+            fill: '#FFFFFF'
+        };
 
-    this.speedIndex = 0;
-    this.speeds = [1, 2, 4];
+        _this3.text = new _pixi2.default.Text('x1', style);
+        _this3.text.y = 10;
+        _this3.button.addChild(_this3.text);
 
-    this.updateButton();
-}
+        _this3.speedIndex = 0;
+        _this3.speeds = [1, 2, 4];
 
-GameSpeedUI.constructor = GameSpeedUI;
-GameSpeedUI.prototype = Object.create(_pixi2.default.Container.prototype);
+        _this3.updateButton();
 
-GameSpeedUI.prototype.onButtonDown = function (event) {
-
-    this.speedIndex++;
-
-    if (this.speedIndex >= this.speeds.length) {
-
-        this.speedIndex = 0;
+        return _this3;
     }
 
-    this.updateButton();
-};
+    _createClass(GameSpeedUI, [{
+        key: 'onButtonDown',
+        value: function onButtonDown(event) {
 
-GameSpeedUI.prototype.updateButton = function () {
+            this.speedIndex++;
 
-    var speed = this.speeds[this.speedIndex];
+            if (this.speedIndex >= this.speeds.length) {
 
-    this.text.text = 'x' + speed;
-    this.text.x = (this.buttonW - this.text.width) * .5;
+                this.speedIndex = 0;
+            }
 
-    _World2.default.TICK_RATE = speed;
-};
+            this.updateButton();
+        }
+    }, {
+        key: 'updateButton',
+        value: function updateButton() {
+
+            var speed = this.speeds[this.speedIndex];
+
+            this.text.text = 'x' + speed;
+            this.text.x = (this.buttonW - this.text.width) * .5;
+
+            _World2.default.TICK_RATE = speed;
+        }
+    }]);
+
+    return GameSpeedUI;
+}(_pixi2.default.Container);
 
 /* ---------------------------- */
 /* ------------------- Building */
 /* ---------------------------- */
 
-function BuildingUI(world) {
+var BuildingUI = exports.BuildingUI = function (_PanelUI) {
+    _inherits(BuildingUI, _PanelUI);
 
-    PanelUI.call(this, world, 'building');
+    function BuildingUI(world) {
+        _classCallCheck(this, BuildingUI);
 
-    var style = {
-        font: '20px Arial',
-        fill: '#FFFFFF',
-        wordWrap: true,
-        wordWrapWidth: this.background.width - 40
-    };
+        var _this4 = _possibleConstructorReturn(this, (BuildingUI.__proto__ || Object.getPrototypeOf(BuildingUI)).call(this, world, 'building'));
 
-    this.textTitle = new _pixi2.default.Text('title', style);
-    this.textTitle.x = 20;
-    this.textTitle.y = 20;
-    this.background.addChild(this.textTitle);
+        var style = {
+            font: '20px Arial',
+            fill: '#FFFFFF',
+            wordWrap: true,
+            wordWrapWidth: _this4.background.width - 40
+        };
 
-    style.font = '14px Arial';
+        _this4.textTitle = new _pixi2.default.Text('title', style);
+        _this4.textTitle.x = 20;
+        _this4.textTitle.y = 20;
+        _this4.background.addChild(_this4.textTitle);
 
-    this.textDescription = new _pixi2.default.Text('description', style);
-    this.textDescription.x = 20;
-    this.textDescription.y = 50;
-    this.textDescription.alpha = .75;
-    this.background.addChild(this.textDescription);
+        style.font = '14px Arial';
 
-    this.integrity = new _ValueBarUI2.default(this.background.width - 40, 10);
-    this.integrity.x = 20;
-    this.integrity.y = this.background.height - 30;
-    this.background.addChild(this.integrity);
+        _this4.textDescription = new _pixi2.default.Text('description', style);
+        _this4.textDescription.x = 20;
+        _this4.textDescription.y = 50;
+        _this4.textDescription.alpha = .75;
+        _this4.background.addChild(_this4.textDescription);
 
-    this.inhabitants = new InhabitantsUI(this.background.width - 40, 200);
-    this.inhabitants.x = 20;
-    this.inhabitants.y = 90;
-    this.background.addChild(this.inhabitants);
-}
+        _this4.integrity = new _ValueBarUI2.default(_this4.background.width - 40, 10);
+        _this4.integrity.x = 20;
+        _this4.integrity.y = _this4.background.height - 30;
+        _this4.background.addChild(_this4.integrity);
 
-BuildingUI.constructor = BuildingUI;
-BuildingUI.prototype = Object.create(PanelUI.prototype);
+        _this4.inhabitants = new InhabitantsUI(_this4.background.width - 40, 200);
+        _this4.inhabitants.x = 20;
+        _this4.inhabitants.y = 90;
+        _this4.background.addChild(_this4.inhabitants);
 
-BuildingUI.prototype.update = function (timeDelta, world) {
-
-    if (this.shown && this.activeBuilding) {
-
-        this.integrity.setValue(this.activeBuilding.integrity.val());
+        return _this4;
     }
-};
 
-BuildingUI.prototype.setBuilding = function (building) {
+    _createClass(BuildingUI, [{
+        key: 'update',
+        value: function update(timeDelta, world) {
 
-    if (this.activeBuilding != building) {
+            if (this.shown && this.activeBuilding) {
 
-        this.activeBuilding = building;
+                this.integrity.setValue(this.activeBuilding.integrity.val());
+            }
+        }
+    }, {
+        key: 'setBuilding',
+        value: function setBuilding(building) {
 
-        this.textTitle.text = building.archetype.title;
-        this.textDescription.text = building.archetype.description;
-        this.integrity.setValue(building.integrity.val());
+            if (this.activeBuilding != building) {
 
-        this.inhabitants.setInhabitants(building.inhabitants);
-    }
-};
+                this.activeBuilding = building;
+
+                this.textTitle.text = building.archetype.title;
+                this.textDescription.text = building.archetype.description;
+                this.integrity.setValue(building.integrity.val());
+
+                this.inhabitants.setInhabitants(building.inhabitants);
+            }
+        }
+    }]);
+
+    return BuildingUI;
+}(PanelUI);
 
 /* ---------------------------- */
 /* ---------------- Inhabitants */
 /* ---------------------------- */
 
-function InhabitantsUI(width, height) {
+var InhabitantsUI = exports.InhabitantsUI = function (_PIXI$Container4) {
+    _inherits(InhabitantsUI, _PIXI$Container4);
 
-    _pixi2.default.Container.call(this);
+    function InhabitantsUI(width, height) {
+        _classCallCheck(this, InhabitantsUI);
 
-    this.widthMax = width;
-    this.heightMax = height;
+        var _this5 = _possibleConstructorReturn(this, (InhabitantsUI.__proto__ || Object.getPrototypeOf(InhabitantsUI)).call(this));
 
-    this.inhabitants = [];
-}
+        _this5.widthMax = width;
+        _this5.heightMax = height;
 
-InhabitantsUI.constructor = InhabitantsUI;
-InhabitantsUI.prototype = Object.create(_pixi2.default.Container.prototype);
+        _this5.inhabitants = [];
 
-InhabitantsUI.prototype.setInhabitants = function (inhabitants) {
-
-    this.clearInhabitants();
-
-    if (this.activeInhabitants != inhabitants) {
-
-        this.activeInhabitants = inhabitants;
-
-        inhabitants.list.forEach(function (inhabitant, index) {
-
-            var inhabitantUI = new InhabitantUI(this.widthMax, 40);
-            inhabitantUI.x = 0;
-            inhabitantUI.y = index * 50;
-            inhabitantUI.setInhabitant(inhabitant);
-            this.addChild(inhabitantUI);
-
-            this.inhabitants.push(inhabitantUI);
-        }.bind(this));
+        return _this5;
     }
-};
 
-InhabitantsUI.prototype.clearInhabitants = function () {
+    _createClass(InhabitantsUI, [{
+        key: 'setInhabitants',
+        value: function setInhabitants(inhabitants) {
 
-    this.inhabitants.forEach(function (inhabitantUI) {
+            this.clearInhabitants();
 
-        inhabitantUI.destroy();
-    });
-};
+            if (this.activeInhabitants != inhabitants) {
+
+                this.activeInhabitants = inhabitants;
+
+                inhabitants.list.forEach(function (inhabitant, index) {
+
+                    var inhabitantUI = new InhabitantUI(this.widthMax, 40);
+                    inhabitantUI.x = 0;
+                    inhabitantUI.y = index * 50;
+                    inhabitantUI.setInhabitant(inhabitant);
+                    this.addChild(inhabitantUI);
+
+                    this.inhabitants.push(inhabitantUI);
+                }.bind(this));
+            }
+        }
+    }, {
+        key: 'clearInhabitants',
+        value: function clearInhabitants() {
+
+            this.inhabitants.forEach(function (inhabitantUI) {
+
+                inhabitantUI.destroy();
+            });
+        }
+    }]);
+
+    return InhabitantsUI;
+}(_pixi2.default.Container);
 
 /* ---------------------------- */
 /* ----------------- Inhabitant */
 /* ---------------------------- */
 
-function InhabitantUI(width, height) {
+var InhabitantUI = exports.InhabitantUI = function (_PIXI$Container5) {
+    _inherits(InhabitantUI, _PIXI$Container5);
 
-    _pixi2.default.Container.call(this);
+    function InhabitantUI(width, height) {
+        _classCallCheck(this, InhabitantUI);
 
-    this.widthMax = width;
-    this.heightMax = height;
+        var _this6 = _possibleConstructorReturn(this, (InhabitantUI.__proto__ || Object.getPrototypeOf(InhabitantUI)).call(this));
 
-    var style = {
-        font: '16px Arial',
-        fill: '#FFFFFF',
-        wordWrap: true,
-        wordWrapWidth: this.widthMax - 40
-    };
-
-    this.textTitle = new _pixi2.default.Text('title', style);
-    this.addChild(this.textTitle);
-
-    style.font = '12px Arial';
-
-    this.textDescription = new _pixi2.default.Text('description', style);
-    this.textDescription.y = 20;
-    this.textDescription.alpha = .75;
-    this.addChild(this.textDescription);
-}
-
-InhabitantUI.constructor = InhabitantUI;
-InhabitantUI.prototype = Object.create(_pixi2.default.Container.prototype);
-
-InhabitantUI.prototype.setInhabitant = function (inhabitant) {
-
-    this.activeInhabitant = inhabitant;
-
-    inhabitant.on('filled:true', this.update.bind(this));
-    inhabitant.on('filled:false', this.update.bind(this));
-
-    this.on('mousedown', this.onDown.bind(this));
-    this.on('touchstart', this.onDown.bind(this));
-
-    this.update();
-};
-
-InhabitantUI.prototype.update = function () {
-
-    console.log('sajdashdkashdjh');
-
-    if (this.activeInhabitant.isFilled) {
-
-        this.textTitle.text = this.activeInhabitant.dwarf.name;
-        this.textDescription.text = this.activeInhabitant.archetype.id;
-    } else {
-
-        this.textTitle.text = 'Hire replacement ' + this.activeInhabitant.archetype.id;
-        this.textDescription.text = 'For ' + this.activeInhabitant.archetype.cWood + ' wood and ' + this.activeInhabitant.archetype.cStone + ' stone.';
-    }
-
-    this.interactive = !this.activeInhabitant.isFilled;
-};
-
-InhabitantUI.prototype.clearInhabitants = function () {
-
-    this.inhabitants.forEach(function (inhabitantUI) {
-
-        inhabitantUI.destroy();
-    });
-};
-
-InhabitantUI.prototype.onDown = function () {
-
-    this.activeInhabitant.spawn(true, false);
-};
-
-/* ---------------------------- */
-/* --------------------- Supply */
-/* ---------------------------- */
-
-function SupplyUI() {
-
-    _pixi2.default.Container.call(this);
-
-    var w = 280;
-    var h = 40;
-
-    this.background = new _pixi2.default.Graphics();
-    this.addChild(this.background);
-
-    var style = {
-        font: '16px Arial',
-        fill: '#FFFFFF',
-        wordWrap: true,
-        wordWrapWidth: w - 20
-    };
-
-    this.text = new _pixi2.default.Text('Supply', style);
-    this.text.x = 10;
-    this.text.y = 10;
-    this.addChild(this.text);
-
-    this.update(0, 0);
-}
-
-SupplyUI.constructor = SupplyUI;
-SupplyUI.prototype = Object.create(_pixi2.default.Container.prototype);
-
-SupplyUI.prototype.update = function (wood, stone) {
-
-    // console.log('Supply.update(', 'WOOD:' + this.wood, 'ROCK:' + this.stone, ')');
-
-    this.text.text = 'Wood: ' + wood + ' | Stone: ' + stone;
-
-    var w = this.text.width + 20;
-    var h = this.text.height + 20;
-
-    this.background.clear();
-    this.background.beginFill(0x000000, .5);
-    this.background.drawRect(0, 0, w, h);
-    this.background.endFill();
-};
-
-/* ---------------------------- */
-/* ----------------------- Time */
-/* ---------------------------- */
-
-function TimeUI() {
-
-    _pixi2.default.Container.call(this);
-
-    var w = 280;
-    var h = 40;
-
-    this.background = new _pixi2.default.Graphics();
-    this.addChild(this.background);
-
-    var style = {
-        font: '16px Arial',
-        fill: '#FFFFFF',
-        wordWrap: true,
-        wordWrapWidth: w - 20
-    };
-
-    this.text = new _pixi2.default.Text('Time', style);
-    this.text.x = 10;
-    this.text.y = 10;
-    this.addChild(this.text);
-
-    this.update(0, 0);
-}
-
-TimeUI.constructor = TimeUI;
-TimeUI.prototype = Object.create(_pixi2.default.Container.prototype);
-
-TimeUI.prototype.update = function (hour, minute) {
-
-    this.text.text = (hour < 10 ? '0' + hour : hour) + ':' + (minute < 10 ? '0' + minute : minute);
-
-    var w = this.text.width + 20;
-    var h = this.text.height + 20;
-
-    this.background.clear();
-    this.background.beginFill(0x000000, .5);
-    this.background.drawRect(0, 0, w, h);
-    this.background.endFill();
-};
-
-/* ---------------------------- */
-/* --------------- Construction */
-/* ---------------------------- */
-
-function ConstructionUI(world) {
-
-    PanelUI.call(this, world, 'construction');
-
-    // Toggle Button
-
-    var buttonW = 60;
-    var buttonH = 60;
-
-    this.button = new _pixi2.default.Graphics();
-    this.button.beginFill(0x000000, .5);
-    this.button.drawRect(0, 0, buttonW, buttonH);
-    this.button.endFill();
-
-    this.button.beginFill(0xFFFFFF, .75);
-    this.button.drawRect(10, 10, buttonW - 20, buttonH - 20);
-    this.button.endFill();
-
-    this.button.x = _Layout2.default.WIDTH - buttonW;
-    this.button.y = _Layout2.default.HEIGHT - buttonH;
-
-    this.button.interactive = true;
-
-    this.button.on('mousedown', this.onButtonDown.bind(this));
-    this.button.on('touchstart', this.onButtonDown.bind(this));
-
-    // Buildings
-
-    this.archetypeButtonsMap = {};
-
-    world.buildings.archetypes.forEach(function (archetype, index) {
-
-        var archetypeButtonW = Math.min(300, this.background.width - 40);
-        var archetypeButtonH = 60;
-
-        var archetypeButton = new _pixi2.default.Graphics();
-
-        archetypeButton.archetype = archetype;
-
-        archetypeButton.beginFill(0x000000, 1);
-        archetypeButton.drawRect(0, 0, archetypeButtonW, archetypeButtonH);
-        archetypeButton.endFill();
-
-        archetypeButton.interactive = true;
-
-        archetypeButton.on('mousedown', this.onArchetypeButtonDown.bind(this));
-        archetypeButton.on('touchstart', this.onArchetypeButtonDown.bind(this));
-
-        archetypeButton.x = 10;
-        archetypeButton.y = 10 + (10 + archetypeButtonH) * index;
-
-        this.archetypeButtonsMap[archetype.id] = archetypeButton;
-
-        this.background.addChild(archetypeButton);
+        _this6.widthMax = width;
+        _this6.heightMax = height;
 
         var style = {
             font: '16px Arial',
             fill: '#FFFFFF',
             wordWrap: true,
-            wordWrapWidth: archetypeButtonW - 20
+            wordWrapWidth: _this6.widthMax - 40
         };
 
-        var textTitle = new _pixi2.default.Text(archetype.title, style);
-        textTitle.x = 10;
-        textTitle.y = 10;
-        archetypeButton.addChild(textTitle);
+        _this6.textTitle = new _pixi2.default.Text('title', style);
+        _this6.addChild(_this6.textTitle);
 
         style.font = '12px Arial';
 
-        var textDescription = new _pixi2.default.Text(archetype.description + ' (' + archetype.cWood + ' wood : ' + archetype.cStone + ' stone)', style);
-        textDescription.x = 10;
-        textDescription.y = 30;
-        textDescription.alpha = .75;
-        archetypeButton.addChild(textDescription);
-    }.bind(this));
-}
+        _this6.textDescription = new _pixi2.default.Text('description', style);
+        _this6.textDescription.y = 20;
+        _this6.textDescription.alpha = .75;
+        _this6.addChild(_this6.textDescription);
 
-ConstructionUI.constructor = ConstructionUI;
-ConstructionUI.prototype = Object.create(PanelUI.prototype);
-
-ConstructionUI.prototype.onButtonDown = function (event) {
-
-    this.toggle();
-};
-
-ConstructionUI.prototype.onArchetypeButtonDown = function (event) {
-
-    // Wait for drag start
-
-    this.world.viewport.disable();
-
-    this.world.interactive = true;
-    this.dragging = false;
-    this.activeArchetype = event.target.archetype;
-    this.dragStartPos = event.data.getLocalPosition(this.world);
-
-    this.onDragBound = this.onDrag.bind(this);
-    this.onDragEndBound = this.onDragEnd.bind(this);
-
-    this.world.on('mousemove', this.onDragBound);
-    this.world.on('touchmove', this.onDragBound);
-
-    this.world.on('mouseupoutside', this.onDragEndBound);
-    this.world.on('mouseup', this.onDragEndBound);
-    this.world.on('touchendoutside', this.onDragEndBound);
-    this.world.on('touchend', this.onDragEndBound);
-
-    // On drag start hide menu
-
-    // Bind up listener on route
-
-    // Show building placement
-
-    // On Up Show confirm menu
-
-    // On confirm place building
-
-    // On cancel open building menu
-};
-
-ConstructionUI.prototype.onDragStart = function (event) {
-
-    this.dragging = true;
-
-    this.toggle(false);
-
-    var pos = event.data.getLocalPosition(this.world);
-
-    this.activeBuilding = new this.activeArchetype.c(this.world, pos.x, pos.y, this.activeArchetype, true);
-    this.activeBuilding.x = pos.x;
-    this.activeBuilding.y = pos.y;
-
-    this.world.content.addChild(this.activeBuilding);
-};
-
-ConstructionUI.prototype.onDrag = function (event) {
-
-    var distanceFromStart = _Maths2.default.distanceBetween(this.dragStartPos, event.data.getLocalPosition(this.world));
-
-    if (!this.dragging && distanceFromStart > 5) {
-
-        this.onDragStart(event);
-    } else if (this.dragging) {
-
-        var pos = event.data.getLocalPosition(this.world);
-        var tile = this.world.getTileFromWorld(pos.x, pos.y + this.world.viewport.scroll);
-        if (tile && !tile.isOccupied) {
-
-            this.activeBuilding.x = tile.xCentre;
-            this.activeBuilding.y = tile.yCentre;
-        }
+        return _this6;
     }
-};
 
-ConstructionUI.prototype.onDragEnd = function () {
+    _createClass(InhabitantUI, [{
+        key: 'setInhabitant',
+        value: function setInhabitant(inhabitant) {
 
-    this.world.off('mousemove', this.onDragBound);
-    this.world.off('touchmove', this.onDragBound);
+            this.activeInhabitant = inhabitant;
 
-    this.world.off('mouseupoutside', this.onDragEndBound);
-    this.world.off('mouseup', this.onDragEndBound);
-    this.world.off('touchendoutside', this.onDragEndBound);
-    this.world.off('touchend', this.onDragEndBound);
+            inhabitant.on('filled:true', this.update.bind(this));
+            inhabitant.on('filled:false', this.update.bind(this));
 
-    if (this.dragging) {
+            this.on('mousedown', this.onDown.bind(this));
+            this.on('touchstart', this.onDown.bind(this));
 
-        var targetX = this.activeBuilding.x;
-        var targetY = this.activeBuilding.y;
+            this.update();
+        }
+    }, {
+        key: 'update',
+        value: function update() {
 
-        var targetTile = this.world.getTileFromWorld(targetX, targetY);
+            if (this.activeInhabitant.isFilled) {
 
-        if (targetTile && !targetTile.isOccupied) {
-
-            var canAfford = this.world.supply.wood.get() >= this.activeArchetype.cWood && this.world.supply.stone.get() >= this.activeArchetype.cStone;
-
-            if (canAfford && window.confirm('Place new ' + this.activeArchetype.title + ' at ' + targetTile.tileX + '/' + targetTile.tileY + '?')) {
-
-                // console.log('Placing new', this.activeArchetype.title, 'at', targetTile.tileX + '/' + targetTile.tileY);
-
-                this.world.supply.wood.decrement(this.activeArchetype.cWood);
-                this.world.supply.stone.decrement(this.activeArchetype.cStone);
-
-                this.world.addBuilding(this.activeArchetype.id, targetTile.tileX, targetTile.tileY);
+                this.textTitle.text = this.activeInhabitant.dwarf.name;
+                this.textDescription.text = this.activeInhabitant.archetype.id;
             } else {
 
-                this.toggle(true);
+                this.textTitle.text = 'Hire replacement ' + this.activeInhabitant.archetype.id;
+                this.textDescription.text = 'For ' + this.activeInhabitant.archetype.cWood + ' wood and ' + this.activeInhabitant.archetype.cStone + ' stone.';
+            }
+
+            this.interactive = !this.activeInhabitant.isFilled;
+        }
+    }, {
+        key: 'clearInhabitants',
+        value: function clearInhabitants() {
+
+            this.inhabitants.forEach(function (inhabitantUI) {
+
+                inhabitantUI.destroy();
+            });
+        }
+    }, {
+        key: 'onDown',
+        value: function onDown() {
+
+            this.activeInhabitant.spawn(true, false);
+        }
+    }]);
+
+    return InhabitantUI;
+}(_pixi2.default.Container);
+
+/* ---------------------------- */
+/* --------------------- Supply */
+/* ---------------------------- */
+
+var SupplyUI = exports.SupplyUI = function (_PIXI$Container6) {
+    _inherits(SupplyUI, _PIXI$Container6);
+
+    function SupplyUI() {
+        _classCallCheck(this, SupplyUI);
+
+        var _this7 = _possibleConstructorReturn(this, (SupplyUI.__proto__ || Object.getPrototypeOf(SupplyUI)).call(this));
+
+        var w = 280;
+        var h = 40;
+
+        _this7.background = new _pixi2.default.Graphics();
+        _this7.addChild(_this7.background);
+
+        var style = {
+            font: '16px Arial',
+            fill: '#FFFFFF',
+            wordWrap: true,
+            wordWrapWidth: w - 20
+        };
+
+        _this7.text = new _pixi2.default.Text('Supply', style);
+        _this7.text.x = 10;
+        _this7.text.y = 10;
+        _this7.addChild(_this7.text);
+
+        _this7.update(0, 0);
+
+        return _this7;
+    }
+
+    _createClass(SupplyUI, [{
+        key: 'update',
+        value: function update(wood, stone) {
+
+            this.text.text = 'Wood: ' + wood + ' | Stone: ' + stone;
+
+            var w = this.text.width + 20;
+            var h = this.text.height + 20;
+
+            this.background.clear();
+            this.background.beginFill(0x000000, .5);
+            this.background.drawRect(0, 0, w, h);
+            this.background.endFill();
+        }
+    }]);
+
+    return SupplyUI;
+}(_pixi2.default.Container);
+
+/* ---------------------------- */
+/* ----------------------- Time */
+/* ---------------------------- */
+
+var TimeUI = exports.TimeUI = function (_PIXI$Container7) {
+    _inherits(TimeUI, _PIXI$Container7);
+
+    function TimeUI() {
+        _classCallCheck(this, TimeUI);
+
+        var _this8 = _possibleConstructorReturn(this, (TimeUI.__proto__ || Object.getPrototypeOf(TimeUI)).call(this));
+
+        var w = 280;
+        var h = 40;
+
+        _this8.background = new _pixi2.default.Graphics();
+        _this8.addChild(_this8.background);
+
+        var style = {
+            font: '16px Arial',
+            fill: '#FFFFFF',
+            wordWrap: true,
+            wordWrapWidth: w - 20
+        };
+
+        _this8.text = new _pixi2.default.Text('Time', style);
+        _this8.text.x = 10;
+        _this8.text.y = 10;
+        _this8.addChild(_this8.text);
+
+        _this8.update(0, 0);
+
+        return _this8;
+    }
+
+    _createClass(TimeUI, [{
+        key: 'update',
+        value: function update(hour, minute) {
+
+            this.text.text = (hour < 10 ? '0' + hour : hour) + ':' + (minute < 10 ? '0' + minute : minute);
+
+            var w = this.text.width + 20;
+            var h = this.text.height + 20;
+
+            this.background.clear();
+            this.background.beginFill(0x000000, .5);
+            this.background.drawRect(0, 0, w, h);
+            this.background.endFill();
+        }
+    }]);
+
+    return TimeUI;
+}(_pixi2.default.Container);
+
+/* ---------------------------- */
+/* --------------- Construction */
+/* ---------------------------- */
+
+var ConstructionUI = exports.ConstructionUI = function (_PanelUI2) {
+    _inherits(ConstructionUI, _PanelUI2);
+
+    function ConstructionUI(world) {
+        _classCallCheck(this, ConstructionUI);
+
+        // Toggle Button
+
+        var _this9 = _possibleConstructorReturn(this, (ConstructionUI.__proto__ || Object.getPrototypeOf(ConstructionUI)).call(this, world, 'construction'));
+
+        var buttonW = 60;
+        var buttonH = 60;
+
+        _this9.button = new _pixi2.default.Graphics();
+        _this9.button.beginFill(0x000000, .5);
+        _this9.button.drawRect(0, 0, buttonW, buttonH);
+        _this9.button.endFill();
+
+        _this9.button.beginFill(0xFFFFFF, .75);
+        _this9.button.drawRect(10, 10, buttonW - 20, buttonH - 20);
+        _this9.button.endFill();
+
+        _this9.button.x = _Layout2.default.WIDTH - buttonW;
+        _this9.button.y = _Layout2.default.HEIGHT - buttonH;
+
+        _this9.button.interactive = true;
+
+        _this9.button.on('mousedown', _this9.onButtonDown.bind(_this9));
+        _this9.button.on('touchstart', _this9.onButtonDown.bind(_this9));
+
+        // Buildings
+
+        _this9.archetypeButtonsMap = {};
+
+        world.buildings.archetypes.forEach(function (archetype, index) {
+
+            var archetypeButtonW = Math.min(300, this.background.width - 40);
+            var archetypeButtonH = 60;
+
+            var archetypeButton = new _pixi2.default.Graphics();
+
+            archetypeButton.archetype = archetype;
+
+            archetypeButton.beginFill(0x000000, 1);
+            archetypeButton.drawRect(0, 0, archetypeButtonW, archetypeButtonH);
+            archetypeButton.endFill();
+
+            archetypeButton.interactive = true;
+
+            archetypeButton.on('mousedown', this.onArchetypeButtonDown.bind(this));
+            archetypeButton.on('touchstart', this.onArchetypeButtonDown.bind(this));
+
+            archetypeButton.x = 10;
+            archetypeButton.y = 10 + (10 + archetypeButtonH) * index;
+
+            this.archetypeButtonsMap[archetype.id] = archetypeButton;
+
+            this.background.addChild(archetypeButton);
+
+            var style = {
+                font: '16px Arial',
+                fill: '#FFFFFF',
+                wordWrap: true,
+                wordWrapWidth: archetypeButtonW - 20
+            };
+
+            var textTitle = new _pixi2.default.Text(archetype.title, style);
+            textTitle.x = 10;
+            textTitle.y = 10;
+            archetypeButton.addChild(textTitle);
+
+            style.font = '12px Arial';
+
+            var textDescription = new _pixi2.default.Text(archetype.description + ' (' + archetype.cWood + ' wood : ' + archetype.cStone + ' stone)', style);
+            textDescription.x = 10;
+            textDescription.y = 30;
+            textDescription.alpha = .75;
+            archetypeButton.addChild(textDescription);
+        }.bind(_this9));
+
+        return _this9;
+    }
+
+    _createClass(ConstructionUI, [{
+        key: 'onButtonDown',
+        value: function onButtonDown(event) {
+
+            this.toggle();
+        }
+    }, {
+        key: 'onArchetypeButtonDown',
+        value: function onArchetypeButtonDown(event) {
+
+            // Wait for drag start
+
+            // On drag start hide menu
+
+            // Bind up listener on route
+
+            // Show building placement
+
+            // On Up Show confirm menu
+
+            // On confirm place building
+
+            // On cancel open building menu
+
+            this.world.viewport.disable();
+
+            this.world.interactive = true;
+            this.dragging = false;
+            this.activeArchetype = event.target.archetype;
+            this.dragStartPos = event.data.getLocalPosition(this.world);
+
+            this.onDragBound = this.onDrag.bind(this);
+            this.onDragEndBound = this.onDragEnd.bind(this);
+
+            this.world.on('mousemove', this.onDragBound);
+            this.world.on('touchmove', this.onDragBound);
+
+            this.world.on('mouseupoutside', this.onDragEndBound);
+            this.world.on('mouseup', this.onDragEndBound);
+            this.world.on('touchendoutside', this.onDragEndBound);
+            this.world.on('touchend', this.onDragEndBound);
+        }
+    }, {
+        key: 'onDragStart',
+        value: function onDragStart(event) {
+
+            this.dragging = true;
+
+            this.toggle(false);
+
+            var pos = event.data.getLocalPosition(this.world);
+
+            this.activeBuilding = new this.activeArchetype.c(this.world, pos.x, pos.y, this.activeArchetype, true);
+            this.activeBuilding.x = pos.x;
+            this.activeBuilding.y = pos.y;
+
+            this.world.content.addChild(this.activeBuilding);
+        }
+    }, {
+        key: 'onDrag',
+        value: function onDrag(event) {
+
+            var distanceFromStart = _Maths2.default.distanceBetween(this.dragStartPos, event.data.getLocalPosition(this.world));
+
+            if (!this.dragging && distanceFromStart > 5) {
+
+                this.onDragStart(event);
+            } else if (this.dragging) {
+
+                var pos = event.data.getLocalPosition(this.world);
+                var tile = this.world.getTileFromWorld(pos.x, pos.y + this.world.viewport.scroll);
+                if (tile && !tile.isOccupied) {
+
+                    this.activeBuilding.x = tile.xCentre;
+                    this.activeBuilding.y = tile.yCentre;
+                }
             }
         }
+    }, {
+        key: 'onDragEnd',
+        value: function onDragEnd() {
 
-        this.world.removeChild(this.activeBuilding);
-        this.activeBuilding.destroy();
-        this.activeBuilding = null;
+            this.world.off('mousemove', this.onDragBound);
+            this.world.off('touchmove', this.onDragBound);
 
-        this.activeArchetype = false;
-    }
+            this.world.off('mouseupoutside', this.onDragEndBound);
+            this.world.off('mouseup', this.onDragEndBound);
+            this.world.off('touchendoutside', this.onDragEndBound);
+            this.world.off('touchend', this.onDragEndBound);
 
-    this.dragStartPos = false;
+            if (this.dragging) {
 
-    this.world.viewport.enable();
+                var targetX = this.activeBuilding.x;
+                var targetY = this.activeBuilding.y;
 
-    if (!this.world.viewport.isInteractive) {
+                var targetTile = this.world.getTileFromWorld(targetX, targetY);
 
-        this.world.interactive = false;
-    }
-};
+                if (targetTile && !targetTile.isOccupied) {
 
-ConstructionUI.prototype.update = function (wood, stone) {
+                    var canAfford = this.world.supply.wood.get() >= this.activeArchetype.cWood && this.world.supply.stone.get() >= this.activeArchetype.cStone;
 
-    this.world.buildings.archetypes.forEach(function (archetype) {
+                    if (canAfford && window.confirm('Place new ' + this.activeArchetype.title + ' at ' + targetTile.tileX + '/' + targetTile.tileY + '?')) {
 
-        var canAfford = archetype.cWood <= wood && archetype.cStone <= stone;
+                        // console.log('Placing new', this.activeArchetype.title, 'at', targetTile.tileX + '/' + targetTile.tileY);
 
-        var button = this.archetypeButtonsMap[archetype.id];
+                        this.world.supply.wood.decrement(this.activeArchetype.cWood);
+                        this.world.supply.stone.decrement(this.activeArchetype.cStone);
 
-        button.alpha = canAfford ? 1 : .5;
-        button.interactive = canAfford;
-    }.bind(this));
-};
+                        this.world.addBuilding(this.activeArchetype.id, targetTile.tileX, targetTile.tileY);
+                    } else {
+
+                        this.toggle(true);
+                    }
+                }
+
+                this.world.removeChild(this.activeBuilding);
+                this.activeBuilding.destroy();
+                this.activeBuilding = null;
+
+                this.activeArchetype = false;
+            }
+
+            this.dragStartPos = false;
+
+            this.world.viewport.enable();
+
+            if (!this.world.viewport.isInteractive) {
+
+                this.world.interactive = false;
+            }
+        }
+    }, {
+        key: 'update',
+        value: function update(wood, stone) {
+
+            this.world.buildings.archetypes.forEach(function (archetype) {
+
+                var canAfford = archetype.cWood <= wood && archetype.cStone <= stone;
+
+                var button = this.archetypeButtonsMap[archetype.id];
+
+                button.alpha = canAfford ? 1 : .5;
+                button.interactive = canAfford;
+            }.bind(this));
+        }
+    }]);
+
+    return ConstructionUI;
+}(PanelUI);
 
 /* ---------------------------- */
 /* ------------------------ Log */
 /* ---------------------------- */
 
-function LogUI(world) {
+var LogUI = exports.LogUI = function (_PanelUI3) {
+    _inherits(LogUI, _PanelUI3);
 
-    PanelUI.call(this, world, 'log');
+    function LogUI(world) {
+        _classCallCheck(this, LogUI);
 
-    // Toggle Button
+        // Toggle Button
 
-    var buttonW = 60;
-    var buttonH = 60;
+        var _this10 = _possibleConstructorReturn(this, (LogUI.__proto__ || Object.getPrototypeOf(LogUI)).call(this, world, 'log'));
 
-    this.button = new _pixi2.default.Graphics();
-    this.button.beginFill(0x000000, .5);
-    this.button.drawRect(0, 0, buttonW, buttonH);
-    this.button.endFill();
+        var buttonW = 60;
+        var buttonH = 60;
 
-    this.button.beginFill(0xFFFFFF, .75);
-    this.button.drawRect(10, 10, buttonW - 20, buttonH - 20);
-    this.button.endFill();
+        _this10.button = new _pixi2.default.Graphics();
+        _this10.button.beginFill(0x000000, .5);
+        _this10.button.drawRect(0, 0, buttonW, buttonH);
+        _this10.button.endFill();
 
-    this.button.x = _Layout2.default.WIDTH - buttonW;
-    this.button.y = _Layout2.default.HEIGHT - buttonH * 2 - 20;
+        _this10.button.beginFill(0xFFFFFF, .75);
+        _this10.button.drawRect(10, 10, buttonW - 20, buttonH - 20);
+        _this10.button.endFill();
 
-    this.button.interactive = true;
+        _this10.button.x = _Layout2.default.WIDTH - buttonW;
+        _this10.button.y = _Layout2.default.HEIGHT - buttonH * 2 - 20;
 
-    this.button.on('mousedown', this.onButtonDown.bind(this));
-    this.button.on('touchstart', this.onButtonDown.bind(this));
+        _this10.button.interactive = true;
 
-    // Log
+        _this10.button.on('mousedown', _this10.onButtonDown.bind(_this10));
+        _this10.button.on('touchstart', _this10.onButtonDown.bind(_this10));
 
-    var logW = _Layout2.default.WIDTH * .8;
-    var logH = _Layout2.default.HEIGHT * .8;
+        // Log
 
-    this.logStyle = {
-        font: '14px Arial',
-        fill: '#FFFFFF'
-    };
+        var logW = _Layout2.default.WIDTH * .8;
+        var logH = _Layout2.default.HEIGHT * .8;
 
-    this.logItems = new _pixi2.default.Container();
-    this.background.addChild(this.logItems);
+        _this10.logStyle = {
+            font: '14px Arial',
+            fill: '#FFFFFF'
+        };
 
-    this.logItemHeight = 24;
-    this.logItemY = 0;
+        _this10.logItems = new _pixi2.default.Container();
+        _this10.background.addChild(_this10.logItems);
 
-    this.logCount = 0;
-    this.logMax = Math.floor((logH - 40) / this.logItemHeight);
+        _this10.logItemHeight = 24;
+        _this10.logItemY = 0;
 
-    this.toggle(false);
-}
+        _this10.logCount = 0;
+        _this10.logMax = Math.floor((logH - 40) / _this10.logItemHeight);
 
-LogUI.constructor = LogUI;
-LogUI.prototype = Object.create(PanelUI.prototype);
+        _this10.toggle(false);
 
-LogUI.prototype.log = function (message) {
-
-    var item = new _pixi2.default.Text(message, this.logStyle);
-    item.x = 20;
-    item.y = this.logItemY;
-    this.logItems.addChild(item);
-
-    this.logItems.y += this.logItemHeight;
-    this.logItemY -= this.logItemHeight;
-
-    this.logCount++;
-
-    if (this.logCount > this.logMax) {
-
-        this.logItems.getChildAt(0).destroy();
-
-        this.logCount--;
+        return _this10;
     }
-};
 
-LogUI.prototype.onButtonDown = function (event) {
+    _createClass(LogUI, [{
+        key: 'log',
+        value: function log(message) {
 
-    this.toggle(undefined, true);
-};
+            var item = new _pixi2.default.Text(message, this.logStyle);
+            item.x = 20;
+            item.y = this.logItemY;
+            this.logItems.addChild(item);
+
+            this.logItems.y += this.logItemHeight;
+            this.logItemY -= this.logItemHeight;
+
+            this.logCount++;
+
+            if (this.logCount > this.logMax) {
+
+                this.logItems.getChildAt(0).destroy();
+
+                this.logCount--;
+            }
+        }
+    }, {
+        key: 'onButtonDown',
+        value: function onButtonDown(event) {
+
+            this.toggle(undefined, true);
+        }
+    }]);
+
+    return LogUI;
+}(PanelUI);
 
 },{"./Layout":217,"./PanelController":220,"./World":230,"./ui/ValueBarUI":233,"./utils/Maths":234,"pixi.js":154}],228:[function(require,module,exports){
 'use strict';
@@ -36726,7 +37693,16 @@ LogUI.prototype.onButtonDown = function (event) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = Viewport;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _pixi = require('pixi.js');
 
@@ -36740,117 +37716,135 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function Viewport(world, width, height, worldWidth, worldHeight, isInteractive) {
-
-    this.world = world;
-
-    this.width = width;
-    this.height = height;
-
-    this.worldWidth = worldWidth;
-    this.worldHeight = worldHeight;
-
-    this.scroll = this.worldHeight - this.height;
-    // this.scroll = 0;
-
-    this.scrollTarget = this.scroll;
-
-    this.isEnabled = true;
-    this.isInteractive = false; //isInteractive;
-
-    if (this.isInteractive) {
-
-        this.dragging = false;
-        this.world.interactive = true;
-        this.world.on('mousedown', this.onWorldDown.bind(this));
-        this.world.on('touchstart', this.onWorldDown.bind(this));
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
     }
 }
 
-Viewport.constructor = Viewport;
+var Viewport = function () {
+    function Viewport(world, width, height, worldWidth, worldHeight, isInteractive) {
+        _classCallCheck(this, Viewport);
 
-Viewport.prototype.update = function (timeDelta, world) {
+        this.world = world;
 
-    if (this.scrollTarget > this.worldHeight - this.height) {
+        this.width = width;
+        this.height = height;
 
-        this.scrollTarget = this.worldHeight - this.height;
-    } else if (this.scrollTarget < 0) {
+        this.worldWidth = worldWidth;
+        this.worldHeight = worldHeight;
 
-        this.scrollTarget = 0;
+        this.scroll = this.worldHeight - this.height;
+        // this.scroll = 0;
+
+        this.scrollTarget = this.scroll;
+
+        this.isEnabled = true;
+        this.isInteractive = false; //isInteractive;
+
+        if (this.isInteractive) {
+
+            this.dragging = false;
+            this.world.interactive = true;
+            this.world.on('mousedown', this.onWorldDown.bind(this));
+            this.world.on('touchstart', this.onWorldDown.bind(this));
+        }
     }
 
-    this.scroll += (this.scrollTarget - this.scroll) * .5;
-};
+    _createClass(Viewport, [{
+        key: 'update',
+        value: function update(timeDelta, world) {
 
-Viewport.prototype.onWorldDown = function (event) {
+            if (this.scrollTarget > this.worldHeight - this.height) {
 
-    this.dragging = false;
-    this.dragStartPos = event.data.getLocalPosition(this.world);
-    this.lastY = this.dragStartPos.y;
+                this.scrollTarget = this.worldHeight - this.height;
+            } else if (this.scrollTarget < 0) {
 
-    if (this.isEnabled) {
+                this.scrollTarget = 0;
+            }
 
-        this.world.on('mousemove', this.onDrag.bind(this));
-        this.world.on('touchmove', this.onDrag.bind(this));
+            this.scroll += (this.scrollTarget - this.scroll) * .5;
+        }
+    }, {
+        key: 'onWorldDown',
+        value: function onWorldDown(event) {
 
-        this.world.on('mouseupoutside', this.onDragEnd.bind(this));
-        this.world.on('mouseup', this.onDragEnd.bind(this));
-        this.world.on('touchendoutside', this.onDragEnd.bind(this));
-        this.world.on('touchend', this.onDragEnd.bind(this));
-    }
-};
+            this.dragging = false;
+            this.dragStartPos = event.data.getLocalPosition(this.world);
+            this.lastY = this.dragStartPos.y;
 
-Viewport.prototype.onDragStart = function (event) {
+            if (this.isEnabled) {
 
-    this.dragging = true;
+                this.world.on('mousemove', this.onDrag.bind(this));
+                this.world.on('touchmove', this.onDrag.bind(this));
 
-    // let pos = event.data.getLocalPosition(this.world);
-};
+                this.world.on('mouseupoutside', this.onDragEnd.bind(this));
+                this.world.on('mouseup', this.onDragEnd.bind(this));
+                this.world.on('touchendoutside', this.onDragEnd.bind(this));
+                this.world.on('touchend', this.onDragEnd.bind(this));
+            }
+        }
+    }, {
+        key: 'onDragStart',
+        value: function onDragStart(event) {
 
-Viewport.prototype.onDrag = function (event) {
+            this.dragging = true;
+        }
+    }, {
+        key: 'onDrag',
+        value: function onDrag(event) {
 
-    var distanceFromStart = _Maths2.default.distanceBetween(this.dragStartPos, event.data.getLocalPosition(this.world));
+            var distanceFromStart = _Maths2.default.distanceBetween(this.dragStartPos, event.data.getLocalPosition(this.world));
 
-    if (!this.dragging && distanceFromStart > 5) {
+            if (!this.dragging && distanceFromStart > 5) {
 
-        this.onDragStart(event);
-    } else if (this.dragging) {
+                this.onDragStart(event);
+            } else if (this.dragging) {
 
-        var pos = event.data.getLocalPosition(this.world);
+                var pos = event.data.getLocalPosition(this.world);
 
-        var diffY = this.lastY - pos.y;
+                var diffY = this.lastY - pos.y;
 
-        this.scrollTarget += diffY;
+                this.scrollTarget += diffY;
 
-        this.lastY = pos.y;
-    }
-};
+                this.lastY = pos.y;
+            }
+        }
+    }, {
+        key: 'onDragEnd',
+        value: function onDragEnd() {
 
-Viewport.prototype.onDragEnd = function () {
+            if (this.dragging) {}
 
-    if (this.dragging) {}
+            this.dragStartPos = false;
+            this.dragging = false;
 
-    this.dragStartPos = false;
-    this.dragging = false;
+            this.world.off('mousemove');
+            this.world.off('touchmove');
 
-    this.world.off('mousemove');
-    this.world.off('touchmove');
+            this.world.off('mouseupoutside');
+            this.world.off('mouseup');
+            this.world.off('touchendoutside');
+            this.world.off('touchend');
+        }
+    }, {
+        key: 'enable',
+        value: function enable() {
 
-    this.world.off('mouseupoutside');
-    this.world.off('mouseup');
-    this.world.off('touchendoutside');
-    this.world.off('touchend');
-};
+            this.isEnabled = true;
+        }
+    }, {
+        key: 'disable',
+        value: function disable() {
 
-Viewport.prototype.enable = function () {
+            this.isEnabled = false;
+        }
+    }]);
 
-    this.isEnabled = true;
-};
+    return Viewport;
+}();
 
-Viewport.prototype.disable = function () {
-
-    this.isEnabled = false;
-};
+exports.default = Viewport;
 
 },{"./utils/Maths":234,"pixi.js":154}],229:[function(require,module,exports){
 'use strict';
@@ -36858,8 +37852,15 @@ Viewport.prototype.disable = function () {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = Weapons;
-function Weapons(world) {
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+var Weapons = function Weapons(world) {
+    _classCallCheck(this, Weapons);
 
     this.world = world;
 
@@ -36868,11 +37869,22 @@ function Weapons(world) {
     this.archetypesMap = {};
 
     this.archetypes.forEach(function (archetype) {
+
         this.archetypesMap[archetype.id] = archetype;
     }.bind(this));
-}
+};
 
-Weapons.constructor = Weapons;
+exports.default = Weapons;
+
+var WeaponArchetype = function WeaponArchetype(id, title, damage, range) {
+    _classCallCheck(this, WeaponArchetype);
+
+    this.id = id;
+    this.type = 'weapon';
+    this.title = title;
+    this.damage = damage;
+    this.range = range;
+};
 
 Weapons.FISTS = new WeaponArchetype('fists', 'Bare fists', 1, 5);
 Weapons.HAMMER = new WeaponArchetype('hammer', 'Mason\'s hammer', 3, 5);
@@ -36884,24 +37896,24 @@ Weapons.BOW = new WeaponArchetype('bow', 'Short bow', 20, 100);
 Weapons.TUSKS = new WeaponArchetype('tusks', 'Tusks', 8, 5);
 Weapons.CLAWS = new WeaponArchetype('claws', 'Claws', 10, 5);
 
-function WeaponArchetype(id, title, damage, range) {
-
-    this.id = id;
-    this.type = 'weapon';
-    this.title = title;
-    this.damage = damage;
-    this.range = range;
-}
-
-WeaponArchetype.constructor = WeaponArchetype;
-
 },{}],230:[function(require,module,exports){
 'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = World;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _pixi = require('pixi.js');
 
@@ -36979,437 +37991,477 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function World() {
-
-    _pixi2.default.Container.call(this);
-
-    var heightMultiplier = 2;
-
-    World.WIDTH = Math.ceil(_Layout2.default.WIDTH / _Tile2.default.WIDTH);
-    World.HEIGHT = Math.ceil(_Layout2.default.HEIGHT / _Tile2.default.HEIGHT) * heightMultiplier;
-
-    this.viewport = new _Viewport2.default(this, Math.ceil(_Layout2.default.WIDTH / _Tile2.default.WIDTH) * _Tile2.default.WIDTH, Math.ceil(_Layout2.default.HEIGHT / _Tile2.default.HEIGHT) * _Tile2.default.HEIGHT, World.WIDTH * _Tile2.default.WIDTH, World.HEIGHT * _Tile2.default.HEIGHT, heightMultiplier > 1);
-
-    this.randomSeed = Math.floor(Math.random() * 1000);
-
-    console.log('World(', World.WIDTH, World.HEIGHT, this.randomSeed, World.DEBUG ? 'Debug Mode' : 'Production Mode', ')');
-
-    // GOOD RANDOM SEEDS
-    // 182
-    // 197
-    // 353
-    // 686
-    // 746
-    // 776
-    // 806
-    // 870
-    // 841
-    // 929
-
-    this.noise = new _noisejs2.default.Noise(this.randomSeed);
-
-    this.timeOfLastUpdate = 0;
-
-    this.supply = new _Supply2.default(World.DEBUG);
-
-    this.timeOfDay = new _TimeOfDay2.default();
-
-    this.motherNature = new _MotherNature2.default(this);
-
-    this.buildings = new _Buildings2.default(this);
-
-    this.roles = new _Roles2.default(this);
-
-    this.archetypes = new _Archetypes2.default(this);
-
-    this.tiles = [];
-    this.resources = [];
-    this.trees = [];
-    this.rocks = [];
-    this.dwarves = [];
-    this.zOrdered = [];
-
-    this.containerZOrdered = new _pixi2.default.Container();
-
-    this.ui = new _UI2.default(this);
-
-    this.ui.log.log('New game started. Random seed is ' + this.randomSeed);
-
-    var background = document.createElement('canvas');
-    background.width = World.WIDTH * _Tile2.default.WIDTH;
-    background.height = World.HEIGHT * _Tile2.default.HEIGHT;
-
-    this.lighting = new _Lighting2.default(this);
-
-    this.containerLights = new _pixi2.default.Container();
-    this.containerLights.blendMode = _pixi2.default.BLEND_MODES.SCREEN;
-
-    var backgroundCtx = background.getContext('2d');
-    for (var y = 0; y < World.HEIGHT; y++) {
-
-        for (var x = 0; x < World.WIDTH; x++) {
-
-            var tile = this.addTile(x, y);
-
-            backgroundCtx.drawImage(tile.canvas, x * _Tile2.default.WIDTH, y * _Tile2.default.HEIGHT);
-        }
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
     }
-
-    this.background = new _pixi2.default.Sprite(_pixi2.default.Texture.fromCanvas(background));
-
-    this.content = new _pixi2.default.Container();
-
-    this.content.addChild(this.background);
-    this.content.addChild(this.containerZOrdered);
-    this.content.addChild(this.containerLights);
-    this.content.addChild(this.lighting);
-
-    this.addChild(this.content);
-    this.addChild(this.ui);
-
-    // Add buildings
-
-    var camp = this.addBuilding(_Buildings2.default.ARCHETYPE_CAMP.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT - 5));
-
-    // Add resources
-
-    this.tiles.forEach(function (tile) {
-
-        if (tile.type === _Tile2.default.TYPE_GRASS && tile.elevation < .4 && Math.random() > .6) {
-
-            var tree = this.addTree(tile.tileX, tile.tileY);
-        } else if (tile.type === _Tile2.default.TYPE_GRASS && (tile.elevation > .9 && Math.random() > .5 || Math.random() > .99)) {
-
-            var rock = this.addRock(tile.tileX, tile.tileY);
-        }
-    }.bind(this));
 }
 
-World.constructor = World;
-World.prototype = Object.create(_pixi2.default.Container.prototype);
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
 
-World.prototype.addTile = function (x, y) {
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
-    var tile = new _Tile2.default(x, y, this.noise.simplex2(x / World.WIDTH * 2, y / World.WIDTH * 2));
+var World = function (_PIXI$Container) {
+    _inherits(World, _PIXI$Container);
 
-    this.tiles.push(tile);
+    function World() {
+        _classCallCheck(this, World);
 
-    return tile;
-};
+        var _this = _possibleConstructorReturn(this, (World.__proto__ || Object.getPrototypeOf(World)).call(this));
 
-World.prototype.addToZOrdered = function (item) {
+        var heightMultiplier = 2;
 
-    item.id = _ZOrdered2.default.getUniqueID();
-    this.zOrdered.push(item);
-    this.containerZOrdered.addChild(item);
+        World.WIDTH = Math.ceil(_Layout2.default.WIDTH / _Tile2.default.WIDTH);
+        World.HEIGHT = Math.ceil(_Layout2.default.HEIGHT / _Tile2.default.HEIGHT) * heightMultiplier;
 
-    if (item.light) {
+        _this.viewport = new _Viewport2.default(_this, Math.ceil(_Layout2.default.WIDTH / _Tile2.default.WIDTH) * _Tile2.default.WIDTH, Math.ceil(_Layout2.default.HEIGHT / _Tile2.default.HEIGHT) * _Tile2.default.HEIGHT, World.WIDTH * _Tile2.default.WIDTH, World.HEIGHT * _Tile2.default.HEIGHT, heightMultiplier > 1);
 
-        this.containerLights.addChild(item.light);
+        _this.randomSeed = Math.floor(Math.random() * 1000);
 
-        item.light.x = item.x;
-        item.light.y = item.y;
-    }
-};
+        console.log('World(', World.WIDTH, World.HEIGHT, _this.randomSeed, World.DEBUG ? 'Debug Mode' : 'Production Mode', ')');
 
-World.prototype.addTree = function (tileX, tileY) {
+        // GOOD RANDOM SEEDS
+        // 182
+        // 197
+        // 353
+        // 686
+        // 746
+        // 776
+        // 806
+        // 870
+        // 841
+        // 929
 
-    if (this.spaceAvailable(tileX, tileY, 1, 1)) {
+        _this.noise = new _noisejs2.default.Noise(_this.randomSeed);
 
-        var tile = this.getTile(tileX, tileY);
+        _this.timeOfLastUpdate = 0;
 
-        tile.occupy();
+        _this.supply = new _Supply2.default(World.DEBUG);
 
-        var offsetX = _Tile2.default.WIDTH * .3 * Math.random() - _Tile2.default.WIDTH * .15;
-        var offsetY = _Tile2.default.HEIGHT * .3 * Math.random() - _Tile2.default.HEIGHT * .15;
+        _this.timeOfDay = new _TimeOfDay2.default();
 
-        var tree = new _Tree2.default();
-        tree.x = tile.x + _Tile2.default.WIDTH * .5 + offsetX;
-        tree.y = tile.y + _Tile2.default.HEIGHT * .5 + offsetY;
+        _this.motherNature = new _MotherNature2.default(_this);
 
-        this.resources.push(tree);
-        this.trees.push(tree);
+        _this.buildings = new _Buildings2.default(_this);
 
-        this.addToZOrdered(tree);
+        _this.roles = new _Roles2.default(_this);
 
-        return tree;
-    } else {
+        _this.archetypes = new _Archetypes2.default(_this);
 
-        console.warn('Can\'t place tree at', tileX, tileY, 'there is not enough space.');
+        _this.tiles = [];
+        _this.resources = [];
+        _this.trees = [];
+        _this.rocks = [];
+        _this.dwarves = [];
+        _this.zOrdered = [];
 
-        return false;
-    }
-};
+        _this.containerZOrdered = new _pixi2.default.Container();
 
-World.prototype.addRock = function (tileX, tileY) {
+        _this.ui = new _UI2.default(_this);
 
-    if (this.spaceAvailable(tileX, tileY, 1, 1)) {
+        _this.ui.log.log('New game started. Random seed is ' + _this.randomSeed);
 
-        var tile = this.getTile(tileX, tileY);
+        var background = document.createElement('canvas');
+        background.width = World.WIDTH * _Tile2.default.WIDTH;
+        background.height = World.HEIGHT * _Tile2.default.HEIGHT;
 
-        tile.occupy();
+        _this.lighting = new _Lighting2.default(_this);
 
-        var rock = new _Rock2.default();
-        rock.x = tile.x + _Tile2.default.WIDTH * .5;
-        rock.y = tile.y + _Tile2.default.HEIGHT * .5;
+        _this.containerLights = new _pixi2.default.Container();
+        _this.containerLights.blendMode = _pixi2.default.BLEND_MODES.SCREEN;
 
-        this.resources.push(rock);
-        this.rocks.push(rock);
+        var backgroundCtx = background.getContext('2d');
+        for (var y = 0; y < World.HEIGHT; y++) {
 
-        this.addToZOrdered(rock);
+            for (var x = 0; x < World.WIDTH; x++) {
 
-        return rock;
-    } else {
+                var tile = _this.addTile(x, y);
 
-        console.warn('Can\'t place rock at', tileX, tileY, 'there is not enough space.');
-
-        return false;
-    }
-};
-
-World.prototype.addBuilding = function (id, tileX, tileY) {
-
-    var buildingWidth = 1;
-    var buildingHeight = 1;
-
-    if (this.spaceAvailable(tileX, tileY, buildingWidth, buildingHeight)) {
-
-        var tile = this.getTile(tileX, tileY);
-
-        tile.occupy();
-
-        var building = this.buildings.add(id, tile.x + _Tile2.default.WIDTH * .5, tile.y + _Tile2.default.HEIGHT * .5);
-
-        building.on('constructed', this.onBuildingConstructed.bind(this));
-
-        this.ui.log.log('Added building of type "' + id + '"');
-
-        this.addToZOrdered(building);
-
-        // Update watchmen patrol routes
-
-        this.buildings.buildings.forEach(function (building) {
-
-            if (building.patrolRoute !== undefined) {
-
-                building.updatePatrolRoute();
+                backgroundCtx.drawImage(tile.canvas, x * _Tile2.default.WIDTH, y * _Tile2.default.HEIGHT);
             }
-        });
-
-        return building;
-    } else {
-
-        console.warn('Can\'t place building at', tileX, tileY, 'there is not enough space.');
-
-        return false;
-    }
-};
-
-World.prototype.onBuildingConstructed = function (building) {
-
-    if (building.light) {
-
-        this.containerLights.addChild(building.light);
-
-        building.light.x = building.x;
-        building.light.y = building.y;
-    }
-};
-
-World.prototype.buyDwarf = function (x, y, archetypeId) {
-
-    var archetype = this.archetypes.getById(archetypeId);
-    var canAfford = this.supply.wood.get() >= archetype.cWood && this.supply.stone.get() >= archetype.cStone;
-
-    if (canAfford) {
-
-        this.supply.wood.decrement(archetype.cWood);
-        this.supply.stone.decrement(archetype.cStone);
-
-        return this.addDwarf(x, y, archetype.id);
-    } else {
-
-        return false;
-    }
-};
-
-World.prototype.addDwarf = function (x, y, archetypeId) {
-
-    var dwarf = new _Dwarf2.default(this, x, y, this.archetypes.getById(archetypeId));
-
-    this.ui.log.log('Added dwarf of type "' + archetypeId + '" called "' + dwarf.name + '"');
-
-    this.dwarves.push(dwarf);
-
-    this.addToZOrdered(dwarf);
-
-    return dwarf;
-};
-
-World.prototype.update = function (time) {
-
-    var timeDelta = time - this.timeOfLastUpdate;
-
-    this.timeOfLastUpdate = time;
-
-    this.timeOfDay.update(timeDelta, this);
-
-    this.motherNature.update(timeDelta, this);
-
-    this.lighting.update(timeDelta, this);
-
-    this.viewport.update(timeDelta, this);
-
-    this.content.y = -this.viewport.scroll;
-
-    var killed = [];
-
-    this.motherNature.animals.forEach(function (animal, index) {
-
-        if (animal.isAlive()) {
-
-            animal.update(timeDelta, this);
-        } else {
-
-            killed.push(animal);
         }
-    }.bind(this));
 
-    this.dwarves.forEach(function (dwarf, index) {
+        _this.background = new _pixi2.default.Sprite(_pixi2.default.Texture.fromCanvas(background));
 
-        if (dwarf.isAlive()) {
+        _this.content = new _pixi2.default.Container();
 
-            dwarf.update(timeDelta, this);
-        } else {
+        _this.content.addChild(_this.background);
+        _this.content.addChild(_this.containerZOrdered);
+        _this.content.addChild(_this.containerLights);
+        _this.content.addChild(_this.lighting);
 
-            killed.push(dwarf);
+        _this.addChild(_this.content);
+        _this.addChild(_this.ui);
+
+        // Add buildings
+
+        var camp = _this.addBuilding(_Buildings2.default.ARCHETYPE_CAMP.id, Math.floor(World.WIDTH * .5), Math.floor(World.HEIGHT - 5));
+
+        // Add resources
+
+        _this.tiles.forEach(function (tile) {
+
+            if (tile.type === _Tile2.default.TYPE_GRASS && tile.elevation < .4 && Math.random() > .6) {
+
+                var tree = this.addTree(tile.tileX, tile.tileY);
+            } else if (tile.type === _Tile2.default.TYPE_GRASS && (tile.elevation > .9 && Math.random() > .5 || Math.random() > .99)) {
+
+                var rock = this.addRock(tile.tileX, tile.tileY);
+            }
+        }.bind(_this));
+
+        return _this;
+    }
+
+    _createClass(World, [{
+        key: 'addTile',
+        value: function addTile(x, y) {
+
+            var tile = new _Tile2.default(x, y, this.noise.simplex2(x / World.WIDTH * 2, y / World.WIDTH * 2));
+
+            this.tiles.push(tile);
+
+            return tile;
         }
-    }.bind(this));
+    }, {
+        key: 'addToZOrdered',
+        value: function addToZOrdered(item) {
 
-    this.resources.forEach(function (resource) {
+            item.id = _ZOrdered2.default.getUniqueID();
+            this.zOrdered.push(item);
+            this.containerZOrdered.addChild(item);
 
-        resource.update(timeDelta, this);
-    }.bind(this));
+            if (item.light) {
 
-    this.buildings.update(timeDelta);
+                this.containerLights.addChild(item.light);
 
-    this.ui.update(timeDelta, this);
+                item.light.x = item.x;
+                item.light.y = item.y;
+            }
+        }
+    }, {
+        key: 'addTree',
+        value: function addTree(tileX, tileY) {
 
-    // Z-Sorting
+            if (this.spaceAvailable(tileX, tileY, 1, 1)) {
 
-    this.zOrdered.sort(function (a, b) {
+                var tile = this.getTile(tileX, tileY);
 
-        if (a.y > b.y) {
+                tile.occupy();
 
-            return 1;
-        } else if (a.y < b.y) {
+                var offsetX = _Tile2.default.WIDTH * .3 * Math.random() - _Tile2.default.WIDTH * .15;
+                var offsetY = _Tile2.default.HEIGHT * .3 * Math.random() - _Tile2.default.HEIGHT * .15;
 
-            return -1;
-        } else {
+                var tree = new _Tree2.default();
+                tree.x = tile.x + _Tile2.default.WIDTH * .5 + offsetX;
+                tree.y = tile.y + _Tile2.default.HEIGHT * .5 + offsetY;
 
-            if (a.id > b.id) {
+                this.resources.push(tree);
+                this.trees.push(tree);
 
-                return 1;
-            } else if (a.id < b.id) {
+                this.addToZOrdered(tree);
 
-                return -1;
+                return tree;
             } else {
 
-                return 0;
+                console.warn('Can\'t place tree at', tileX, tileY, 'there is not enough space.');
+
+                return false;
             }
         }
-    });
+    }, {
+        key: 'addRock',
+        value: function addRock(tileX, tileY) {
 
-    this.zOrdered.forEach(function (item, index) {
+            if (this.spaceAvailable(tileX, tileY, 1, 1)) {
 
-        if (item.parent === null) {
+                var tile = this.getTile(tileX, tileY);
 
-            this.zOrdered = this.zOrdered.splice(index, 1);
-        } else {
+                tile.occupy();
 
-            this.containerZOrdered.setChildIndex(item, index);
+                var rock = new _Rock2.default();
+                rock.x = tile.x + _Tile2.default.WIDTH * .5;
+                rock.y = tile.y + _Tile2.default.HEIGHT * .5;
 
-            if (item.light && this.timeOfDay.getSunValue() > 0) {
+                this.resources.push(rock);
+                this.rocks.push(rock);
 
-                item.light.x = item.x - item.light.radius + item.light.xOffset;
-                item.light.y = item.y - item.light.radius + item.light.yOffset;
+                this.addToZOrdered(rock);
 
-                item.light.alpha = (this.timeOfDay.getSunValue() - (Math.random() > .9 ? Math.random() * .15 : 0)) * item.light.alphaMultiplier;
+                return rock;
+            } else {
+
+                console.warn('Can\'t place rock at', tileX, tileY, 'there is not enough space.');
+
+                return false;
             }
         }
-    }.bind(this));
+    }, {
+        key: 'addBuilding',
+        value: function addBuilding(id, tileX, tileY) {
 
-    this.supply.update(timeDelta, this);
+            var buildingWidth = 1;
+            var buildingHeight = 1;
 
-    killed.forEach(function (entity) {
+            if (this.spaceAvailable(tileX, tileY, buildingWidth, buildingHeight)) {
 
-        switch (entity.type) {
-            case _Dwarf2.default.TYPE:
+                var tile = this.getTile(tileX, tileY);
 
-                for (var d = 0; d < this.dwarves.length; d++) {
+                tile.occupy();
 
-                    if (this.dwarves[d] === entity) {
+                var building = this.buildings.add(id, tile.x + _Tile2.default.WIDTH * .5, tile.y + _Tile2.default.HEIGHT * .5);
 
-                        this.dwarves.splice(d, 1);
+                building.on('constructed', this.onBuildingConstructed.bind(this));
+
+                this.ui.log.log('Added building of type "' + id + '"');
+
+                this.addToZOrdered(building);
+
+                // Update watchmen patrol routes
+
+                this.buildings.buildings.forEach(function (building) {
+
+                    if (building.patrolRoute !== undefined) {
+
+                        building.updatePatrolRoute();
+                    }
+                });
+
+                return building;
+            } else {
+
+                console.warn('Can\'t place building at', tileX, tileY, 'there is not enough space.');
+
+                return false;
+            }
+        }
+    }, {
+        key: 'onBuildingConstructed',
+        value: function onBuildingConstructed(building) {
+
+            if (building.light) {
+
+                this.containerLights.addChild(building.light);
+
+                building.light.x = building.x;
+                building.light.y = building.y;
+            }
+        }
+    }, {
+        key: 'buyDwarf',
+        value: function buyDwarf(x, y, archetypeId) {
+
+            var archetype = this.archetypes.getById(archetypeId);
+            var canAfford = this.supply.wood.get() >= archetype.cWood && this.supply.stone.get() >= archetype.cStone;
+
+            if (canAfford) {
+
+                this.supply.wood.decrement(archetype.cWood);
+                this.supply.stone.decrement(archetype.cStone);
+
+                return this.addDwarf(x, y, archetype.id);
+            } else {
+
+                return false;
+            }
+        }
+    }, {
+        key: 'addDwarf',
+        value: function addDwarf(x, y, archetypeId) {
+
+            var dwarf = new _Dwarf2.default(this, x, y, this.archetypes.getById(archetypeId));
+
+            this.ui.log.log('Added dwarf of type "' + archetypeId + '" called "' + dwarf.name + '"');
+
+            this.dwarves.push(dwarf);
+
+            this.addToZOrdered(dwarf);
+
+            return dwarf;
+        }
+    }, {
+        key: 'update',
+        value: function update(time) {
+
+            var timeDelta = time - this.timeOfLastUpdate;
+
+            this.timeOfLastUpdate = time;
+
+            this.timeOfDay.update(timeDelta, this);
+
+            this.motherNature.update(timeDelta, this);
+
+            this.lighting.update(timeDelta, this);
+
+            this.viewport.update(timeDelta, this);
+
+            this.content.y = -this.viewport.scroll;
+
+            var killed = [];
+
+            this.motherNature.animals.forEach(function (animal, index) {
+
+                if (animal.isAlive()) {
+
+                    animal.update(timeDelta, this);
+                } else {
+
+                    killed.push(animal);
+                }
+            }.bind(this));
+
+            this.dwarves.forEach(function (dwarf, index) {
+
+                if (dwarf.isAlive()) {
+
+                    dwarf.update(timeDelta, this);
+                } else {
+
+                    killed.push(dwarf);
+                }
+            }.bind(this));
+
+            this.resources.forEach(function (resource) {
+
+                resource.update(timeDelta, this);
+            }.bind(this));
+
+            this.buildings.update(timeDelta);
+
+            this.ui.update(timeDelta, this);
+
+            // Z-Sorting
+
+            this.zOrdered.sort(function (a, b) {
+
+                if (a.y > b.y) {
+
+                    return 1;
+                } else if (a.y < b.y) {
+
+                    return -1;
+                } else {
+
+                    if (a.id > b.id) {
+
+                        return 1;
+                    } else if (a.id < b.id) {
+
+                        return -1;
+                    } else {
+
+                        return 0;
+                    }
+                }
+            });
+
+            this.zOrdered.forEach(function (item, index) {
+
+                if (item.parent === null) {
+
+                    this.zOrdered = this.zOrdered.splice(index, 1);
+                } else {
+
+                    this.containerZOrdered.setChildIndex(item, index);
+
+                    if (item.light && this.timeOfDay.getSunValue() > 0) {
+
+                        item.light.x = item.x - item.light.radius + item.light.xOffset;
+                        item.light.y = item.y - item.light.radius + item.light.yOffset;
+
+                        item.light.alpha = (this.timeOfDay.getSunValue() - (Math.random() > .9 ? Math.random() * .15 : 0)) * item.light.alphaMultiplier;
+                    }
+                }
+            }.bind(this));
+
+            this.supply.update(timeDelta, this);
+
+            killed.forEach(function (entity) {
+
+                switch (entity.type) {
+                    case _Dwarf2.default.TYPE:
+
+                        for (var d = 0; d < this.dwarves.length; d++) {
+
+                            if (this.dwarves[d] === entity) {
+
+                                this.dwarves.splice(d, 1);
+                                break;
+                            }
+                        }
+
+                        break;
+                    case _Animal2.default.TYPE:
+
+                        this.motherNature.removeAnimal(entity);
+
+                        break;
+                }
+
+                for (var i = 0; i < this.zOrdered.length; i++) {
+
+                    if (this.zOrdered[i] === entity) {
+
+                        this.zOrdered.splice(i, 1);
                         break;
                     }
                 }
 
-                break;
-            case _Animal2.default.TYPE:
+                this.lighting.removeEmitter(entity);
 
-                this.motherNature.removeAnimal(entity);
+                if (entity.light) {
 
-                break;
+                    entity.light.destroy();
+                }
+
+                entity.destroy();
+            }.bind(this));
         }
+    }, {
+        key: 'spaceAvailable',
+        value: function spaceAvailable(tileX, tileY, w, h) {
 
-        for (var i = 0; i < this.zOrdered.length; i++) {
+            var valid = true;
 
-            if (this.zOrdered[i] === entity) {
+            for (var i = tileX; i < tileX + w; i++) {
+                for (var j = tileY; j < tileY + h; j++) {
 
-                this.zOrdered.splice(i, 1);
-                break;
+                    if (this.getTile(i, j).isOccupied) {
+
+                        valid = false;
+                        break;
+                    }
+                }
             }
+
+            return valid;
         }
+    }, {
+        key: 'getTileFromWorld',
+        value: function getTileFromWorld(x, y) {
 
-        this.lighting.removeEmitter(entity);
-
-        if (entity.light) {
-
-            entity.light.destroy();
+            return this.getTile(Math.floor(x / _Tile2.default.WIDTH), Math.floor(y / _Tile2.default.HEIGHT));
         }
+    }, {
+        key: 'getTile',
+        value: function getTile(x, y) {
 
-        entity.destroy();
-    }.bind(this));
-};
-
-World.prototype.spaceAvailable = function (tileX, tileY, w, h) {
-
-    var valid = true;
-
-    for (var i = tileX; i < tileX + w; i++) {
-        for (var j = tileY; j < tileY + h; j++) {
-
-            if (this.getTile(i, j).isOccupied) {
-
-                valid = false;
-                break;
-            }
+            return this.tiles[y * World.WIDTH + x] || false;
         }
-    }
+    }]);
 
-    return valid;
-};
+    return World;
+}(_pixi2.default.Container);
 
-World.prototype.getTileFromWorld = function (x, y) {
-
-    return this.getTile(Math.floor(x / _Tile2.default.WIDTH), Math.floor(y / _Tile2.default.HEIGHT));
-};
-
-World.prototype.getTile = function (x, y) {
-
-    return this.tiles[y * World.WIDTH + x] || false;
-};
+exports.default = World;
 
 World.WIDTH = 48;
 World.HEIGHT = 32;
@@ -37511,10 +38563,21 @@ function startGame() {
 },{"./Layout":217,"./World":230,"pixi.js":154,"raf":187}],233:[function(require,module,exports){
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = ValueBarUI;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _pixi = require('pixi.js');
 
@@ -37524,50 +38587,79 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function ValueBarUI(w, h, value) {
-
-    _pixi2.default.Container.call(this);
-
-    w = Math.round(w);
-    h = Math.round(h);
-
-    var border = w >= 20 && h >= 20;
-
-    this.background = new _pixi2.default.Graphics();
-    this.background.beginFill(0x333333);
-    this.background.drawRect(0, 0, w, h);
-    this.background.endFill();
-    this.background.beginFill(0xBB3333);
-    if (border) {
-        this.background.drawRect(1, 1, w - 2, h - 2);
-    } else {
-        this.background.drawRect(0, 0, w, h);
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
     }
-    this.background.endFill();
-    this.addChild(this.background);
-
-    this.bar = new _pixi2.default.Graphics();
-    this.bar.beginFill(0x33BB33);
-    if (border) {
-        this.bar.drawRect(0, 0, w - 2, h - 2);
-        this.bar.x = 1;
-        this.bar.y = 1;
-    } else {
-        this.bar.drawRect(0, 0, w, h);
-    }
-    this.bar.endFill();
-    this.addChild(this.bar);
-
-    this.setValue(value || 0);
 }
 
-ValueBarUI.constructor = ValueBarUI;
-ValueBarUI.prototype = Object.create(_pixi2.default.Container.prototype);
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
 
-ValueBarUI.prototype.setValue = function (value) {
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
 
-    this.bar.scale.x = value;
-};
+var ValueBarUI = function (_PIXI$Container) {
+    _inherits(ValueBarUI, _PIXI$Container);
+
+    function ValueBarUI(w, h, value) {
+        _classCallCheck(this, ValueBarUI);
+
+        var _this = _possibleConstructorReturn(this, (ValueBarUI.__proto__ || Object.getPrototypeOf(ValueBarUI)).call(this));
+
+        w = Math.round(w);
+        h = Math.round(h);
+
+        var border = w >= 20 && h >= 20;
+
+        _this.background = new _pixi2.default.Graphics();
+        _this.background.beginFill(0x333333);
+        _this.background.drawRect(0, 0, w, h);
+        _this.background.endFill();
+        _this.background.beginFill(0xBB3333);
+        if (border) {
+            _this.background.drawRect(1, 1, w - 2, h - 2);
+        } else {
+            _this.background.drawRect(0, 0, w, h);
+        }
+        _this.background.endFill();
+        _this.addChild(_this.background);
+
+        _this.bar = new _pixi2.default.Graphics();
+        _this.bar.beginFill(0x33BB33);
+        if (border) {
+            _this.bar.drawRect(0, 0, w - 2, h - 2);
+            _this.bar.x = 1;
+            _this.bar.y = 1;
+        } else {
+            _this.bar.drawRect(0, 0, w, h);
+        }
+        _this.bar.endFill();
+        _this.addChild(_this.bar);
+
+        _this.setValue(value || 0);
+
+        return _this;
+    }
+
+    _createClass(ValueBarUI, [{
+        key: 'setValue',
+        value: function setValue(value) {
+
+            this.bar.scale.x = value;
+        }
+    }]);
+
+    return ValueBarUI;
+}(_pixi2.default.Container);
+
+exports.default = ValueBarUI;
 
 },{"pixi.js":154}],234:[function(require,module,exports){
 "use strict";
@@ -37602,76 +38694,103 @@ exports.default = {
 },{}],235:[function(require,module,exports){
 "use strict";
 
-module.exports = function (min, max, initial) {
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
 
-	var value = initial || max;
-	var api = {
-		get: get,
-		getRemainder: getRemainder,
-		set: set,
-		increment: increment,
-		decrement: decrement,
-		isMax: isMax,
-		isMin: isMin,
-		simplify: simplify,
-		val: val
+var _createClass = function () {
+	function defineProperties(target, props) {
+		for (var i = 0; i < props.length; i++) {
+			var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+		}
+	}return function (Constructor, protoProps, staticProps) {
+		if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
 	};
+}();
 
-	function get() {
+function _classCallCheck(instance, Constructor) {
+	if (!(instance instanceof Constructor)) {
+		throw new TypeError("Cannot call a class as a function");
+	}
+}
 
-		return value;
+var ValueMinMax = function () {
+	function ValueMinMax(min, max, initial) {
+		_classCallCheck(this, ValueMinMax);
+
+		this.value = initial || max;
+		this.min = min;
+		this.max = max;
 	}
 
-	function getRemainder() {
+	_createClass(ValueMinMax, [{
+		key: "get",
+		value: function get() {
 
-		return max - value;
-	}
+			return this.value;
+		}
+	}, {
+		key: "getRemainder",
+		value: function getRemainder() {
 
-	function set(val) {
+			return this.max - this.value;
+		}
+	}, {
+		key: "set",
+		value: function set(val) {
 
-		value = constrain(val);
-	}
+			this.value = this.constrain(val);
+		}
+	}, {
+		key: "increment",
+		value: function increment(val) {
 
-	function increment(val) {
+			this.value = this.constrain(this.value + val);
+		}
+	}, {
+		key: "decrement",
+		value: function decrement(val) {
 
-		value = constrain(value + val);
-	}
+			this.value = this.constrain(this.value - val);
+		}
+	}, {
+		key: "isMin",
+		value: function isMin() {
 
-	function decrement(val) {
+			return this.value === this.min;
+		}
+	}, {
+		key: "isMax",
+		value: function isMax() {
 
-		value = constrain(value - val);
-	}
+			return this.value === this.max;
+		}
+	}, {
+		key: "constrain",
+		value: function constrain(val) {
 
-	function isMin() {
+			return val < this.min ? this.min : val > this.max ? this.max : val;
+		}
+	}, {
+		key: "val",
+		value: function val() {
 
-		return value === min;
-	}
+			return (this.value - this.min) / (this.max - this.min);
+		}
 
-	function isMax() {
+		/*simplify() {
+  		return {
+  		min: min,
+  		value: value,
+  		max: max
+  	};
+  	}*/
 
-		return value === max;
-	}
+	}]);
 
-	function constrain(val) {
+	return ValueMinMax;
+}();
 
-		return val < min ? min : val > max ? max : val;
-	}
-
-	function val() {
-
-		return (value - min) / (max - min);
-	}
-
-	function simplify() {
-
-		return {
-			min: min,
-			value: value,
-			max: max
-		};
-	}
-
-	return api;
-};
+exports.default = ValueMinMax;
 
 },{}]},{},[232]);

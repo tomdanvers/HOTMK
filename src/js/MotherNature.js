@@ -3,67 +3,81 @@ import Tile from './Tile';
 import {Deer as ADeer, Rabbit as ARabbit, Fox as AFox, Wolf as AWolf, Boar as ABoar} from './Archetypes';
 import {Deer, Rabbit, Fox, Wolf, Boar} from './Animal';
 
-export default function MotherNature(world) {
+export default class MotherNature {
 
-    this.world = world;
+    constructor(world) {
 
-    this.animalArchetypes = [
-        AnimalArchetype.DEER,
-        AnimalArchetype.RABBIT,
-        AnimalArchetype.FOX,
-        AnimalArchetype.WOLF,
-        AnimalArchetype.BOAR
-    ];
+        this.world = world;
 
-    this.animalsMap = {};
-    this.animals = [];
+        this.animalArchetypes = [
+            AnimalArchetype.DEER,
+            AnimalArchetype.RABBIT,
+            AnimalArchetype.FOX,
+            AnimalArchetype.WOLF,
+            AnimalArchetype.BOAR
+        ];
 
-    this.animalArchetypes.forEach(function(animalArchetype) {
+        this.animalsMap = {};
+        this.animals = [];
 
-        this.animalsMap[animalArchetype.id] = [];
+        this.animalArchetypes.forEach(function(animalArchetype) {
 
-    }.bind(this));
+            this.animalsMap[animalArchetype.id] = [];
 
-}
+        }.bind(this));
 
-MotherNature.constructor = MotherNature;
+    }
 
-MotherNature.prototype.update = function(timeDelta) {
+    update(timeDelta) {
 
-    this.animalArchetypes.forEach(function(animalArchetype) {
+        this.animalArchetypes.forEach(function(animalArchetype) {
 
-        if (Math.random() > .99 && this.animalsMap[animalArchetype.id].length < animalArchetype.maxConcurrent && this.world.timeOfDay.isDuringPeriod(animalArchetype.startTime, animalArchetype.endTime)) {
+            if (Math.random() > .99 && this.animalsMap[animalArchetype.id].length < animalArchetype.maxConcurrent && this.world.timeOfDay.isDuringPeriod(animalArchetype.startTime, animalArchetype.endTime)) {
 
-            // console.log('MotherNature.spawnAnimal(',animalArchetype.id,')');
+                // console.log('MotherNature.spawnAnimal(',animalArchetype.id,')');
 
-            this.spawn(animalArchetype);
+                this.spawn(animalArchetype);
 
-        }
+            }
 
-    }.bind(this));
+        }.bind(this));
 
-}
+    }
 
-MotherNature.prototype.spawn = function(animalArchetype) {
+    spawn(animalArchetype) {
 
-    let animal = new animalArchetype.c(this.world, World.WIDTH * Tile.WIDTH * Math.random(), World.HEIGHT * Tile.HEIGHT * Math.random() * .7, animalArchetype.archetype);
+        let animal = new animalArchetype.c(this.world, World.WIDTH * Tile.WIDTH * Math.random(), World.HEIGHT * Tile.HEIGHT * Math.random() * .7, animalArchetype.archetype);
 
-    this.world.addToZOrdered(animal);
+        this.world.addToZOrdered(animal);
 
-    this.animalsMap[animalArchetype.id].push(animal);
-    this.animals.push(animal);
+        this.animalsMap[animalArchetype.id].push(animal);
+        this.animals.push(animal);
 
-}
+    }
 
-MotherNature.prototype.removeAnimal = function(animal) {
+    removeAnimal(animal) {
 
-    this.animalArchetypes.forEach(function(animalArchetype) {
+        this.animalArchetypes.forEach(function(animalArchetype) {
 
-        for(let i = 0; i < this.animalsMap[animalArchetype.id].length; i ++) {
+            for(let i = 0; i < this.animalsMap[animalArchetype.id].length; i ++) {
 
-            if (animal === this.animalsMap[animalArchetype.id][i]) {
+                if (animal === this.animalsMap[animalArchetype.id][i]) {
 
-                this.animalsMap[animalArchetype.id].splice(i, 1);
+                    this.animalsMap[animalArchetype.id].splice(i, 1);
+
+                    break;
+
+                }
+
+            }
+
+        }.bind(this));
+
+        for(let i = 0; i < this.animals.length; i ++) {
+
+            if (animal === this.animals[i]) {
+
+                this.animals.splice(i, 1);
 
                 break;
 
@@ -71,17 +85,20 @@ MotherNature.prototype.removeAnimal = function(animal) {
 
         }
 
-    }.bind(this));
+    }
 
-    for(let i = 0; i < this.animals.length; i ++) {
+}
 
-        if (animal === this.animals[i]) {
+class AnimalArchetype {
 
-            this.animals.splice(i, 1);
+    constructor(id, startTime, endTime, maxConcurrent, c, archetype) {
 
-            break;
-
-        }
+        this.id = id;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.maxConcurrent = maxConcurrent;
+        this.c = c || false;
+        this.archetype = archetype;
 
     }
 
@@ -92,17 +109,3 @@ AnimalArchetype.DEER = new AnimalArchetype('deer', 6, 22, 3, Deer, new ADeer());
 AnimalArchetype.FOX = new AnimalArchetype('fox', 2, 24, 2, Fox, new AFox());
 AnimalArchetype.BOAR = new AnimalArchetype('boar', 4, 23, 10, Boar, new ABoar());
 AnimalArchetype.WOLF = new AnimalArchetype('wolf', 22, 5, 1, Wolf, new AWolf());
-
-
-function AnimalArchetype(id, startTime, endTime, maxConcurrent, c, archetype) {
-
-    this.id = id;
-    this.startTime = startTime;
-    this.endTime = endTime;
-    this.maxConcurrent = maxConcurrent;
-    this.c = c || false;
-    this.archetype = archetype;
-
-}
-
-AnimalArchetype.constructor = AnimalArchetype;

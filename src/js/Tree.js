@@ -1,53 +1,54 @@
 import PIXI from 'pixi.js';
-import ValueMinMax from './utils/value-min-max';
+import ValueMinMax from './utils/ValueMinMax';
 
 import Tile from './Tile';
 
-export default function Tree() {
+export default class Tree extends PIXI.Container {
 
-    PIXI.Container.call(this);
+    constructor() {
 
-    this.type = Tree.TYPE;
+        super();
 
-    this.supply = new ValueMinMax(0, Tree.SUPPLY, 0);
+        this.type = Tree.TYPE;
 
-    let base = new PIXI.Graphics();
+        this.supply = new ValueMinMax(0, Tree.SUPPLY, 0);
 
-    base.beginFill(0x613917);
-    base.drawRect(-1,-2,2,3);
-    base.endFill();
+        let base = new PIXI.Graphics();
 
-    base.beginFill(0x004400);
-    base.moveTo(0, - Tree.HEIGHT-2);
-    base.lineTo(- Tree.WIDTH * .5, -2);
-    base.lineTo(Tree.WIDTH * .5, -2);
-    base.lineTo(0, - Tree.HEIGHT-2);
-    base.endFill();
+        base.beginFill(0x613917);
+        base.drawRect(-1,-2,2,3);
+        base.endFill();
 
-    this.addChild(base)
+        base.beginFill(0x004400);
+        base.moveTo(0, - Tree.HEIGHT-2);
+        base.lineTo(- Tree.WIDTH * .5, -2);
+        base.lineTo(Tree.WIDTH * .5, -2);
+        base.lineTo(0, - Tree.HEIGHT-2);
+        base.endFill();
 
-}
-
-Tree.constructor = Tree;
-Tree.prototype = Object.create(PIXI.Container.prototype);
-
-Tree.prototype.update = function(timeDelta, world) {
-
-    // this.alpha = this.supply / this.supplyMax;
-
-    this.visible = !this.supply.isMin();
-
-    if (this.quiverValue > 0) {
-
-        this.quiverValue -= timeDelta * .3;
-
-    } else {
-
-        this.quiverValue = 0;
+        this.addChild(base)
 
     }
 
-    this.rotation = 0 + Math.sin(this.quiverValue * .15) * Math.PI * 0.05;
+    update(timeDelta, world) {
+
+        // this.alpha = this.supply / this.supplyMax;
+
+        this.visible = !this.supply.isMin();
+
+        if (this.quiverValue > 0) {
+
+            this.quiverValue -= timeDelta * .3;
+
+        } else {
+
+            this.quiverValue = 0;
+
+        }
+
+        this.rotation = 0 + Math.sin(this.quiverValue * .15) * Math.PI * 0.05;
+
+    }
 
 }
 

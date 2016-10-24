@@ -1,35 +1,36 @@
 import PIXI from 'pixi.js';
-import ValueMinMax from './utils/value-min-max';
+import ValueMinMax from './utils/ValueMinMax';
 
-export default function Rock() {
+export default class Rock extends PIXI.Container {
 
-    PIXI.Container.call(this);
+    constructor() {
 
-    this.type = Rock.TYPE;
+        super();
 
-    this.supply = new ValueMinMax(0, Rock.SUPPLY, 0);
+        this.type = Rock.TYPE;
 
-    let base = new PIXI.Graphics();
-    base.beginFill(0x555555);
-    base.drawRect(- Rock.WIDTH * .5, - Rock.HEIGHT, Rock.WIDTH, Rock.HEIGHT);
-    base.endFill();
+        this.supply = new ValueMinMax(0, Rock.SUPPLY, 0);
 
-    this.addChild(base)
+        let base = new PIXI.Graphics();
+        base.beginFill(0x555555);
+        base.drawRect(- Rock.WIDTH * .5, - Rock.HEIGHT, Rock.WIDTH, Rock.HEIGHT);
+        base.endFill();
 
-}
+        this.addChild(base);
 
-Rock.constructor = Rock;
-Rock.prototype = Object.create(PIXI.Container.prototype);
+    }
 
-Rock.prototype.update = function(timeDelta, world) {
+    update(timeDelta, world) {
 
-    this.visible = !this.supply.isMin();
+        this.visible = !this.supply.isMin();
 
-}
+    }
 
-Rock.prototype.hit = function() {
+    hit() {
 
-    // this.quiverValue = 100;
+        // this.quiverValue = 100;
+
+    }
 
 }
 

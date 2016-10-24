@@ -1,42 +1,44 @@
 import PIXI from 'pixi.js';
-import ValueMinMax from './utils/value-min-max';
+import ValueMinMax from './utils/ValueMinMax';
 
-export default function Supply(debug) {
+export default class Supply {
 
-    this.wood = new ValueMinMax(0, 100000, debug ? 1000 : Supply.WOOD);
-    this.woodOld = 0;
+    constructor(debug) {
 
-    this.stone = new ValueMinMax(0, 100000, debug ? 1000 : Supply.STONE);
-    this.stoneOld = 0;
+        this.wood = new ValueMinMax(0, 100000, debug ? 1000 : Supply.WOOD);
+        this.woodOld = 0;
 
-    return this;
-
-}
-
-Supply.prototype.update = function(timeDelta, world) {
-
-    let dirty = false;
-
-    if (this.wood.get() !== this.woodOld) {
-
-        this.woodOld = this.wood.get();
-
-        dirty = true;
-
+        this.stone = new ValueMinMax(0, 100000, debug ? 1000 : Supply.STONE);
+        this.stoneOld = 0;
 
     }
 
-    if (this.stone.get() !== this.stoneOld) {
+    update(timeDelta, world) {
 
-        this.stoneOld = this.stone.get();
+        let dirty = false;
 
-        dirty = true;
+        if (this.wood.get() !== this.woodOld) {
 
-    }
+            this.woodOld = this.wood.get();
 
-    if (dirty) {
+            dirty = true;
 
-        world.ui.updateSupply(this.wood.get(), this.stone.get());
+
+        }
+
+        if (this.stone.get() !== this.stoneOld) {
+
+            this.stoneOld = this.stone.get();
+
+            dirty = true;
+
+        }
+
+        if (dirty) {
+
+            world.ui.updateSupply(this.wood.get(), this.stone.get());
+
+        }
 
     }
 
