@@ -35019,7 +35019,10 @@ var Lighting = function (_PIXI$Sprite) {
 
                     _this2.emitters.forEach(function (emitter) {
 
-                        this.shadowCtx.drawImage(emitter.canvas, emitter.owner.x - emitter.radius + emitter.xOffset, emitter.owner.y - emitter.radius + emitter.yOffset - viewportOffset);
+                        if (emitter.owner.isAwake()) {
+
+                            this.shadowCtx.drawImage(emitter.canvas, emitter.owner.x - emitter.radius + emitter.xOffset, emitter.owner.y - emitter.radius + emitter.yOffset - viewportOffset);
+                        }
                     }.bind(_this2));
 
                     _this2.shadowCtx.globalCompositeOperation = 'source-over';
