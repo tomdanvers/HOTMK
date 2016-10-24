@@ -12,6 +12,7 @@ export default class Roles {
             'resting': new RoleResting(),
             'builder': new RoleBuilder(),
             'hunter': new RoleHunter(),
+            'soldier': new RoleSoldier(),
             'collect-wood': new RoleCollectWood(),
             'collect-stone': new RoleCollectStone(),
             'watch-day': new RoleWatchDay(),
@@ -38,6 +39,7 @@ Roles.IDLE = 'idle';
 Roles.RESTING = 'resting';
 Roles.BUILDER = 'builder';
 Roles.HUNTER = 'hunter';
+Roles.SOLDIER = 'soldier';
 Roles.COLLECT_WOOD = 'collect-wood';
 Roles.COLLECT_STONE = 'collect-stone';
 Roles.HEALER = 'healer';
@@ -69,9 +71,12 @@ class RoleIdle {
 
             if (Math.random() > .75) {
 
+                let idleRange = entity.archetype.rangeIdle || 30;
+                let a = Math.random() * Math.PI * 2;
+
                 entity.target = {
-                    x: entity.startX + Math.random() * 60 - 30,
-                    y: entity.startY + Math.random() * 60 - 30
+                    x: entity.startX + Math.cos(a) * idleRange,
+                    y: entity.startY + Math.sin(a) * idleRange
                 };
 
             }
@@ -656,7 +661,90 @@ class RoleHunter {
 }
 
 
+/* --------------------------------- */
+/* ------------------------- SOLDIER */
+/* --------------------------------- */
 
+class RoleSoldier {
+
+    constructor() {
+
+        this.id = 'soldier';
+
+        this.startTime = 5.5;
+        this.endTime = 20.5;
+
+        this.isWeaponBased = true;
+
+    }
+
+    checkCanPerform(timeDelta, entity, world) {
+
+        let targets = Utils.percievedEntities(entity, world.motherNature.animals);
+
+        if (targets.length > 0) {
+
+            entity.target = targets.random();
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
+
+    }
+
+    update(timeDelta, entity, world) {
+
+        if (entity.target) {
+
+            if (!entity.target.isAlive()) {
+
+                entity.target = false;
+
+                return Roles.IDLE;
+
+            }
+
+
+        } else {
+
+            return Roles.IDLE;
+
+        }
+
+    }
+
+    targetProximity(timeDelta, entity, world) {
+
+        if (entity.canTakeAction()) {
+
+            // Attack
+
+            let target = entity.target;
+
+            target.takeDamage(entity.weapon.damage, entity);
+
+            entity.tookAction();
+
+            if (!target.isAlive()) {
+
+                world.ui.log.log('"' + entity.name + '" killed "' + target.name + '" with "' + entity.weapon.title + '"');
+
+                entity.target = false;
+
+                return Roles.IDLE;
+
+            }
+
+        }
+
+    }
+
+}
 
 
 /* --------------------------------- */

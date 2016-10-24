@@ -1,4 +1,4 @@
-import {Camp, Miner, Forester, Mason, Hunter, NightWatch, DayWatch, Healer} from './Building';
+import {Camp, Miner, Forester, Mason, Hunter, Barracks, NightWatch, DayWatch, Healer} from './Building';
 
 export default class Buildings {
 
@@ -11,10 +11,13 @@ export default class Buildings {
             Buildings.ARCHETYPE_FORESTER,
             Buildings.ARCHETYPE_MASON,
             Buildings.ARCHETYPE_HUNTER,
+            Buildings.ARCHETYPE_BARRACKS,
             Buildings.ARCHETYPE_DAYWATCH,
             Buildings.ARCHETYPE_NIGHTWATCH,
             Buildings.ARCHETYPE_HEALER
         ];
+
+        //console.table(this.archetypes);
 
         this.archetypesMap = {};
 
@@ -74,6 +77,7 @@ Buildings.ARCHETYPE_MINER = new BuildingArchetype('miner', 'Miner\'s Cottage', '
 Buildings.ARCHETYPE_FORESTER = new BuildingArchetype('forester', 'Forester\'s Cottage', 'A lowly home for a forester', 50, 100, Forester);
 Buildings.ARCHETYPE_MASON = new BuildingArchetype('mason', 'Mason\'s Cottage', 'A builder\'s home', 150, 150, Mason);
 Buildings.ARCHETYPE_HUNTER = new BuildingArchetype('hunter', 'Hunter\'s Shack', 'A hunter\'s shack', 100, 100, Hunter);
+Buildings.ARCHETYPE_BARRACKS = new BuildingArchetype('barracks', 'Barracks', 'A dwarven barracks', 200, 200, Barracks);
 Buildings.ARCHETYPE_DAYWATCH = new BuildingArchetype('day-watch', 'The Watch', 'A watch house that patrols during the day', 200, 200, DayWatch);
 Buildings.ARCHETYPE_NIGHTWATCH = new BuildingArchetype('night-watch', 'The Night Watch', 'A watch house that patrols during the hours of darkness', 200, 200, NightWatch);
 Buildings.ARCHETYPE_HEALER = new BuildingArchetype('healer', 'Healer\'s Home', 'A den of herbal healing', 120, 80, Healer);

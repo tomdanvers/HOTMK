@@ -5,7 +5,7 @@ export default class TimeOfDay {
 
     constructor() {
 
-        this.time = 18.5;
+        this.time = 8;
         this.count = 0;
 
     }

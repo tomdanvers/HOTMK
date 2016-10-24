@@ -5,21 +5,33 @@ export default class Archetypes {
 
     constructor() {
 
-        this.archetypesMap = {
-            'mason': new Mason(),
-            'miner': new Miner(),
-            'forester': new Forester(),
-            'hunter': new Hunter(),
-            'watch-day': new WatchDay(),
-            'watch-night': new WatchNight(),
-            'healer': new Healer(),
+        this.archetypes = [
+            new Mason(),
+            new Miner(),
+            new Forester(),
+            new Hunter(),
+            new Soldier(),
+            new WatchDay(),
+            new WatchNight(),
+            new Healer(),
 
-            'animal-rabbit': new Rabbit(),
-            'animal-deer': new Deer(),
-            'animal-fox': new Fox(),
-            'animal-boar': new Boar(),
-            'animal-wolf': new Wolf()
-        };
+            new Rabbit(),
+            new Deer(),
+            new Fox(),
+            new Boar(),
+            new Wolf()
+        ];
+
+        this.archetypesMap = {};
+
+        this.archetypes.forEach(function(archetype) {
+
+            this.archetypesMap[archetype.id] = archetype;
+
+        }.bind(this));
+
+        //console.table(this.archetypes);
+
 
     }
 
@@ -35,6 +47,7 @@ Archetypes.MASON = 'mason';
 Archetypes.MINER = 'miner';
 Archetypes.FORESTER = 'forester';
 Archetypes.HUNTER = 'hunter';
+Archetypes.SOLDIER = 'soldier';
 Archetypes.WATCH_DAY = 'watch-day';
 Archetypes.WATCH_NIGHT = 'watch-night';
 Archetypes.HEALER = 'healer';
@@ -59,6 +72,7 @@ class Dwarf {
         this.range = 5;
         this.rangePerception = 125;
         this.rangeLimit = 200;
+        this.rangeIdle = 30;
 
         this.lightRadius = 0;
 
@@ -192,6 +206,39 @@ export class Hunter extends Dwarf {
 
 
 /* --------------------------------- */
+/* ------------------------- SOLDIER */
+/* --------------------------------- */
+
+export class Soldier extends Dwarf {
+
+    constructor() {
+
+        super();
+
+        this.id = Archetypes.SOLDIER;
+        this.role = Roles.SOLDIER;
+
+        this.lightRadius = 45;
+
+        this.rangePerception = 50;
+        this.rangeIdle = 65;
+
+        this.colour = 0x2D717F;
+
+        this.stealthiness = .2;
+
+        this.cWood = 50;
+        this.cStone = 50;
+
+        this.weapons = [Weapons.BATTLEAXE];
+
+    }
+
+}
+
+
+
+/* --------------------------------- */
 /* ----------------------- WATCH DAY */
 /* --------------------------------- */
 
@@ -296,6 +343,7 @@ class Animal {
         this.range = 5;
         this.rangePerception = 150;
         this.rangeLimit = 400;
+        this.rangeIdle = 50;
 
         this.lightRadius = 0;
 

@@ -32858,7 +32858,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Wolf = exports.Boar = exports.Fox = exports.Deer = exports.Rabbit = exports.Healer = exports.WatchNight = exports.WatchDay = exports.Hunter = exports.Forester = exports.Miner = exports.Mason = undefined;
+exports.Wolf = exports.Boar = exports.Fox = exports.Deer = exports.Rabbit = exports.Healer = exports.WatchNight = exports.WatchDay = exports.Soldier = exports.Hunter = exports.Forester = exports.Miner = exports.Mason = undefined;
 
 var _createClass = function () {
     function defineProperties(target, props) {
@@ -32904,21 +32904,16 @@ var Archetypes = function () {
     function Archetypes() {
         _classCallCheck(this, Archetypes);
 
-        this.archetypesMap = {
-            'mason': new Mason(),
-            'miner': new Miner(),
-            'forester': new Forester(),
-            'hunter': new Hunter(),
-            'watch-day': new WatchDay(),
-            'watch-night': new WatchNight(),
-            'healer': new Healer(),
+        this.archetypes = [new Mason(), new Miner(), new Forester(), new Hunter(), new Soldier(), new WatchDay(), new WatchNight(), new Healer(), new Rabbit(), new Deer(), new Fox(), new Boar(), new Wolf()];
 
-            'animal-rabbit': new Rabbit(),
-            'animal-deer': new Deer(),
-            'animal-fox': new Fox(),
-            'animal-boar': new Boar(),
-            'animal-wolf': new Wolf()
-        };
+        this.archetypesMap = {};
+
+        this.archetypes.forEach(function (archetype) {
+
+            this.archetypesMap[archetype.id] = archetype;
+        }.bind(this));
+
+        //console.table(this.archetypes);
     }
 
     _createClass(Archetypes, [{
@@ -32938,6 +32933,7 @@ Archetypes.MASON = 'mason';
 Archetypes.MINER = 'miner';
 Archetypes.FORESTER = 'forester';
 Archetypes.HUNTER = 'hunter';
+Archetypes.SOLDIER = 'soldier';
 Archetypes.WATCH_DAY = 'watch-day';
 Archetypes.WATCH_NIGHT = 'watch-night';
 Archetypes.HEALER = 'healer';
@@ -32960,6 +32956,7 @@ var Dwarf = function Dwarf() {
     this.range = 5;
     this.rangePerception = 125;
     this.rangeLimit = 200;
+    this.rangeIdle = 30;
 
     this.lightRadius = 0;
 
@@ -33096,55 +33093,58 @@ var Hunter = exports.Hunter = function (_Dwarf4) {
 }(Dwarf);
 
 /* --------------------------------- */
-/* ----------------------- WATCH DAY */
+/* ------------------------- SOLDIER */
 /* --------------------------------- */
 
-var WatchDay = exports.WatchDay = function (_Dwarf5) {
-    _inherits(WatchDay, _Dwarf5);
+var Soldier = exports.Soldier = function (_Dwarf5) {
+    _inherits(Soldier, _Dwarf5);
 
-    function WatchDay() {
-        _classCallCheck(this, WatchDay);
+    function Soldier() {
+        _classCallCheck(this, Soldier);
 
-        var _this5 = _possibleConstructorReturn(this, (WatchDay.__proto__ || Object.getPrototypeOf(WatchDay)).call(this));
+        var _this5 = _possibleConstructorReturn(this, (Soldier.__proto__ || Object.getPrototypeOf(Soldier)).call(this));
 
-        _this5.id = Archetypes.WATCH_DAY;
-        _this5.role = _Roles2.default.WATCH_DAY;
+        _this5.id = Archetypes.SOLDIER;
+        _this5.role = _Roles2.default.SOLDIER;
 
-        _this5.colour = 0x555533;
+        _this5.lightRadius = 45;
 
-        _this5.stealthiness = .25;
+        _this5.rangePerception = 50;
+        _this5.rangeIdle = 65;
+
+        _this5.colour = 0x2D717F;
+
+        _this5.stealthiness = .2;
 
         _this5.cWood = 50;
         _this5.cStone = 50;
 
-        _this5.weapons = [_Weapons2.default.BOW, _Weapons2.default.BATTLEAXE];
+        _this5.weapons = [_Weapons2.default.BATTLEAXE];
 
         return _this5;
     }
 
-    return WatchDay;
+    return Soldier;
 }(Dwarf);
 
 /* --------------------------------- */
-/* --------------------- WATCH NIGHT */
+/* ----------------------- WATCH DAY */
 /* --------------------------------- */
 
-var WatchNight = exports.WatchNight = function (_Dwarf6) {
-    _inherits(WatchNight, _Dwarf6);
+var WatchDay = exports.WatchDay = function (_Dwarf6) {
+    _inherits(WatchDay, _Dwarf6);
 
-    function WatchNight() {
-        _classCallCheck(this, WatchNight);
+    function WatchDay() {
+        _classCallCheck(this, WatchDay);
 
-        var _this6 = _possibleConstructorReturn(this, (WatchNight.__proto__ || Object.getPrototypeOf(WatchNight)).call(this));
+        var _this6 = _possibleConstructorReturn(this, (WatchDay.__proto__ || Object.getPrototypeOf(WatchDay)).call(this));
 
-        _this6.id = Archetypes.WATCH_NIGHT;
-        _this6.role = _Roles2.default.WATCH_NIGHT;
+        _this6.id = Archetypes.WATCH_DAY;
+        _this6.role = _Roles2.default.WATCH_DAY;
 
-        _this6.colour = 0x553333;
+        _this6.colour = 0x555533;
 
         _this6.stealthiness = .25;
-
-        _this6.lightRadius = 60;
 
         _this6.cWood = 50;
         _this6.cStone = 50;
@@ -33154,6 +33154,38 @@ var WatchNight = exports.WatchNight = function (_Dwarf6) {
         return _this6;
     }
 
+    return WatchDay;
+}(Dwarf);
+
+/* --------------------------------- */
+/* --------------------- WATCH NIGHT */
+/* --------------------------------- */
+
+var WatchNight = exports.WatchNight = function (_Dwarf7) {
+    _inherits(WatchNight, _Dwarf7);
+
+    function WatchNight() {
+        _classCallCheck(this, WatchNight);
+
+        var _this7 = _possibleConstructorReturn(this, (WatchNight.__proto__ || Object.getPrototypeOf(WatchNight)).call(this));
+
+        _this7.id = Archetypes.WATCH_NIGHT;
+        _this7.role = _Roles2.default.WATCH_NIGHT;
+
+        _this7.colour = 0x553333;
+
+        _this7.stealthiness = .25;
+
+        _this7.lightRadius = 60;
+
+        _this7.cWood = 50;
+        _this7.cStone = 50;
+
+        _this7.weapons = [_Weapons2.default.BOW, _Weapons2.default.BATTLEAXE];
+
+        return _this7;
+    }
+
     return WatchNight;
 }(Dwarf);
 
@@ -33161,30 +33193,30 @@ var WatchNight = exports.WatchNight = function (_Dwarf6) {
 /* -------------------------- HEALER */
 /* --------------------------------- */
 
-var Healer = exports.Healer = function (_Dwarf7) {
-    _inherits(Healer, _Dwarf7);
+var Healer = exports.Healer = function (_Dwarf8) {
+    _inherits(Healer, _Dwarf8);
 
     function Healer() {
         _classCallCheck(this, Healer);
 
-        var _this7 = _possibleConstructorReturn(this, (Healer.__proto__ || Object.getPrototypeOf(Healer)).call(this));
+        var _this8 = _possibleConstructorReturn(this, (Healer.__proto__ || Object.getPrototypeOf(Healer)).call(this));
 
-        _this7.id = Archetypes.HEALER;
-        _this7.role = _Roles2.default.HEALER;
+        _this8.id = Archetypes.HEALER;
+        _this8.role = _Roles2.default.HEALER;
 
-        _this7.colour = 0x999999;
+        _this8.colour = 0x999999;
 
-        _this7.stealthiness = .25;
+        _this8.stealthiness = .25;
 
-        _this7.speed = .85;
-        _this7.range = 10;
+        _this8.speed = .85;
+        _this8.range = 10;
 
-        _this7.cWood = 50;
-        _this7.cStone = 50;
+        _this8.cWood = 50;
+        _this8.cStone = 50;
 
-        _this7.weapons = [];
+        _this8.weapons = [];
 
-        return _this7;
+        return _this8;
     }
 
     return Healer;
@@ -33202,6 +33234,7 @@ var Animal = function Animal() {
     this.range = 5;
     this.rangePerception = 150;
     this.rangeLimit = 400;
+    this.rangeIdle = 50;
 
     this.lightRadius = 0;
 
@@ -33227,18 +33260,18 @@ var Rabbit = exports.Rabbit = function (_Animal) {
     function Rabbit() {
         _classCallCheck(this, Rabbit);
 
-        var _this8 = _possibleConstructorReturn(this, (Rabbit.__proto__ || Object.getPrototypeOf(Rabbit)).call(this));
+        var _this9 = _possibleConstructorReturn(this, (Rabbit.__proto__ || Object.getPrototypeOf(Rabbit)).call(this));
 
-        _this8.id = Archetypes.ANIMAL_RABBIT;
-        _this8.role = _Roles2.default.PREY;
+        _this9.id = Archetypes.ANIMAL_RABBIT;
+        _this9.role = _Roles2.default.PREY;
 
-        _this8.colour = 0x553333;
+        _this9.colour = 0x553333;
 
-        _this8.speed = .8;
-        _this8.rangePerception = 60;
-        _this8.health = 5;
+        _this9.speed = .8;
+        _this9.rangePerception = 60;
+        _this9.health = 5;
 
-        return _this8;
+        return _this9;
     }
 
     return Rabbit;
@@ -33254,18 +33287,18 @@ var Deer = exports.Deer = function (_Animal2) {
     function Deer() {
         _classCallCheck(this, Deer);
 
-        var _this9 = _possibleConstructorReturn(this, (Deer.__proto__ || Object.getPrototypeOf(Deer)).call(this));
+        var _this10 = _possibleConstructorReturn(this, (Deer.__proto__ || Object.getPrototypeOf(Deer)).call(this));
 
-        _this9.id = Archetypes.ANIMAL_DEER;
-        _this9.role = _Roles2.default.PREY;
+        _this10.id = Archetypes.ANIMAL_DEER;
+        _this10.role = _Roles2.default.PREY;
 
-        _this9.colour = 0x553333;
+        _this10.colour = 0x553333;
 
-        _this9.speed = .9;
-        _this9.rangePerception = 100;
-        _this9.health = 20;
+        _this10.speed = .9;
+        _this10.rangePerception = 100;
+        _this10.health = 20;
 
-        return _this9;
+        return _this10;
     }
 
     return Deer;
@@ -33281,18 +33314,18 @@ var Fox = exports.Fox = function (_Animal3) {
     function Fox() {
         _classCallCheck(this, Fox);
 
-        var _this10 = _possibleConstructorReturn(this, (Fox.__proto__ || Object.getPrototypeOf(Fox)).call(this));
+        var _this11 = _possibleConstructorReturn(this, (Fox.__proto__ || Object.getPrototypeOf(Fox)).call(this));
 
-        _this10.id = Archetypes.ANIMAL_FOX;
-        _this10.role = _Roles2.default.PREY;
+        _this11.id = Archetypes.ANIMAL_FOX;
+        _this11.role = _Roles2.default.PREY;
 
-        _this10.colour = 0x553333;
+        _this11.colour = 0x553333;
 
-        _this10.speed = .9;
-        _this10.rangePerception = 70;
-        _this10.health = 10;
+        _this11.speed = .9;
+        _this11.rangePerception = 70;
+        _this11.health = 10;
 
-        return _this10;
+        return _this11;
     }
 
     return Fox;
@@ -33308,20 +33341,20 @@ var Boar = exports.Boar = function (_Animal4) {
     function Boar() {
         _classCallCheck(this, Boar);
 
-        var _this11 = _possibleConstructorReturn(this, (Boar.__proto__ || Object.getPrototypeOf(Boar)).call(this));
+        var _this12 = _possibleConstructorReturn(this, (Boar.__proto__ || Object.getPrototypeOf(Boar)).call(this));
 
-        _this11.id = Archetypes.ANIMAL_BOAR;
-        _this11.role = _Roles2.default.PREDATOR;
+        _this12.id = Archetypes.ANIMAL_BOAR;
+        _this12.role = _Roles2.default.PREDATOR;
 
-        _this11.colour = 0x553333;
+        _this12.colour = 0x553333;
 
-        _this11.speed = .6;
-        _this11.rangePerception = 60;
-        _this11.health = 100;
+        _this12.speed = .6;
+        _this12.rangePerception = 60;
+        _this12.health = 100;
 
-        _this11.weapons = [_Weapons2.default.TUSKS];
+        _this12.weapons = [_Weapons2.default.TUSKS];
 
-        return _this11;
+        return _this12;
     }
 
     return Boar;
@@ -33337,20 +33370,20 @@ var Wolf = exports.Wolf = function (_Animal5) {
     function Wolf() {
         _classCallCheck(this, Wolf);
 
-        var _this12 = _possibleConstructorReturn(this, (Wolf.__proto__ || Object.getPrototypeOf(Wolf)).call(this));
+        var _this13 = _possibleConstructorReturn(this, (Wolf.__proto__ || Object.getPrototypeOf(Wolf)).call(this));
 
-        _this12.id = Archetypes.ANIMAL_WOLF;
-        _this12.role = _Roles2.default.PREDATOR;
+        _this13.id = Archetypes.ANIMAL_WOLF;
+        _this13.role = _Roles2.default.PREDATOR;
 
-        _this12.colour = 0x553333;
+        _this13.colour = 0x553333;
 
-        _this12.speed = .9;
-        _this12.rangePerception = 120;
-        _this12.health = 80;
+        _this13.speed = .9;
+        _this13.rangePerception = 120;
+        _this13.health = 80;
 
-        _this12.weapons = [_Weapons2.default.CLAWS];
+        _this13.weapons = [_Weapons2.default.CLAWS];
 
-        return _this12;
+        return _this13;
     }
 
     return Wolf;
@@ -33364,7 +33397,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Healer = exports.Mason = exports.Forester = exports.Miner = exports.Hunter = exports.DayWatch = exports.NightWatch = exports.Watch = exports.Camp = exports.Building = undefined;
+exports.Healer = exports.Mason = exports.Forester = exports.Miner = exports.Barracks = exports.Hunter = exports.DayWatch = exports.NightWatch = exports.Watch = exports.Camp = exports.Building = undefined;
 
 var _createClass = function () {
     function defineProperties(target, props) {
@@ -33765,20 +33798,59 @@ Hunter.WIDTH = 12;
 Hunter.HEIGHT = 12;
 
 /* -------------- */
+/* ----- Barracks */
+/* -------------- */
+
+var Barracks = exports.Barracks = function (_Building4) {
+    _inherits(Barracks, _Building4);
+
+    function Barracks(world, startX, startY, archetype, isTemp) {
+        _classCallCheck(this, Barracks);
+
+        var _this7 = _possibleConstructorReturn(this, (Barracks.__proto__ || Object.getPrototypeOf(Barracks)).call(this, world, startX, startY, archetype, isTemp));
+
+        _this7.inhabitants.addArchetype(_Archetypes2.default.SOLDIER);
+        _this7.inhabitants.addArchetype(_Archetypes2.default.SOLDIER);
+        _this7.inhabitants.addArchetype(_Archetypes2.default.SOLDIER);
+        _this7.inhabitants.addArchetype(_Archetypes2.default.SOLDIER);
+
+        return _this7;
+    }
+
+    _createClass(Barracks, [{
+        key: 'draw',
+        value: function draw(graphics) {
+
+            graphics.beginFill(0x999999);
+            graphics.drawRect(-Barracks.WIDTH * .5, -Barracks.HEIGHT, Barracks.WIDTH, Barracks.HEIGHT);
+            graphics.endFill();
+            graphics.beginFill(0x2D717F);
+            graphics.drawRect(-Barracks.WIDTH * .5 + 4, -6, Barracks.WIDTH - 8, 6);
+            graphics.endFill();
+        }
+    }]);
+
+    return Barracks;
+}(Building);
+
+Barracks.WIDTH = 14;
+Barracks.HEIGHT = 11;
+
+/* -------------- */
 /* -------- Miner */
 /* -------------- */
 
-var Miner = exports.Miner = function (_Building4) {
-    _inherits(Miner, _Building4);
+var Miner = exports.Miner = function (_Building5) {
+    _inherits(Miner, _Building5);
 
     function Miner(world, startX, startY, archetype, isTemp) {
         _classCallCheck(this, Miner);
 
-        var _this7 = _possibleConstructorReturn(this, (Miner.__proto__ || Object.getPrototypeOf(Miner)).call(this, world, startX, startY, archetype, isTemp));
+        var _this8 = _possibleConstructorReturn(this, (Miner.__proto__ || Object.getPrototypeOf(Miner)).call(this, world, startX, startY, archetype, isTemp));
 
-        _this7.inhabitants.addArchetype(_Archetypes2.default.MINER);
+        _this8.inhabitants.addArchetype(_Archetypes2.default.MINER);
 
-        return _this7;
+        return _this8;
     }
 
     _createClass(Miner, [{
@@ -33804,17 +33876,17 @@ Miner.HEIGHT = 12;
 /* ----- Forester */
 /* -------------- */
 
-var Forester = exports.Forester = function (_Building5) {
-    _inherits(Forester, _Building5);
+var Forester = exports.Forester = function (_Building6) {
+    _inherits(Forester, _Building6);
 
     function Forester(world, startX, startY, archetype, isTemp) {
         _classCallCheck(this, Forester);
 
-        var _this8 = _possibleConstructorReturn(this, (Forester.__proto__ || Object.getPrototypeOf(Forester)).call(this, world, startX, startY, archetype, isTemp));
+        var _this9 = _possibleConstructorReturn(this, (Forester.__proto__ || Object.getPrototypeOf(Forester)).call(this, world, startX, startY, archetype, isTemp));
 
-        _this8.inhabitants.addArchetype(_Archetypes2.default.FORESTER);
+        _this9.inhabitants.addArchetype(_Archetypes2.default.FORESTER);
 
-        return _this8;
+        return _this9;
     }
 
     _createClass(Forester, [{
@@ -33840,17 +33912,17 @@ Forester.HEIGHT = 12;
 /* -------- Mason */
 /* -------------- */
 
-var Mason = exports.Mason = function (_Building6) {
-    _inherits(Mason, _Building6);
+var Mason = exports.Mason = function (_Building7) {
+    _inherits(Mason, _Building7);
 
     function Mason(world, startX, startY, archetype, isTemp) {
         _classCallCheck(this, Mason);
 
-        var _this9 = _possibleConstructorReturn(this, (Mason.__proto__ || Object.getPrototypeOf(Mason)).call(this, world, startX, startY, archetype, isTemp));
+        var _this10 = _possibleConstructorReturn(this, (Mason.__proto__ || Object.getPrototypeOf(Mason)).call(this, world, startX, startY, archetype, isTemp));
 
-        _this9.inhabitants.addArchetype(_Archetypes2.default.MASON);
+        _this10.inhabitants.addArchetype(_Archetypes2.default.MASON);
 
-        return _this9;
+        return _this10;
     }
 
     _createClass(Mason, [{
@@ -33876,17 +33948,17 @@ Mason.HEIGHT = 14;
 /* ------- Healer */
 /* -------------- */
 
-var Healer = exports.Healer = function (_Building7) {
-    _inherits(Healer, _Building7);
+var Healer = exports.Healer = function (_Building8) {
+    _inherits(Healer, _Building8);
 
     function Healer(world, startX, startY, archetype, isTemp) {
         _classCallCheck(this, Healer);
 
-        var _this10 = _possibleConstructorReturn(this, (Healer.__proto__ || Object.getPrototypeOf(Healer)).call(this, world, startX, startY, archetype, isTemp));
+        var _this11 = _possibleConstructorReturn(this, (Healer.__proto__ || Object.getPrototypeOf(Healer)).call(this, world, startX, startY, archetype, isTemp));
 
-        _this10.inhabitants.addArchetype(_Archetypes2.default.HEALER);
+        _this11.inhabitants.addArchetype(_Archetypes2.default.HEALER);
 
-        return _this10;
+        return _this11;
     }
 
     _createClass(Healer, [{
@@ -33939,7 +34011,9 @@ var Buildings = function () {
 
         this.world = world;
 
-        this.archetypes = [Buildings.ARCHETYPE_MINER, Buildings.ARCHETYPE_FORESTER, Buildings.ARCHETYPE_MASON, Buildings.ARCHETYPE_HUNTER, Buildings.ARCHETYPE_DAYWATCH, Buildings.ARCHETYPE_NIGHTWATCH, Buildings.ARCHETYPE_HEALER];
+        this.archetypes = [Buildings.ARCHETYPE_MINER, Buildings.ARCHETYPE_FORESTER, Buildings.ARCHETYPE_MASON, Buildings.ARCHETYPE_HUNTER, Buildings.ARCHETYPE_BARRACKS, Buildings.ARCHETYPE_DAYWATCH, Buildings.ARCHETYPE_NIGHTWATCH, Buildings.ARCHETYPE_HEALER];
+
+        //console.table(this.archetypes);
 
         this.archetypesMap = {};
 
@@ -33997,6 +34071,7 @@ Buildings.ARCHETYPE_MINER = new BuildingArchetype('miner', 'Miner\'s Cottage', '
 Buildings.ARCHETYPE_FORESTER = new BuildingArchetype('forester', 'Forester\'s Cottage', 'A lowly home for a forester', 50, 100, _Building.Forester);
 Buildings.ARCHETYPE_MASON = new BuildingArchetype('mason', 'Mason\'s Cottage', 'A builder\'s home', 150, 150, _Building.Mason);
 Buildings.ARCHETYPE_HUNTER = new BuildingArchetype('hunter', 'Hunter\'s Shack', 'A hunter\'s shack', 100, 100, _Building.Hunter);
+Buildings.ARCHETYPE_BARRACKS = new BuildingArchetype('barracks', 'Barracks', 'A dwarven barracks', 200, 200, _Building.Barracks);
 Buildings.ARCHETYPE_DAYWATCH = new BuildingArchetype('day-watch', 'The Watch', 'A watch house that patrols during the day', 200, 200, _Building.DayWatch);
 Buildings.ARCHETYPE_NIGHTWATCH = new BuildingArchetype('night-watch', 'The Night Watch', 'A watch house that patrols during the hours of darkness', 200, 200, _Building.NightWatch);
 Buildings.ARCHETYPE_HEALER = new BuildingArchetype('healer', 'Healer\'s Home', 'A den of herbal healing', 120, 80, _Building.Healer);
@@ -35348,6 +35423,7 @@ var Roles = function () {
             'resting': new RoleResting(),
             'builder': new RoleBuilder(),
             'hunter': new RoleHunter(),
+            'soldier': new RoleSoldier(),
             'collect-wood': new RoleCollectWood(),
             'collect-stone': new RoleCollectStone(),
             'watch-day': new RoleWatchDay(),
@@ -35377,6 +35453,7 @@ Roles.IDLE = 'idle';
 Roles.RESTING = 'resting';
 Roles.BUILDER = 'builder';
 Roles.HUNTER = 'hunter';
+Roles.SOLDIER = 'soldier';
 Roles.COLLECT_WOOD = 'collect-wood';
 Roles.COLLECT_STONE = 'collect-stone';
 Roles.HEALER = 'healer';
@@ -35407,9 +35484,12 @@ var RoleIdle = function () {
 
                 if (Math.random() > .75) {
 
+                    var idleRange = entity.archetype.rangeIdle || 30;
+                    var a = Math.random() * Math.PI * 2;
+
                     entity.target = {
-                        x: entity.startX + Math.random() * 60 - 30,
-                        y: entity.startY + Math.random() * 60 - 30
+                        x: entity.startX + Math.cos(a) * idleRange,
+                        y: entity.startY + Math.sin(a) * idleRange
                     };
                 }
 
@@ -35952,6 +36032,84 @@ var RoleHunter = function () {
     }]);
 
     return RoleHunter;
+}();
+
+/* --------------------------------- */
+/* ------------------------- SOLDIER */
+/* --------------------------------- */
+
+var RoleSoldier = function () {
+    function RoleSoldier() {
+        _classCallCheck(this, RoleSoldier);
+
+        this.id = 'soldier';
+
+        this.startTime = 5.5;
+        this.endTime = 20.5;
+
+        this.isWeaponBased = true;
+    }
+
+    _createClass(RoleSoldier, [{
+        key: 'checkCanPerform',
+        value: function checkCanPerform(timeDelta, entity, world) {
+
+            var targets = Utils.percievedEntities(entity, world.motherNature.animals);
+
+            if (targets.length > 0) {
+
+                entity.target = targets.random();
+
+                return true;
+            } else {
+
+                return false;
+            }
+        }
+    }, {
+        key: 'update',
+        value: function update(timeDelta, entity, world) {
+
+            if (entity.target) {
+
+                if (!entity.target.isAlive()) {
+
+                    entity.target = false;
+
+                    return Roles.IDLE;
+                }
+            } else {
+
+                return Roles.IDLE;
+            }
+        }
+    }, {
+        key: 'targetProximity',
+        value: function targetProximity(timeDelta, entity, world) {
+
+            if (entity.canTakeAction()) {
+
+                // Attack
+
+                var target = entity.target;
+
+                target.takeDamage(entity.weapon.damage, entity);
+
+                entity.tookAction();
+
+                if (!target.isAlive()) {
+
+                    world.ui.log.log('"' + entity.name + '" killed "' + target.name + '" with "' + entity.weapon.title + '"');
+
+                    entity.target = false;
+
+                    return Roles.IDLE;
+                }
+            }
+        }
+    }]);
+
+    return RoleSoldier;
 }();
 
 /* --------------------------------- */
@@ -36566,7 +36724,7 @@ var TimeOfDay = function () {
     function TimeOfDay() {
         _classCallCheck(this, TimeOfDay);
 
-        this.time = 18.5;
+        this.time = 8;
         this.count = 0;
     }
 

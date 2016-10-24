@@ -325,6 +325,42 @@ Hunter.WIDTH = 12;
 Hunter.HEIGHT = 12;
 
 
+
+/* -------------- */
+/* ----- Barracks */
+/* -------------- */
+
+export class Barracks extends Building {
+
+    constructor(world, startX, startY, archetype, isTemp) {
+
+        super(world, startX, startY, archetype, isTemp);
+
+        this.inhabitants.addArchetype(Archetypes.SOLDIER);
+        this.inhabitants.addArchetype(Archetypes.SOLDIER);
+        this.inhabitants.addArchetype(Archetypes.SOLDIER);
+        this.inhabitants.addArchetype(Archetypes.SOLDIER);
+
+    }
+
+    draw(graphics) {
+
+        graphics.beginFill(0x999999);
+        graphics.drawRect(- Barracks.WIDTH * .5, - Barracks.HEIGHT, Barracks.WIDTH, Barracks.HEIGHT);
+        graphics.endFill();
+        graphics.beginFill(0x2D717F);
+        graphics.drawRect(- Barracks.WIDTH * .5 + 4, -6, Barracks.WIDTH - 8, 6);
+        graphics.endFill();
+
+    }
+
+}
+
+
+Barracks.WIDTH = 14;
+Barracks.HEIGHT = 11;
+
+
 /* -------------- */
 /* -------- Miner */
 /* -------------- */
