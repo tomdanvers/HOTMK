@@ -36756,7 +36756,7 @@ function Viewport(world, width, height, worldWidth, worldHeight, isInteractive) 
     this.scrollTarget = this.scroll;
 
     this.isEnabled = true;
-    this.isInteractive = isInteractive;
+    this.isInteractive = false; //isInteractive;
 
     if (this.isInteractive) {
 
@@ -37002,6 +37002,7 @@ function World() {
     // 746
     // 776
     // 806
+    // 870
     // 841
     // 929
 

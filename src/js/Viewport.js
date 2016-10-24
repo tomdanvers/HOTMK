@@ -18,7 +18,7 @@ export default function Viewport(world, width, height, worldWidth, worldHeight, 
     this.scrollTarget = this.scroll;
 
     this.isEnabled = true;
-    this.isInteractive = isInteractive;
+    this.isInteractive = false;//isInteractive;
 
     if (this.isInteractive) {
 
