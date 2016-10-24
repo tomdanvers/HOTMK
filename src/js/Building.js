@@ -140,8 +140,8 @@ export class Watch extends Building {
         super(world, startX, startY, archetype, isTemp);
 
         this.patrolRoute = false;
-        this.patrolRadius = 225;
-        this.lightRadius = 125;
+        this.patrolRadius = 200;
+        this.lightRadius = 100;
 
     }
 
@@ -227,7 +227,7 @@ Watch.HEIGHT = 18;
 /* --- NightWatch */
 /* -------------- */
 
-export class NightWatch extends Building {
+export class NightWatch extends Watch {
 
     constructor(world, startX, startY, archetype, isTemp) {
 
@@ -262,7 +262,7 @@ NightWatch.HEIGHT = 18;
 /* ----- DayWatch */
 /* -------------- */
 
-export class DayWatch extends Building {
+export class DayWatch extends Watch {
 
     constructor(world, startX, startY, archetype, isTemp) {
 

@@ -12,12 +12,14 @@ export default class Lighting extends PIXI.Sprite {
         let w = World.WIDTH * Tile.WIDTH;
         let h = World.HEIGHT * Tile.HEIGHT;
 
+        let vW = world.viewport.width;
+        let vH = world.viewport.height;
 
         // Combined lighting
 
         this.lightCanvas = document.createElement('canvas');
-        this.lightCanvas.width = w;
-        this.lightCanvas.height = h;
+        this.lightCanvas.width = vW;
+        this.lightCanvas.height = vH;
 
         this.lightCtx = this.lightCanvas.getContext('2d');
 
@@ -25,8 +27,8 @@ export default class Lighting extends PIXI.Sprite {
         // Yellow glow
 
         this.glowCanvas = document.createElement('canvas');
-        this.glowCanvas.width = w;
-        this.glowCanvas.height = h;
+        this.glowCanvas.width = vW;
+        this.glowCanvas.height = vH;
 
         this.glowCtx = this.glowCanvas.getContext('2d');
         this.glowCtx.fillStyle = 'rgba(250, 224, 77, .15)';
@@ -36,8 +38,8 @@ export default class Lighting extends PIXI.Sprite {
         // Darkness with lights cut out
 
         this.shadowCanvas = document.createElement('canvas');
-        this.shadowCanvas.width = w;
-        this.shadowCanvas.height = h;
+        this.shadowCanvas.width = vW;
+        this.shadowCanvas.height = vH;
 
         this.shadowCtx = this.shadowCanvas.getContext('2d');
 
@@ -173,6 +175,11 @@ export default class Lighting extends PIXI.Sprite {
             let width = World.WIDTH * Tile.WIDTH;
             let height = World.HEIGHT * Tile.HEIGHT;
 
+            width = world.viewport.width;
+            height = world.viewport.height;
+
+            let viewportOffset = world.viewport.scroll;
+
             // Reset lighting
 
             this.lightCtx.clearRect(0, 0, width, height);
@@ -190,11 +197,11 @@ export default class Lighting extends PIXI.Sprite {
 
             this.shadowCtx.globalCompositeOperation = 'destination-out';
 
-            this.shadowCtx.drawImage(this.staticCanvas, 0, 0);
+            this.shadowCtx.drawImage(this.staticCanvas, 0, - viewportOffset);
 
             this.emitters.forEach(function(emitter) {
 
-                this.shadowCtx.drawImage(emitter.canvas, emitter.owner.x - emitter.radius + emitter.xOffset, emitter.owner.y - emitter.radius + emitter.yOffset);
+                this.shadowCtx.drawImage(emitter.canvas, emitter.owner.x - emitter.radius + emitter.xOffset, emitter.owner.y - emitter.radius + emitter.yOffset - viewportOffset);
 
             }.bind(this));
 

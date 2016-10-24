@@ -128,9 +128,9 @@ export default class World extends PIXI.Container {
         this.content.addChild(this.background);
         this.content.addChild(this.containerZOrdered);
         this.content.addChild(this.containerLights);
-        this.content.addChild(this.lighting);
 
         this.addChild(this.content);
+        this.addChild(this.lighting);
         this.addChild(this.ui);
 
         // Add buildings

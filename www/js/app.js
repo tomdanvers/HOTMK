@@ -33571,8 +33571,8 @@ var Watch = exports.Watch = function (_Building2) {
         var _this3 = _possibleConstructorReturn(this, (Watch.__proto__ || Object.getPrototypeOf(Watch)).call(this, world, startX, startY, archetype, isTemp));
 
         _this3.patrolRoute = false;
-        _this3.patrolRadius = 225;
-        _this3.lightRadius = 125;
+        _this3.patrolRadius = 200;
+        _this3.lightRadius = 100;
 
         return _this3;
     }
@@ -33656,8 +33656,8 @@ Watch.HEIGHT = 18;
 /* --- NightWatch */
 /* -------------- */
 
-var NightWatch = exports.NightWatch = function (_Building3) {
-    _inherits(NightWatch, _Building3);
+var NightWatch = exports.NightWatch = function (_Watch) {
+    _inherits(NightWatch, _Watch);
 
     function NightWatch(world, startX, startY, archetype, isTemp) {
         _classCallCheck(this, NightWatch);
@@ -33685,7 +33685,7 @@ var NightWatch = exports.NightWatch = function (_Building3) {
     }]);
 
     return NightWatch;
-}(Building);
+}(Watch);
 
 NightWatch.WIDTH = 12;
 NightWatch.HEIGHT = 18;
@@ -33694,8 +33694,8 @@ NightWatch.HEIGHT = 18;
 /* ----- DayWatch */
 /* -------------- */
 
-var DayWatch = exports.DayWatch = function (_Building4) {
-    _inherits(DayWatch, _Building4);
+var DayWatch = exports.DayWatch = function (_Watch2) {
+    _inherits(DayWatch, _Watch2);
 
     function DayWatch(world, startX, startY, archetype, isTemp) {
         _classCallCheck(this, DayWatch);
@@ -33723,7 +33723,7 @@ var DayWatch = exports.DayWatch = function (_Building4) {
     }]);
 
     return DayWatch;
-}(Building);
+}(Watch);
 
 DayWatch.WIDTH = 12;
 DayWatch.HEIGHT = 18;
@@ -33732,8 +33732,8 @@ DayWatch.HEIGHT = 18;
 /* ------- Hunter */
 /* -------------- */
 
-var Hunter = exports.Hunter = function (_Building5) {
-    _inherits(Hunter, _Building5);
+var Hunter = exports.Hunter = function (_Building3) {
+    _inherits(Hunter, _Building3);
 
     function Hunter(world, startX, startY, archetype, isTemp) {
         _classCallCheck(this, Hunter);
@@ -33768,8 +33768,8 @@ Hunter.HEIGHT = 12;
 /* -------- Miner */
 /* -------------- */
 
-var Miner = exports.Miner = function (_Building6) {
-    _inherits(Miner, _Building6);
+var Miner = exports.Miner = function (_Building4) {
+    _inherits(Miner, _Building4);
 
     function Miner(world, startX, startY, archetype, isTemp) {
         _classCallCheck(this, Miner);
@@ -33804,8 +33804,8 @@ Miner.HEIGHT = 12;
 /* ----- Forester */
 /* -------------- */
 
-var Forester = exports.Forester = function (_Building7) {
-    _inherits(Forester, _Building7);
+var Forester = exports.Forester = function (_Building5) {
+    _inherits(Forester, _Building5);
 
     function Forester(world, startX, startY, archetype, isTemp) {
         _classCallCheck(this, Forester);
@@ -33840,8 +33840,8 @@ Forester.HEIGHT = 12;
 /* -------- Mason */
 /* -------------- */
 
-var Mason = exports.Mason = function (_Building8) {
-    _inherits(Mason, _Building8);
+var Mason = exports.Mason = function (_Building6) {
+    _inherits(Mason, _Building6);
 
     function Mason(world, startX, startY, archetype, isTemp) {
         _classCallCheck(this, Mason);
@@ -33876,8 +33876,8 @@ Mason.HEIGHT = 14;
 /* ------- Healer */
 /* -------------- */
 
-var Healer = exports.Healer = function (_Building9) {
-    _inherits(Healer, _Building9);
+var Healer = exports.Healer = function (_Building7) {
+    _inherits(Healer, _Building7);
 
     function Healer(world, startX, startY, archetype, isTemp) {
         _classCallCheck(this, Healer);
@@ -34757,19 +34757,22 @@ var Lighting = function (_PIXI$Sprite) {
         var w = _World2.default.WIDTH * _Tile2.default.WIDTH;
         var h = _World2.default.HEIGHT * _Tile2.default.HEIGHT;
 
+        var vW = world.viewport.width;
+        var vH = world.viewport.height;
+
         // Combined lighting
 
         _this.lightCanvas = document.createElement('canvas');
-        _this.lightCanvas.width = w;
-        _this.lightCanvas.height = h;
+        _this.lightCanvas.width = vW;
+        _this.lightCanvas.height = vH;
 
         _this.lightCtx = _this.lightCanvas.getContext('2d');
 
         // Yellow glow
 
         _this.glowCanvas = document.createElement('canvas');
-        _this.glowCanvas.width = w;
-        _this.glowCanvas.height = h;
+        _this.glowCanvas.width = vW;
+        _this.glowCanvas.height = vH;
 
         _this.glowCtx = _this.glowCanvas.getContext('2d');
         _this.glowCtx.fillStyle = 'rgba(250, 224, 77, .15)';
@@ -34778,8 +34781,8 @@ var Lighting = function (_PIXI$Sprite) {
         // Darkness with lights cut out
 
         _this.shadowCanvas = document.createElement('canvas');
-        _this.shadowCanvas.width = w;
-        _this.shadowCanvas.height = h;
+        _this.shadowCanvas.width = vW;
+        _this.shadowCanvas.height = vH;
 
         _this.shadowCtx = _this.shadowCanvas.getContext('2d');
 
@@ -34907,42 +34910,50 @@ var Lighting = function (_PIXI$Sprite) {
     }, {
         key: 'update',
         value: function update(timeDelta, world) {
+            var _this2 = this;
 
             if (world.timeOfDay.getSunValue() > 0) {
+                (function () {
 
-                var width = _World2.default.WIDTH * _Tile2.default.WIDTH;
-                var height = _World2.default.HEIGHT * _Tile2.default.HEIGHT;
+                    var width = _World2.default.WIDTH * _Tile2.default.WIDTH;
+                    var height = _World2.default.HEIGHT * _Tile2.default.HEIGHT;
 
-                // Reset lighting
+                    width = world.viewport.width;
+                    height = world.viewport.height;
 
-                this.lightCtx.clearRect(0, 0, width, height);
+                    var viewportOffset = world.viewport.scroll;
 
-                // Draw glow
+                    // Reset lighting
 
-                this.lightCtx.drawImage(this.glowCanvas, 0, 0);
+                    _this2.lightCtx.clearRect(0, 0, width, height);
 
-                // Darkness with lights cut out
+                    // Draw glow
 
-                this.shadowCtx.clearRect(0, 0, width, height);
+                    _this2.lightCtx.drawImage(_this2.glowCanvas, 0, 0);
 
-                this.shadowCtx.fillStyle = 'rgba(0, 0, 0, .7)';
-                this.shadowCtx.fillRect(0, 0, width, height);
+                    // Darkness with lights cut out
 
-                this.shadowCtx.globalCompositeOperation = 'destination-out';
+                    _this2.shadowCtx.clearRect(0, 0, width, height);
 
-                this.shadowCtx.drawImage(this.staticCanvas, 0, 0);
+                    _this2.shadowCtx.fillStyle = 'rgba(0, 0, 0, .7)';
+                    _this2.shadowCtx.fillRect(0, 0, width, height);
 
-                this.emitters.forEach(function (emitter) {
+                    _this2.shadowCtx.globalCompositeOperation = 'destination-out';
 
-                    this.shadowCtx.drawImage(emitter.canvas, emitter.owner.x - emitter.radius + emitter.xOffset, emitter.owner.y - emitter.radius + emitter.yOffset);
-                }.bind(this));
+                    _this2.shadowCtx.drawImage(_this2.staticCanvas, 0, -viewportOffset);
 
-                this.shadowCtx.globalCompositeOperation = 'source-over';
+                    _this2.emitters.forEach(function (emitter) {
 
-                this.lightCtx.drawImage(this.shadowCanvas, 0, 0);
+                        this.shadowCtx.drawImage(emitter.canvas, emitter.owner.x - emitter.radius + emitter.xOffset, emitter.owner.y - emitter.radius + emitter.yOffset - viewportOffset);
+                    }.bind(_this2));
 
-                this.texture = _pixi2.default.Texture.fromCanvas(this.lightCanvas);
-                this.texture.update();
+                    _this2.shadowCtx.globalCompositeOperation = 'source-over';
+
+                    _this2.lightCtx.drawImage(_this2.shadowCanvas, 0, 0);
+
+                    _this2.texture = _pixi2.default.Texture.fromCanvas(_this2.lightCanvas);
+                    _this2.texture.update();
+                })();
             }
 
             this.alpha = world.timeOfDay.getSunValue();
@@ -36522,7 +36533,16 @@ Tile.TILE_COLOURS = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = TimeOfDay;
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
 
 var _pixi = require('pixi.js');
 
@@ -36536,105 +36556,125 @@ function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
 
-function TimeOfDay() {
-
-    this.time = 16;
-    this.count = 0;
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
 }
+
+var TimeOfDay = function () {
+    function TimeOfDay() {
+        _classCallCheck(this, TimeOfDay);
+
+        this.time = 18.5;
+        this.count = 0;
+    }
+
+    _createClass(TimeOfDay, [{
+        key: 'update',
+        value: function update(timeDelta, world) {
+
+            this.count++;
+
+            // this.time += timeDelta * 0.0005;
+            this.time += timeDelta * 0.00005;
+
+            var hour = this.getHour();
+            var minute = this.getMinute();
+
+            if (hour != this.hourOld || minute != this.minuteOld) {
+
+                this.timeChanged(world, hour, minute);
+            }
+
+            this.hourOld = hour;
+            this.minuteOld = minute;
+
+            if (this.time >= 24) {
+
+                this.time = 0;
+            }
+
+            if (this.count >= Number.MAX_VALUE) {
+
+                this.count = 0;
+            }
+        }
+    }, {
+        key: 'timeChanged',
+        value: function timeChanged(world, hour, minute) {
+
+            world.ui.time.update(hour, minute);
+        }
+    }, {
+        key: 'getValue',
+        value: function getValue() {
+
+            return this.time / 24;
+        }
+    }, {
+        key: 'getSunValue',
+        value: function getSunValue() {
+
+            var val = void 0;
+
+            if (this.time < TimeOfDay.DAWN_START) {
+
+                val = 0;
+            } else if (this.time < TimeOfDay.DAWN_END) {
+
+                val = (this.time - TimeOfDay.DAWN_START) / (TimeOfDay.DAWN_END - TimeOfDay.DAWN_START);
+            } else if (this.time < TimeOfDay.DUSK_START) {
+
+                val = 1;
+            } else if (this.time < TimeOfDay.DUSK_END) {
+
+                val = 1 - (this.time - TimeOfDay.DUSK_START) / (TimeOfDay.DUSK_END - TimeOfDay.DUSK_START);
+            } else {
+
+                val = 0;
+            }
+
+            return 1 - val;
+        }
+    }, {
+        key: 'getHour',
+        value: function getHour() {
+
+            return Math.floor(this.time);
+        }
+    }, {
+        key: 'getMinute',
+        value: function getMinute() {
+
+            return Math.floor(this.time % 1 * 60);
+        }
+    }, {
+        key: 'isDuringPeriod',
+        value: function isDuringPeriod(start, end) {
+
+            // NB only works for roles that are in the daytime...
+
+            if (start > end) {
+
+                return this.time >= start || this.time < end;
+            } else {
+
+                return this.time >= start && this.time < end;
+            }
+        }
+    }]);
+
+    return TimeOfDay;
+}();
+
+exports.default = TimeOfDay;
 
 TimeOfDay.DAWN_START = 6;
 TimeOfDay.DAWN_END = 7.5;
 
 TimeOfDay.DUSK_START = 19;
 TimeOfDay.DUSK_END = 21;
-
-TimeOfDay.constructor = TimeOfDay;
-
-TimeOfDay.prototype.update = function (timeDelta, world) {
-
-    this.count++;
-
-    // this.time += timeDelta * 0.0005;
-    this.time += timeDelta * 0.00005;
-
-    var hour = this.getHour();
-    var minute = this.getMinute();
-
-    if (hour != this.hourOld || minute != this.minuteOld) {
-
-        this.timeChanged(world, hour, minute);
-    }
-
-    this.hourOld = hour;
-    this.minuteOld = minute;
-
-    if (this.time >= 24) {
-
-        this.time = 0;
-    }
-
-    if (this.count >= Number.MAX_VALUE) {
-
-        this.count = 0;
-    }
-};
-
-TimeOfDay.prototype.timeChanged = function (world, hour, minute) {
-
-    world.ui.time.update(hour, minute);
-};
-
-TimeOfDay.prototype.getValue = function () {
-
-    return this.time / 24;
-};
-
-TimeOfDay.prototype.getSunValue = function () {
-
-    var val = void 0;
-
-    if (this.time < TimeOfDay.DAWN_START) {
-
-        val = 0;
-    } else if (this.time < TimeOfDay.DAWN_END) {
-
-        val = (this.time - TimeOfDay.DAWN_START) / (TimeOfDay.DAWN_END - TimeOfDay.DAWN_START);
-    } else if (this.time < TimeOfDay.DUSK_START) {
-
-        val = 1;
-    } else if (this.time < TimeOfDay.DUSK_END) {
-
-        val = 1 - (this.time - TimeOfDay.DUSK_START) / (TimeOfDay.DUSK_END - TimeOfDay.DUSK_START);
-    } else {
-
-        val = 0;
-    }
-
-    return 1 - val;
-};
-
-TimeOfDay.prototype.getHour = function () {
-
-    return Math.floor(this.time);
-};
-
-TimeOfDay.prototype.getMinute = function () {
-
-    return Math.floor(this.time % 1 * 60);
-};
-
-TimeOfDay.prototype.isDuringPeriod = function (start, end) {
-
-    // NB only works for roles that are in the daytime...
-
-    if (start > end) {
-
-        return this.time >= start || this.time < end;
-    } else {
-
-        return this.time >= start && this.time < end;
-    }
-};
 
 },{"./utils/ValueMinMax":235,"pixi.js":154}],226:[function(require,module,exports){
 'use strict';
@@ -38096,9 +38136,9 @@ var World = function (_PIXI$Container) {
         _this.content.addChild(_this.background);
         _this.content.addChild(_this.containerZOrdered);
         _this.content.addChild(_this.containerLights);
-        _this.content.addChild(_this.lighting);
 
         _this.addChild(_this.content);
+        _this.addChild(_this.lighting);
         _this.addChild(_this.ui);
 
         // Add buildings
