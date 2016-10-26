@@ -235,7 +235,7 @@ export class NightWatch extends Watch {
 
         this.inhabitants.addArchetype(Archetypes.WATCH_NIGHT);
         this.inhabitants.addArchetype(Archetypes.WATCH_NIGHT);
-        this.inhabitants.addArchetype(Archetypes.WATCH_NIGHT);
+        this.inhabitants.addArchetype(Archetypes.HEALER);
 
     }
 

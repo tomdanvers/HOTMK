@@ -71,7 +71,7 @@ class Dwarf {
 
         this.range = 5;
         this.rangePerception = 125;
-        this.rangeLimit = 200;
+        this.rangeLimit = 100;
         this.rangeIdle = 30;
 
         this.lightRadius = 0;
@@ -188,7 +188,8 @@ export class Hunter extends Dwarf {
 
         this.lightRadius = 45;
 
-        this.rangePerception = 200;
+        this.rangePerception = 150;
+        this.rangeLimit = 100;
 
         this.colour = 0x58240A;
 

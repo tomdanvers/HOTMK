@@ -32957,7 +32957,7 @@ var Dwarf = function Dwarf() {
 
     this.range = 5;
     this.rangePerception = 125;
-    this.rangeLimit = 200;
+    this.rangeLimit = 100;
     this.rangeIdle = 30;
 
     this.lightRadius = 0;
@@ -33077,7 +33077,8 @@ var Hunter = exports.Hunter = function (_Dwarf4) {
 
         _this4.lightRadius = 45;
 
-        _this4.rangePerception = 200;
+        _this4.rangePerception = 150;
+        _this4.rangeLimit = 100;
 
         _this4.colour = 0x58240A;
 
@@ -33701,7 +33702,7 @@ var NightWatch = exports.NightWatch = function (_Watch) {
 
         _this4.inhabitants.addArchetype(_Archetypes2.default.WATCH_NIGHT);
         _this4.inhabitants.addArchetype(_Archetypes2.default.WATCH_NIGHT);
-        _this4.inhabitants.addArchetype(_Archetypes2.default.WATCH_NIGHT);
+        _this4.inhabitants.addArchetype(_Archetypes2.default.HEALER);
 
         return _this4;
     }
