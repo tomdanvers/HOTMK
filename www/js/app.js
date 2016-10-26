@@ -35354,7 +35354,6 @@ var Rock = function (_PIXI$Container) {
         var base = new _pixi2.default.Sprite(_pixi2.default.Texture.fromImage('img/rock-' + r + '.png'));
         base.x = -5;
         base.y = -10;
-
         _this.addChild(base);
 
         return _this;
@@ -35408,10 +35407,6 @@ var _createClass = function () {
 var _Maths = require('./utils/Maths');
 
 var _Maths2 = _interopRequireDefault(_Maths);
-
-var _Dwarf = require('./Dwarf');
-
-var _Dwarf2 = _interopRequireDefault(_Dwarf);
 
 var _Tree = require('./Tree');
 
@@ -35520,6 +35515,14 @@ var RoleIdle = function () {
                         x: entity.startX + Math.cos(a) * idleRange,
                         y: entity.startY + Math.sin(a) * idleRange
                     };
+
+                    // TEMP FIX TO MAKE ANIMALS PROGRESS DOWN SCREEN
+                    if (entity.type === 'animal') {
+
+                        entity.target.y += Math.random() * 30;
+
+                        entity.startY = entity.target.y;
+                    }
                 }
 
                 entity.tookAction();
@@ -36430,7 +36433,7 @@ var Utils = {
     }
 };
 
-},{"./Dwarf":214,"./Rock":221,"./Tree":226,"./utils/Maths":234}],223:[function(require,module,exports){
+},{"./Rock":221,"./Tree":226,"./utils/Maths":234}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

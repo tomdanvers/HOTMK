@@ -1,5 +1,4 @@
 import Maths from './utils/Maths';
-import Dwarf from './Dwarf';
 import Tree from './Tree';
 import Rock from './Rock';
 
@@ -78,6 +77,16 @@ class RoleIdle {
                     x: entity.startX + Math.cos(a) * idleRange,
                     y: entity.startY + Math.sin(a) * idleRange
                 };
+
+
+                // TEMP FIX TO MAKE ANIMALS PROGRESS DOWN SCREEN
+                if (entity.type === 'animal') {
+
+                    entity.target.y += Math.random() * 30;
+
+                    entity.startY = entity.target.y;
+
+                }
 
             }
 

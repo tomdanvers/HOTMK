@@ -16,7 +16,6 @@ export default class Rock extends PIXI.Container {
         let base = new PIXI.Sprite(PIXI.Texture.fromImage(`img/rock-${r}.png`));
         base.x = -5;
         base.y = -10;
-
         this.addChild(base);
 
     }
