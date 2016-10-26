@@ -6,7 +6,7 @@ import Viewport from './Viewport';
 
 import Tile from './Tile';
 
-import Tree from './Tree';
+import {TreeConifer, TreeDeciduous} from './Tree';
 
 import Rock from './Rock';
 
@@ -190,10 +190,14 @@ export default class World extends PIXI.Container {
 
             tile.occupy();
 
-            let offsetX = Tile.WIDTH * .3 * Math.random() - Tile.WIDTH * .15;
-            let offsetY = Tile.HEIGHT * .3 * Math.random() - Tile.HEIGHT * .15;
+            let offsetRangeX = Tile.WIDTH * .5;
+            let offsetRangeY = Tile.HEIGHT * .4;
 
-            let tree = new Tree();
+            let offsetX = Math.round(offsetRangeX * Math.random() - offsetRangeX * .5);
+            let offsetY = Math.round(offsetRangeY * Math.random() - offsetRangeY * .5);
+
+            let tree = tile.elevation > .3 ? new TreeDeciduous() : new TreeConifer();
+
             tree.x = tile.x + Tile.WIDTH * .5 + offsetX;
             tree.y = tile.y + Tile.HEIGHT * .5 + offsetY;
 

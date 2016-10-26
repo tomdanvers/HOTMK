@@ -34489,7 +34489,7 @@ var Dwarf = function (_Creature) {
 
 exports.default = Dwarf;
 
-Dwarf.NAMES_FIRST = ['Snorri', 'Ori', 'Nori', 'Gloin', 'Oin', 'Bifur', 'Bofur', 'Thorin', 'Balin'];
+Dwarf.NAMES_FIRST = ['Snorri', 'Ori', 'Nori', 'Gloin', 'Oin', 'Bifur', 'Bofur', 'Thorin', 'Balin', 'Thrain', 'Gimli'];
 Dwarf.NAMES_LAST = ['Oakenshield', 'Bittenaxe', 'Longbeard', 'Undermountain', 'Ironskull', 'Steelhammer', 'Goldring'];
 
 Dwarf.getName = function () {
@@ -35349,10 +35349,11 @@ var Rock = function (_PIXI$Container) {
 
         _this.supply = new _ValueMinMax2.default(0, Rock.SUPPLY, 0);
 
-        var base = new _pixi2.default.Graphics();
-        base.beginFill(0x555555);
-        base.drawRect(-Rock.WIDTH * .5, -Rock.HEIGHT, Rock.WIDTH, Rock.HEIGHT);
-        base.endFill();
+        var r = Math.floor(Math.random() * 3);
+
+        var base = new _pixi2.default.Sprite(_pixi2.default.Texture.fromImage('img/rock-' + r + '.png'));
+        base.x = -5;
+        base.y = -10;
 
         _this.addChild(base);
 
@@ -36772,6 +36773,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.TreeDeciduous = exports.TreeConifer = undefined;
 
 var _createClass = function () {
     function defineProperties(target, props) {
@@ -36829,25 +36831,31 @@ var Tree = function (_PIXI$Container) {
 
         _this.supply = new _ValueMinMax2.default(0, Tree.SUPPLY, 0);
 
-        var base = new _pixi2.default.Graphics();
-
-        base.beginFill(0x613917);
-        base.drawRect(-1, -2, 2, 3);
-        base.endFill();
-
-        base.beginFill(0x004400);
-        base.moveTo(0, -Tree.HEIGHT - 2);
-        base.lineTo(-Tree.WIDTH * .5, -2);
-        base.lineTo(Tree.WIDTH * .5, -2);
-        base.lineTo(0, -Tree.HEIGHT - 2);
-        base.endFill();
-
-        _this.addChild(base);
+        _this.addChild(_this.draw());
 
         return _this;
     }
 
     _createClass(Tree, [{
+        key: 'draw',
+        value: function draw() {
+
+            var base = new _pixi2.default.Graphics();
+
+            base.beginFill(0x613917);
+            base.drawRect(-1, -2, 2, 3);
+            base.endFill();
+
+            base.beginFill(0x004400);
+            base.moveTo(0, -Tree.HEIGHT - 2);
+            base.lineTo(-Tree.WIDTH * .5, -2);
+            base.lineTo(Tree.WIDTH * .5, -2);
+            base.lineTo(0, -Tree.HEIGHT - 2);
+            base.endFill();
+
+            return base;
+        }
+    }, {
         key: 'update',
         value: function update(timeDelta, world) {
 
@@ -36882,6 +36890,56 @@ Tree.HEIGHT = 24;
 
 Tree.TYPE = 'tree';
 Tree.SUPPLY = 100;
+
+var TreeConifer = exports.TreeConifer = function (_Tree) {
+    _inherits(TreeConifer, _Tree);
+
+    function TreeConifer() {
+        _classCallCheck(this, TreeConifer);
+
+        return _possibleConstructorReturn(this, (TreeConifer.__proto__ || Object.getPrototypeOf(TreeConifer)).apply(this, arguments));
+    }
+
+    _createClass(TreeConifer, [{
+        key: 'draw',
+        value: function draw() {
+
+            var r = Math.floor(Math.random() * 3);
+
+            var base = new _pixi2.default.Sprite(_pixi2.default.Texture.fromImage('img/tree-conifer-' + r + '.png'));
+            base.x = -6;
+            base.y = -28;
+            return base;
+        }
+    }]);
+
+    return TreeConifer;
+}(Tree);
+
+var TreeDeciduous = exports.TreeDeciduous = function (_Tree2) {
+    _inherits(TreeDeciduous, _Tree2);
+
+    function TreeDeciduous() {
+        _classCallCheck(this, TreeDeciduous);
+
+        return _possibleConstructorReturn(this, (TreeDeciduous.__proto__ || Object.getPrototypeOf(TreeDeciduous)).apply(this, arguments));
+    }
+
+    _createClass(TreeDeciduous, [{
+        key: 'draw',
+        value: function draw() {
+
+            var r = Math.floor(Math.random() * 3);
+
+            var base = new _pixi2.default.Sprite(_pixi2.default.Texture.fromImage('img/tree-deciduous-' + r + '.png'));
+            base.x = -10;
+            base.y = -25;
+            return base;
+        }
+    }]);
+
+    return TreeDeciduous;
+}(Tree);
 
 },{"./Tile":224,"./utils/ValueMinMax":235,"pixi.js":154}],227:[function(require,module,exports){
 'use strict';
@@ -38061,8 +38119,6 @@ var _Tile2 = _interopRequireDefault(_Tile);
 
 var _Tree = require('./Tree');
 
-var _Tree2 = _interopRequireDefault(_Tree);
-
 var _Rock = require('./Rock');
 
 var _Rock2 = _interopRequireDefault(_Rock);
@@ -38285,10 +38341,14 @@ var World = function (_PIXI$Container) {
 
                 tile.occupy();
 
-                var offsetX = _Tile2.default.WIDTH * .3 * Math.random() - _Tile2.default.WIDTH * .15;
-                var offsetY = _Tile2.default.HEIGHT * .3 * Math.random() - _Tile2.default.HEIGHT * .15;
+                var offsetRangeX = _Tile2.default.WIDTH * .5;
+                var offsetRangeY = _Tile2.default.HEIGHT * .4;
 
-                var tree = new _Tree2.default();
+                var offsetX = Math.round(offsetRangeX * Math.random() - offsetRangeX * .5);
+                var offsetY = Math.round(offsetRangeY * Math.random() - offsetRangeY * .5);
+
+                var tree = tile.elevation > .3 ? new _Tree.TreeDeciduous() : new _Tree.TreeConifer();
+
                 tree.x = tile.x + _Tile2.default.WIDTH * .5 + offsetX;
                 tree.y = tile.y + _Tile2.default.HEIGHT * .5 + offsetY;
 

@@ -11,10 +11,11 @@ export default class Rock extends PIXI.Container {
 
         this.supply = new ValueMinMax(0, Rock.SUPPLY, 0);
 
-        let base = new PIXI.Graphics();
-        base.beginFill(0x555555);
-        base.drawRect(- Rock.WIDTH * .5, - Rock.HEIGHT, Rock.WIDTH, Rock.HEIGHT);
-        base.endFill();
+        let r = Math.floor(Math.random() * 3);
+
+        let base = new PIXI.Sprite(PIXI.Texture.fromImage(`img/rock-${r}.png`));
+        base.x = -5;
+        base.y = -10;
 
         this.addChild(base);
 

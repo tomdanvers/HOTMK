@@ -13,6 +13,12 @@ export default class Tree extends PIXI.Container {
 
         this.supply = new ValueMinMax(0, Tree.SUPPLY, 0);
 
+        this.addChild(this.draw());
+
+    }
+
+    draw() {
+
         let base = new PIXI.Graphics();
 
         base.beginFill(0x613917);
@@ -26,7 +32,7 @@ export default class Tree extends PIXI.Container {
         base.lineTo(0, - Tree.HEIGHT-2);
         base.endFill();
 
-        this.addChild(base)
+        return base;
 
     }
 
@@ -63,3 +69,33 @@ Tree.HEIGHT = 24;
 
 Tree.TYPE = 'tree';
 Tree.SUPPLY = 100;
+
+export class TreeConifer extends Tree {
+
+    draw() {
+
+        let r = Math.floor(Math.random() * 3);
+
+        let base = new PIXI.Sprite(PIXI.Texture.fromImage(`img/tree-conifer-${r}.png`));
+        base.x = -6;
+        base.y = -28;
+        return base;
+
+    }
+
+}
+
+export class TreeDeciduous extends Tree {
+
+    draw() {
+
+        let r = Math.floor(Math.random() * 3);
+
+        let base = new PIXI.Sprite(PIXI.Texture.fromImage(`img/tree-deciduous-${r}.png`));
+        base.x = -10;
+        base.y = -25;
+        return base;
+
+    }
+
+}
