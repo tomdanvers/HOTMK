@@ -19,6 +19,8 @@ export default class MotherNature {
 
         this.animalsMap = {};
         this.animals = [];
+        this.predators = [];
+        this.prey = [];
 
         this.animalArchetypes.forEach(function(animalArchetype) {
 
@@ -33,8 +35,6 @@ export default class MotherNature {
         this.animalArchetypes.forEach(function(animalArchetype) {
 
             if (Math.random() > .99 && this.animalsMap[animalArchetype.id].length < animalArchetype.maxConcurrent && this.world.timeOfDay.isDuringPeriod(animalArchetype.startTime, animalArchetype.endTime)) {
-
-                // console.log('MotherNature.spawnAnimal(',animalArchetype.id,')');
 
                 this.spawn(animalArchetype);
 
@@ -52,6 +52,16 @@ export default class MotherNature {
 
         this.animalsMap[animalArchetype.id].push(animal);
         this.animals.push(animal);
+
+        if (animalArchetype.archetype.role === 'prey') {
+
+            this.prey.push(animal);
+
+        } else {
+
+            this.predators.push(animal);
+
+        }
 
     }
 
@@ -73,11 +83,19 @@ export default class MotherNature {
 
         }.bind(this));
 
-        for(let i = 0; i < this.animals.length; i ++) {
+        this.removeFrom(animal, this.animals);
+        this.removeFrom(animal, this.prey);
+        this.removeFrom(animal, this.predators);
 
-            if (animal === this.animals[i]) {
+    }
 
-                this.animals.splice(i, 1);
+    removeFrom(animal, pool) {
+
+        for(let i = 0; i < pool.length; i ++) {
+
+            if (animal === pool[i]) {
+
+                pool.splice(i, 1);
 
                 break;
 

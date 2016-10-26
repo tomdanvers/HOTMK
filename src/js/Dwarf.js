@@ -13,14 +13,22 @@ export default class Dwarf extends Creature {
 
         this.name = Dwarf.getName();
 
+        if (archetype.role === 'hunter') {
+
+            this.enemies = world.motherNature.animals;
+
+        } else {
+
+            this.enemies = world.motherNature.predators;
+
+        }
+
+
         if (archetype.lightRadius) {
 
             this.light = this.world.lighting.addEmitter(this, archetype.lightRadius, 0, -10);
 
         }
-
-        // TEMP test healer
-        this.takeDamage(10);
 
     }
 

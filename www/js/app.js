@@ -32731,6 +32731,8 @@ var Animal = function (_Creature) {
 
         _this.type = Animal.TYPE;
 
+        _this.enemies = world.dwarves;
+
         return _this;
     }
 
@@ -34072,8 +34074,8 @@ Buildings.ARCHETYPE_FORESTER = new BuildingArchetype('forester', 'Forester\'s Co
 Buildings.ARCHETYPE_MASON = new BuildingArchetype('mason', 'Mason\'s Cottage', 'A builder\'s home', 150, 150, _Building.Mason);
 Buildings.ARCHETYPE_HUNTER = new BuildingArchetype('hunter', 'Hunter\'s Shack', 'A hunter\'s shack', 100, 100, _Building.Hunter);
 Buildings.ARCHETYPE_BARRACKS = new BuildingArchetype('barracks', 'Barracks', 'A dwarven barracks', 200, 200, _Building.Barracks);
-Buildings.ARCHETYPE_DAYWATCH = new BuildingArchetype('day-watch', 'The Watch', 'A watch house that patrols during the day', 200, 200, _Building.DayWatch);
-Buildings.ARCHETYPE_NIGHTWATCH = new BuildingArchetype('night-watch', 'The Night Watch', 'A watch house that patrols during the hours of darkness', 200, 200, _Building.NightWatch);
+Buildings.ARCHETYPE_DAYWATCH = new BuildingArchetype('day-watch', 'The Watch', 'Patrols during the day', 200, 200, _Building.DayWatch);
+Buildings.ARCHETYPE_NIGHTWATCH = new BuildingArchetype('night-watch', 'The Night Watch', 'Patrols during the night', 200, 200, _Building.NightWatch);
 Buildings.ARCHETYPE_HEALER = new BuildingArchetype('healer', 'Healer\'s Home', 'A den of herbal healing', 120, 80, _Building.Healer);
 
 },{"./Building":211}],213:[function(require,module,exports){
@@ -34160,6 +34162,8 @@ var Creature = function (_PIXI$Container) {
 
         _this.weapons = archetype.weapons;
         _this.weapon = _this.weapons.length > 0 ? _this.weapons[0] : false;
+
+        _this.enemies = [];
 
         _this.angle = 0;
 
@@ -34455,13 +34459,18 @@ var Dwarf = function (_Creature) {
 
         _this.name = Dwarf.getName();
 
+        if (archetype.role === 'hunter') {
+
+            _this.enemies = world.motherNature.animals;
+        } else {
+
+            _this.enemies = world.motherNature.predators;
+        }
+
         if (archetype.lightRadius) {
 
             _this.light = _this.world.lighting.addEmitter(_this, archetype.lightRadius, 0, -10);
         }
-
-        // TEMP test healer
-        _this.takeDamage(10);
 
         return _this;
     }
@@ -35094,6 +35103,8 @@ var MotherNature = function () {
 
         this.animalsMap = {};
         this.animals = [];
+        this.predators = [];
+        this.prey = [];
 
         this.animalArchetypes.forEach(function (animalArchetype) {
 
@@ -35109,8 +35120,6 @@ var MotherNature = function () {
 
                 if (Math.random() > .99 && this.animalsMap[animalArchetype.id].length < animalArchetype.maxConcurrent && this.world.timeOfDay.isDuringPeriod(animalArchetype.startTime, animalArchetype.endTime)) {
 
-                    // console.log('MotherNature.spawnAnimal(',animalArchetype.id,')');
-
                     this.spawn(animalArchetype);
                 }
             }.bind(this));
@@ -35125,6 +35134,14 @@ var MotherNature = function () {
 
             this.animalsMap[animalArchetype.id].push(animal);
             this.animals.push(animal);
+
+            if (animalArchetype.archetype.role === 'prey') {
+
+                this.prey.push(animal);
+            } else {
+
+                this.predators.push(animal);
+            }
         }
     }, {
         key: 'removeAnimal',
@@ -35143,11 +35160,19 @@ var MotherNature = function () {
                 }
             }.bind(this));
 
-            for (var i = 0; i < this.animals.length; i++) {
+            this.removeFrom(animal, this.animals);
+            this.removeFrom(animal, this.prey);
+            this.removeFrom(animal, this.predators);
+        }
+    }, {
+        key: 'removeFrom',
+        value: function removeFrom(animal, pool) {
 
-                if (animal === this.animals[i]) {
+            for (var i = 0; i < pool.length; i++) {
 
-                    this.animals.splice(i, 1);
+                if (animal === pool[i]) {
+
+                    pool.splice(i, 1);
 
                     break;
                 }
@@ -35952,112 +35977,23 @@ var RoleBuilder = function () {
 }();
 
 /* --------------------------------- */
-/* -------------------------- HUNTER */
+/* ----------------- AGGRESSIVE BASE */
 /* --------------------------------- */
 
-var RoleHunter = function () {
-    function RoleHunter() {
-        _classCallCheck(this, RoleHunter);
+var RoleAggressive = function () {
+    function RoleAggressive() {
+        _classCallCheck(this, RoleAggressive);
 
-        this.id = 'hunter';
-
-        this.startTime = 5;
-        this.endTime = 19.5;
+        this.id = 'predator';
 
         this.isWeaponBased = true;
     }
 
-    _createClass(RoleHunter, [{
+    _createClass(RoleAggressive, [{
         key: 'checkCanPerform',
         value: function checkCanPerform(timeDelta, entity, world) {
 
-            var target = Utils.nearestWithProperty('health', entity, world.motherNature.animals);
-
-            return target && _Maths2.default.distanceBetween(entity, target) <= entity.rangePerception && _Maths2.default.distanceBetween(entity, entity.home) <= entity.rangeLimit;
-        }
-    }, {
-        key: 'update',
-        value: function update(timeDelta, entity, world) {
-
-            if (entity.target) {
-
-                if (_Maths2.default.distanceBetween(entity, entity.home) > entity.rangeLimit) {
-
-                    // This critter got away...
-
-                    entity.target = false;
-
-                    return Roles.IDLE;
-                }
-            } else {
-
-                var target = Utils.nearestWithProperty('health', entity, world.motherNature.animals);
-
-                if (target && _Maths2.default.distanceBetween(entity, target) <= entity.rangePerception && _Maths2.default.distanceBetween(entity, entity.home) <= entity.rangeLimit) {
-
-                    entity.target = target;
-                } else {
-
-                    return Roles.IDLE;
-                }
-            }
-        }
-    }, {
-        key: 'targetProximity',
-        value: function targetProximity(timeDelta, entity, world) {
-
-            if (entity.target && entity.target.isAlive !== undefined && entity.target.isAlive()) {
-
-                if (entity.canTakeAction()) {
-
-                    // Attack
-
-                    var animal = entity.target;
-
-                    animal.takeDamage(entity.weapon.damage, entity);
-
-                    entity.tookAction();
-
-                    if (!animal.isAlive()) {
-
-                        world.ui.log.log('Dwarf "' + entity.name + '" killed "' + animal.name + '" with "' + entity.weapon.title + '"');
-
-                        entity.target = false;
-
-                        return Roles.IDLE;
-                    }
-                }
-            } else {
-
-                entity.target = false;
-            }
-        }
-    }]);
-
-    return RoleHunter;
-}();
-
-/* --------------------------------- */
-/* ------------------------- SOLDIER */
-/* --------------------------------- */
-
-var RoleSoldier = function () {
-    function RoleSoldier() {
-        _classCallCheck(this, RoleSoldier);
-
-        this.id = 'soldier';
-
-        this.startTime = 5.5;
-        this.endTime = 20.5;
-
-        this.isWeaponBased = true;
-    }
-
-    _createClass(RoleSoldier, [{
-        key: 'checkCanPerform',
-        value: function checkCanPerform(timeDelta, entity, world) {
-
-            var targets = Utils.percievedEntities(entity, world.motherNature.animals);
+            var targets = Utils.percievedEntities(entity, entity.enemies);
 
             if (targets.length > 0) {
 
@@ -36112,8 +36048,54 @@ var RoleSoldier = function () {
         }
     }]);
 
-    return RoleSoldier;
+    return RoleAggressive;
 }();
+
+/* --------------------------------- */
+/* -------------------------- HUNTER */
+/* --------------------------------- */
+
+var RoleHunter = function (_RoleAggressive) {
+    _inherits(RoleHunter, _RoleAggressive);
+
+    function RoleHunter() {
+        _classCallCheck(this, RoleHunter);
+
+        var _this3 = _possibleConstructorReturn(this, (RoleHunter.__proto__ || Object.getPrototypeOf(RoleHunter)).call(this));
+
+        _this3.id = 'hunter';
+
+        _this3.startTime = 5;
+        _this3.endTime = 19.5;
+
+        return _this3;
+    }
+
+    return RoleHunter;
+}(RoleAggressive);
+
+/* --------------------------------- */
+/* ------------------------- SOLDIER */
+/* --------------------------------- */
+
+var RoleSoldier = function (_RoleAggressive2) {
+    _inherits(RoleSoldier, _RoleAggressive2);
+
+    function RoleSoldier() {
+        _classCallCheck(this, RoleSoldier);
+
+        var _this4 = _possibleConstructorReturn(this, (RoleSoldier.__proto__ || Object.getPrototypeOf(RoleSoldier)).call(this));
+
+        _this4.id = 'soldier';
+
+        _this4.startTime = 5.5;
+        _this4.endTime = 20.5;
+
+        return _this4;
+    }
+
+    return RoleSoldier;
+}(RoleAggressive);
 
 /* --------------------------------- */
 /* -------------------- COLLECT WOOD */
@@ -36299,76 +36281,21 @@ var RoleCollectStone = function () {
 /* ------------------------ PREDATOR */
 /* --------------------------------- */
 
-var RolePredator = function () {
+var RolePredator = function (_RoleAggressive3) {
+    _inherits(RolePredator, _RoleAggressive3);
+
     function RolePredator() {
         _classCallCheck(this, RolePredator);
 
-        this.id = 'predator';
+        var _this5 = _possibleConstructorReturn(this, (RolePredator.__proto__ || Object.getPrototypeOf(RolePredator)).call(this));
 
-        this.isWeaponBased = true;
+        _this5.id = 'predator';
+
+        return _this5;
     }
 
-    _createClass(RolePredator, [{
-        key: 'checkCanPerform',
-        value: function checkCanPerform(timeDelta, entity, world) {
-
-            var targets = Utils.percievedEntities(entity, world.dwarves);
-
-            if (targets.length > 0) {
-
-                entity.target = targets.random();
-
-                return true;
-            } else {
-
-                return false;
-            }
-        }
-    }, {
-        key: 'update',
-        value: function update(timeDelta, entity, world) {
-
-            if (entity.target) {
-
-                if (!entity.target.isAlive()) {
-
-                    entity.target = false;
-
-                    return Roles.IDLE;
-                }
-            } else {
-
-                return Roles.IDLE;
-            }
-        }
-    }, {
-        key: 'targetProximity',
-        value: function targetProximity(timeDelta, entity, world) {
-
-            if (entity.canTakeAction()) {
-
-                // Attack
-
-                var target = entity.target;
-
-                target.takeDamage(entity.weapon.damage, entity);
-
-                entity.tookAction();
-
-                if (!target.isAlive()) {
-
-                    world.ui.log.log('"' + entity.name + '" killed "' + target.name + '" with "' + entity.weapon.title + '"');
-
-                    entity.target = false;
-
-                    return Roles.IDLE;
-                }
-            }
-        }
-    }]);
-
     return RolePredator;
-}();
+}(RoleAggressive);
 
 /* --------------------------------- */
 /* ---------------------------- PREY */
@@ -37602,7 +37529,7 @@ var ConstructionUI = exports.ConstructionUI = function (_PanelUI2) {
         world.buildings.archetypes.forEach(function (archetype, index) {
 
             var archetypeButtonW = Math.min(300, this.background.width - 40);
-            var archetypeButtonH = 60;
+            var archetypeButtonH = 45;
 
             var archetypeButton = new _pixi2.default.Graphics();
 
@@ -37638,7 +37565,7 @@ var ConstructionUI = exports.ConstructionUI = function (_PanelUI2) {
 
             style.font = '12px Arial';
 
-            var textDescription = new _pixi2.default.Text(archetype.description + ' (' + archetype.cWood + ' wood : ' + archetype.cStone + ' stone)', style);
+            var textDescription = new _pixi2.default.Text(archetype.description + ' (' + archetype.cWood + 'W : ' + archetype.cStone + 'S)', style);
             textDescription.x = 10;
             textDescription.y = 30;
             textDescription.alpha = .75;

@@ -15,6 +15,8 @@ export default class Animal extends Creature {
 
         this.type = Animal.TYPE;
 
+        this.enemies = world.dwarves;
+
     }
 
     getAppearance(roleId) {

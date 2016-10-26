@@ -554,7 +554,7 @@ export class ConstructionUI extends PanelUI {
         world.buildings.archetypes.forEach(function(archetype, index) {
 
             let archetypeButtonW = Math.min(300, this.background.width - 40);
-            let archetypeButtonH = 60;
+            let archetypeButtonH = 45;
 
             let archetypeButton = new PIXI.Graphics();
 
@@ -590,7 +590,7 @@ export class ConstructionUI extends PanelUI {
 
             style.font = '12px Arial';
 
-            let textDescription = new PIXI.Text(archetype.description + ' (' + archetype.cWood + ' wood : ' + archetype.cStone + ' stone)', style);
+            let textDescription = new PIXI.Text(archetype.description + ' (' + archetype.cWood + 'W : ' + archetype.cStone + 'S)', style);
             textDescription.x = 10;
             textDescription.y = 30;
             textDescription.alpha = .75;

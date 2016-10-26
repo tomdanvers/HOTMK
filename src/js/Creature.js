@@ -24,6 +24,8 @@ export default class Creature extends PIXI.Container {
         this.weapons = archetype.weapons;
         this.weapon = this.weapons.length > 0 ? this.weapons[0] : false;
 
+        this.enemies = [];
+
         this.angle = 0;
 
         this.timeBetweenActions = archetype.timeBetweenActions;

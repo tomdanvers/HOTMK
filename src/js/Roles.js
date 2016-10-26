@@ -452,7 +452,6 @@ class RoleHealer {
                 entity.startY = entity.y;
 
                 return Roles.IDLE;
-
             }
 
         }
@@ -565,19 +564,15 @@ class RoleBuilder {
 
 
 
-
 /* --------------------------------- */
-/* -------------------------- HUNTER */
+/* ----------------- AGGRESSIVE BASE */
 /* --------------------------------- */
 
-class RoleHunter {
+class RoleAggressive{
 
     constructor() {
 
-        this.id = 'hunter';
-
-        this.startTime = 5;
-        this.endTime = 19.5;
+        this.id = 'predator';
 
         this.isWeaponBased = true;
 
@@ -585,102 +580,7 @@ class RoleHunter {
 
     checkCanPerform(timeDelta, entity, world) {
 
-        let target = Utils.nearestWithProperty('health', entity, world.motherNature.animals);
-
-        return (target && Maths.distanceBetween(entity, target) <= entity.rangePerception && Maths.distanceBetween(entity, entity.home) <= entity.rangeLimit);
-
-    }
-
-    update(timeDelta, entity, world) {
-
-        if (entity.target) {
-
-            if (Maths.distanceBetween(entity, entity.home) > entity.rangeLimit) {
-
-                // This critter got away...
-
-                entity.target = false;
-
-                return Roles.IDLE;
-
-            }
-
-        } else {
-
-            let target = Utils.nearestWithProperty('health', entity, world.motherNature.animals);
-
-            if (target && Maths.distanceBetween(entity, target) <= entity.rangePerception && Maths.distanceBetween(entity, entity.home) <= entity.rangeLimit) {
-
-                entity.target = target;
-
-            } else {
-
-                return Roles.IDLE;
-
-            }
-
-
-        }
-
-    }
-
-    targetProximity(timeDelta, entity, world) {
-
-        if (entity.target && entity.target.isAlive !== undefined && entity.target.isAlive()) {
-
-            if (entity.canTakeAction()) {
-
-                // Attack
-
-                let animal = entity.target;
-
-                animal.takeDamage(entity.weapon.damage, entity);
-
-                entity.tookAction();
-
-                if (!animal.isAlive()) {
-
-                    world.ui.log.log('Dwarf "' + entity.name + '" killed "' + animal.name + '" with "' + entity.weapon.title + '"');
-
-                    entity.target = false;
-
-                    return Roles.IDLE;
-
-                }
-
-            }
-
-        } else {
-
-            entity.target = false;
-
-        }
-
-    }
-
-}
-
-
-/* --------------------------------- */
-/* ------------------------- SOLDIER */
-/* --------------------------------- */
-
-class RoleSoldier {
-
-    constructor() {
-
-        this.id = 'soldier';
-
-        this.startTime = 5.5;
-        this.endTime = 20.5;
-
-        this.isWeaponBased = true;
-
-    }
-
-    checkCanPerform(timeDelta, entity, world) {
-
-        let targets = Utils.percievedEntities(entity, world.motherNature.animals);
+        let targets = Utils.percievedEntities(entity, entity.enemies);
 
         if (targets.length > 0) {
 
@@ -741,6 +641,47 @@ class RoleSoldier {
             }
 
         }
+
+    }
+
+}
+
+
+
+/* --------------------------------- */
+/* -------------------------- HUNTER */
+/* --------------------------------- */
+
+class RoleHunter extends RoleAggressive{
+
+    constructor() {
+
+        super();
+
+        this.id = 'hunter';
+
+        this.startTime = 5;
+        this.endTime = 19.5;
+
+    }
+
+}
+
+
+/* --------------------------------- */
+/* ------------------------- SOLDIER */
+/* --------------------------------- */
+
+class RoleSoldier extends RoleAggressive {
+
+    constructor() {
+
+        super();
+
+        this.id = 'soldier';
+
+        this.startTime = 5.5;
+        this.endTime = 20.5;
 
     }
 
@@ -953,79 +894,13 @@ class RoleCollectStone {
 /* ------------------------ PREDATOR */
 /* --------------------------------- */
 
-class RolePredator {
+class RolePredator extends RoleAggressive {
 
     constructor() {
 
+        super();
+
         this.id = 'predator';
-
-        this.isWeaponBased = true;
-
-    }
-
-    checkCanPerform(timeDelta, entity, world) {
-
-        let targets = Utils.percievedEntities(entity, world.dwarves);
-
-        if (targets.length > 0) {
-
-            entity.target = targets.random();
-
-            return true;
-
-        } else {
-
-            return false;
-
-        }
-
-
-    }
-
-    update(timeDelta, entity, world) {
-
-        if (entity.target) {
-
-            if (!entity.target.isAlive()) {
-
-                entity.target = false;
-
-                return Roles.IDLE;
-
-            }
-
-
-        } else {
-
-            return Roles.IDLE;
-
-        }
-
-    }
-
-    targetProximity(timeDelta, entity, world) {
-
-        if (entity.canTakeAction()) {
-
-            // Attack
-
-            let target = entity.target;
-
-            target.takeDamage(entity.weapon.damage, entity);
-
-            entity.tookAction();
-
-            if (!target.isAlive()) {
-
-                world.ui.log.log('"' + entity.name + '" killed "' + target.name + '" with "' + entity.weapon.title + '"');
-
-                entity.target = false;
-
-                return Roles.IDLE;
-
-            }
-
-        }
 
     }
 
