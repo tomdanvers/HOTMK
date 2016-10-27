@@ -14,6 +14,7 @@ World.DEBUG = window.location.hostname !== "";
 
 if (World.DEBUG) {
 
+    World.DEBUG = false;
     startGame();
 
 } else {

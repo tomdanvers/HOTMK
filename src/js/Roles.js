@@ -82,7 +82,7 @@ class RoleIdle {
                 // TEMP FIX TO MAKE ANIMALS PROGRESS DOWN SCREEN
                 if (entity.type === 'animal') {
 
-                    entity.target.y += Math.random() * 30;
+                    entity.target.y += Math.random() * 10;
 
                     entity.startY = entity.target.y;
 
@@ -610,7 +610,7 @@ class RoleAggressive{
 
         if (entity.target) {
 
-            if (!entity.target.isAlive()) {
+            if (!entity.target.isActive()) {
 
                 entity.target = false;
 
@@ -994,7 +994,7 @@ const Utils = {
 
         entities.forEach(function(entityB) {
 
-            if (entityB.isAlive()) {
+            if (entityB.isActive()) {
 
                 distance = Maths.distanceBetween(entityA, entityB);
 
@@ -1019,7 +1019,7 @@ const Utils = {
 
         items.forEach(function(item) {
 
-            let valid = item.isAlive !== undefined && !item.isAlive() ? false : !item[property].isMin();
+            let valid = item.isActive !== undefined && !item.isActive() ? false : !item[property].isMin();
 
             if (valid) {
 
@@ -1045,7 +1045,7 @@ const Utils = {
 
         items.forEach(function(item) {
 
-            let valid = item.isAlive !== undefined && !item.isAlive() ? false : !item[property].isMax();
+            let valid = item.isActive !== undefined && !item.isActive() ? false : !item[property].isMax();
 
             if (valid) {
 

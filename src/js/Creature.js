@@ -264,5 +264,11 @@ export default class Creature extends PIXI.Container {
 
     }
 
+    isActive() {
+
+        return this.isAlive() && this.isAwake();
+
+    }
+
 }
 

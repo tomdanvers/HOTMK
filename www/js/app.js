@@ -34388,6 +34388,12 @@ var Creature = function (_PIXI$Container) {
 
             return this.visible;
         }
+    }, {
+        key: 'isActive',
+        value: function isActive() {
+
+            return this.isAlive() && this.isAwake();
+        }
     }]);
 
     return Creature;
@@ -35129,7 +35135,7 @@ var MotherNature = function () {
         key: 'spawn',
         value: function spawn(animalArchetype) {
 
-            var animal = new animalArchetype.c(this.world, _World2.default.WIDTH * _Tile2.default.WIDTH * Math.random(), _World2.default.HEIGHT * _Tile2.default.HEIGHT * Math.random() * .7, animalArchetype.archetype);
+            var animal = new animalArchetype.c(this.world, _World2.default.WIDTH * _Tile2.default.WIDTH * Math.random(), _World2.default.HEIGHT * _Tile2.default.HEIGHT * Math.random() * .5, animalArchetype.archetype);
 
             this.world.addToZOrdered(animal);
 
@@ -35520,7 +35526,7 @@ var RoleIdle = function () {
                     // TEMP FIX TO MAKE ANIMALS PROGRESS DOWN SCREEN
                     if (entity.type === 'animal') {
 
-                        entity.target.y += Math.random() * 30;
+                        entity.target.y += Math.random() * 10;
 
                         entity.startY = entity.target.y;
                     }
@@ -36016,7 +36022,7 @@ var RoleAggressive = function () {
 
             if (entity.target) {
 
-                if (!entity.target.isAlive()) {
+                if (!entity.target.isActive()) {
 
                     entity.target = false;
 
@@ -36375,7 +36381,7 @@ var Utils = {
 
         entities.forEach(function (entityB) {
 
-            if (entityB.isAlive()) {
+            if (entityB.isActive()) {
 
                 distance = _Maths2.default.distanceBetween(entityA, entityB);
 
@@ -36395,7 +36401,7 @@ var Utils = {
 
         items.forEach(function (item) {
 
-            var valid = item.isAlive !== undefined && !item.isAlive() ? false : !item[property].isMin();
+            var valid = item.isActive !== undefined && !item.isActive() ? false : !item[property].isMin();
 
             if (valid) {
 
@@ -36417,7 +36423,7 @@ var Utils = {
 
         items.forEach(function (item) {
 
-            var valid = item.isAlive !== undefined && !item.isAlive() ? false : !item[property].isMax();
+            var valid = item.isActive !== undefined && !item.isActive() ? false : !item[property].isMax();
 
             if (valid) {
 
@@ -38704,6 +38710,7 @@ _World2.default.DEBUG = window.location.hostname !== "";
 
 if (_World2.default.DEBUG) {
 
+    _World2.default.DEBUG = false;
     startGame();
 } else {
 

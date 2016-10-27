@@ -46,7 +46,7 @@ export default class MotherNature {
 
     spawn(animalArchetype) {
 
-        let animal = new animalArchetype.c(this.world, World.WIDTH * Tile.WIDTH * Math.random(), World.HEIGHT * Tile.HEIGHT * Math.random() * .7, animalArchetype.archetype);
+        let animal = new animalArchetype.c(this.world, World.WIDTH * Tile.WIDTH * Math.random(), World.HEIGHT * Tile.HEIGHT * Math.random() * .5, animalArchetype.archetype);
 
         this.world.addToZOrdered(animal);
 
