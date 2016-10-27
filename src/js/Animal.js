@@ -19,7 +19,7 @@ export default class Animal extends Creature {
 
     }
 
-    getAppearance(roleId) {
+    getAppearance() {
 
         return new PIXI.Sprite(PIXI.Texture.fromImage('img/' + this.archetype.id + '.png'));
 

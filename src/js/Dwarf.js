@@ -7,7 +7,7 @@ export default class Dwarf extends Creature {
 
     constructor(world, startX, startY, archetype) {
 
-        super(world, startX, startY, archetype, 6, 14);
+        super(world, startX, startY, archetype, 8, 14);
 
         this.type = Dwarf.TYPE;
 
@@ -32,10 +32,11 @@ export default class Dwarf extends Creature {
 
     }
 
-    getAppearance(roleId) {
+    getAppearance() {
 
-        let base = new PIXI.Sprite(PIXI.Texture.fromImage('img/dwarf.png'));
-        return base;
+        let appearance = this.archetype.appearance;
+
+        return new PIXI.Sprite(PIXI.Texture.fromImage(`img/dwarf-${appearance}.png`));
 
     }
 

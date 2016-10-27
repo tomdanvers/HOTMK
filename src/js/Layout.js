@@ -1,4 +1,4 @@
 export default {
-    WIDTH: 960,
-    HEIGHT: 640
+    WIDTH: 640,
+    HEIGHT: 960
 }

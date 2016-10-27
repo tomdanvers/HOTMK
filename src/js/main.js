@@ -14,7 +14,7 @@ World.DEBUG = window.location.hostname !== "";
 
 if (World.DEBUG) {
 
-    World.DEBUG = false;
+    // World.DEBUG = false;
     startGame();
 
 } else {
@@ -27,8 +27,8 @@ function startGame() {
 
     if (window && window.screen) {
 
-        Layout.WIDTH = Math.min(960, window.screen.width);
-        Layout.HEIGHT = Math.min(640, window.screen.height);
+        Layout.WIDTH = Math.min(Layout.WIDTH, window.screen.width);
+        Layout.HEIGHT = Math.min(Layout.HEIGHT, window.screen.height);
 
     }
 

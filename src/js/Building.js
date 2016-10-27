@@ -17,6 +17,9 @@ export class Building extends PIXI.Container {
 
         this.archetype = archetype;
 
+        this.timeStart = archetype.timeStart;
+        this.timeEnd = archetype.timeEnd;
+
         this.inhabitants = new Inhabitants(world, this);
 
         this.integrity = new ValueMinMax(0, Building.INTEGRITY, Building.INTEGRITY * .25);

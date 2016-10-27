@@ -82,7 +82,7 @@ class RoleIdle {
                 // TEMP FIX TO MAKE ANIMALS PROGRESS DOWN SCREEN
                 if (entity.type === 'animal') {
 
-                    entity.target.y += Math.random() * 10;
+                    entity.target.y += Math.random() * 15;
 
                     entity.startY = entity.target.y;
 
@@ -249,7 +249,7 @@ class RoleResting {
 
     update(timeDelta, entity, world) {
 
-        if (entity.careerRole.startTime && entity.careerRole.endTime && world.timeOfDay.isDuringPeriod(entity.careerRole.startTime + entity.offsetStartTime, entity.careerRole.endTime + entity.offsetEndTime)){
+        if (entity.home.timeStart && entity.home.timeEnd && world.timeOfDay.isDuringPeriod(entity.home.timeStart + entity.offsetStartTime, entity.home.timeEnd + entity.offsetEndTime)){
 
             return entity.careerRole.id;
 
@@ -326,7 +326,7 @@ class RoleWatch {
 
         }
 
-        let targets = Utils.percievedEntities(entity, world.motherNature.animals);
+        let targets = Utils.percievedEntities(entity, entity.enemies);
 
         if (targets.length > 0) {
 
@@ -395,9 +395,6 @@ class RoleWatchNight extends RoleWatch {
 
         this.id = 'watch-night';
 
-        this.startTime = 19;
-        this.endTime = 7;
-
     }
 
 
@@ -416,9 +413,6 @@ class RoleWatchDay extends RoleWatch {
 
         this.id = 'watch-day';
 
-        this.startTime = 7;
-        this.endTime = 18;
-
     }
 
 }
@@ -433,9 +427,6 @@ class RoleHealer {
     constructor() {
 
         this.id = 'healer';
-
-        this.startTime = 5.5;
-        this.endTime = 20;
 
     }
 
@@ -504,9 +495,6 @@ class RoleBuilder {
     constructor() {
 
         this.id = 'builder';
-
-        this.startTime = 5.5;
-        this.endTime = 20;
 
     }
 
@@ -669,9 +657,6 @@ class RoleHunter extends RoleAggressive{
 
         this.id = 'hunter';
 
-        this.startTime = 5;
-        this.endTime = 19.5;
-
     }
 
 }
@@ -689,9 +674,6 @@ class RoleSoldier extends RoleAggressive {
 
         this.id = 'soldier';
 
-        this.startTime = 5.5;
-        this.endTime = 20.5;
-
     }
 
 }
@@ -706,9 +688,6 @@ class RoleCollectWood {
     constructor() {
 
         this.id = 'collect-wood';
-
-        this.startTime = 5.5;
-        this.endTime = 20;
 
     }
 
@@ -809,9 +788,6 @@ class RoleCollectStone {
     constructor() {
 
         this.id = 'collect-stone';
-
-        this.startTime = 5.5;
-        this.endTime = 20;
 
     }
 

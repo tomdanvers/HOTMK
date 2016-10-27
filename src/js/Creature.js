@@ -74,7 +74,7 @@ export default class Creature extends PIXI.Container {
 
     }
 
-    getAppearance(roleId) {
+    getAppearance() {
 
         let base = new PIXI.Graphics();
 
@@ -196,7 +196,7 @@ export default class Creature extends PIXI.Container {
 
         let newRoleId = this.role.update(timeDelta, this, world) || false;
 
-        if (this.roleId !== Roles.RESTING && this.roleId !== Roles.SELF_DEFENSE && this.careerRole.startTime && this.careerRole.endTime && !world.timeOfDay.isDuringPeriod(this.careerRole.startTime + this.offsetStartTime, this.careerRole.endTime + this.offsetEndTime)) {
+        if (this.home && this.roleId !== Roles.RESTING && this.roleId !== Roles.SELF_DEFENSE && this.home.timeStart && this.home.timeEnd && !world.timeOfDay.isDuringPeriod(this.home.timeStart + this.offsetStartTime, this.home.timeEnd + this.offsetEndTime)) {
 
             newRoleId = Roles.RESTING;
 

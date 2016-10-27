@@ -67,6 +67,8 @@ class Dwarf {
 
     constructor() {
 
+        this.appearance = 'base';
+
         this.timeBetweenActions = 1500;
 
         this.range = 5;
@@ -105,6 +107,7 @@ export class Mason extends Dwarf {
 
         this.id = Archetypes.MASON;
         this.role = Roles.BUILDER;
+        this.appearance = 'mason';
 
         this.colour = 0x333355;
 
@@ -131,6 +134,7 @@ export class Miner extends Dwarf {
 
         this.id = Archetypes.MINER;
         this.role = Roles.COLLECT_STONE;
+        this.appearance = 'miner';
 
         this.colour = 0x444444;
 
@@ -157,6 +161,7 @@ export class Forester extends Dwarf {
 
         this.id = Archetypes.FORESTER;
         this.role = Roles.COLLECT_WOOD;
+        this.appearance = 'forester';
 
         this.colour = 0x335533;
 
@@ -185,6 +190,7 @@ export class Hunter extends Dwarf {
 
         this.id = Archetypes.HUNTER;
         this.role = Roles.HUNTER;
+        this.appearance = 'hunter';
 
         this.lightRadius = 45;
 
@@ -218,6 +224,7 @@ export class Soldier extends Dwarf {
 
         this.id = Archetypes.SOLDIER;
         this.role = Roles.SOLDIER;
+        this.appearance = 'soldier';
 
         this.lightRadius = 45;
 
@@ -252,6 +259,7 @@ export class WatchDay extends Dwarf {
 
         this.id = Archetypes.WATCH_DAY;
         this.role = Roles.WATCH_DAY;
+        this.appearance = 'soldier';
 
         this.colour = 0x555533;
 
@@ -281,6 +289,7 @@ export class WatchNight extends Dwarf {
 
         this.id = Archetypes.WATCH_NIGHT;
         this.role = Roles.WATCH_NIGHT;
+        this.appearance = 'soldier';
 
         this.colour = 0x553333;
 
@@ -291,7 +300,7 @@ export class WatchNight extends Dwarf {
         this.cWood = 50;
         this.cStone = 50;
 
-        this.weapons = [Weapons.BOW, Weapons.BATTLEAXE];
+        this.weapons = [Weapons.BATTLEAXE];
 
     }
 
@@ -311,6 +320,7 @@ export class Healer extends Dwarf {
 
         this.id = Archetypes.HEALER;
         this.role = Roles.HEALER;
+        this.appearance = 'healer';
 
         this.colour = 0x999999;
 

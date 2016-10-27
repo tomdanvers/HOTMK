@@ -32738,7 +32738,7 @@ var Animal = function (_Creature) {
 
     _createClass(Animal, [{
         key: 'getAppearance',
-        value: function getAppearance(roleId) {
+        value: function getAppearance() {
 
             return new _pixi2.default.Sprite(_pixi2.default.Texture.fromImage('img/' + this.archetype.id + '.png'));
         }
@@ -32953,6 +32953,8 @@ Archetypes.ANIMAL_WOLF = 'animal-wolf';
 var Dwarf = function Dwarf() {
     _classCallCheck(this, Dwarf);
 
+    this.appearance = 'base';
+
     this.timeBetweenActions = 1500;
 
     this.range = 5;
@@ -32988,6 +32990,7 @@ var Mason = exports.Mason = function (_Dwarf) {
 
         _this.id = Archetypes.MASON;
         _this.role = _Roles2.default.BUILDER;
+        _this.appearance = 'mason';
 
         _this.colour = 0x333355;
 
@@ -33016,6 +33019,7 @@ var Miner = exports.Miner = function (_Dwarf2) {
 
         _this2.id = Archetypes.MINER;
         _this2.role = _Roles2.default.COLLECT_STONE;
+        _this2.appearance = 'miner';
 
         _this2.colour = 0x444444;
 
@@ -33044,6 +33048,7 @@ var Forester = exports.Forester = function (_Dwarf3) {
 
         _this3.id = Archetypes.FORESTER;
         _this3.role = _Roles2.default.COLLECT_WOOD;
+        _this3.appearance = 'forester';
 
         _this3.colour = 0x335533;
 
@@ -33074,6 +33079,7 @@ var Hunter = exports.Hunter = function (_Dwarf4) {
 
         _this4.id = Archetypes.HUNTER;
         _this4.role = _Roles2.default.HUNTER;
+        _this4.appearance = 'hunter';
 
         _this4.lightRadius = 45;
 
@@ -33109,6 +33115,7 @@ var Soldier = exports.Soldier = function (_Dwarf5) {
 
         _this5.id = Archetypes.SOLDIER;
         _this5.role = _Roles2.default.SOLDIER;
+        _this5.appearance = 'soldier';
 
         _this5.lightRadius = 45;
 
@@ -33144,6 +33151,7 @@ var WatchDay = exports.WatchDay = function (_Dwarf6) {
 
         _this6.id = Archetypes.WATCH_DAY;
         _this6.role = _Roles2.default.WATCH_DAY;
+        _this6.appearance = 'soldier';
 
         _this6.colour = 0x555533;
 
@@ -33174,6 +33182,7 @@ var WatchNight = exports.WatchNight = function (_Dwarf7) {
 
         _this7.id = Archetypes.WATCH_NIGHT;
         _this7.role = _Roles2.default.WATCH_NIGHT;
+        _this7.appearance = 'soldier';
 
         _this7.colour = 0x553333;
 
@@ -33184,7 +33193,7 @@ var WatchNight = exports.WatchNight = function (_Dwarf7) {
         _this7.cWood = 50;
         _this7.cStone = 50;
 
-        _this7.weapons = [_Weapons2.default.BOW, _Weapons2.default.BATTLEAXE];
+        _this7.weapons = [_Weapons2.default.BATTLEAXE];
 
         return _this7;
     }
@@ -33206,6 +33215,7 @@ var Healer = exports.Healer = function (_Dwarf8) {
 
         _this8.id = Archetypes.HEALER;
         _this8.role = _Roles2.default.HEALER;
+        _this8.appearance = 'healer';
 
         _this8.colour = 0x999999;
 
@@ -33473,6 +33483,9 @@ var Building = exports.Building = function (_PIXI$Container) {
         _this.world = world;
 
         _this.archetype = archetype;
+
+        _this.timeStart = archetype.timeStart;
+        _this.timeEnd = archetype.timeEnd;
 
         _this.inhabitants = new _Inhabitants2.default(world, _this);
 
@@ -34058,7 +34071,7 @@ var Buildings = function () {
 
 exports.default = Buildings;
 
-var BuildingArchetype = function BuildingArchetype(id, title, description, cWood, cStone, c) {
+var BuildingArchetype = function BuildingArchetype(id, title, description, cWood, cStone, timeStart, timeEnd, c) {
     _classCallCheck(this, BuildingArchetype);
 
     this.id = id;
@@ -34066,18 +34079,20 @@ var BuildingArchetype = function BuildingArchetype(id, title, description, cWood
     this.description = description;
     this.cWood = cWood;
     this.cStone = cStone;
+    this.timeStart = timeStart;
+    this.timeEnd = timeEnd;
     this.c = c || false;
 };
 
-Buildings.ARCHETYPE_CAMP = new BuildingArchetype('camp', 'Camp', 'A settler\'s camp', 0, 0, _Building.Camp);
-Buildings.ARCHETYPE_MINER = new BuildingArchetype('miner', 'Miner\'s Cottage', 'A lowly home for a miner', 100, 50, _Building.Miner);
-Buildings.ARCHETYPE_FORESTER = new BuildingArchetype('forester', 'Forester\'s Cottage', 'A lowly home for a forester', 50, 100, _Building.Forester);
-Buildings.ARCHETYPE_MASON = new BuildingArchetype('mason', 'Mason\'s Cottage', 'A builder\'s home', 150, 150, _Building.Mason);
-Buildings.ARCHETYPE_HUNTER = new BuildingArchetype('hunter', 'Hunter\'s Shack', 'A hunter\'s shack', 100, 100, _Building.Hunter);
-Buildings.ARCHETYPE_BARRACKS = new BuildingArchetype('barracks', 'Barracks', 'A dwarven barracks', 200, 200, _Building.Barracks);
-Buildings.ARCHETYPE_DAYWATCH = new BuildingArchetype('day-watch', 'The Watch', 'Patrols during the day', 200, 200, _Building.DayWatch);
-Buildings.ARCHETYPE_NIGHTWATCH = new BuildingArchetype('night-watch', 'The Night Watch', 'Patrols during the night', 200, 200, _Building.NightWatch);
-Buildings.ARCHETYPE_HEALER = new BuildingArchetype('healer', 'Healer\'s Home', 'A den of herbal healing', 120, 80, _Building.Healer);
+Buildings.ARCHETYPE_CAMP = new BuildingArchetype('camp', 'Camp', 'A settler\'s camp', 0, 0, 5.5, 20, _Building.Camp);
+Buildings.ARCHETYPE_MINER = new BuildingArchetype('miner', 'Miner\'s Cottage', 'A lowly home for a miner', 100, 50, 5.5, 20, _Building.Miner);
+Buildings.ARCHETYPE_FORESTER = new BuildingArchetype('forester', 'Forester\'s Cottage', 'A lowly home for a forester', 50, 100, 5.5, 20, _Building.Forester);
+Buildings.ARCHETYPE_MASON = new BuildingArchetype('mason', 'Mason\'s Cottage', 'A builder\'s home', 150, 150, 5.5, 20, _Building.Mason);
+Buildings.ARCHETYPE_HUNTER = new BuildingArchetype('hunter', 'Hunter\'s Shack', 'A hunter\'s shack', 100, 100, 5, 19.5, _Building.Hunter);
+Buildings.ARCHETYPE_BARRACKS = new BuildingArchetype('barracks', 'Barracks', 'A dwarven barracks', 200, 200, 6, 20, _Building.Barracks);
+Buildings.ARCHETYPE_DAYWATCH = new BuildingArchetype('day-watch', 'The Watch', 'Patrols during the day', 200, 200, 7, 18, _Building.DayWatch);
+Buildings.ARCHETYPE_NIGHTWATCH = new BuildingArchetype('night-watch', 'The Night Watch', 'Patrols during the night', 200, 200, 19, 7, _Building.NightWatch);
+Buildings.ARCHETYPE_HEALER = new BuildingArchetype('healer', 'Healer\'s Home', 'A den of herbal healing', 120, 80, 5.5, 20, _Building.Healer);
 
 },{"./Building":211}],213:[function(require,module,exports){
 'use strict';
@@ -34217,7 +34232,7 @@ var Creature = function (_PIXI$Container) {
 
     _createClass(Creature, [{
         key: 'getAppearance',
-        value: function getAppearance(roleId) {
+        value: function getAppearance() {
 
             var base = new _pixi2.default.Graphics();
 
@@ -34329,7 +34344,7 @@ var Creature = function (_PIXI$Container) {
 
             var newRoleId = this.role.update(timeDelta, this, world) || false;
 
-            if (this.roleId !== _Roles2.default.RESTING && this.roleId !== _Roles2.default.SELF_DEFENSE && this.careerRole.startTime && this.careerRole.endTime && !world.timeOfDay.isDuringPeriod(this.careerRole.startTime + this.offsetStartTime, this.careerRole.endTime + this.offsetEndTime)) {
+            if (this.home && this.roleId !== _Roles2.default.RESTING && this.roleId !== _Roles2.default.SELF_DEFENSE && this.home.timeStart && this.home.timeEnd && !world.timeOfDay.isDuringPeriod(this.home.timeStart + this.offsetStartTime, this.home.timeEnd + this.offsetEndTime)) {
 
                 newRoleId = _Roles2.default.RESTING;
             }
@@ -34460,7 +34475,7 @@ var Dwarf = function (_Creature) {
     function Dwarf(world, startX, startY, archetype) {
         _classCallCheck(this, Dwarf);
 
-        var _this = _possibleConstructorReturn(this, (Dwarf.__proto__ || Object.getPrototypeOf(Dwarf)).call(this, world, startX, startY, archetype, 6, 14));
+        var _this = _possibleConstructorReturn(this, (Dwarf.__proto__ || Object.getPrototypeOf(Dwarf)).call(this, world, startX, startY, archetype, 8, 14));
 
         _this.type = Dwarf.TYPE;
 
@@ -34484,10 +34499,11 @@ var Dwarf = function (_Creature) {
 
     _createClass(Dwarf, [{
         key: 'getAppearance',
-        value: function getAppearance(roleId) {
+        value: function getAppearance() {
 
-            var base = new _pixi2.default.Sprite(_pixi2.default.Texture.fromImage('img/dwarf.png'));
-            return base;
+            var appearance = this.archetype.appearance;
+
+            return new _pixi2.default.Sprite(_pixi2.default.Texture.fromImage('img/dwarf-' + appearance + '.png'));
         }
     }]);
 
@@ -34780,8 +34796,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = {
-    WIDTH: 960,
-    HEIGHT: 640
+    WIDTH: 640,
+    HEIGHT: 960
 };
 
 },{}],218:[function(require,module,exports){
@@ -35526,7 +35542,7 @@ var RoleIdle = function () {
                     // TEMP FIX TO MAKE ANIMALS PROGRESS DOWN SCREEN
                     if (entity.type === 'animal') {
 
-                        entity.target.y += Math.random() * 10;
+                        entity.target.y += Math.random() * 15;
 
                         entity.startY = entity.target.y;
                     }
@@ -35681,7 +35697,7 @@ var RoleResting = function () {
         key: 'update',
         value: function update(timeDelta, entity, world) {
 
-            if (entity.careerRole.startTime && entity.careerRole.endTime && world.timeOfDay.isDuringPeriod(entity.careerRole.startTime + entity.offsetStartTime, entity.careerRole.endTime + entity.offsetEndTime)) {
+            if (entity.home.timeStart && entity.home.timeEnd && world.timeOfDay.isDuringPeriod(entity.home.timeStart + entity.offsetStartTime, entity.home.timeEnd + entity.offsetEndTime)) {
 
                 return entity.careerRole.id;
             }
@@ -35753,7 +35769,7 @@ var RoleWatch = function () {
                 this.updateRoute(entity, world);
             }
 
-            var targets = Utils.percievedEntities(entity, world.motherNature.animals);
+            var targets = Utils.percievedEntities(entity, entity.enemies);
 
             if (targets.length > 0) {
 
@@ -35818,9 +35834,6 @@ var RoleWatchNight = function (_RoleWatch) {
 
         _this.id = 'watch-night';
 
-        _this.startTime = 19;
-        _this.endTime = 7;
-
         return _this;
     }
 
@@ -35841,9 +35854,6 @@ var RoleWatchDay = function (_RoleWatch2) {
 
         _this2.id = 'watch-day';
 
-        _this2.startTime = 7;
-        _this2.endTime = 18;
-
         return _this2;
     }
 
@@ -35859,9 +35869,6 @@ var RoleHealer = function () {
         _classCallCheck(this, RoleHealer);
 
         this.id = 'healer';
-
-        this.startTime = 5.5;
-        this.endTime = 20;
     }
 
     _createClass(RoleHealer, [{
@@ -35925,9 +35932,6 @@ var RoleBuilder = function () {
         _classCallCheck(this, RoleBuilder);
 
         this.id = 'builder';
-
-        this.startTime = 5.5;
-        this.endTime = 20;
     }
 
     _createClass(RoleBuilder, [{
@@ -36076,9 +36080,6 @@ var RoleHunter = function (_RoleAggressive) {
 
         _this3.id = 'hunter';
 
-        _this3.startTime = 5;
-        _this3.endTime = 19.5;
-
         return _this3;
     }
 
@@ -36099,9 +36100,6 @@ var RoleSoldier = function (_RoleAggressive2) {
 
         _this4.id = 'soldier';
 
-        _this4.startTime = 5.5;
-        _this4.endTime = 20.5;
-
         return _this4;
     }
 
@@ -36117,9 +36115,6 @@ var RoleCollectWood = function () {
         _classCallCheck(this, RoleCollectWood);
 
         this.id = 'collect-wood';
-
-        this.startTime = 5.5;
-        this.endTime = 20;
     }
 
     _createClass(RoleCollectWood, [{
@@ -36209,9 +36204,6 @@ var RoleCollectStone = function () {
         _classCallCheck(this, RoleCollectStone);
 
         this.id = 'collect-stone';
-
-        this.startTime = 5.5;
-        this.endTime = 20;
     }
 
     _createClass(RoleCollectStone, [{
@@ -38710,7 +38702,7 @@ _World2.default.DEBUG = window.location.hostname !== "";
 
 if (_World2.default.DEBUG) {
 
-    _World2.default.DEBUG = false;
+    // World.DEBUG = false;
     startGame();
 } else {
 
@@ -38721,8 +38713,8 @@ function startGame() {
 
     if (window && window.screen) {
 
-        _Layout2.default.WIDTH = Math.min(960, window.screen.width);
-        _Layout2.default.HEIGHT = Math.min(640, window.screen.height);
+        _Layout2.default.WIDTH = Math.min(_Layout2.default.WIDTH, window.screen.width);
+        _Layout2.default.HEIGHT = Math.min(_Layout2.default.HEIGHT, window.screen.height);
     }
 
     var renderer = _pixi2.default.autoDetectRenderer(_Layout2.default.WIDTH, _Layout2.default.HEIGHT, { backgroundColour: 0x000000 });
