@@ -19,8 +19,6 @@ export default class DayUI extends PIXI.Container {
         this.text = new PIXI.Text('Day Count', style);
         this.addChild(this.text);
 
-        this.dayChanged(0);
-
     }
 
     dayChanged(day) {

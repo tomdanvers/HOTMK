@@ -38487,8 +38487,6 @@ var DayUI = function (_PIXI$Container) {
         _this.text = new _pixi2.default.Text('Day Count', style);
         _this.addChild(_this.text);
 
-        _this.dayChanged(0);
-
         return _this;
     }
 
