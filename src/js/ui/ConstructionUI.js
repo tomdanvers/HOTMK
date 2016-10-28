@@ -1,6 +1,7 @@
 import PIXI from 'pixi.js';
 
 import Layout from '../Layout';
+import Maths from '../utils/Maths';
 
 import PanelUI from './PanelUI';
 

@@ -27,8 +27,6 @@ export default class LogUI extends PanelUI {
         this.button.x = Layout.WIDTH - buttonW;
         this.button.y = Layout.HEIGHT - buttonH * 2 - 20;
 
-        console.log(this.button.y)
-
         this.button.interactive = true;
 
         this.button.on('mousedown', this.onButtonDown.bind(this));

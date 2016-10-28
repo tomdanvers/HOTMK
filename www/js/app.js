@@ -38154,6 +38154,10 @@ var _Layout = require('../Layout');
 
 var _Layout2 = _interopRequireDefault(_Layout);
 
+var _Maths = require('../utils/Maths');
+
+var _Maths2 = _interopRequireDefault(_Maths);
+
 var _PanelUI2 = require('./PanelUI');
 
 var _PanelUI3 = _interopRequireDefault(_PanelUI2);
@@ -38325,7 +38329,7 @@ var ConstructionUI = function (_PanelUI) {
         key: 'onDrag',
         value: function onDrag(event) {
 
-            var distanceFromStart = Maths.distanceBetween(this.dragStartPos, event.data.getLocalPosition(this.world));
+            var distanceFromStart = _Maths2.default.distanceBetween(this.dragStartPos, event.data.getLocalPosition(this.world));
 
             if (!this.dragging && distanceFromStart > 5) {
 
@@ -38415,7 +38419,7 @@ var ConstructionUI = function (_PanelUI) {
 
 exports.default = ConstructionUI;
 
-},{"../Layout":217,"./PanelUI":239,"pixi.js":154}],235:[function(require,module,exports){
+},{"../Layout":217,"../utils/Maths":243,"./PanelUI":239,"pixi.js":154}],235:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -38912,8 +38916,6 @@ var LogUI = function (_PanelUI) {
 
         _this.button.x = _Layout2.default.WIDTH - buttonW;
         _this.button.y = _Layout2.default.HEIGHT - buttonH * 2 - 20;
-
-        console.log(_this.button.y);
 
         _this.button.interactive = true;
 
