@@ -32852,7 +32852,7 @@ var Boar = exports.Boar = function (_Animal5) {
     return Boar;
 }(Animal);
 
-},{"./Creature":213,"./utils/Maths":242,"./utils/ValueMinMax":243,"pixi.js":154}],210:[function(require,module,exports){
+},{"./Creature":213,"./utils/Maths":243,"./utils/ValueMinMax":244,"pixi.js":154}],210:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -33994,7 +33994,7 @@ var Healer = exports.Healer = function (_Building8) {
 Healer.WIDTH = 12;
 Healer.HEIGHT = 12;
 
-},{"./Archetypes":210,"./Dwarf":214,"./Inhabitants":215,"./Roles":222,"./utils/Maths":242,"./utils/ValueMinMax":243,"pixi.js":154}],212:[function(require,module,exports){
+},{"./Archetypes":210,"./Dwarf":214,"./Inhabitants":215,"./Roles":222,"./utils/Maths":243,"./utils/ValueMinMax":244,"pixi.js":154}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34414,7 +34414,7 @@ var Creature = function (_PIXI$Container) {
 
 exports.default = Creature;
 
-},{"./Inventory":216,"./Roles":222,"./ui/ValueBarUI":241,"./utils/Maths":242,"./utils/ValueMinMax":243,"pixi.js":154}],214:[function(require,module,exports){
+},{"./Inventory":216,"./Roles":222,"./ui/ValueBarUI":242,"./utils/Maths":243,"./utils/ValueMinMax":244,"pixi.js":154}],214:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -34520,7 +34520,7 @@ Dwarf.getName = function () {
 
 Dwarf.TYPE = 'dwarf';
 
-},{"./Creature":213,"./utils/Maths":242,"pixi.js":154}],215:[function(require,module,exports){
+},{"./Creature":213,"./utils/Maths":243,"pixi.js":154}],215:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -35309,7 +35309,7 @@ var PanelController = function () {
 
 exports.default = PanelController;
 
-},{"./utils/Maths":242,"./utils/ValueMinMax":243}],221:[function(require,module,exports){
+},{"./utils/Maths":243,"./utils/ValueMinMax":244}],221:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -35406,7 +35406,7 @@ Rock.HEIGHT = 10;
 Rock.TYPE = 'rock';
 Rock.SUPPLY = 250;
 
-},{"./utils/ValueMinMax":243,"pixi.js":154}],222:[function(require,module,exports){
+},{"./utils/ValueMinMax":244,"pixi.js":154}],222:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -36430,7 +36430,7 @@ var Utils = {
     }
 };
 
-},{"./Rock":221,"./Tree":226,"./utils/Maths":242}],223:[function(require,module,exports){
+},{"./Rock":221,"./Tree":226,"./utils/Maths":243}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36511,7 +36511,7 @@ exports.default = Supply;
 Supply.WOOD = 150;
 Supply.STONE = 150;
 
-},{"./utils/ValueMinMax":243,"pixi.js":154}],224:[function(require,module,exports){
+},{"./utils/ValueMinMax":244,"pixi.js":154}],224:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36657,6 +36657,9 @@ var TimeOfDay = function () {
 
         this.time = 8;
         this.count = 0;
+
+        this.dayStartHour = 7;
+        this.dayCount = 0;
     }
 
     _createClass(TimeOfDay, [{
@@ -36674,6 +36677,11 @@ var TimeOfDay = function () {
             if (hour != this.hourOld || minute != this.minuteOld) {
 
                 this.timeChanged(world, hour, minute);
+
+                if (hour != this.hourOld && hour === this.dayStartHour) {
+
+                    this.dayChanged(world, hour, minute);
+                }
             }
 
             this.hourOld = hour;
@@ -36694,6 +36702,16 @@ var TimeOfDay = function () {
         value: function timeChanged(world, hour, minute) {
 
             world.ui.time.update(hour, minute);
+        }
+    }, {
+        key: 'dayChanged',
+        value: function dayChanged(world, hour, minute) {
+
+            this.dayCount++;
+
+            world.ui.log.log('TimeOfDay.dayChanged(' + this.dayCount + ')');
+
+            world.ui.day.dayChanged(this.dayCount);
         }
     }, {
         key: 'getValue',
@@ -36765,7 +36783,7 @@ TimeOfDay.DAWN_END = 7.5;
 TimeOfDay.DUSK_START = 19;
 TimeOfDay.DUSK_END = 21;
 
-},{"./utils/ValueMinMax":243,"pixi.js":154}],226:[function(require,module,exports){
+},{"./utils/ValueMinMax":244,"pixi.js":154}],226:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -36941,7 +36959,7 @@ var TreeDeciduous = exports.TreeDeciduous = function (_Tree2) {
     return TreeDeciduous;
 }(Tree);
 
-},{"./Tile":224,"./utils/ValueMinMax":243,"pixi.js":154}],227:[function(require,module,exports){
+},{"./Tile":224,"./utils/ValueMinMax":244,"pixi.js":154}],227:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -36983,6 +37001,10 @@ var _PanelController2 = _interopRequireDefault(_PanelController);
 var _ValueBarUI = require('./ui/ValueBarUI');
 
 var _ValueBarUI2 = _interopRequireDefault(_ValueBarUI);
+
+var _DayUI = require('./ui/DayUI');
+
+var _DayUI2 = _interopRequireDefault(_DayUI);
 
 var _SupplyUI = require('./ui/SupplyUI');
 
@@ -37038,6 +37060,9 @@ var UI = function (_PIXI$Container) {
 
         var _this = _possibleConstructorReturn(this, (UI.__proto__ || Object.getPrototypeOf(UI)).call(this));
 
+        _this.day = new _DayUI2.default(world);
+        _this.addChild(_this.day);
+
         _this.supply = new _SupplyUI2.default(world);
         _this.addChild(_this.supply);
 
@@ -37077,6 +37102,8 @@ var UI = function (_PIXI$Container) {
         value: function update(timeDelta, world) {
 
             this.building.update(timeDelta, world);
+
+            this.day.update(timeDelta, world);
         }
     }, {
         key: 'updateSupply',
@@ -37092,7 +37119,7 @@ var UI = function (_PIXI$Container) {
 
 exports.default = UI;
 
-},{"./Layout":217,"./PanelController":220,"./World":230,"./ui/BuildingUI":233,"./ui/ConstructionUI":234,"./ui/GameSpeedUI":235,"./ui/LogUI":237,"./ui/SupplyUI":239,"./ui/TimeUI":240,"./ui/ValueBarUI":241,"./utils/Maths":242,"pixi.js":154}],228:[function(require,module,exports){
+},{"./Layout":217,"./PanelController":220,"./World":230,"./ui/BuildingUI":233,"./ui/ConstructionUI":234,"./ui/DayUI":235,"./ui/GameSpeedUI":236,"./ui/LogUI":238,"./ui/SupplyUI":240,"./ui/TimeUI":241,"./ui/ValueBarUI":242,"./utils/Maths":243,"pixi.js":154}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37251,7 +37278,7 @@ var Viewport = function () {
 
 exports.default = Viewport;
 
-},{"./utils/Maths":242,"pixi.js":154}],229:[function(require,module,exports){
+},{"./utils/Maths":243,"pixi.js":154}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -37932,6 +37959,9 @@ function startGame() {
 
         _Layout2.default.WIDTH = Math.min(_Layout2.default.WIDTH, window.screen.width);
         _Layout2.default.HEIGHT = Math.min(_Layout2.default.HEIGHT, window.screen.height);
+
+        console.log(window.screen);
+        console.log(_Layout2.default.WIDTH, _Layout2.default.HEIGHT);
     }
 
     var renderer = _pixi2.default.autoDetectRenderer(_Layout2.default.WIDTH, _Layout2.default.HEIGHT, { backgroundColour: 0x000000 });
@@ -38097,7 +38127,7 @@ var BuildingUI = function (_PanelUI) {
 
 exports.default = BuildingUI;
 
-},{"./InhabitantsUI":236,"./PanelUI":238,"./ValueBarUI":241,"pixi.js":154}],234:[function(require,module,exports){
+},{"./InhabitantsUI":237,"./PanelUI":239,"./ValueBarUI":242,"pixi.js":154}],234:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -38385,7 +38415,118 @@ var ConstructionUI = function (_PanelUI) {
 
 exports.default = ConstructionUI;
 
-},{"../Layout":217,"./PanelUI":238,"pixi.js":154}],235:[function(require,module,exports){
+},{"../Layout":217,"./PanelUI":239,"pixi.js":154}],235:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _pixi = require('pixi.js');
+
+var _pixi2 = _interopRequireDefault(_pixi);
+
+var _Layout = require('../Layout');
+
+var _Layout2 = _interopRequireDefault(_Layout);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var DayUI = function (_PIXI$Container) {
+    _inherits(DayUI, _PIXI$Container);
+
+    function DayUI() {
+        _classCallCheck(this, DayUI);
+
+        var _this = _possibleConstructorReturn(this, (DayUI.__proto__ || Object.getPrototypeOf(DayUI)).call(this));
+
+        var w = 280;
+        var h = 40;
+
+        var style = {
+            font: '52px Arial',
+            fill: '#FFFFFF'
+        };
+
+        _this.text = new _pixi2.default.Text('Day Count', style);
+        _this.addChild(_this.text);
+
+        _this.dayChanged(0);
+
+        return _this;
+    }
+
+    _createClass(DayUI, [{
+        key: 'dayChanged',
+        value: function dayChanged(day) {
+
+            console.log('DayUI.dayChanged(', day, ')');
+
+            this.text.text = 'Day ' + day;
+
+            var w = this.text.width;
+            var h = this.text.height;
+
+            this.text.x = (_Layout2.default.WIDTH - w) * .5;
+            this.text.y = (_Layout2.default.HEIGHT - h) * .5;
+
+            this.visible = true;
+            this.alpha = 1;
+        }
+    }, {
+        key: 'update',
+        value: function update(timeDelta, world) {
+
+            if (this.visible) {
+
+                this.alpha -= .03;
+
+                if (this.alpha <= 0) {
+
+                    this.visible = false;
+                }
+            }
+        }
+    }]);
+
+    return DayUI;
+}(_pixi2.default.Container);
+
+exports.default = DayUI;
+
+},{"../Layout":217,"pixi.js":154}],236:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -38514,7 +38655,7 @@ var GameSpeedUI = function (_PIXI$Container) {
 
 exports.default = GameSpeedUI;
 
-},{"../Layout":217,"../World":230,"pixi.js":154}],236:[function(require,module,exports){
+},{"../Layout":217,"../World":230,"pixi.js":154}],237:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -38694,7 +38835,7 @@ var InhabitantUI = function (_PIXI$Container2) {
     return InhabitantUI;
 }(_pixi2.default.Container);
 
-},{"pixi.js":154}],237:[function(require,module,exports){
+},{"pixi.js":154}],238:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -38772,6 +38913,8 @@ var LogUI = function (_PanelUI) {
         _this.button.x = _Layout2.default.WIDTH - buttonW;
         _this.button.y = _Layout2.default.HEIGHT - buttonH * 2 - 20;
 
+        console.log(_this.button.y);
+
         _this.button.interactive = true;
 
         _this.button.on('mousedown', _this.onButtonDown.bind(_this));
@@ -38835,7 +38978,7 @@ var LogUI = function (_PanelUI) {
 
 exports.default = LogUI;
 
-},{"../Layout":217,"./PanelUI":238,"pixi.js":154}],238:[function(require,module,exports){
+},{"../Layout":217,"./PanelUI":239,"pixi.js":154}],239:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -38958,7 +39101,7 @@ var PanelUI = function (_PIXI$Container) {
 
 exports.default = PanelUI;
 
-},{"../Layout":217,"pixi.js":154}],239:[function(require,module,exports){
+},{"../Layout":217,"pixi.js":154}],240:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -39055,7 +39198,7 @@ var SupplyUI = function (_PIXI$Container) {
 
 exports.default = SupplyUI;
 
-},{"pixi.js":154}],240:[function(require,module,exports){
+},{"pixi.js":154}],241:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -39152,7 +39295,7 @@ var TimeUI = function (_PIXI$Container) {
 
 exports.default = TimeUI;
 
-},{"pixi.js":154}],241:[function(require,module,exports){
+},{"pixi.js":154}],242:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -39253,7 +39396,7 @@ var ValueBarUI = function (_PIXI$Container) {
 
 exports.default = ValueBarUI;
 
-},{"pixi.js":154}],242:[function(require,module,exports){
+},{"pixi.js":154}],243:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -39283,7 +39426,7 @@ exports.default = {
     }
 };
 
-},{}],243:[function(require,module,exports){
+},{}],244:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

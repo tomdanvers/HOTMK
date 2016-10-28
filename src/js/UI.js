@@ -5,6 +5,7 @@ import World from './World';
 import PanelController from './PanelController';
 
 import ValueBarUI from './ui/ValueBarUI';
+import DayUI from './ui/DayUI';
 import SupplyUI from './ui/SupplyUI';
 import TimeUI from './ui/TimeUI';
 import ConstructionUI from './ui/ConstructionUI';
@@ -17,6 +18,9 @@ export default class UI extends PIXI.Container {
     constructor(world) {
 
         super();
+
+        this.day = new DayUI(world);
+        this.addChild(this.day);
 
         this.supply = new SupplyUI(world);
         this.addChild(this.supply);
@@ -54,6 +58,8 @@ export default class UI extends PIXI.Container {
     update(timeDelta, world) {
 
         this.building.update(timeDelta, world);
+
+        this.day.update(timeDelta, world);
 
     }
 

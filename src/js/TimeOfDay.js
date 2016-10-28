@@ -8,6 +8,9 @@ export default class TimeOfDay {
         this.time = 8;
         this.count = 0;
 
+        this.dayStartHour = 7;
+        this.dayCount = 0;
+
     }
 
     update(timeDelta, world) {
@@ -23,6 +26,12 @@ export default class TimeOfDay {
         if (hour != this.hourOld || minute != this.minuteOld) {
 
             this.timeChanged(world, hour, minute);
+
+            if (hour != this.hourOld && hour === this.dayStartHour) {
+
+                this.dayChanged(world, hour, minute);
+
+            }
 
         }
 
@@ -46,6 +55,17 @@ export default class TimeOfDay {
     timeChanged(world, hour, minute) {
 
         world.ui.time.update(hour, minute);
+
+
+    }
+
+    dayChanged(world, hour, minute) {
+
+        this.dayCount ++;
+
+        world.ui.log.log('TimeOfDay.dayChanged(' + this.dayCount + ')');
+
+        world.ui.day.dayChanged(this.dayCount);
 
     }
 

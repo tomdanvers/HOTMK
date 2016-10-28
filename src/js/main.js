@@ -27,8 +27,12 @@ function startGame() {
 
     if (window && window.screen) {
 
+
         Layout.WIDTH = Math.min(Layout.WIDTH, window.screen.width);
         Layout.HEIGHT = Math.min(Layout.HEIGHT, window.screen.height);
+
+        console.log(window.screen);
+        console.log(Layout.WIDTH, Layout.HEIGHT);
 
     }
 
