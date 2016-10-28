@@ -32852,7 +32852,7 @@ var Boar = exports.Boar = function (_Animal5) {
     return Boar;
 }(Animal);
 
-},{"./Creature":213,"./utils/Maths":234,"./utils/ValueMinMax":235,"pixi.js":154}],210:[function(require,module,exports){
+},{"./Creature":213,"./utils/Maths":242,"./utils/ValueMinMax":243,"pixi.js":154}],210:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -33690,8 +33690,6 @@ var Watch = exports.Watch = function (_Building2) {
                     return 0;
                 }
             });
-
-            // console.log('Watch.updatePatrolRoute(',this.patrolRoute,')');
         }
     }]);
 
@@ -33996,7 +33994,7 @@ var Healer = exports.Healer = function (_Building8) {
 Healer.WIDTH = 12;
 Healer.HEIGHT = 12;
 
-},{"./Archetypes":210,"./Dwarf":214,"./Inhabitants":215,"./Roles":222,"./utils/Maths":234,"./utils/ValueMinMax":235,"pixi.js":154}],212:[function(require,module,exports){
+},{"./Archetypes":210,"./Dwarf":214,"./Inhabitants":215,"./Roles":222,"./utils/Maths":242,"./utils/ValueMinMax":243,"pixi.js":154}],212:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -34416,7 +34414,7 @@ var Creature = function (_PIXI$Container) {
 
 exports.default = Creature;
 
-},{"./Inventory":216,"./Roles":222,"./ui/ValueBarUI":233,"./utils/Maths":234,"./utils/ValueMinMax":235,"pixi.js":154}],214:[function(require,module,exports){
+},{"./Inventory":216,"./Roles":222,"./ui/ValueBarUI":241,"./utils/Maths":242,"./utils/ValueMinMax":243,"pixi.js":154}],214:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -34522,7 +34520,7 @@ Dwarf.getName = function () {
 
 Dwarf.TYPE = 'dwarf';
 
-},{"./Creature":213,"./utils/Maths":234,"pixi.js":154}],215:[function(require,module,exports){
+},{"./Creature":213,"./utils/Maths":242,"pixi.js":154}],215:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -35311,7 +35309,7 @@ var PanelController = function () {
 
 exports.default = PanelController;
 
-},{"./utils/Maths":234,"./utils/ValueMinMax":235}],221:[function(require,module,exports){
+},{"./utils/Maths":242,"./utils/ValueMinMax":243}],221:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -35408,7 +35406,7 @@ Rock.HEIGHT = 10;
 Rock.TYPE = 'rock';
 Rock.SUPPLY = 250;
 
-},{"./utils/ValueMinMax":235,"pixi.js":154}],222:[function(require,module,exports){
+},{"./utils/ValueMinMax":243,"pixi.js":154}],222:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -36432,7 +36430,7 @@ var Utils = {
     }
 };
 
-},{"./Rock":221,"./Tree":226,"./utils/Maths":234}],223:[function(require,module,exports){
+},{"./Rock":221,"./Tree":226,"./utils/Maths":242}],223:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36513,7 +36511,7 @@ exports.default = Supply;
 Supply.WOOD = 150;
 Supply.STONE = 150;
 
-},{"./utils/ValueMinMax":235,"pixi.js":154}],224:[function(require,module,exports){
+},{"./utils/ValueMinMax":243,"pixi.js":154}],224:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -36767,7 +36765,7 @@ TimeOfDay.DAWN_END = 7.5;
 TimeOfDay.DUSK_START = 19;
 TimeOfDay.DUSK_END = 21;
 
-},{"./utils/ValueMinMax":235,"pixi.js":154}],226:[function(require,module,exports){
+},{"./utils/ValueMinMax":243,"pixi.js":154}],226:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -36943,7 +36941,7 @@ var TreeDeciduous = exports.TreeDeciduous = function (_Tree2) {
     return TreeDeciduous;
 }(Tree);
 
-},{"./Tile":224,"./utils/ValueMinMax":235,"pixi.js":154}],227:[function(require,module,exports){
+},{"./Tile":224,"./utils/ValueMinMax":243,"pixi.js":154}],227:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -36951,7 +36949,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.LogUI = exports.ConstructionUI = exports.TimeUI = exports.SupplyUI = exports.InhabitantUI = exports.InhabitantsUI = exports.BuildingUI = exports.GameSpeedUI = exports.PanelUI = undefined;
 
 var _createClass = function () {
     function defineProperties(target, props) {
@@ -36987,6 +36984,30 @@ var _ValueBarUI = require('./ui/ValueBarUI');
 
 var _ValueBarUI2 = _interopRequireDefault(_ValueBarUI);
 
+var _SupplyUI = require('./ui/SupplyUI');
+
+var _SupplyUI2 = _interopRequireDefault(_SupplyUI);
+
+var _TimeUI = require('./ui/TimeUI');
+
+var _TimeUI2 = _interopRequireDefault(_TimeUI);
+
+var _ConstructionUI = require('./ui/ConstructionUI');
+
+var _ConstructionUI2 = _interopRequireDefault(_ConstructionUI);
+
+var _LogUI = require('./ui/LogUI');
+
+var _LogUI2 = _interopRequireDefault(_LogUI);
+
+var _BuildingUI = require('./ui/BuildingUI');
+
+var _BuildingUI2 = _interopRequireDefault(_BuildingUI);
+
+var _GameSpeedUI = require('./ui/GameSpeedUI');
+
+var _GameSpeedUI2 = _interopRequireDefault(_GameSpeedUI);
+
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
@@ -37017,10 +37038,10 @@ var UI = function (_PIXI$Container) {
 
         var _this = _possibleConstructorReturn(this, (UI.__proto__ || Object.getPrototypeOf(UI)).call(this));
 
-        _this.supply = new SupplyUI(world);
+        _this.supply = new _SupplyUI2.default(world);
         _this.addChild(_this.supply);
 
-        _this.time = new TimeUI(world);
+        _this.time = new _TimeUI2.default(world);
         _this.time.y = 50;
         _this.addChild(_this.time);
 
@@ -37029,19 +37050,19 @@ var UI = function (_PIXI$Container) {
         _this.panelButtons = new _pixi2.default.Container();
         _this.addChild(_this.panelButtons);
 
-        _this.construction = new ConstructionUI(world);
+        _this.construction = new _ConstructionUI2.default(world);
         _this.addChild(_this.construction);
 
-        _this.log = new LogUI(world);
+        _this.log = new _LogUI2.default(world);
         _this.addChild(_this.log);
 
         _this.panelButtons.addChild(_this.construction.button);
         _this.panelButtons.addChild(_this.log.button);
 
-        _this.building = new BuildingUI(world);
+        _this.building = new _BuildingUI2.default(world);
         _this.addChild(_this.building);
 
-        _this.gameSpeed = new GameSpeedUI(world);
+        _this.gameSpeed = new _GameSpeedUI2.default(world);
         _this.addChild(_this.gameSpeed);
 
         _this.panelController.add(_this.building);
@@ -37069,813 +37090,9 @@ var UI = function (_PIXI$Container) {
     return UI;
 }(_pixi2.default.Container);
 
-/* ---------------------------- */
-/* ---------------------- Panel */
-/* ---------------------------- */
-
 exports.default = UI;
 
-var PanelUI = exports.PanelUI = function (_PIXI$Container2) {
-    _inherits(PanelUI, _PIXI$Container2);
-
-    function PanelUI(world, id) {
-        _classCallCheck(this, PanelUI);
-
-        var _this2 = _possibleConstructorReturn(this, (PanelUI.__proto__ || Object.getPrototypeOf(PanelUI)).call(this));
-
-        _this2.world = world;
-
-        _this2.id = id;
-
-        _this2.hit = new _pixi2.default.Graphics();
-        _this2.hit.beginFill(0x000000, .15);
-        _this2.hit.drawRect(0, 0, _Layout2.default.WIDTH, _Layout2.default.HEIGHT);
-        _this2.hit.endFill();
-
-        _this2.hit.interactive = true;
-        _this2.hit.on('mousedown', _this2.onButtonDown.bind(_this2));
-        _this2.hit.on('touchstart', _this2.onButtonDown.bind(_this2));
-
-        _this2.addChild(_this2.hit);
-
-        var backgroundW = _Layout2.default.WIDTH * .8;
-        var backgroundH = _Layout2.default.HEIGHT * .8;
-
-        _this2.background = new _pixi2.default.Graphics();
-        _this2.background.beginFill(0x000000, 1);
-        _this2.background.drawRect(0, 0, backgroundW, backgroundH);
-        _this2.background.endFill();
-
-        _this2.background.x = _Layout2.default.WIDTH * .5 - backgroundW * .5;
-        _this2.background.y = _Layout2.default.HEIGHT * .5 - backgroundH * .5;
-
-        _this2.addChild(_this2.background);
-
-        _this2.toggle(false);
-
-        return _this2;
-    }
-
-    _createClass(PanelUI, [{
-        key: 'onButtonDown',
-        value: function onButtonDown(event) {
-
-            this.toggle(undefined, true);
-        }
-    }, {
-        key: 'toggle',
-        value: function toggle(show, dispatchEvent) {
-
-            var isVisible = void 0;
-            if (typeof show === 'undefined') {
-                isVisible = !this.shown;
-            } else {
-                isVisible = show;
-            }
-
-            dispatchEvent = typeof dispatchEvent === 'undefined' ? false : dispatchEvent;
-
-            this.visible = this.shown = isVisible;
-
-            if (dispatchEvent) {
-
-                this.emit(isVisible ? 'toggle:on' : 'toggle:off', this.id);
-            }
-        }
-    }]);
-
-    return PanelUI;
-}(_pixi2.default.Container);
-
-/* ---------------------------- */
-/* ----------------- GAME SPEED */
-/* ---------------------------- */
-
-var GameSpeedUI = exports.GameSpeedUI = function (_PIXI$Container3) {
-    _inherits(GameSpeedUI, _PIXI$Container3);
-
-    function GameSpeedUI(world) {
-        _classCallCheck(this, GameSpeedUI);
-
-        var _this3 = _possibleConstructorReturn(this, (GameSpeedUI.__proto__ || Object.getPrototypeOf(GameSpeedUI)).call(this));
-
-        _this3.world = world;
-
-        _this3.buttonW = 40;
-        _this3.buttonH = 40;
-
-        _this3.button = new _pixi2.default.Graphics();
-        _this3.button.beginFill(0x000000, .5);
-        _this3.button.drawRect(0, 0, _this3.buttonW, _this3.buttonH);
-        _this3.button.endFill();
-
-        _this3.button.x = _Layout2.default.WIDTH - _this3.buttonW;
-        _this3.button.y = 0;
-
-        _this3.button.interactive = true;
-
-        _this3.button.on('mousedown', _this3.onButtonDown.bind(_this3));
-        _this3.button.on('touchstart', _this3.onButtonDown.bind(_this3));
-
-        _this3.addChild(_this3.button);
-
-        var style = {
-            font: '16px Arial',
-            fill: '#FFFFFF'
-        };
-
-        _this3.text = new _pixi2.default.Text('x1', style);
-        _this3.text.y = 10;
-        _this3.button.addChild(_this3.text);
-
-        _this3.speedIndex = 0;
-        _this3.speeds = [1, 2, 4];
-
-        _this3.updateButton();
-
-        return _this3;
-    }
-
-    _createClass(GameSpeedUI, [{
-        key: 'onButtonDown',
-        value: function onButtonDown(event) {
-
-            this.speedIndex++;
-
-            if (this.speedIndex >= this.speeds.length) {
-
-                this.speedIndex = 0;
-            }
-
-            this.updateButton();
-        }
-    }, {
-        key: 'updateButton',
-        value: function updateButton() {
-
-            var speed = this.speeds[this.speedIndex];
-
-            this.text.text = 'x' + speed;
-            this.text.x = (this.buttonW - this.text.width) * .5;
-
-            _World2.default.TICK_RATE = speed;
-        }
-    }]);
-
-    return GameSpeedUI;
-}(_pixi2.default.Container);
-
-/* ---------------------------- */
-/* ------------------- Building */
-/* ---------------------------- */
-
-var BuildingUI = exports.BuildingUI = function (_PanelUI) {
-    _inherits(BuildingUI, _PanelUI);
-
-    function BuildingUI(world) {
-        _classCallCheck(this, BuildingUI);
-
-        var _this4 = _possibleConstructorReturn(this, (BuildingUI.__proto__ || Object.getPrototypeOf(BuildingUI)).call(this, world, 'building'));
-
-        var style = {
-            font: '20px Arial',
-            fill: '#FFFFFF',
-            wordWrap: true,
-            wordWrapWidth: _this4.background.width - 40
-        };
-
-        _this4.textTitle = new _pixi2.default.Text('title', style);
-        _this4.textTitle.x = 20;
-        _this4.textTitle.y = 20;
-        _this4.background.addChild(_this4.textTitle);
-
-        style.font = '14px Arial';
-
-        _this4.textDescription = new _pixi2.default.Text('description', style);
-        _this4.textDescription.x = 20;
-        _this4.textDescription.y = 50;
-        _this4.textDescription.alpha = .75;
-        _this4.background.addChild(_this4.textDescription);
-
-        _this4.integrity = new _ValueBarUI2.default(_this4.background.width - 40, 10);
-        _this4.integrity.x = 20;
-        _this4.integrity.y = _this4.background.height - 30;
-        _this4.background.addChild(_this4.integrity);
-
-        _this4.inhabitants = new InhabitantsUI(_this4.background.width - 40, 200);
-        _this4.inhabitants.x = 20;
-        _this4.inhabitants.y = 90;
-        _this4.background.addChild(_this4.inhabitants);
-
-        return _this4;
-    }
-
-    _createClass(BuildingUI, [{
-        key: 'update',
-        value: function update(timeDelta, world) {
-
-            if (this.shown && this.activeBuilding) {
-
-                this.integrity.setValue(this.activeBuilding.integrity.val());
-            }
-        }
-    }, {
-        key: 'setBuilding',
-        value: function setBuilding(building) {
-
-            if (this.activeBuilding != building) {
-
-                this.activeBuilding = building;
-
-                this.textTitle.text = building.archetype.title;
-                this.textDescription.text = building.archetype.description;
-                this.integrity.setValue(building.integrity.val());
-
-                this.inhabitants.setInhabitants(building.inhabitants);
-            }
-        }
-    }]);
-
-    return BuildingUI;
-}(PanelUI);
-
-/* ---------------------------- */
-/* ---------------- Inhabitants */
-/* ---------------------------- */
-
-var InhabitantsUI = exports.InhabitantsUI = function (_PIXI$Container4) {
-    _inherits(InhabitantsUI, _PIXI$Container4);
-
-    function InhabitantsUI(width, height) {
-        _classCallCheck(this, InhabitantsUI);
-
-        var _this5 = _possibleConstructorReturn(this, (InhabitantsUI.__proto__ || Object.getPrototypeOf(InhabitantsUI)).call(this));
-
-        _this5.widthMax = width;
-        _this5.heightMax = height;
-
-        _this5.inhabitants = [];
-
-        return _this5;
-    }
-
-    _createClass(InhabitantsUI, [{
-        key: 'setInhabitants',
-        value: function setInhabitants(inhabitants) {
-
-            this.clearInhabitants();
-
-            if (this.activeInhabitants != inhabitants) {
-
-                this.activeInhabitants = inhabitants;
-
-                inhabitants.list.forEach(function (inhabitant, index) {
-
-                    var inhabitantUI = new InhabitantUI(this.widthMax, 40);
-                    inhabitantUI.x = 0;
-                    inhabitantUI.y = index * 50;
-                    inhabitantUI.setInhabitant(inhabitant);
-                    this.addChild(inhabitantUI);
-
-                    this.inhabitants.push(inhabitantUI);
-                }.bind(this));
-            }
-        }
-    }, {
-        key: 'clearInhabitants',
-        value: function clearInhabitants() {
-
-            this.inhabitants.forEach(function (inhabitantUI) {
-
-                inhabitantUI.destroy();
-            });
-        }
-    }]);
-
-    return InhabitantsUI;
-}(_pixi2.default.Container);
-
-/* ---------------------------- */
-/* ----------------- Inhabitant */
-/* ---------------------------- */
-
-var InhabitantUI = exports.InhabitantUI = function (_PIXI$Container5) {
-    _inherits(InhabitantUI, _PIXI$Container5);
-
-    function InhabitantUI(width, height) {
-        _classCallCheck(this, InhabitantUI);
-
-        var _this6 = _possibleConstructorReturn(this, (InhabitantUI.__proto__ || Object.getPrototypeOf(InhabitantUI)).call(this));
-
-        _this6.widthMax = width;
-        _this6.heightMax = height;
-
-        var style = {
-            font: '16px Arial',
-            fill: '#FFFFFF',
-            wordWrap: true,
-            wordWrapWidth: _this6.widthMax - 40
-        };
-
-        _this6.textTitle = new _pixi2.default.Text('title', style);
-        _this6.addChild(_this6.textTitle);
-
-        style.font = '12px Arial';
-
-        _this6.textDescription = new _pixi2.default.Text('description', style);
-        _this6.textDescription.y = 20;
-        _this6.textDescription.alpha = .75;
-        _this6.addChild(_this6.textDescription);
-
-        return _this6;
-    }
-
-    _createClass(InhabitantUI, [{
-        key: 'setInhabitant',
-        value: function setInhabitant(inhabitant) {
-
-            this.activeInhabitant = inhabitant;
-
-            inhabitant.on('filled:true', this.update.bind(this));
-            inhabitant.on('filled:false', this.update.bind(this));
-
-            this.on('mousedown', this.onDown.bind(this));
-            this.on('touchstart', this.onDown.bind(this));
-
-            this.update();
-        }
-    }, {
-        key: 'update',
-        value: function update() {
-
-            if (this.activeInhabitant.isFilled) {
-
-                this.textTitle.text = this.activeInhabitant.dwarf.name;
-                this.textDescription.text = this.activeInhabitant.archetype.id;
-            } else {
-
-                this.textTitle.text = 'Hire replacement ' + this.activeInhabitant.archetype.id;
-                this.textDescription.text = 'For ' + this.activeInhabitant.archetype.cWood + ' wood and ' + this.activeInhabitant.archetype.cStone + ' stone.';
-            }
-
-            this.interactive = !this.activeInhabitant.isFilled;
-        }
-    }, {
-        key: 'clearInhabitants',
-        value: function clearInhabitants() {
-
-            this.inhabitants.forEach(function (inhabitantUI) {
-
-                inhabitantUI.destroy();
-            });
-        }
-    }, {
-        key: 'onDown',
-        value: function onDown() {
-
-            this.activeInhabitant.spawn(true, false);
-        }
-    }]);
-
-    return InhabitantUI;
-}(_pixi2.default.Container);
-
-/* ---------------------------- */
-/* --------------------- Supply */
-/* ---------------------------- */
-
-var SupplyUI = exports.SupplyUI = function (_PIXI$Container6) {
-    _inherits(SupplyUI, _PIXI$Container6);
-
-    function SupplyUI() {
-        _classCallCheck(this, SupplyUI);
-
-        var _this7 = _possibleConstructorReturn(this, (SupplyUI.__proto__ || Object.getPrototypeOf(SupplyUI)).call(this));
-
-        var w = 280;
-        var h = 40;
-
-        _this7.background = new _pixi2.default.Graphics();
-        _this7.addChild(_this7.background);
-
-        var style = {
-            font: '16px Arial',
-            fill: '#FFFFFF',
-            wordWrap: true,
-            wordWrapWidth: w - 20
-        };
-
-        _this7.text = new _pixi2.default.Text('Supply', style);
-        _this7.text.x = 10;
-        _this7.text.y = 10;
-        _this7.addChild(_this7.text);
-
-        _this7.update(0, 0);
-
-        return _this7;
-    }
-
-    _createClass(SupplyUI, [{
-        key: 'update',
-        value: function update(wood, stone) {
-
-            this.text.text = 'Wood: ' + wood + ' | Stone: ' + stone;
-
-            var w = this.text.width + 20;
-            var h = this.text.height + 20;
-
-            this.background.clear();
-            this.background.beginFill(0x000000, .5);
-            this.background.drawRect(0, 0, w, h);
-            this.background.endFill();
-        }
-    }]);
-
-    return SupplyUI;
-}(_pixi2.default.Container);
-
-/* ---------------------------- */
-/* ----------------------- Time */
-/* ---------------------------- */
-
-var TimeUI = exports.TimeUI = function (_PIXI$Container7) {
-    _inherits(TimeUI, _PIXI$Container7);
-
-    function TimeUI() {
-        _classCallCheck(this, TimeUI);
-
-        var _this8 = _possibleConstructorReturn(this, (TimeUI.__proto__ || Object.getPrototypeOf(TimeUI)).call(this));
-
-        var w = 280;
-        var h = 40;
-
-        _this8.background = new _pixi2.default.Graphics();
-        _this8.addChild(_this8.background);
-
-        var style = {
-            font: '16px Arial',
-            fill: '#FFFFFF',
-            wordWrap: true,
-            wordWrapWidth: w - 20
-        };
-
-        _this8.text = new _pixi2.default.Text('Time', style);
-        _this8.text.x = 10;
-        _this8.text.y = 10;
-        _this8.addChild(_this8.text);
-
-        _this8.update(0, 0);
-
-        return _this8;
-    }
-
-    _createClass(TimeUI, [{
-        key: 'update',
-        value: function update(hour, minute) {
-
-            this.text.text = (hour < 10 ? '0' + hour : hour) + ':' + (minute < 10 ? '0' + minute : minute);
-
-            var w = this.text.width + 20;
-            var h = this.text.height + 20;
-
-            this.background.clear();
-            this.background.beginFill(0x000000, .5);
-            this.background.drawRect(0, 0, w, h);
-            this.background.endFill();
-        }
-    }]);
-
-    return TimeUI;
-}(_pixi2.default.Container);
-
-/* ---------------------------- */
-/* --------------- Construction */
-/* ---------------------------- */
-
-var ConstructionUI = exports.ConstructionUI = function (_PanelUI2) {
-    _inherits(ConstructionUI, _PanelUI2);
-
-    function ConstructionUI(world) {
-        _classCallCheck(this, ConstructionUI);
-
-        // Toggle Button
-
-        var _this9 = _possibleConstructorReturn(this, (ConstructionUI.__proto__ || Object.getPrototypeOf(ConstructionUI)).call(this, world, 'construction'));
-
-        var buttonW = 60;
-        var buttonH = 60;
-
-        _this9.button = new _pixi2.default.Graphics();
-        _this9.button.beginFill(0x000000, .5);
-        _this9.button.drawRect(0, 0, buttonW, buttonH);
-        _this9.button.endFill();
-
-        _this9.button.beginFill(0xFFFFFF, .75);
-        _this9.button.drawRect(10, 10, buttonW - 20, buttonH - 20);
-        _this9.button.endFill();
-
-        _this9.button.x = _Layout2.default.WIDTH - buttonW;
-        _this9.button.y = _Layout2.default.HEIGHT - buttonH;
-
-        _this9.button.interactive = true;
-
-        _this9.button.on('mousedown', _this9.onButtonDown.bind(_this9));
-        _this9.button.on('touchstart', _this9.onButtonDown.bind(_this9));
-
-        // Buildings
-
-        _this9.archetypeButtonsMap = {};
-
-        world.buildings.archetypes.forEach(function (archetype, index) {
-
-            var archetypeButtonW = Math.min(300, this.background.width - 40);
-            var archetypeButtonH = 45;
-
-            var archetypeButton = new _pixi2.default.Graphics();
-
-            archetypeButton.archetype = archetype;
-
-            archetypeButton.beginFill(0x000000, 1);
-            archetypeButton.drawRect(0, 0, archetypeButtonW, archetypeButtonH);
-            archetypeButton.endFill();
-
-            archetypeButton.interactive = true;
-
-            archetypeButton.on('mousedown', this.onArchetypeButtonDown.bind(this));
-            archetypeButton.on('touchstart', this.onArchetypeButtonDown.bind(this));
-
-            archetypeButton.x = 10;
-            archetypeButton.y = 10 + (10 + archetypeButtonH) * index;
-
-            this.archetypeButtonsMap[archetype.id] = archetypeButton;
-
-            this.background.addChild(archetypeButton);
-
-            var style = {
-                font: '16px Arial',
-                fill: '#FFFFFF',
-                wordWrap: true,
-                wordWrapWidth: archetypeButtonW - 20
-            };
-
-            var textTitle = new _pixi2.default.Text(archetype.title, style);
-            textTitle.x = 10;
-            textTitle.y = 10;
-            archetypeButton.addChild(textTitle);
-
-            style.font = '12px Arial';
-
-            var textDescription = new _pixi2.default.Text(archetype.description + ' (' + archetype.cWood + 'W : ' + archetype.cStone + 'S)', style);
-            textDescription.x = 10;
-            textDescription.y = 30;
-            textDescription.alpha = .75;
-            archetypeButton.addChild(textDescription);
-        }.bind(_this9));
-
-        return _this9;
-    }
-
-    _createClass(ConstructionUI, [{
-        key: 'onButtonDown',
-        value: function onButtonDown(event) {
-
-            this.toggle();
-        }
-    }, {
-        key: 'onArchetypeButtonDown',
-        value: function onArchetypeButtonDown(event) {
-
-            // Wait for drag start
-
-            // On drag start hide menu
-
-            // Bind up listener on route
-
-            // Show building placement
-
-            // On Up Show confirm menu
-
-            // On confirm place building
-
-            // On cancel open building menu
-
-            this.world.viewport.disable();
-
-            this.world.interactive = true;
-            this.dragging = false;
-            this.activeArchetype = event.target.archetype;
-            this.dragStartPos = event.data.getLocalPosition(this.world);
-
-            this.onDragBound = this.onDrag.bind(this);
-            this.onDragEndBound = this.onDragEnd.bind(this);
-
-            this.world.on('mousemove', this.onDragBound);
-            this.world.on('touchmove', this.onDragBound);
-
-            this.world.on('mouseupoutside', this.onDragEndBound);
-            this.world.on('mouseup', this.onDragEndBound);
-            this.world.on('touchendoutside', this.onDragEndBound);
-            this.world.on('touchend', this.onDragEndBound);
-        }
-    }, {
-        key: 'onDragStart',
-        value: function onDragStart(event) {
-
-            this.dragging = true;
-
-            this.toggle(false);
-
-            var pos = event.data.getLocalPosition(this.world);
-
-            this.activeBuilding = new this.activeArchetype.c(this.world, pos.x, pos.y, this.activeArchetype, true);
-            this.activeBuilding.x = pos.x;
-            this.activeBuilding.y = pos.y;
-
-            this.world.content.addChild(this.activeBuilding);
-        }
-    }, {
-        key: 'onDrag',
-        value: function onDrag(event) {
-
-            var distanceFromStart = _Maths2.default.distanceBetween(this.dragStartPos, event.data.getLocalPosition(this.world));
-
-            if (!this.dragging && distanceFromStart > 5) {
-
-                this.onDragStart(event);
-            } else if (this.dragging) {
-
-                var pos = event.data.getLocalPosition(this.world);
-                var tile = this.world.getTileFromWorld(pos.x, pos.y + this.world.viewport.scroll);
-                if (tile && !tile.isOccupied) {
-
-                    this.activeBuilding.x = tile.xCentre;
-                    this.activeBuilding.y = tile.yCentre;
-                }
-            }
-        }
-    }, {
-        key: 'onDragEnd',
-        value: function onDragEnd() {
-
-            this.world.off('mousemove', this.onDragBound);
-            this.world.off('touchmove', this.onDragBound);
-
-            this.world.off('mouseupoutside', this.onDragEndBound);
-            this.world.off('mouseup', this.onDragEndBound);
-            this.world.off('touchendoutside', this.onDragEndBound);
-            this.world.off('touchend', this.onDragEndBound);
-
-            if (this.dragging) {
-
-                var targetX = this.activeBuilding.x;
-                var targetY = this.activeBuilding.y;
-
-                var targetTile = this.world.getTileFromWorld(targetX, targetY);
-
-                if (targetTile && !targetTile.isOccupied) {
-
-                    var canAfford = this.world.supply.wood.get() >= this.activeArchetype.cWood && this.world.supply.stone.get() >= this.activeArchetype.cStone;
-
-                    if (canAfford && window.confirm('Place new ' + this.activeArchetype.title + ' at ' + targetTile.tileX + '/' + targetTile.tileY + '?')) {
-
-                        // console.log('Placing new', this.activeArchetype.title, 'at', targetTile.tileX + '/' + targetTile.tileY);
-
-                        this.world.supply.wood.decrement(this.activeArchetype.cWood);
-                        this.world.supply.stone.decrement(this.activeArchetype.cStone);
-
-                        this.world.addBuilding(this.activeArchetype.id, targetTile.tileX, targetTile.tileY);
-                    } else {
-
-                        this.toggle(true);
-                    }
-                }
-
-                this.world.removeChild(this.activeBuilding);
-                this.activeBuilding.destroy();
-                this.activeBuilding = null;
-
-                this.activeArchetype = false;
-            }
-
-            this.dragStartPos = false;
-
-            this.world.viewport.enable();
-
-            if (!this.world.viewport.isInteractive) {
-
-                this.world.interactive = false;
-            }
-        }
-    }, {
-        key: 'update',
-        value: function update(wood, stone) {
-
-            this.world.buildings.archetypes.forEach(function (archetype) {
-
-                var canAfford = archetype.cWood <= wood && archetype.cStone <= stone;
-
-                var button = this.archetypeButtonsMap[archetype.id];
-
-                button.alpha = canAfford ? 1 : .5;
-                button.interactive = canAfford;
-            }.bind(this));
-        }
-    }]);
-
-    return ConstructionUI;
-}(PanelUI);
-
-/* ---------------------------- */
-/* ------------------------ Log */
-/* ---------------------------- */
-
-var LogUI = exports.LogUI = function (_PanelUI3) {
-    _inherits(LogUI, _PanelUI3);
-
-    function LogUI(world) {
-        _classCallCheck(this, LogUI);
-
-        // Toggle Button
-
-        var _this10 = _possibleConstructorReturn(this, (LogUI.__proto__ || Object.getPrototypeOf(LogUI)).call(this, world, 'log'));
-
-        var buttonW = 60;
-        var buttonH = 60;
-
-        _this10.button = new _pixi2.default.Graphics();
-        _this10.button.beginFill(0x000000, .5);
-        _this10.button.drawRect(0, 0, buttonW, buttonH);
-        _this10.button.endFill();
-
-        _this10.button.beginFill(0xFFFFFF, .75);
-        _this10.button.drawRect(10, 10, buttonW - 20, buttonH - 20);
-        _this10.button.endFill();
-
-        _this10.button.x = _Layout2.default.WIDTH - buttonW;
-        _this10.button.y = _Layout2.default.HEIGHT - buttonH * 2 - 20;
-
-        _this10.button.interactive = true;
-
-        _this10.button.on('mousedown', _this10.onButtonDown.bind(_this10));
-        _this10.button.on('touchstart', _this10.onButtonDown.bind(_this10));
-
-        // Log
-
-        var logW = _Layout2.default.WIDTH * .8;
-        var logH = _Layout2.default.HEIGHT * .8;
-
-        _this10.logStyle = {
-            font: '14px Arial',
-            fill: '#FFFFFF'
-        };
-
-        _this10.logItems = new _pixi2.default.Container();
-        _this10.background.addChild(_this10.logItems);
-
-        _this10.logItemHeight = 24;
-        _this10.logItemY = 0;
-
-        _this10.logCount = 0;
-        _this10.logMax = Math.floor((logH - 40) / _this10.logItemHeight);
-
-        _this10.toggle(false);
-
-        return _this10;
-    }
-
-    _createClass(LogUI, [{
-        key: 'log',
-        value: function log(message) {
-
-            var item = new _pixi2.default.Text(message, this.logStyle);
-            item.x = 20;
-            item.y = this.logItemY;
-            this.logItems.addChild(item);
-
-            this.logItems.y += this.logItemHeight;
-            this.logItemY -= this.logItemHeight;
-
-            this.logCount++;
-
-            if (this.logCount > this.logMax) {
-
-                this.logItems.getChildAt(0).destroy();
-
-                this.logCount--;
-            }
-        }
-    }, {
-        key: 'onButtonDown',
-        value: function onButtonDown(event) {
-
-            this.toggle(undefined, true);
-        }
-    }]);
-
-    return LogUI;
-}(PanelUI);
-
-},{"./Layout":217,"./PanelController":220,"./World":230,"./ui/ValueBarUI":233,"./utils/Maths":234,"pixi.js":154}],228:[function(require,module,exports){
+},{"./Layout":217,"./PanelController":220,"./World":230,"./ui/BuildingUI":233,"./ui/ConstructionUI":234,"./ui/GameSpeedUI":235,"./ui/LogUI":237,"./ui/SupplyUI":239,"./ui/TimeUI":240,"./ui/ValueBarUI":241,"./utils/Maths":242,"pixi.js":154}],228:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38034,7 +37251,7 @@ var Viewport = function () {
 
 exports.default = Viewport;
 
-},{"./utils/Maths":234,"pixi.js":154}],229:[function(require,module,exports){
+},{"./utils/Maths":242,"pixi.js":154}],229:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -38774,6 +37991,1190 @@ var _pixi = require('pixi.js');
 
 var _pixi2 = _interopRequireDefault(_pixi);
 
+var _PanelUI2 = require('./PanelUI');
+
+var _PanelUI3 = _interopRequireDefault(_PanelUI2);
+
+var _ValueBarUI = require('./ValueBarUI');
+
+var _ValueBarUI2 = _interopRequireDefault(_ValueBarUI);
+
+var _InhabitantsUI = require('./InhabitantsUI');
+
+var _InhabitantsUI2 = _interopRequireDefault(_InhabitantsUI);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var BuildingUI = function (_PanelUI) {
+    _inherits(BuildingUI, _PanelUI);
+
+    function BuildingUI(world) {
+        _classCallCheck(this, BuildingUI);
+
+        var _this = _possibleConstructorReturn(this, (BuildingUI.__proto__ || Object.getPrototypeOf(BuildingUI)).call(this, world, 'building'));
+
+        var style = {
+            font: '20px Arial',
+            fill: '#FFFFFF',
+            wordWrap: true,
+            wordWrapWidth: _this.background.width - 40
+        };
+
+        _this.textTitle = new _pixi2.default.Text('title', style);
+        _this.textTitle.x = 20;
+        _this.textTitle.y = 20;
+        _this.background.addChild(_this.textTitle);
+
+        style.font = '14px Arial';
+
+        _this.textDescription = new _pixi2.default.Text('description', style);
+        _this.textDescription.x = 20;
+        _this.textDescription.y = 50;
+        _this.textDescription.alpha = .75;
+        _this.background.addChild(_this.textDescription);
+
+        _this.integrity = new _ValueBarUI2.default(_this.background.width - 40, 10);
+        _this.integrity.x = 20;
+        _this.integrity.y = _this.background.height - 30;
+        _this.background.addChild(_this.integrity);
+
+        _this.inhabitants = new _InhabitantsUI2.default(_this.background.width - 40, 200);
+        _this.inhabitants.x = 20;
+        _this.inhabitants.y = 90;
+        _this.background.addChild(_this.inhabitants);
+
+        return _this;
+    }
+
+    _createClass(BuildingUI, [{
+        key: 'update',
+        value: function update(timeDelta, world) {
+
+            if (this.shown && this.activeBuilding) {
+
+                this.integrity.setValue(this.activeBuilding.integrity.val());
+            }
+        }
+    }, {
+        key: 'setBuilding',
+        value: function setBuilding(building) {
+
+            if (this.activeBuilding != building) {
+
+                this.activeBuilding = building;
+
+                this.textTitle.text = building.archetype.title;
+                this.textDescription.text = building.archetype.description;
+                this.integrity.setValue(building.integrity.val());
+
+                this.inhabitants.setInhabitants(building.inhabitants);
+            }
+        }
+    }]);
+
+    return BuildingUI;
+}(_PanelUI3.default);
+
+exports.default = BuildingUI;
+
+},{"./InhabitantsUI":236,"./PanelUI":238,"./ValueBarUI":241,"pixi.js":154}],234:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _pixi = require('pixi.js');
+
+var _pixi2 = _interopRequireDefault(_pixi);
+
+var _Layout = require('../Layout');
+
+var _Layout2 = _interopRequireDefault(_Layout);
+
+var _PanelUI2 = require('./PanelUI');
+
+var _PanelUI3 = _interopRequireDefault(_PanelUI2);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var ConstructionUI = function (_PanelUI) {
+    _inherits(ConstructionUI, _PanelUI);
+
+    function ConstructionUI(world) {
+        _classCallCheck(this, ConstructionUI);
+
+        // Toggle Button
+
+        var _this = _possibleConstructorReturn(this, (ConstructionUI.__proto__ || Object.getPrototypeOf(ConstructionUI)).call(this, world, 'construction'));
+
+        var buttonW = 60;
+        var buttonH = 60;
+
+        _this.button = new _pixi2.default.Graphics();
+        _this.button.beginFill(0x000000, .5);
+        _this.button.drawRect(0, 0, buttonW, buttonH);
+        _this.button.endFill();
+
+        _this.button.beginFill(0xFFFFFF, .75);
+        _this.button.drawRect(10, 10, buttonW - 20, buttonH - 20);
+        _this.button.endFill();
+
+        _this.button.x = _Layout2.default.WIDTH - buttonW;
+        _this.button.y = _Layout2.default.HEIGHT - buttonH;
+
+        _this.button.interactive = true;
+
+        _this.button.on('mousedown', _this.onButtonDown.bind(_this));
+        _this.button.on('touchstart', _this.onButtonDown.bind(_this));
+
+        // Buildings
+
+        _this.archetypeButtonsMap = {};
+
+        world.buildings.archetypes.forEach(function (archetype, index) {
+
+            var archetypeButtonW = Math.min(300, this.background.width - 40);
+            var archetypeButtonH = 45;
+
+            var archetypeButton = new _pixi2.default.Graphics();
+
+            archetypeButton.archetype = archetype;
+
+            archetypeButton.beginFill(0x000000, 1);
+            archetypeButton.drawRect(0, 0, archetypeButtonW, archetypeButtonH);
+            archetypeButton.endFill();
+
+            archetypeButton.interactive = true;
+
+            archetypeButton.on('mousedown', this.onArchetypeButtonDown.bind(this));
+            archetypeButton.on('touchstart', this.onArchetypeButtonDown.bind(this));
+
+            archetypeButton.x = 10;
+            archetypeButton.y = 10 + (10 + archetypeButtonH) * index;
+
+            this.archetypeButtonsMap[archetype.id] = archetypeButton;
+
+            this.background.addChild(archetypeButton);
+
+            var style = {
+                font: '16px Arial',
+                fill: '#FFFFFF',
+                wordWrap: true,
+                wordWrapWidth: archetypeButtonW - 20
+            };
+
+            var textTitle = new _pixi2.default.Text(archetype.title, style);
+            textTitle.x = 10;
+            textTitle.y = 10;
+            archetypeButton.addChild(textTitle);
+
+            style.font = '12px Arial';
+
+            var textDescription = new _pixi2.default.Text(archetype.description + ' (' + archetype.cWood + 'W : ' + archetype.cStone + 'S)', style);
+            textDescription.x = 10;
+            textDescription.y = 30;
+            textDescription.alpha = .75;
+            archetypeButton.addChild(textDescription);
+        }.bind(_this));
+
+        return _this;
+    }
+
+    _createClass(ConstructionUI, [{
+        key: 'onButtonDown',
+        value: function onButtonDown(event) {
+
+            this.toggle();
+        }
+    }, {
+        key: 'onArchetypeButtonDown',
+        value: function onArchetypeButtonDown(event) {
+
+            // Wait for drag start
+
+            // On drag start hide menu
+
+            // Bind up listener on route
+
+            // Show building placement
+
+            // On Up Show confirm menu
+
+            // On confirm place building
+
+            // On cancel open building menu
+
+            this.world.viewport.disable();
+
+            this.world.interactive = true;
+            this.dragging = false;
+            this.activeArchetype = event.target.archetype;
+            this.dragStartPos = event.data.getLocalPosition(this.world);
+
+            this.onDragBound = this.onDrag.bind(this);
+            this.onDragEndBound = this.onDragEnd.bind(this);
+
+            this.world.on('mousemove', this.onDragBound);
+            this.world.on('touchmove', this.onDragBound);
+
+            this.world.on('mouseupoutside', this.onDragEndBound);
+            this.world.on('mouseup', this.onDragEndBound);
+            this.world.on('touchendoutside', this.onDragEndBound);
+            this.world.on('touchend', this.onDragEndBound);
+        }
+    }, {
+        key: 'onDragStart',
+        value: function onDragStart(event) {
+
+            this.dragging = true;
+
+            this.toggle(false);
+
+            var pos = event.data.getLocalPosition(this.world);
+
+            this.activeBuilding = new this.activeArchetype.c(this.world, pos.x, pos.y, this.activeArchetype, true);
+            this.activeBuilding.x = pos.x;
+            this.activeBuilding.y = pos.y;
+
+            this.world.content.addChild(this.activeBuilding);
+        }
+    }, {
+        key: 'onDrag',
+        value: function onDrag(event) {
+
+            var distanceFromStart = Maths.distanceBetween(this.dragStartPos, event.data.getLocalPosition(this.world));
+
+            if (!this.dragging && distanceFromStart > 5) {
+
+                this.onDragStart(event);
+            } else if (this.dragging) {
+
+                var pos = event.data.getLocalPosition(this.world);
+                var tile = this.world.getTileFromWorld(pos.x, pos.y + this.world.viewport.scroll);
+                if (tile && !tile.isOccupied) {
+
+                    this.activeBuilding.x = tile.xCentre;
+                    this.activeBuilding.y = tile.yCentre;
+                }
+            }
+        }
+    }, {
+        key: 'onDragEnd',
+        value: function onDragEnd() {
+
+            this.world.off('mousemove', this.onDragBound);
+            this.world.off('touchmove', this.onDragBound);
+
+            this.world.off('mouseupoutside', this.onDragEndBound);
+            this.world.off('mouseup', this.onDragEndBound);
+            this.world.off('touchendoutside', this.onDragEndBound);
+            this.world.off('touchend', this.onDragEndBound);
+
+            if (this.dragging) {
+
+                var targetX = this.activeBuilding.x;
+                var targetY = this.activeBuilding.y;
+
+                var targetTile = this.world.getTileFromWorld(targetX, targetY);
+
+                if (targetTile && !targetTile.isOccupied) {
+
+                    var canAfford = this.world.supply.wood.get() >= this.activeArchetype.cWood && this.world.supply.stone.get() >= this.activeArchetype.cStone;
+
+                    if (canAfford && window.confirm('Place new ' + this.activeArchetype.title + ' at ' + targetTile.tileX + '/' + targetTile.tileY + '?')) {
+
+                        // console.log('Placing new', this.activeArchetype.title, 'at', targetTile.tileX + '/' + targetTile.tileY);
+
+                        this.world.supply.wood.decrement(this.activeArchetype.cWood);
+                        this.world.supply.stone.decrement(this.activeArchetype.cStone);
+
+                        this.world.addBuilding(this.activeArchetype.id, targetTile.tileX, targetTile.tileY);
+                    } else {
+
+                        this.toggle(true);
+                    }
+                }
+
+                this.world.removeChild(this.activeBuilding);
+                this.activeBuilding.destroy();
+                this.activeBuilding = null;
+
+                this.activeArchetype = false;
+            }
+
+            this.dragStartPos = false;
+
+            this.world.viewport.enable();
+
+            if (!this.world.viewport.isInteractive) {
+
+                this.world.interactive = false;
+            }
+        }
+    }, {
+        key: 'update',
+        value: function update(wood, stone) {
+
+            this.world.buildings.archetypes.forEach(function (archetype) {
+
+                var canAfford = archetype.cWood <= wood && archetype.cStone <= stone;
+
+                var button = this.archetypeButtonsMap[archetype.id];
+
+                button.alpha = canAfford ? 1 : .5;
+                button.interactive = canAfford;
+            }.bind(this));
+        }
+    }]);
+
+    return ConstructionUI;
+}(_PanelUI3.default);
+
+exports.default = ConstructionUI;
+
+},{"../Layout":217,"./PanelUI":238,"pixi.js":154}],235:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _pixi = require('pixi.js');
+
+var _pixi2 = _interopRequireDefault(_pixi);
+
+var _World = require('../World');
+
+var _World2 = _interopRequireDefault(_World);
+
+var _Layout = require('../Layout');
+
+var _Layout2 = _interopRequireDefault(_Layout);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var GameSpeedUI = function (_PIXI$Container) {
+    _inherits(GameSpeedUI, _PIXI$Container);
+
+    function GameSpeedUI(world) {
+        _classCallCheck(this, GameSpeedUI);
+
+        var _this = _possibleConstructorReturn(this, (GameSpeedUI.__proto__ || Object.getPrototypeOf(GameSpeedUI)).call(this));
+
+        _this.world = world;
+
+        _this.buttonW = 40;
+        _this.buttonH = 40;
+
+        _this.button = new _pixi2.default.Graphics();
+        _this.button.beginFill(0x000000, .5);
+        _this.button.drawRect(0, 0, _this.buttonW, _this.buttonH);
+        _this.button.endFill();
+
+        _this.button.x = _Layout2.default.WIDTH - _this.buttonW;
+        _this.button.y = 0;
+
+        _this.button.interactive = true;
+
+        _this.button.on('mousedown', _this.onButtonDown.bind(_this));
+        _this.button.on('touchstart', _this.onButtonDown.bind(_this));
+
+        _this.addChild(_this.button);
+
+        var style = {
+            font: '16px Arial',
+            fill: '#FFFFFF'
+        };
+
+        _this.text = new _pixi2.default.Text('x1', style);
+        _this.text.y = 10;
+        _this.button.addChild(_this.text);
+
+        _this.speedIndex = 0;
+        _this.speeds = [1, 2, 4];
+
+        _this.updateButton();
+
+        return _this;
+    }
+
+    _createClass(GameSpeedUI, [{
+        key: 'onButtonDown',
+        value: function onButtonDown(event) {
+
+            this.speedIndex++;
+
+            if (this.speedIndex >= this.speeds.length) {
+
+                this.speedIndex = 0;
+            }
+
+            this.updateButton();
+        }
+    }, {
+        key: 'updateButton',
+        value: function updateButton() {
+
+            var speed = this.speeds[this.speedIndex];
+
+            this.text.text = 'x' + speed;
+            this.text.x = (this.buttonW - this.text.width) * .5;
+
+            _World2.default.TICK_RATE = speed;
+        }
+    }]);
+
+    return GameSpeedUI;
+}(_pixi2.default.Container);
+
+exports.default = GameSpeedUI;
+
+},{"../Layout":217,"../World":230,"pixi.js":154}],236:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _pixi = require('pixi.js');
+
+var _pixi2 = _interopRequireDefault(_pixi);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var InhabitantsUI = function (_PIXI$Container) {
+    _inherits(InhabitantsUI, _PIXI$Container);
+
+    function InhabitantsUI(width, height) {
+        _classCallCheck(this, InhabitantsUI);
+
+        var _this = _possibleConstructorReturn(this, (InhabitantsUI.__proto__ || Object.getPrototypeOf(InhabitantsUI)).call(this));
+
+        _this.widthMax = width;
+        _this.heightMax = height;
+
+        _this.inhabitants = [];
+
+        return _this;
+    }
+
+    _createClass(InhabitantsUI, [{
+        key: 'setInhabitants',
+        value: function setInhabitants(inhabitants) {
+
+            this.clearInhabitants();
+
+            if (this.activeInhabitants != inhabitants) {
+
+                this.activeInhabitants = inhabitants;
+
+                inhabitants.list.forEach(function (inhabitant, index) {
+
+                    var inhabitantUI = new InhabitantUI(this.widthMax, 40);
+                    inhabitantUI.x = 0;
+                    inhabitantUI.y = index * 50;
+                    inhabitantUI.setInhabitant(inhabitant);
+                    this.addChild(inhabitantUI);
+
+                    this.inhabitants.push(inhabitantUI);
+                }.bind(this));
+            }
+        }
+    }, {
+        key: 'clearInhabitants',
+        value: function clearInhabitants() {
+
+            this.inhabitants.forEach(function (inhabitantUI) {
+
+                inhabitantUI.destroy();
+            });
+        }
+    }]);
+
+    return InhabitantsUI;
+}(_pixi2.default.Container);
+
+exports.default = InhabitantsUI;
+
+var InhabitantUI = function (_PIXI$Container2) {
+    _inherits(InhabitantUI, _PIXI$Container2);
+
+    function InhabitantUI(width, height) {
+        _classCallCheck(this, InhabitantUI);
+
+        var _this2 = _possibleConstructorReturn(this, (InhabitantUI.__proto__ || Object.getPrototypeOf(InhabitantUI)).call(this));
+
+        _this2.widthMax = width;
+        _this2.heightMax = height;
+
+        var style = {
+            font: '16px Arial',
+            fill: '#FFFFFF',
+            wordWrap: true,
+            wordWrapWidth: _this2.widthMax - 40
+        };
+
+        _this2.textTitle = new _pixi2.default.Text('title', style);
+        _this2.addChild(_this2.textTitle);
+
+        style.font = '12px Arial';
+
+        _this2.textDescription = new _pixi2.default.Text('description', style);
+        _this2.textDescription.y = 20;
+        _this2.textDescription.alpha = .75;
+        _this2.addChild(_this2.textDescription);
+
+        return _this2;
+    }
+
+    _createClass(InhabitantUI, [{
+        key: 'setInhabitant',
+        value: function setInhabitant(inhabitant) {
+
+            this.activeInhabitant = inhabitant;
+
+            inhabitant.on('filled:true', this.update.bind(this));
+            inhabitant.on('filled:false', this.update.bind(this));
+
+            this.on('mousedown', this.onDown.bind(this));
+            this.on('touchstart', this.onDown.bind(this));
+
+            this.update();
+        }
+    }, {
+        key: 'update',
+        value: function update() {
+
+            if (this.activeInhabitant.isFilled) {
+
+                this.textTitle.text = this.activeInhabitant.dwarf.name;
+                this.textDescription.text = this.activeInhabitant.archetype.id;
+            } else {
+
+                this.textTitle.text = 'Hire replacement ' + this.activeInhabitant.archetype.id;
+                this.textDescription.text = 'For ' + this.activeInhabitant.archetype.cWood + ' wood and ' + this.activeInhabitant.archetype.cStone + ' stone.';
+            }
+
+            this.interactive = !this.activeInhabitant.isFilled;
+        }
+    }, {
+        key: 'clearInhabitants',
+        value: function clearInhabitants() {
+
+            this.inhabitants.forEach(function (inhabitantUI) {
+
+                inhabitantUI.destroy();
+            });
+        }
+    }, {
+        key: 'onDown',
+        value: function onDown() {
+
+            this.activeInhabitant.spawn(true, false);
+        }
+    }]);
+
+    return InhabitantUI;
+}(_pixi2.default.Container);
+
+},{"pixi.js":154}],237:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _pixi = require('pixi.js');
+
+var _pixi2 = _interopRequireDefault(_pixi);
+
+var _Layout = require('../Layout');
+
+var _Layout2 = _interopRequireDefault(_Layout);
+
+var _PanelUI2 = require('./PanelUI');
+
+var _PanelUI3 = _interopRequireDefault(_PanelUI2);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var LogUI = function (_PanelUI) {
+    _inherits(LogUI, _PanelUI);
+
+    function LogUI(world) {
+        _classCallCheck(this, LogUI);
+
+        // Toggle Button
+
+        var _this = _possibleConstructorReturn(this, (LogUI.__proto__ || Object.getPrototypeOf(LogUI)).call(this, world, 'log'));
+
+        var buttonW = 60;
+        var buttonH = 60;
+
+        _this.button = new _pixi2.default.Graphics();
+        _this.button.beginFill(0x000000, .5);
+        _this.button.drawRect(0, 0, buttonW, buttonH);
+        _this.button.endFill();
+
+        _this.button.beginFill(0xFFFFFF, .75);
+        _this.button.drawRect(10, 10, buttonW - 20, buttonH - 20);
+        _this.button.endFill();
+
+        _this.button.x = _Layout2.default.WIDTH - buttonW;
+        _this.button.y = _Layout2.default.HEIGHT - buttonH * 2 - 20;
+
+        _this.button.interactive = true;
+
+        _this.button.on('mousedown', _this.onButtonDown.bind(_this));
+        _this.button.on('touchstart', _this.onButtonDown.bind(_this));
+
+        // Log
+
+        var logW = _Layout2.default.WIDTH * .8;
+        var logH = _Layout2.default.HEIGHT * .8;
+
+        _this.logStyle = {
+            font: '14px Arial',
+            fill: '#FFFFFF'
+        };
+
+        _this.logItems = new _pixi2.default.Container();
+        _this.background.addChild(_this.logItems);
+
+        _this.logItemHeight = 24;
+        _this.logItemY = 0;
+
+        _this.logCount = 0;
+        _this.logMax = Math.floor((logH - 40) / _this.logItemHeight);
+
+        _this.toggle(false);
+
+        return _this;
+    }
+
+    _createClass(LogUI, [{
+        key: 'log',
+        value: function log(message) {
+
+            var item = new _pixi2.default.Text(message, this.logStyle);
+            item.x = 20;
+            item.y = this.logItemY;
+            this.logItems.addChild(item);
+
+            this.logItems.y += this.logItemHeight;
+            this.logItemY -= this.logItemHeight;
+
+            this.logCount++;
+
+            if (this.logCount > this.logMax) {
+
+                this.logItems.getChildAt(0).destroy();
+
+                this.logCount--;
+            }
+        }
+    }, {
+        key: 'onButtonDown',
+        value: function onButtonDown(event) {
+
+            this.toggle(undefined, true);
+        }
+    }]);
+
+    return LogUI;
+}(_PanelUI3.default);
+
+exports.default = LogUI;
+
+},{"../Layout":217,"./PanelUI":238,"pixi.js":154}],238:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _pixi = require('pixi.js');
+
+var _pixi2 = _interopRequireDefault(_pixi);
+
+var _Layout = require('../Layout');
+
+var _Layout2 = _interopRequireDefault(_Layout);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var PanelUI = function (_PIXI$Container) {
+    _inherits(PanelUI, _PIXI$Container);
+
+    function PanelUI(world, id) {
+        _classCallCheck(this, PanelUI);
+
+        var _this = _possibleConstructorReturn(this, (PanelUI.__proto__ || Object.getPrototypeOf(PanelUI)).call(this));
+
+        _this.world = world;
+
+        _this.id = id;
+
+        _this.hit = new _pixi2.default.Graphics();
+        _this.hit.beginFill(0x000000, .15);
+        _this.hit.drawRect(0, 0, _Layout2.default.WIDTH, _Layout2.default.HEIGHT);
+        _this.hit.endFill();
+
+        _this.hit.interactive = true;
+        _this.hit.on('mousedown', _this.onButtonDown.bind(_this));
+        _this.hit.on('touchstart', _this.onButtonDown.bind(_this));
+
+        _this.addChild(_this.hit);
+
+        var backgroundW = _Layout2.default.WIDTH * .8;
+        var backgroundH = _Layout2.default.HEIGHT * .8;
+
+        _this.background = new _pixi2.default.Graphics();
+        _this.background.beginFill(0x000000, 1);
+        _this.background.drawRect(0, 0, backgroundW, backgroundH);
+        _this.background.endFill();
+
+        _this.background.x = _Layout2.default.WIDTH * .5 - backgroundW * .5;
+        _this.background.y = _Layout2.default.HEIGHT * .5 - backgroundH * .5;
+
+        _this.addChild(_this.background);
+
+        _this.toggle(false);
+
+        return _this;
+    }
+
+    _createClass(PanelUI, [{
+        key: 'onButtonDown',
+        value: function onButtonDown(event) {
+
+            this.toggle(undefined, true);
+        }
+    }, {
+        key: 'toggle',
+        value: function toggle(show, dispatchEvent) {
+
+            var isVisible = void 0;
+            if (typeof show === 'undefined') {
+                isVisible = !this.shown;
+            } else {
+                isVisible = show;
+            }
+
+            dispatchEvent = typeof dispatchEvent === 'undefined' ? false : dispatchEvent;
+
+            this.visible = this.shown = isVisible;
+
+            if (dispatchEvent) {
+
+                this.emit(isVisible ? 'toggle:on' : 'toggle:off', this.id);
+            }
+        }
+    }]);
+
+    return PanelUI;
+}(_pixi2.default.Container);
+
+exports.default = PanelUI;
+
+},{"../Layout":217,"pixi.js":154}],239:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _pixi = require('pixi.js');
+
+var _pixi2 = _interopRequireDefault(_pixi);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var SupplyUI = function (_PIXI$Container) {
+    _inherits(SupplyUI, _PIXI$Container);
+
+    function SupplyUI() {
+        _classCallCheck(this, SupplyUI);
+
+        var _this = _possibleConstructorReturn(this, (SupplyUI.__proto__ || Object.getPrototypeOf(SupplyUI)).call(this));
+
+        var w = 280;
+        var h = 40;
+
+        _this.background = new _pixi2.default.Graphics();
+        _this.addChild(_this.background);
+
+        var style = {
+            font: '16px Arial',
+            fill: '#FFFFFF',
+            wordWrap: true,
+            wordWrapWidth: w - 20
+        };
+
+        _this.text = new _pixi2.default.Text('Supply', style);
+        _this.text.x = 10;
+        _this.text.y = 10;
+        _this.addChild(_this.text);
+
+        _this.update(0, 0);
+
+        return _this;
+    }
+
+    _createClass(SupplyUI, [{
+        key: 'update',
+        value: function update(wood, stone) {
+
+            this.text.text = 'Wood: ' + wood + ' | Stone: ' + stone;
+
+            var w = this.text.width + 20;
+            var h = this.text.height + 20;
+
+            this.background.clear();
+            this.background.beginFill(0x000000, .5);
+            this.background.drawRect(0, 0, w, h);
+            this.background.endFill();
+        }
+    }]);
+
+    return SupplyUI;
+}(_pixi2.default.Container);
+
+exports.default = SupplyUI;
+
+},{"pixi.js":154}],240:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _pixi = require('pixi.js');
+
+var _pixi2 = _interopRequireDefault(_pixi);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+    }
+}
+
+function _possibleConstructorReturn(self, call) {
+    if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+}
+
+function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+    }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+}
+
+var TimeUI = function (_PIXI$Container) {
+    _inherits(TimeUI, _PIXI$Container);
+
+    function TimeUI() {
+        _classCallCheck(this, TimeUI);
+
+        var _this = _possibleConstructorReturn(this, (TimeUI.__proto__ || Object.getPrototypeOf(TimeUI)).call(this));
+
+        var w = 280;
+        var h = 40;
+
+        _this.background = new _pixi2.default.Graphics();
+        _this.addChild(_this.background);
+
+        var style = {
+            font: '16px Arial',
+            fill: '#FFFFFF',
+            wordWrap: true,
+            wordWrapWidth: w - 20
+        };
+
+        _this.text = new _pixi2.default.Text('Time', style);
+        _this.text.x = 10;
+        _this.text.y = 10;
+        _this.addChild(_this.text);
+
+        _this.update(0, 0);
+
+        return _this;
+    }
+
+    _createClass(TimeUI, [{
+        key: 'update',
+        value: function update(hour, minute) {
+
+            this.text.text = (hour < 10 ? '0' + hour : hour) + ':' + (minute < 10 ? '0' + minute : minute);
+
+            var w = this.text.width + 20;
+            var h = this.text.height + 20;
+
+            this.background.clear();
+            this.background.beginFill(0x000000, .5);
+            this.background.drawRect(0, 0, w, h);
+            this.background.endFill();
+        }
+    }]);
+
+    return TimeUI;
+}(_pixi2.default.Container);
+
+exports.default = TimeUI;
+
+},{"pixi.js":154}],241:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () {
+    function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+        }
+    }return function (Constructor, protoProps, staticProps) {
+        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+    };
+}();
+
+var _pixi = require('pixi.js');
+
+var _pixi2 = _interopRequireDefault(_pixi);
+
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
 }
@@ -38852,7 +39253,7 @@ var ValueBarUI = function (_PIXI$Container) {
 
 exports.default = ValueBarUI;
 
-},{"pixi.js":154}],234:[function(require,module,exports){
+},{"pixi.js":154}],242:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -38882,7 +39283,7 @@ exports.default = {
     }
 };
 
-},{}],235:[function(require,module,exports){
+},{}],243:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

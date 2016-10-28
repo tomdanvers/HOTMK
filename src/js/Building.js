@@ -215,8 +215,6 @@ export class Watch extends Building {
 
         });
 
-        // console.log('Watch.updatePatrolRoute(',this.patrolRoute,')');
-
     }
 
 }
