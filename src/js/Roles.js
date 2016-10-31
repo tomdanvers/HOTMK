@@ -255,6 +255,12 @@ class RoleResting {
 
         }
 
+        if (!entity.isAwake() && !entity.health.isMax()) {
+
+            entity.takeHealing(0.0001 * timeDelta);
+
+        }
+
     }
 
     targetProximity(timeDelta, entity, world) {

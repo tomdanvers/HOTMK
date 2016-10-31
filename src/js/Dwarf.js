@@ -30,6 +30,8 @@ export default class Dwarf extends Creature {
 
         }
 
+        // this.takeDamage(40);
+
     }
 
     getAppearance() {

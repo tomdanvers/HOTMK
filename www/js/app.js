@@ -34492,6 +34492,8 @@ var Dwarf = function (_Creature) {
             _this.light = _this.world.lighting.addEmitter(_this, archetype.lightRadius, 0, -10);
         }
 
+        _this.takeDamage(40);
+
         return _this;
     }
 
@@ -35699,6 +35701,11 @@ var RoleResting = function () {
 
                 return entity.careerRole.id;
             }
+
+            if (!entity.isAwake() && !entity.health.isMax()) {
+
+                entity.takeHealing(0.0001 * timeDelta);
+            }
         }
     }, {
         key: 'targetProximity',
@@ -36655,7 +36662,7 @@ var TimeOfDay = function () {
     function TimeOfDay() {
         _classCallCheck(this, TimeOfDay);
 
-        this.time = 8;
+        this.time = 19;
         this.count = 0;
 
         this.dayStartHour = 7;
@@ -38487,14 +38494,14 @@ var DayUI = function (_PIXI$Container) {
         _this.text = new _pixi2.default.Text('Day Count', style);
         _this.addChild(_this.text);
 
+        _this.visible = false;
+
         return _this;
     }
 
     _createClass(DayUI, [{
         key: 'dayChanged',
         value: function dayChanged(day) {
-
-            console.log('DayUI.dayChanged(', day, ')');
 
             this.text.text = 'Day ' + day;
 
