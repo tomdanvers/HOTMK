@@ -1,4 +1,4 @@
-import PIXI from 'pixi.js';
+import * as PIXI from 'pixi.js';
 import Maths from './utils/Maths';
 
 import Creature from './Creature';

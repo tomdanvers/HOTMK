@@ -5,7 +5,7 @@ Array.prototype.random = function() {
 }
 
 
-import PIXI from 'pixi.js';
+import * as PIXI from 'pixi.js';
 import raf from 'raf';
 import World from './World';
 import Layout from './Layout';

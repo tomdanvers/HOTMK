@@ -1,4 +1,4 @@
-import PIXI from 'pixi.js';
+import * as PIXI from 'pixi.js';
 import ValueMinMax from './utils/ValueMinMax';
 
 export default class TimeOfDay {

@@ -46,7 +46,7 @@ gulp.task('scripts', function() {
 
 
     var bundler = browserify('./src/js/main.js');
-    bundler.transform(babelify, {presets: ["es2015"]});
+    bundler.transform(babelify, {presets: ['es2015']});
 
     bundler.bundle()
         .on('error', function (err) { console.error(err); })

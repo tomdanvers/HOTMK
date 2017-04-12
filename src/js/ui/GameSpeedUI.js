@@ -1,4 +1,4 @@
-import PIXI from 'pixi.js';
+import * as PIXI from 'pixi.js';
 
 import World from '../World';
 import Layout from '../Layout';
