@@ -5,5 +5,7 @@ A game prototype. Use the build menu (bottom right) to build structures that gen
 Using Cordova, PixiJS, Sass, Gulp, Babel.
 
 Install
-~~~ npm install
-gulp ~~~
+~~~ 
+npm install
+gulp
+~~~
